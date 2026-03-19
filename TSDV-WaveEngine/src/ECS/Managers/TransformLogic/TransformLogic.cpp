@@ -24,7 +24,7 @@ namespace WaveEngine
 
 		for (ECSTransform& transform : transformComponents)
 		{
-			if (!transform.IsMarkAsDirty())
+			if (!transform.IsDirty())
 				continue;
 
 			transform.CalculateTRS();
