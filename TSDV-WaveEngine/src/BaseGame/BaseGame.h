@@ -13,6 +13,8 @@
 #include "EventSystem/EventSystem.h"
 #include <ECS/CompontRegistry/ComponentRegistry.h>
 #include <ImGuiClass/ImGuiClass.h>
+#include "../ECS/Managers/Draw.h"
+#include "ECS/Managers/TransformLogic/TransformLogic.h"
 
 namespace WaveEngine
 {
@@ -29,6 +31,9 @@ namespace WaveEngine
 		void EngineDraw();
 
 		Renderer* GetRenderer();
+
+		DrawLogic drawLogic;
+		TransformLogic transformLogic;
 
 		ImGuiClass* imGui;
 

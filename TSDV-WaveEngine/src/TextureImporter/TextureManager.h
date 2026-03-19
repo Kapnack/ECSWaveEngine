@@ -23,17 +23,18 @@ namespace WaveEngine
 	{
 	private:
 
-		unordered_map<unsigned int, Texture*> textures;
+		vector<Texture*> textures;
+		unordered_map<string, unsigned int> indexByname;
 
 		TextureManager();
 		~TextureManager();
 
-		void Save(const unsigned int& ID, Texture* texture);
+		const unsigned int Save(Texture* texture);
 
 		Texture* GetTexture(const unsigned int& ID) const;
 		Texture* TryGetTexture(const unsigned int& ID) const;
 
-		unordered_map<unsigned int, Texture*>& GetTextures();
+		vector<Texture*>& GetTextures();
 
 		friend class BaseGame;
 		friend class TextureImporter;

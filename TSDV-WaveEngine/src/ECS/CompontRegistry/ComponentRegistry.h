@@ -59,6 +59,12 @@ namespace WaveEngine
 		}
 
 		template<typename T>
+		T* TryGet(const int& entity)
+		{
+			return GetComponentStorage<T>().TryGet(entity);
+		}
+
+		template<typename T>
 		void RemoveComponent(const int& entity)
 		{
 			type_index typeIndex = typeid(T);
@@ -72,6 +78,22 @@ namespace WaveEngine
 		template<typename T>
 		ComponentContainer<T>& GetComponentStorage()
 		{
+			return static_cast<Storage<T>*>(storages.at(typeid(T)))->container;
+		}
+
+		template<typename T>
+		ComponentContainer<T>& CreateOrGetComponentStorage()
+		{
+			type_index typeIndex = typeid(T);
+
+			if (!storages.contains(typeIndex))
+			{
+				Storage<T>* newStorage = new Storage<T>();
+				storages[typeIndex] = newStorage;
+
+				return newStorage->container;
+			}
+
 			return static_cast<Storage<T>*>(storages.at(typeid(T)))->container;
 		}
 

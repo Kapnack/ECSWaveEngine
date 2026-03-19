@@ -2,10 +2,11 @@
 
 #include "ServiceProvider/Service.h"
 
-#include <unordered_map>
-
 #include "Mesh/Mesh.h"
 #include <string_view>
+
+#include <vector>
+#include <unordered_map>
 
 using namespace std;
 
@@ -17,11 +18,12 @@ namespace WaveEngine
 	{
 	private:
 
-		unordered_map<unsigned int, Mesh*> meshByID;
+		vector<Mesh*> meshByID;
+		unordered_map<string, unsigned int> idByName;
 
 		friend class MeshFactory;
 
-		void SaveMesh(Mesh* mesh, const unsigned& ID);
+		const unsigned int SaveMesh(Mesh* mesh);
 
 	public:
 

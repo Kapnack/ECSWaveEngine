@@ -8,11 +8,17 @@ namespace WaveEngine
 
 	MeshManager::~MeshManager()
 	{
+		for (Mesh* mesh : meshByID)
+			delete mesh;
 	}
 
-	void MeshManager::SaveMesh(Mesh* mesh, const unsigned& ID)
+	const unsigned int MeshManager::SaveMesh(Mesh* mesh)
 	{
-		meshByID[ID] = mesh;
+		const unsigned int currentIndex = meshByID.size();
+		idByName[mesh->GetName()] = currentIndex;
+		meshByID.push_back(mesh);
+
+		return currentIndex;
 	}
 
 	Mesh* MeshManager::GetMesh(const unsigned int& ID)
@@ -22,30 +28,12 @@ namespace WaveEngine
 
 	Mesh* MeshManager::GetMesh(const string_view name)
 	{
-		unordered_map<unsigned int, Mesh*>::iterator it = find_if(meshByID.begin(), meshByID.end(),
-			[&name](const pair<const unsigned int, Mesh*>& it)
-			{
-				return it.second && it.second->GetName() == name;
-			});
-
-		if (it == meshByID.end())
-			return nullptr;
-
-		return it->second;
+		return meshByID.at(idByName.at(string(name)));
 	}
 
 	unsigned int MeshManager::GetMeshID(const string_view name)
 	{
-		unordered_map<unsigned int, Mesh*>::iterator it = find_if(meshByID.begin(), meshByID.end(),
-			[&name](const pair<const unsigned int, Mesh*>& it)
-			{
-				return it.second && it.second->GetName() == name;
-			});
-
-		if (it == meshByID.end())
-			return Mesh::NULL_MESH;
-
-		return it->first;
+		return idByName.at(string(name));
 	}
 
 	Mesh& MeshManager::Get(const unsigned int meshID)

@@ -8,30 +8,33 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <functional>
+#include <unordered_map>
 
 #include "Window/Window.h"
 #include "TextureImporter/TextureImporter.h"
 #include "VertexData.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
-#include <unordered_map>
-#include <Mesh/MeshManager/MeshManager.h>
-#include <Material/MaterialManager.h>
+#include "Mesh/MeshManager/MeshManager.h"
+#include "Material/MaterialManager.h"
+#include "ECS/MaterialID.h"
+#include "ECS/Mesh/MeshID.h"
+#include "ECS/Transform/ECSTransform.h"
 
 using namespace std;
 
 namespace WaveEngine
 {
-		struct BatchData
-		{
-			unsigned int materialID = 0;
-			unsigned int meshID = 0;
+	struct BatchData
+	{
+		unsigned int materialID = 0;
+		unsigned int meshID = 0;
 
-			bool operator==(const BatchData& other) const
-			{
-				return materialID == other.materialID &&
-					meshID == other.meshID;
-			}
-		};
+		bool operator==(const BatchData& other) const
+		{
+			return materialID == other.materialID &&
+				meshID == other.meshID;
+		}
+	};
 
 	class Renderer final : public Service
 	{
@@ -46,8 +49,11 @@ namespace WaveEngine
 			unsigned int VBO = 0;
 			unsigned int EBO = 0;
 
-			vector<VertexData> vertices;
-			vector<unsigned int> indices;
+			unsigned int instanceVBO = 0;
+
+			vector<glm::mat4> models;
+
+			int instanceCapacity = 0;
 
 			unsigned int indexOffset = 0;
 		};
@@ -58,6 +64,7 @@ namespace WaveEngine
 		unsigned int spriteShaders;
 
 		unsigned int drawCalls = 0;
+		unsigned int batchCalls = 0;
 
 		void Init();
 		void Unload();
@@ -83,7 +90,16 @@ namespace WaveEngine
 		Renderer();
 		~Renderer();
 
-		void CreateBuffers(const VertexData* vertex, const int& vertexSize, const unsigned int* indices, const int& indicesSize, unsigned& VAO, unsigned& VBO, unsigned& EBO) const;
+		void CreateBuffers(
+			const VertexData* vertex,
+			const int& vertexSize,
+			const unsigned int* indices,
+			const int& indicesSize,
+			unsigned& VAO,
+			unsigned& VBO,
+			unsigned& EBO,
+			unsigned& instanceVBO
+		) const;
 
 		void DeleteBuffers(unsigned int& VAO, unsigned int& VBO, unsigned int& EBO);
 
@@ -92,10 +108,11 @@ namespace WaveEngine
 		void Clear();
 
 		unsigned int GetDrawCalls() const;
+		unsigned int GetBatchCalls() const;
 
 		void DrawElement(const unsigned int& materialID, const unsigned int& indicesSize, const unsigned int& VAO);
 
-		void Submit(const int& entityID);
+		void Submit(const ECSTransform& transform, const MeshID& meshComp, const MeshRenderer& matComp);
 		void Flush();
 	};
 }

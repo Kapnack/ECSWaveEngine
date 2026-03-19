@@ -61,20 +61,18 @@ namespace WaveEngine
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		++currentTextureID;
-
-		Texture* newTexture = new Texture(currentTextureID, texture, width, height);
+		Texture* newTexture = new Texture(texture, width, height);
 
 		std::filesystem::path path = filePath;
 
 		newTexture->name = path.filename().string();
 
-		GetTextureManager()->Save(currentTextureID, newTexture);
+		const unsigned int currentIndex = GetTextureManager()->Save(newTexture);
 
 		stbi_image_free(data);
 
 		std::cout << "Loaded texture: " << filePath << " (" << width << "x" << height << ")" << std::endl;
 
-		return currentTextureID;
+		return currentIndex;
 	}
 }

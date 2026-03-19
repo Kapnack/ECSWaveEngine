@@ -2,9 +2,8 @@
 
 const unsigned int Mesh::NULL_MESH = 0;
 
-Mesh::Mesh(VertexData*& vertexBuffer, const unsigned int& vertexSize, unsigned int*& indexes, const unsigned int& indexAmount, const string_view name, const unsigned int& ID)
+Mesh::Mesh(VertexData*& vertexBuffer, const unsigned int& vertexSize, unsigned int*& indexes, const unsigned int& indexAmount, const string_view name)
 {
-	this->ID = ID;
 	this->name = name;
 	this->vertexBuffer = vertexBuffer;
 	this->vertexSize = vertexSize;
@@ -16,12 +15,12 @@ Mesh::~Mesh()
 {
 }
 
-const VertexData* Mesh::GetVertexBuffer()
+const VertexData* Mesh::GetVertexBuffer() const
 {
 	return vertexBuffer;
 }
 
-const unsigned int Mesh::GetVertexSize()
+const unsigned int Mesh::GetVertexSize() const
 {
 	return vertexSize;
 }
@@ -31,12 +30,12 @@ string Mesh::GetName()
 	return name;
 }
 
-const unsigned int* Mesh::GetIndexes()
+const unsigned int* Mesh::GetIndexes() const
 {
 	return indexes;
 }
 
-const unsigned int Mesh::GetIndexesSize()
+const unsigned int Mesh::GetIndexesSize() const
 {
 	return indexAmount;
 }

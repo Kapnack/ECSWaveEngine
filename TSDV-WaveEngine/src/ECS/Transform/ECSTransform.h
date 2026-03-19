@@ -16,6 +16,7 @@ namespace WaveEngine
 	class MeshImGui;
 	class BaseGame;
 	class Renderer;
+	class TransformLogic;
 
 	WAVEEXPORT class ECSTransform : Component
 	{
@@ -32,6 +33,7 @@ namespace WaveEngine
 		friend class MeshImGui;
 		friend class BaseGame;
 		friend class Renderer;
+		friend class TransformLogic;
 
 		Vector3 scale = Vector3(1, 1, 1);
 		Vector3 rotation;
@@ -40,10 +42,11 @@ namespace WaveEngine
 
 		virtual void CalculateTRS();
 
-		virtual void UpdateCollider()
-		{ }
+		const glm::mat4& GetModel() const;
 
-		glm::mat4& GetModel();
+		void FlagAsDirty();
+
+		const bool IsMarkAsDirty() const;
 
 	public:
 

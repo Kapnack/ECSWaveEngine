@@ -14,13 +14,9 @@ namespace WaveEngine
 
 	unsigned int MeshFactory::CreateMesh(const string_view name, VertexData* vertexBuffer, const unsigned int& vertexSize, unsigned int* index, const unsigned int& indexSize)
 	{
-		++currentMeshID;
+		Mesh* newMesh = new Mesh(vertexBuffer, vertexSize, index, indexSize, name);
 
-		Mesh* newMesh = new Mesh(vertexBuffer, vertexSize, index, indexSize, name, currentMeshID);
-
-		GetMeshManager()->SaveMesh(newMesh, currentMeshID);
-
-		return currentMeshID;
+		return GetMeshManager()->SaveMesh(newMesh);
 	}
 
 	MeshManager* MeshFactory::GetMeshManager()

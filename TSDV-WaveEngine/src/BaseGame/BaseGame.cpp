@@ -43,16 +43,19 @@ namespace WaveEngine
 		ServiceProvider::Instance().Register(new Input());
 		ServiceProvider::Instance().Register(new Time());
 
+		transformLogic.Init();
+		drawLogic.Init();
+
 		imGui = new ImGuiClass();
 
 		const unsigned int vertexSize = 4;
 
 		VertexData* vertex = new VertexData[vertexSize]
 		{
-			VertexData(Vector3(0.5f, 0.5f, 0.0f), Vector4(1,0,0,1), Vector2(1,1)),
-			VertexData(Vector3(0.5f, -0.5f, 0.0f), Vector4(1,0,0,1), Vector2(1,0)),
-			VertexData(Vector3(-0.5f, -0.5f, 0.0f), Vector4(1,0,0,1), Vector2(0,0)),
-			VertexData(Vector3(-0.5f, 0.5f, 0.0f), Vector4(1,0,0,1), Vector2(0,1))
+			VertexData(Vector3(0.5f, 0.5f, 0.0f), Vector4(1,1,1,1), Vector2(1,1)),
+			VertexData(Vector3(0.5f, -0.5f, 0.0f), Vector4(1,1,1,1), Vector2(1,0)),
+			VertexData(Vector3(-0.5f, -0.5f, 0.0f), Vector4(1,1,1,1), Vector2(0,0)),
+			VertexData(Vector3(-0.5f, 0.5f, 0.0f), Vector4(1,1,1,1), Vector2(0,1))
 		};
 
 		const unsigned int indexSize = 6;
@@ -65,13 +68,13 @@ namespace WaveEngine
 		GetComponentRegistry()->AddComponent<ECSTransform>(0);
 		GetComponentRegistry()->AddComponent<Camera>(0);
 		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetFarPlane(10000);
-		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetOrthographic(true);
+		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetOrthographic(false);
 
-		GetComponentRegistry()->Get<ECSTransform>(0).SetPosition(0, 0, 5);
+		GetComponentRegistry()->Get<ECSTransform>(0).SetPosition(0, 0, 1000);
 
 		int MatID = GetMaterialFactory()->CreateMaterial("Test", GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"), GetFileReader()->ReadFile("Shaders/ECS/newShader.frag"));
 
-		unsigned int textureIndex = GetTextureImporter()->LoadTextureAbsolutePath("Sprites/whiteImage.png");
+		unsigned int textureIndex = GetTextureImporter()->LoadTextureAbsolutePath("Sprites/battlecity_general.png");
 		unsigned int albedo = GetTextureManager()->GetTexture(textureIndex)->GetTextureID();
 
 		unsigned int meshID = GetMeshFactory()->CreateMesh("Square", vertex, vertexSize, indices, indexSize);
@@ -82,13 +85,13 @@ namespace WaveEngine
 		{
 			GetComponentRegistry()->AddComponent<ECSTransform>(i);
 			GetComponentRegistry()->AddComponent<MeshID>(i);
-			GetComponentRegistry()->AddComponent<MaterialID>(i);
+			GetComponentRegistry()->AddComponent<MeshRenderer>(i);
 
 			GetComponentRegistry()->Get<ECSTransform>(i).SetScale(32, 32, 5);
-			GetComponentRegistry()->Get<ECSTransform>(i).SetPosition(i - (GetWindow()->GetBaseWidth() * 0.5f) - 1, 0, 0);
+			GetComponentRegistry()->Get<ECSTransform>(i).SetPosition(i + 32 - (GetWindow()->GetBaseWidth() * 0.5f) - 1, 0, 0);
 
 			GetComponentRegistry()->Get<MeshID>(i).meshID = meshID;
-			GetComponentRegistry()->Get<MaterialID>(i).materialID = MatID;
+			GetComponentRegistry()->Get<MeshRenderer>(i).materialID = MatID;
 		}
 
 	}
@@ -119,10 +122,47 @@ namespace WaveEngine
 		auto& camera = GetComponentRegistry()->Get<Camera>(0);
 		auto& transform = GetComponentRegistry()->Get<ECSTransform>(0);
 
+		if (GetInput()->IsKeyPressed(Keys::W))
+		{
+			transform.Translate(Vector3::Up() * GetDeltaTime() * 100);
+		}
+		else if (GetInput()->IsKeyPressed(Keys::A))
+		{
+			transform.Translate(Vector3::Left() * GetDeltaTime() * 100);
+		}
+		else if (GetInput()->IsKeyPressed(Keys::S))
+		{
+			transform.Translate(Vector3::Down() * GetDeltaTime() * 100);
+		}
+		else if (GetInput()->IsKeyPressed(Keys::D))
+		{
+			transform.Translate(Vector3::Right() * GetDeltaTime() * 100);
+		}
+
+		if (GetInput()->IsKeyPressed(Keys::Z))
+		{
+			transform.Rotate(Vector3::Left() * GetDeltaTime() * 100);
+		}
+		else if (GetInput()->IsKeyPressed(Keys::X))
+		{
+			transform.Rotate(Vector3::Right() * GetDeltaTime() * 100);
+		}
+
+		if (GetInput()->IsKeyPressed(Keys::SPACE))
+		{
+			transform.Translate(Vector3::Foward() * GetDeltaTime() * 100);
+		}
+		else if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
+		{
+			transform.Translate(Vector3::Back() * GetDeltaTime() * 100);
+		}
+
+
+		transformLogic.Update();
+
 		camera.CalculateMatrixes(transform.GetPosition(), transform.GetRotation());
 
-		for (int i = 1; i <= 2000; ++i)
-			GetRenderer()->Submit(i);
+		drawLogic.Update();
 
 		imGui->Update();
 	}

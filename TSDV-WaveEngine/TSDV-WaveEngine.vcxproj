@@ -188,6 +188,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\Window\Window.cpp" />
     <ClCompile Include="src\Time\Time.cpp" />
     <ClCompile Include="src\TextureImporter\TextureImporter.cpp" />
+    <ClCompile Include="src\ECS\Managers\TransformLogic\TransformLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ECS\Managers\Draw.h" />
@@ -229,6 +230,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="src\Time\Time.h" />
     <ClInclude Include="src\TextureImporter\TextureImporter.h" />
+    <ClInclude Include="src\ECS\Managers\TransformLogic\TransformLogic.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

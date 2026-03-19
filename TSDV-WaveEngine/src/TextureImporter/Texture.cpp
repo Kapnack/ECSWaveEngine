@@ -2,9 +2,8 @@
 
 namespace WaveEngine
 {
-	Texture::Texture(const unsigned int& ID, const unsigned int& textureID, const int& width, const int& height)
+	Texture::Texture(const unsigned int& textureID, const int& width, const int& height)
 	{
-		this->ID = ID;
 		this->textureID = textureID;
 		this->width = width;
 		this->height = height;
@@ -37,10 +36,5 @@ namespace WaveEngine
 	unsigned int Texture::GetTextureID() const
 	{
 		return textureID;
-	}
-
-	unsigned int Texture::GetID() const
-	{
-		return ID;
 	}
 }

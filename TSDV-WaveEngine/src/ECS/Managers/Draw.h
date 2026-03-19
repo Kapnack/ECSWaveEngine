@@ -1,8 +1,25 @@
 #pragma once
 
-class Draw
-{
-public:
+#include "ECS/CompontRegistry/ComponentRegistry.h"
+#include "Renderer/Renderer.h"
 
-	void Update();
-};
+namespace WaveEngine
+{
+	class DrawLogic
+	{
+	private:
+
+		ComponentRegistry* GetComponentRegistry();
+
+		Renderer* GetRenderer();
+
+	public:
+
+		DrawLogic();
+		~DrawLogic();
+
+		void Init();
+
+		void Update();
+	};
+}

@@ -10,6 +10,8 @@
 #include <ECS/Mesh/MeshID.h>
 #include <ECS/MaterialID.h>
 
+#define MAX_INSTANCES 1000
+
 using namespace std;
 
 namespace WaveEngine
@@ -60,7 +62,7 @@ namespace WaveEngine
 
 		glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
 
-		glDisable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 
 		glEnable(GL_BLEND);
@@ -88,16 +90,26 @@ namespace WaveEngine
 		return materialIDToTry != Material::NULL_MATERIAL ? materialIDToTry : materialIDfallBack;
 	}
 
-	void Renderer::CreateBuffers(const VertexData* vertex, const int& vertexSize, const unsigned int* indices, const int& indicesSize, unsigned& VAO, unsigned& VBO, unsigned& EBO) const
+	void Renderer::CreateBuffers(
+		const VertexData* vertex,
+		const int& vertexSize,
+		const unsigned int* indices,
+		const int& indicesSize,
+		unsigned& VAO,
+		unsigned& VBO,
+		unsigned& EBO,
+		unsigned& instanceVBO
+	) const
 	{
 		glGenVertexArrays(1, &VAO);
 		glGenBuffers(1, &VBO);
 		glGenBuffers(1, &EBO);
+		glGenBuffers(1, &instanceVBO);
 
 		glBindVertexArray(VAO);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertexSize * sizeof(VertexData), vertex, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertexSize * sizeof(VertexData), vertex, GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(unsigned int), indices, GL_DYNAMIC_DRAW);
@@ -113,6 +125,24 @@ namespace WaveEngine
 
 		glVertexAttribIPointer(3, 1, GL_INT, sizeof(VertexData), (void*)offsetof(VertexData, textureID));
 		glEnableVertexAttribArray(3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * MAX_INSTANCES, nullptr, GL_DYNAMIC_DRAW);
+
+		for (int i = 0; i < 4; i++)
+		{
+			glEnableVertexAttribArray(4 + i);
+			glVertexAttribPointer(
+				4 + i,
+				4,
+				GL_FLOAT,
+				GL_FALSE,
+				sizeof(glm::mat4),
+				(void*)(i * sizeof(glm::vec4))
+			);
+
+			glVertexAttribDivisor(4 + i, 1);
+		}
 
 		glBindVertexArray(0);
 	}
@@ -141,6 +171,11 @@ namespace WaveEngine
 		return drawCalls;
 	}
 
+	unsigned int Renderer::GetBatchCalls() const
+	{
+		return batchCalls;
+	}
+
 	void Renderer::DrawElement(const unsigned int& materialID, const unsigned int& indicesSize, const unsigned int& VAO)
 	{
 		Material* materialToUse =
@@ -164,92 +199,102 @@ namespace WaveEngine
 		++drawCalls;
 	}
 
-	void Renderer::Submit(const int& entityID)
+	void Renderer::Submit(const ECSTransform& transform, const MeshID& meshComp, const MeshRenderer& matComp)
 	{
-		auto& registry = *GetComponentRegistry();
+		++batchCalls;
 
-		if (!registry.Has<ECSTransform>(entityID) ||
-			!registry.Has<MeshID>(entityID) ||
-			!registry.Has<MaterialID>(entityID))
-			return;
+		RenderData& batch =
+			batching[hash<unsigned int>()(matComp.materialID) ^
+			(hash<unsigned int>()(meshComp.meshID) << 1)];
 
-		ECSTransform& transform = registry.Get<ECSTransform>(entityID);
-		MeshID& meshComp = registry.Get<MeshID>(entityID);
-		MaterialID& matComp = registry.Get<MaterialID>(entityID);
-
-
-		RenderData& batch = batching[std::hash<unsigned int>()(matComp.materialID) ^ (std::hash<unsigned int>()(meshComp.meshID) << 1)];
-		
 		batch.batchData =
 		{
 			matComp.materialID,
 			meshComp.meshID
 		};
 
-		Mesh& mesh = GetMeshManager()->Get(meshComp.meshID);
-
-		int baseVertex = batch.vertices.size();
-
-		for (unsigned int v = 0; v < mesh.GetVertexSize(); ++v)
-		{
-			const VertexData& currentVertex = mesh.GetVertexBuffer()[v];
-
-			VertexData newVertex = currentVertex;
-
-			glm::vec4 pos = transform.GetModel() *
-				glm::vec4(currentVertex.position.x,
-					currentVertex.position.y,
-					currentVertex.position.z,
-					1.0f);
-
-			newVertex.position = Vector3(pos.x, pos.y, pos.z);
-
-			batch.vertices.push_back(newVertex);
-		}
-
-		for (unsigned int i = 0; i < mesh.GetIndexesSize(); ++i)
-		{
-			batch.indices.push_back(mesh.GetIndexes()[i] + baseVertex);
-		}
+		batch.models.reserve(MAX_INSTANCES);
+		batch.models.push_back(transform.GetModel());
 	}
 
 	void Renderer::Flush()
 	{
+		batchCalls = 0;
+
 		for (auto& [key, batch] : batching)
 		{
-			if (batch.vertices.empty())
+			if (batch.models.empty())
 				continue;
+
+			Mesh& mesh = GetMeshManager()->Get(batch.batchData.meshID);
 
 			if (batch.VAO == 0)
 			{
 				CreateBuffers(
-					batch.vertices.data(),
-					batch.vertices.size(),
-					batch.indices.data(),
-					batch.indices.size(),
-					batch.VAO, batch.VBO, batch.EBO
+					mesh.GetVertexBuffer(),
+					mesh.GetVertexSize(),
+					mesh.GetIndexes(),
+					mesh.GetIndexesSize(),
+					batch.VAO,
+					batch.VBO,
+					batch.EBO,
+					batch.instanceVBO
 				);
+
+				batch.instanceCapacity = 0;
 			}
-			else
+
+			glBindVertexArray(batch.VAO);
+			glBindBuffer(GL_ARRAY_BUFFER, batch.instanceVBO);
+
+			if (batch.models.size() > batch.instanceCapacity)
 			{
-				glBindVertexArray(batch.VAO);
+				batch.instanceCapacity = batch.models.size();
 
-				UpdateBuffer(batch.vertices.data(), batch.vertices.size(), batch.VBO);
-
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batch.EBO);
-				glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0,
-					batch.indices.size() * sizeof(unsigned int),
-					batch.indices.data());
+				glBufferData(GL_ARRAY_BUFFER,
+					batch.instanceCapacity * sizeof(glm::mat4),
+					nullptr,
+					GL_DYNAMIC_DRAW);
 			}
 
-			DrawElement(
-				batch.batchData.materialID,
-				batch.indices.size(),
-				batch.VAO
+			glBufferSubData(GL_ARRAY_BUFFER,
+				0,
+				batch.models.size() * sizeof(glm::mat4),
+				batch.models.data());
+
+			Material* materialToUse =
+				GetMaterialManager()->GetMaterial(
+					ReturnWorkingMaterial(batch.batchData.materialID, spriteShaders));
+
+			if (!materialToUse)
+				continue;
+
+			materialToUse->Bind();
+
+			auto& camera = GetComponentRegistry()
+				->GetComponentStorage<Camera>()
+				.Get(0);
+
+			glm::mat4 view = camera.GetView();
+			glm::mat4 proj = camera.GetProjection();
+
+			materialToUse->SetVec4("uColor", materialToUse->GetColor());
+			materialToUse->SetMat4("uView", view);
+			materialToUse->SetMat4("uProj", proj);
+
+			glDrawElementsInstanced(
+				GL_TRIANGLES,
+				mesh.GetIndexesSize(),
+				GL_UNSIGNED_INT,
+				0,
+				batch.models.size()
 			);
 
-			batch.vertices.clear();
-			batch.indices.clear();
+			materialToUse->UnBind();
+
+			++drawCalls;
+
+			batch.models.clear();
 		}
 	}
 

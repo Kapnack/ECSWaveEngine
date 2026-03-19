@@ -4,7 +4,7 @@
 
 namespace WaveEngine
 {
-	struct MaterialID
+	struct MeshRenderer
 	{
 		unsigned int materialID = Material::NULL_MATERIAL;
 	};

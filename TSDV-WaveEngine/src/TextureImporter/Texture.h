@@ -18,13 +18,12 @@ namespace WaveEngine
 	private:
 
 		string name;
-		unsigned int ID = 0;
 		unsigned int textureID = 0;
 
 		int width;
 		int height;
 
-		Texture(const unsigned int& ID, const unsigned int& textureID, const int& width, const int& height);
+		Texture(const unsigned int& textureID, const int& width, const int& height);
 		~Texture();
 
 		friend class TextureManager;
@@ -41,6 +40,5 @@ namespace WaveEngine
 		Vector2 GetRes() const;
 
 		unsigned int GetTextureID() const;
-		unsigned int GetID() const;
 	};
 }

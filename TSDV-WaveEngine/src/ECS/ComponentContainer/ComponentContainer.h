@@ -18,31 +18,34 @@ namespace WaveEngine
 
 		vector<T> components;
 		vector<int> entities;
-		vector<int> sparse;
+		vector<int> componentByEntity;
 
 	public:
 
 		void Add(const int& entity, const T& component = T())
 		{
-			if (entity >= sparse.size())
-				sparse.resize(entity + 1);
+			if (entity >= componentByEntity.size())
+			{
+				size_t oldSize = componentByEntity.size();
+				componentByEntity.resize(entity + 1);
+				for (size_t i = oldSize; i < componentByEntity.size(); ++i)
+					componentByEntity[i] = -1;
+			}
 
 			int index = components.size();
 
 			components.push_back(component);
 			entities.push_back(entity);
 
-			sparse[entity] = index;
+			componentByEntity[entity] = index;
 		}
 
 		bool Has(int entity) const
 		{
-			if (entity >= sparse.size())
+			if (entity >= componentByEntity.size())
 				return false;
 
-			int index = sparse[entity];
-
-			return index < entities.size() && entities[index] == entity;
+			return componentByEntity[entity] != -1;
 		}
 
 		void Remove(int entity)
@@ -50,36 +53,49 @@ namespace WaveEngine
 			if (!Has(entity))
 				return;
 
-			int index = sparse[entity];
+			int index = componentByEntity[entity];
 			int lastIndex = components.size() - 1;
 
-			components[index] = components[lastIndex];
-			entities[index] = entities[lastIndex];
+			if (index != lastIndex)
+			{
+				components[index] = components[lastIndex];
+				entities[index] = entities[lastIndex];
 
-			sparse[entities[index]] = index;
+				componentByEntity[entities[index]] = index;
+			}
 
 			components.pop_back();
 			entities.pop_back();
 
-			sparse[entity] = -1;
+			componentByEntity[entity] = -1;
 		}
 
 		T& Get(const int& entity)
 		{
-			return components.at(sparse.at(entity));
+			return components.at(componentByEntity.at(entity));
 		}
 
-		T* TryGet(const int& entity)
+		T* TryGet(int entity)
 		{
-			if (!Has(entity))
+			if (entity >= componentByEntity.size())
 				return nullptr;
 
-			return &components.at(sparse.at(entity));
+			int index = componentByEntity[entity];
+
+			if (index == -1)
+				return nullptr;
+
+			return &components[index];
 		}
 
 		vector<T>& GetComponents()
 		{
 			return components;
+		}
+
+		const vector<int>& GetEntities() const
+		{
+			return entities;
 		}
 	};
 

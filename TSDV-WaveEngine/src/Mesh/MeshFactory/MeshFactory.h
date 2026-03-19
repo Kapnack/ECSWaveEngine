@@ -14,8 +14,6 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int currentMeshID = Mesh::NULL_MESH;
-
 		MeshManager* GetMeshManager();
 
 	public:

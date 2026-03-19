@@ -6,7 +6,7 @@ namespace WaveEngine
 {
 	ECSTransform::ECSTransform()
 	{
-		CalculateTRS();
+		FlagAsDirty();
 	}
 
 	ECSTransform::~ECSTransform()
@@ -61,9 +61,7 @@ namespace WaveEngine
 
 		previousPosition = position;
 
-		UpdateCollider();
-
-		CalculateTRS();
+		FlagAsDirty();
 	}
 
 	void ECSTransform::Translate(const Vector3& translation)
@@ -89,9 +87,7 @@ namespace WaveEngine
 		position.y += y;
 		position.z += z;
 
-		UpdateCollider();
-
-		CalculateTRS();
+		FlagAsDirty();
 	}
 
 	void ECSTransform::SetScale(const Vector3& vector)
@@ -115,9 +111,7 @@ namespace WaveEngine
 		scale.y = y;
 		scale.z = z;
 
-		UpdateCollider();
-
-		CalculateTRS();
+		FlagAsDirty();
 	}
 
 	void ECSTransform::Scale(const Vector3& vector)
@@ -141,9 +135,7 @@ namespace WaveEngine
 		scale.y += y;
 		scale.z += z;
 
-		UpdateCollider();
-
-		CalculateTRS();
+		FlagAsDirty();
 	}
 
 	void ECSTransform::SetRotation(const Vector3& vector)
@@ -167,9 +159,7 @@ namespace WaveEngine
 		rotation.y = y;
 		rotation.z = z;
 
-		UpdateCollider();
-
-		CalculateTRS();
+		FlagAsDirty();
 	}
 
 	void ECSTransform::Rotate(const Vector3& vector)
@@ -193,9 +183,7 @@ namespace WaveEngine
 		rotation.y += y;
 		rotation.z += z;
 
-		UpdateCollider();
-
-		CalculateTRS();
+		FlagAsDirty();
 	}
 
 	void ECSTransform::FlipX()
@@ -223,8 +211,18 @@ namespace WaveEngine
 		model = glm::scale(model, glm::vec3(scale.x, scale.y, scale.z));
 	}
 
-	glm::mat4& ECSTransform::GetModel()
+	const glm::mat4& ECSTransform::GetModel() const
 	{
 		return model;
+	}
+
+	void ECSTransform::FlagAsDirty()
+	{
+		shouldUpdateTRS = true;
+	}
+
+	const bool ECSTransform::IsMarkAsDirty() const
+	{
+		return shouldUpdateTRS;
 	}
 }
