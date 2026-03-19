@@ -10,11 +10,6 @@ using namespace std;
 
 namespace WaveEngine
 {
-	class EntityFactory;
-	class EntityManager;
-	class EntitiesImGui;
-	class MeshImGui;
-	class BaseGame;
 	class Renderer;
 	class TransformLogic;
 
@@ -25,13 +20,8 @@ namespace WaveEngine
 		Vector3 previousPosition;
 		Vector3 position;
 
-		bool shouldUpdateTRS = false;
+		bool dirty = false;
 
-		friend class EntityFactory;
-		friend class EntityManager;
-		friend class EntitiesImGui;
-		friend class MeshImGui;
-		friend class BaseGame;
 		friend class Renderer;
 		friend class TransformLogic;
 
@@ -44,9 +34,9 @@ namespace WaveEngine
 
 		const glm::mat4& GetModel() const;
 
-		void FlagAsDirty();
+		void MarkDirty();
 
-		const bool IsMarkAsDirty() const;
+		const bool IsDirty() const;
 
 	public:
 
