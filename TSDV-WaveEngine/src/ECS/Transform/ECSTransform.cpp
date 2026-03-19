@@ -6,7 +6,7 @@ namespace WaveEngine
 {
 	ECSTransform::ECSTransform()
 	{
-		FlagAsDirty();
+		MarkDirty();
 	}
 
 	ECSTransform::~ECSTransform()
@@ -61,7 +61,7 @@ namespace WaveEngine
 
 		previousPosition = position;
 
-		FlagAsDirty();
+		MarkDirty();
 	}
 
 	void ECSTransform::Translate(const Vector3& translation)
@@ -87,7 +87,7 @@ namespace WaveEngine
 		position.y += y;
 		position.z += z;
 
-		FlagAsDirty();
+		MarkDirty();
 	}
 
 	void ECSTransform::SetScale(const Vector3& vector)
@@ -111,7 +111,7 @@ namespace WaveEngine
 		scale.y = y;
 		scale.z = z;
 
-		FlagAsDirty();
+		MarkDirty();
 	}
 
 	void ECSTransform::Scale(const Vector3& vector)
@@ -135,7 +135,7 @@ namespace WaveEngine
 		scale.y += y;
 		scale.z += z;
 
-		FlagAsDirty();
+		MarkDirty();
 	}
 
 	void ECSTransform::SetRotation(const Vector3& vector)
@@ -159,7 +159,7 @@ namespace WaveEngine
 		rotation.y = y;
 		rotation.z = z;
 
-		FlagAsDirty();
+		MarkDirty();
 	}
 
 	void ECSTransform::Rotate(const Vector3& vector)
@@ -183,7 +183,7 @@ namespace WaveEngine
 		rotation.y += y;
 		rotation.z += z;
 
-		FlagAsDirty();
+		MarkDirty();
 	}
 
 	void ECSTransform::FlipX()
@@ -216,13 +216,13 @@ namespace WaveEngine
 		return model;
 	}
 
-	void ECSTransform::FlagAsDirty()
+	void ECSTransform::MarkDirty()
 	{
-		shouldUpdateTRS = true;
+		dirty = true;
 	}
 
-	const bool ECSTransform::IsMarkAsDirty() const
+	const bool ECSTransform::IsDirty() const
 	{
-		return shouldUpdateTRS;
+		return dirty;
 	}
 }
