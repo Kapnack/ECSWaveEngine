@@ -81,7 +81,7 @@ namespace WaveEngine
 
 		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uAlbedo", albedo);
 
-		for (int i = 1; i <= 2000; ++i)
+		for (int i = 1; i <= 5000; ++i)
 		{
 			GetComponentRegistry()->AddComponent<ECSTransform>(i);
 			GetComponentRegistry()->AddComponent<MeshID>(i);
