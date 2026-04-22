@@ -30,18 +30,6 @@ namespace WaveEngine::Objects
 		}
 
 		template<typename T>
-		void AddComponent(const int& entity)
-		{
-			type_index typeIndex = typeid(T);
-
-			if (!storages.contains(typeIndex))
-				return;
-
-			static_cast<Storage<T>*>(storages.at(typeIndex))->container.Remove(entity);
-		}
-
-
-		template<typename T>
 		void AddComponent()
 		{
 			GetComponentRegistry()->AddComponent<T>(ID);
