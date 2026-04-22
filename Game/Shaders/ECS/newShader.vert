@@ -3,12 +3,14 @@
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec4 aColor;
 layout(location = 2) in vec2 aTexCoord;
+layout(location = 3) in vec3 aNormal;
 
-layout(location = 3) in mat4 instanceModel;
-layout(location = 7) in vec4 aUVOffsetScale;
+layout(location = 4) in mat4 instanceModel;
+layout(location = 8) in vec4 aUVOffsetScale;
 
 out vec4 vColor;
 out vec2 vTexCoord;
+out vec3 vNormal;
 
 uniform mat4 uView;
 uniform mat4 uProj;
@@ -21,4 +23,6 @@ void main()
     vTexCoord = uv;
 
     gl_Position = uProj * uView * instanceModel * vec4(aPos, 1.0);
+
+    vNormal = aNormal;
 }
