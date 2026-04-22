@@ -48,22 +48,51 @@ namespace WaveEngine
 
 		imGui = new ImGuiClass();
 
-		const unsigned int vertexSize = 4;
+		const unsigned int vertexSize = 24;
 
-		VertexData* vertex = new VertexData[vertexSize]
+		VertexData* vertex = new VertexData[24]
 		{
-			VertexData(Vector3(0.5f, 0.5f, 0.0f), Vector4(1,1,1,1), Vector2(1,1)),
-			VertexData(Vector3(0.5f, -0.5f, 0.0f), Vector4(1,1,1,1), Vector2(1,0)),
-			VertexData(Vector3(-0.5f, -0.5f, 0.0f), Vector4(1,1,1,1), Vector2(0,0)),
-			VertexData(Vector3(-0.5f, 0.5f, 0.0f), Vector4(1,1,1,1), Vector2(0,1))
+			VertexData(Vector3(-0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(0,0,1)),
+			VertexData(Vector3(0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(0,0,1)),
+			VertexData(Vector3(0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(0,0,1)),
+			VertexData(Vector3(-0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(0,0,1)),
+
+			VertexData(Vector3(0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(0,0,-1)),
+			VertexData(Vector3(-0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(0,0,-1)),
+			VertexData(Vector3(-0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(0,0,-1)),
+			VertexData(Vector3(0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(0,0,-1)),
+
+			VertexData(Vector3(-0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(-1,0,0)),
+			VertexData(Vector3(-0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(-1,0,0)),
+			VertexData(Vector3(-0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(-1,0,0)),
+			VertexData(Vector3(-0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(-1,0,0)),
+
+			VertexData(Vector3(0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(1,0,0)),
+			VertexData(Vector3(0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(1,0,0)),
+			VertexData(Vector3(0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(1,0,0)),
+			VertexData(Vector3(0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(1,0,0)),
+
+			VertexData(Vector3(-0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(0,1,0)),
+			VertexData(Vector3(0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(0,1,0)),
+			VertexData(Vector3(0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(0,1,0)),
+			VertexData(Vector3(-0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(0,1,0)),
+
+			VertexData(Vector3(-0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(0,-1,0)),
+			VertexData(Vector3(0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(0,-1,0)),
+			VertexData(Vector3(0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(0,-1,0)),
+			VertexData(Vector3(-0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(0,-1,0))
 		};
 
-		const unsigned int indexSize = 6;
-		unsigned int* indices = new unsigned int[indexSize]
-			{
-				0, 1, 3,
-					1, 2, 3
-			};
+		const unsigned int indexSize = 36;
+		unsigned int* indices = new unsigned[indexSize]
+		{
+			0,1,2, 2,3,0,        // front
+			4,5,6, 6,7,4,        // back
+			8,9,10, 10,11,8,     // left
+			12,13,14, 14,15,12,  // right
+			16,17,18, 18,19,16,  // top
+			20,21,22, 22,23,20   // bottom
+		};
 
 		GetComponentRegistry()->AddComponent<ECSTransform>(0);
 		GetComponentRegistry()->AddComponent<Camera>(0);
@@ -87,12 +116,18 @@ namespace WaveEngine
 			GetComponentRegistry()->AddComponent<MeshID>(i);
 			GetComponentRegistry()->AddComponent<MeshRenderer>(i);
 
-			GetComponentRegistry()->Get<ECSTransform>(i).SetScale(32, 32, 5);
-			GetComponentRegistry()->Get<ECSTransform>(i).SetPosition(i + 32 - (GetWindow()->GetBaseWidth() * 0.5f) - 1, 0, 0);
+			GetComponentRegistry()->Get<ECSTransform>(i).SetScale(32, 32, 32);
 
 			GetComponentRegistry()->Get<MeshID>(i).meshID = meshID;
 			GetComponentRegistry()->Get<MeshRenderer>(i).materialID = MatID;
 		}
+
+		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetParent(1);
+		//GetComponentRegistry()->GetComponent<ECSTransform>(1).AddChild(3);
+		//
+		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetPosition(10,0,0);
+		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetScale(1,1,1);
+		//
 
 	}
 
@@ -118,6 +153,25 @@ namespace WaveEngine
 	void BaseGame::EngineUpdate()
 	{
 		GetTime()->UpdateDeltaTime();
+
+		auto& transformEntity = GetComponentRegistry()->Get<ECSTransform>(1);
+
+		if (GetInput()->IsKeyPressed(Keys::UP))
+		{
+			transformEntity.Translate(Vector3::Up() * GetDeltaTime() * 100);
+		}
+		else if (GetInput()->IsKeyPressed(Keys::LEFT))
+		{
+			transformEntity.Translate(Vector3::Left() * GetDeltaTime() * 100);
+		}
+		else if (GetInput()->IsKeyPressed(Keys::DOWN))
+		{
+			transformEntity.Translate(Vector3::Down() * GetDeltaTime() * 100);
+		}
+		else if (GetInput()->IsKeyPressed(Keys::RIGHT))
+		{
+			transformEntity.Translate(Vector3::Right() * GetDeltaTime() * 100);
+		}
 
 		auto& camera = GetComponentRegistry()->Get<Camera>(0);
 		auto& transform = GetComponentRegistry()->Get<ECSTransform>(0);
@@ -156,7 +210,6 @@ namespace WaveEngine
 		{
 			transform.Translate(Vector3::Back() * GetDeltaTime() * 100);
 		}
-
 
 		transformLogic.Update();
 
