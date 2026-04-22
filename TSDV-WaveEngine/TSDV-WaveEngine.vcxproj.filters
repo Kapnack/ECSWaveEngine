@@ -111,6 +111,9 @@
     <ClCompile Include="src\ECS\Managers\TransformLogic\TransformLogic.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\ECS\WaveObject\WaveObject.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Window\Window.h">
@@ -212,9 +215,6 @@
     <ClInclude Include="src\ECS\CompontRegistry\ComponentRegistry.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\ECS\Entity\ECSEntity.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="src\ECS\Mesh\MeshID.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -231,6 +231,12 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\ECS\Managers\TransformLogic\TransformLogic.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\WaveObject\WaveObject.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Events\RequestAddComponent.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
