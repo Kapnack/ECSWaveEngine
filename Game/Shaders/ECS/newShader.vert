@@ -11,6 +11,7 @@ layout(location = 8) in vec4 aUVOffsetScale;
 out vec4 vColor;
 out vec2 vTexCoord;
 out vec3 vNormal;
+out vec3 vFragPos;
 
 uniform mat4 uView;
 uniform mat4 uProj;
@@ -23,6 +24,7 @@ void main()
     vTexCoord = uv;
 
     gl_Position = uProj * uView * instanceModel * vec4(aPos, 1.0);
+    vFragPos = vec3(instanceModel * vec4(aPos, 1.0));
 
-    vNormal = aNormal;
+    vNormal = mat3(transpose(inverse(instanceModel))) * aNormal;
 }
