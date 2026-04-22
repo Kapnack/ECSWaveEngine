@@ -2,6 +2,7 @@
 
 #include "Export.h"
 #include <glm/glm.hpp>
+#include <vector>
 #include "ECS/Component/Component.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Vector2/Vector2.h"
@@ -28,7 +29,11 @@ namespace WaveEngine
 		Vector3 scale = Vector3(1, 1, 1);
 		Vector3 rotation;
 
-		glm::mat4 model;
+		int parentID = -1;
+		vector<int> children;
+
+		glm::mat4 localModel;
+		glm::mat4 globalModel;
 
 		virtual void CalculateTRS();
 
@@ -84,5 +89,20 @@ namespace WaveEngine
 		WAVEEXPORT void FlipX();
 		WAVEEXPORT void FlipY();
 		WAVEEXPORT void FlipZ();
+
+		const glm::mat4& GetLocalModel() const;
+		const glm::mat4& GetGlobalModel() const;
+
+		WAVEEXPORT void SetGlobalModel(const glm::mat4& m);
+
+		int GetParent() const { return parentID; }
+		const vector<int>& GetChildren() const { return children; }
+
+		void SetParent(unsigned int id);
+		void AddChild(unsigned int id);
+		void RemoveChild(unsigned int id)
+		{
+			children.erase(remove(children.begin(), children.end(), id), children.end());
+		}
 	};
 }
