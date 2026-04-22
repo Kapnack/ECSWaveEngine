@@ -123,14 +123,17 @@ namespace WaveEngine
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), (void*)offsetof(VertexData, textureCordinates));
 		glEnableVertexAttribArray(2);
 
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (void*)offsetof(VertexData, normal));
+		glEnableVertexAttribArray(3);
+
 		glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(InstanceData) * MAX_INSTANCES, nullptr, GL_DYNAMIC_DRAW);
 
 		for (int i = 0; i < 4; i++)
 		{
-			glEnableVertexAttribArray(3 + i);
+			glEnableVertexAttribArray(4 + i);
 			glVertexAttribPointer(
-				3 + i,
+				4 + i,
 				4,
 				GL_FLOAT,
 				GL_FALSE,
@@ -138,15 +141,15 @@ namespace WaveEngine
 				(void*)(offsetof(InstanceData, model) + i * sizeof(glm::vec4))
 			);
 
-			glVertexAttribDivisor(3 + i, 1);
+			glVertexAttribDivisor(4 + i, 1);
 		}
 
-		glEnableVertexAttribArray(7);
-		glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE,
+		glEnableVertexAttribArray(8);
+		glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE,
 			sizeof(InstanceData),
 			(void*)offsetof(InstanceData, uvOffsetScale));
 
-		glVertexAttribDivisor(7, 1);
+		glVertexAttribDivisor(8, 1);
 
 		glBindVertexArray(0);
 	}
@@ -285,6 +288,8 @@ namespace WaveEngine
 			materialToUse->SetVec4("uColor", materialToUse->GetColor());
 			materialToUse->SetMat4("uView", view);
 			materialToUse->SetMat4("uProj", proj);
+			materialToUse->SetFloat("AmbientStrength", 1.0f);
+			materialToUse->SetVec3("LightColor", Vector3(0, 1, 1));
 
 			glDrawElementsInstanced(
 				GL_TRIANGLES,
