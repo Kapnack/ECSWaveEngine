@@ -1,6 +1,8 @@
 #include "ECSTransform.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include "ServiceProvider/ServiceProvider.h"
+#include <ECS/CompontRegistry/ComponentRegistry.h>
 
 namespace WaveEngine
 {
@@ -201,26 +203,62 @@ namespace WaveEngine
 		SetScale(scale.x, scale.y, -scale.z);
 	}
 
+	const glm::mat4& ECSTransform::GetLocalModel() const
+	{
+		return localModel;
+	}
+
+	const glm::mat4& ECSTransform::GetGlobalModel() const
+	{
+		return globalModel;
+	}
+
+	void ECSTransform::SetGlobalModel(const glm::mat4& m)
+	{
+		globalModel = m;
+	}
+
+	void ECSTransform::SetParent(unsigned int id)
+	{
+		parentID = id;
+	}
+
+	void ECSTransform::AddChild(unsigned int id)
+	{
+		children.push_back(id);
+	}
+
 	void ECSTransform::CalculateTRS()
 	{
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(position.x, position.y, position.z));
-		model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1, 0, 0));
-		model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0, 1, 0));
-		model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
-		model = glm::scale(model, glm::vec3(scale.x, scale.y, scale.z));
+		localModel = glm::mat4(1.0f);
+		localModel = glm::translate(localModel, glm::vec3(position.x, position.y, position.z));
+		localModel = glm::rotate(localModel, glm::radians(rotation.x), glm::vec3(1, 0, 0));
+		localModel = glm::rotate(localModel, glm::radians(rotation.y), glm::vec3(0, 1, 0));
+		localModel = glm::rotate(localModel, glm::radians(rotation.z), glm::vec3(0, 0, 1));
+		localModel = glm::scale(localModel, glm::vec3(scale.x, scale.y, scale.z));
 
 		dirty = false;
 	}
 
 	const glm::mat4& ECSTransform::GetModel() const
 	{
-		return model;
+		return globalModel;
 	}
 
 	void ECSTransform::MarkDirty()
 	{
+		if (dirty)
+			return;
+
 		dirty = true;
+
+		for (int childID : children)
+		{
+			ECSTransform* child = ServiceProvider::Instance().Get<ComponentRegistry>()->TryGet<ECSTransform>(childID);
+
+			if (child)
+				child->MarkDirty();
+		}
 	}
 
 	const bool ECSTransform::IsDirty() const
