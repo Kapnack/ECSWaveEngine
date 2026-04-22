@@ -288,8 +288,11 @@ namespace WaveEngine
 			materialToUse->SetVec4("uColor", materialToUse->GetColor());
 			materialToUse->SetMat4("uView", view);
 			materialToUse->SetMat4("uProj", proj);
-			materialToUse->SetFloat("AmbientStrength", 1.0f);
-			materialToUse->SetVec3("LightColor", Vector3(0, 1, 1));
+			materialToUse->SetFloat("AmbientStrength", 0.5f);
+			materialToUse->SetFloat("SpecularStrength", 1.0f);
+			materialToUse->SetVec3("LightColor", Vector3(1, 1, 1));
+			materialToUse->SetVec3("LightPos", Vector3(0, 0, 0));
+			materialToUse->SetVec3("viewPos", Vector3(0, 0, 0));
 
 			glDrawElementsInstanced(
 				GL_TRIANGLES,
