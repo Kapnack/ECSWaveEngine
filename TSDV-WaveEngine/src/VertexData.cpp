@@ -29,6 +29,14 @@ VertexData::VertexData(Vector3 position, Vector4 color, Vector2 textureCordinate
 	this->textureCordinates = textureCordinates;
 }
 
+VertexData::VertexData(Vector3 position, Vector4 color, Vector2 textureCordinates, Vector3 normal)
+{
+	this->position = position;
+	this->color = color;
+	this->textureCordinates = textureCordinates;
+	this->normal = normal;
+}
+
 void VertexData::SetColor(Vector4 color)
 {
 	this->color = color;
