@@ -85,14 +85,14 @@ namespace WaveEngine
 
 		const unsigned int indexSize = 36;
 		unsigned int* indices = new unsigned[indexSize]
-		{
-			0,1,2, 2,3,0,        // front
-			4,5,6, 6,7,4,        // back
-			8,9,10, 10,11,8,     // left
-			12,13,14, 14,15,12,  // right
-			16,17,18, 18,19,16,  // top
-			20,21,22, 22,23,20   // bottom
-		};
+			{
+				0, 1, 2, 2, 3, 0,        // front
+					4, 5, 6, 6, 7, 4,        // back
+					8, 9, 10, 10, 11, 8,     // left
+					12, 13, 14, 14, 15, 12,  // right
+					16, 17, 18, 18, 19, 16,  // top
+					20, 21, 22, 22, 23, 20   // bottom
+			};
 
 		GetComponentRegistry()->AddComponent<ECSTransform>(0);
 		GetComponentRegistry()->AddComponent<Camera>(0);
@@ -110,24 +110,24 @@ namespace WaveEngine
 
 		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uAlbedo", albedo);
 
-		for (int i = 1; i <= 1; ++i)
+		for (int i = 1; i <= 20; ++i)
 		{
 			GetComponentRegistry()->AddComponent<ECSTransform>(i);
 			GetComponentRegistry()->AddComponent<MeshID>(i);
 			GetComponentRegistry()->AddComponent<MeshRenderer>(i);
 
-			GetComponentRegistry()->Get<ECSTransform>(i).SetScale(100, 100, 100);
+			GetComponentRegistry()->Get<ECSTransform>(i).SetPosition(rand() % 200 - 100, rand() % 200 - 100, rand() % 200 - 100);
+			GetComponentRegistry()->Get<ECSTransform>(i).SetScale(32, 32, 32);
 
 			GetComponentRegistry()->Get<MeshID>(i).meshID = meshID;
 			GetComponentRegistry()->Get<MeshRenderer>(i).materialID = MatID;
 		}
-
-		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetParent(1);
-		//GetComponentRegistry()->GetComponent<ECSTransform>(1).AddChild(3);
-		//
-		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetPosition(10,0,0);
-		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetScale(1,1,1);
-		//
+			//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetParent(1);
+			//GetComponentRegistry()->GetComponent<ECSTransform>(1).AddChild(3);
+			//
+			//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetPosition(10,0,0);
+			//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetScale(1,1,1);
+			//
 
 	}
 
@@ -156,59 +156,59 @@ namespace WaveEngine
 
 		auto& transformEntity = GetComponentRegistry()->Get<ECSTransform>(1);
 
-		if (GetInput()->IsKeyPressed(Keys::UP))
-		{
-			transformEntity.Translate(Vector3::Up() * GetDeltaTime() * 100);
-		}
-		else if (GetInput()->IsKeyPressed(Keys::LEFT))
-		{
-			transformEntity.Translate(Vector3::Left() * GetDeltaTime() * 100);
-		}
-		else if (GetInput()->IsKeyPressed(Keys::DOWN))
-		{
-			transformEntity.Translate(Vector3::Down() * GetDeltaTime() * 100);
-		}
-		else if (GetInput()->IsKeyPressed(Keys::RIGHT))
-		{
-			transformEntity.Translate(Vector3::Right() * GetDeltaTime() * 100);
-		}
+		//if (GetInput()->IsKeyPressed(Keys::UP))
+		//{
+		//	transformEntity.Translate(Vector3::Up() * GetDeltaTime() * 100);
+		//}
+		//else if (GetInput()->IsKeyPressed(Keys::LEFT))
+		//{
+		//	transformEntity.Translate(Vector3::Left() * GetDeltaTime() * 100);
+		//}
+		//else if (GetInput()->IsKeyPressed(Keys::DOWN))
+		//{
+		//	transformEntity.Translate(Vector3::Down() * GetDeltaTime() * 100);
+		//}
+		//else if (GetInput()->IsKeyPressed(Keys::RIGHT))
+		//{
+		//	transformEntity.Translate(Vector3::Right() * GetDeltaTime() * 100);
+		//}
 
 		auto& camera = GetComponentRegistry()->Get<Camera>(0);
 		auto& transform = GetComponentRegistry()->Get<ECSTransform>(0);
-
+		const float camereSpeed = 300;
 		if (GetInput()->IsKeyPressed(Keys::W))
 		{
-			transform.Translate(Vector3::Up() * GetDeltaTime() * 100);
+			transform.Translate(Vector3::Up() * GetDeltaTime() * camereSpeed);
 		}
 		else if (GetInput()->IsKeyPressed(Keys::A))
 		{
-			transform.Translate(Vector3::Left() * GetDeltaTime() * 100);
+			transform.Translate(Vector3::Left() * GetDeltaTime() * camereSpeed);
 		}
 		else if (GetInput()->IsKeyPressed(Keys::S))
 		{
-			transform.Translate(Vector3::Down() * GetDeltaTime() * 100);
+			transform.Translate(Vector3::Down() * GetDeltaTime() * camereSpeed);
 		}
 		else if (GetInput()->IsKeyPressed(Keys::D))
 		{
-			transform.Translate(Vector3::Right() * GetDeltaTime() * 100);
+			transform.Translate(Vector3::Right() * GetDeltaTime() * camereSpeed);
 		}
 
 		if (GetInput()->IsKeyPressed(Keys::Z))
 		{
-			transform.Rotate(Vector3::Left() * GetDeltaTime() * 100);
+			transform.Rotate(Vector3::Left() * GetDeltaTime() * camereSpeed);
 		}
 		else if (GetInput()->IsKeyPressed(Keys::X))
 		{
-			transform.Rotate(Vector3::Right() * GetDeltaTime() * 100);
+			transform.Rotate(Vector3::Right() * GetDeltaTime() * camereSpeed);
 		}
 
 		if (GetInput()->IsKeyPressed(Keys::SPACE))
 		{
-			transform.Translate(Vector3::Foward() * GetDeltaTime() * 100);
+			transform.Translate(Vector3::Foward() * GetDeltaTime() * camereSpeed);
 		}
 		else if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
 		{
-			transform.Translate(Vector3::Back() * GetDeltaTime() * 100);
+			transform.Translate(Vector3::Back() * GetDeltaTime() * camereSpeed);
 		}
 
 		transformLogic.Update();
