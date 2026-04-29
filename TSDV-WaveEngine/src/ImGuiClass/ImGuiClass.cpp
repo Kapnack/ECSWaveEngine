@@ -60,6 +60,44 @@ namespace WaveEngine
 		text = "Draw Calls: " + to_string(ServiceProvider::Instance().Get<Renderer>()->GetDrawCalls()) + ".";
 		ImGui::Text(text.c_str());
 
+		ImGui::Separator();
+
+		ImGui::DragFloat3("DirLight Dir", &Renderer::dirLight.direction.x);
+		ImGui::DragFloat3("DirLight Ambient", &Renderer::dirLight.ambient.x);
+		ImGui::DragFloat3("DirLight Diffuse", &Renderer::dirLight.diffuse.x);
+		ImGui::DragFloat3("DirLight Specular", &Renderer::dirLight.specular.x);
+
+		ImGui::Separator();
+
+		ImGui::DragFloat3("Flash Pos", &Renderer::flashLight.position.x);
+		ImGui::DragFloat3("Flash Dir", &Renderer::flashLight.direction.x);
+		ImGui::DragFloat3("Flash Ambient", &Renderer::flashLight.ambient.x);
+		ImGui::DragFloat3("Flash Diffuse", &Renderer::flashLight.diffuse.x);
+		ImGui::DragFloat3("Flash Specular", &Renderer::flashLight.specular.x);
+		ImGui::DragFloat("Flash const", &Renderer::flashLight.constant);
+		ImGui::DragFloat("Flash linear", &Renderer::flashLight.linear);
+		ImGui::DragFloat("Flash Quad", &Renderer::flashLight.quadratic);
+		ImGui::DragFloat("Flash CutOff", &Renderer::flashLight.cutOff);
+		ImGui::DragFloat("Flash OutterCutOff", &Renderer::flashLight.outerCutOff);
+
+		for (int i = 0; i < 4; i++)
+		{
+			string name = "PointLight" + to_string(i);
+
+			ImGui::DragFloat3((name + " Pos").c_str(), &Renderer::pointLight[i].position.x);
+			ImGui::DragFloat3((name + " Ambient").c_str(), &Renderer::pointLight[i].ambient.x);
+			ImGui::DragFloat3((name + " Diffuse").c_str(), &Renderer::pointLight[i].diffuse.x);
+			ImGui::DragFloat3((name + " Specular").c_str(), &Renderer::pointLight[i].specular.x);
+
+			ImGui::DragFloat((name + " const").c_str(), &Renderer::pointLight[i].constant);
+			ImGui::DragFloat((name + " linear").c_str(), &Renderer::pointLight[i].linear);
+			ImGui::DragFloat((name + " Quad").c_str(), &Renderer::pointLight[i].quadratic);
+
+			if (i < 3)
+				ImGui::Separator();
+
+		}
+
 		ImGui::End();
 	}
 
