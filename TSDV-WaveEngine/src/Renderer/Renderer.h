@@ -24,6 +24,45 @@ using namespace std;
 
 namespace WaveEngine
 {
+	struct DirLight
+	{
+		Vector3 direction = { -0.41f, -0.82f, -0.39f };
+
+		Vector3 ambient = { 0.06f, 0.06f, 0.06f };
+		Vector3 diffuse = { 0.45f, 0.42f, 0.40f };
+		Vector3 specular = { 0.50f, 0.50f, 0.50f };
+	};
+
+	struct PointLight
+	{
+		Vector3 position = { 3.8f, 1.6f, -2.9f };
+
+		Vector3 ambient = { 0.04f, 0.04f, 0.04f };
+		Vector3 diffuse = { 0.90f, 0.70f, 0.60f };
+		Vector3 specular = { 1.00f, 1.00f, 1.00f };
+
+		float constant = 1.0f;
+		float linear = 0.07f;
+		float quadratic = 0.017f;
+	};
+
+	struct SpotLight
+	{
+		Vector3 position = { 0.0f, 0.0f, 0.0f };
+		Vector3 direction = { 0.0f, 0.0f, -1.0f };
+
+		Vector3 ambient = { 0.00f, 0.00f, 0.00f };
+		Vector3 diffuse = { 1.00f, 0.95f, 0.85f };
+		Vector3 specular = { 1.00f, 1.00f, 1.00f };
+
+		float constant = 1.0f;
+		float linear = 0.09f;
+		float quadratic = 0.032f;
+
+		float cutOff = 0.976f; // cos(12.5°)
+		float outerCutOff = 0.953f; // cos(17.5°)
+	};
+
 	struct BatchData
 	{
 		unsigned int materialID = 0;
@@ -93,6 +132,10 @@ namespace WaveEngine
 		ComponentRegistry* GetComponentRegistry();
 
 	public:
+
+		static DirLight dirLight;
+		static PointLight pointLight[4];
+		static SpotLight flashLight;
 
 		Renderer();
 		~Renderer();
