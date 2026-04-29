@@ -74,8 +74,11 @@ namespace WaveEngine
 		void SetColor(const Vector4& color);
 
 		void SetVec2(const std::string& name, const Vector2& value);
+		void SetVec2(const std::string& name, const float& x, const float& y);
 		void SetVec3(const std::string& name, const Vector3& value);
+		void SetVec3(const std::string& name, const float& x, const float& y, const float& z);
 		void SetVec4(const std::string& name, const Vector4& value);
+		void SetVec4(const std::string& name, const float& x, const float& y, const float& z, const float& w);
 		void SetMat4(const std::string& name, const glm::mat4& value);
 		void SetGLMVec4(const std::string& name, const glm::vec4& value);
 		void SetGLMVec3(const std::string& name, const glm::vec3& value);
