@@ -75,7 +75,12 @@ namespace WaveEngine
 
 	void Material::SetVec2(const std::string& name, const Vector2& value)
 	{
-		SetGLMVec2(name, glm::vec2(value.x, value.y));
+		SetVec2(name, value.x, value.y);
+	}
+
+	void Material::SetVec2(const std::string& name, const float& x, const float& y)
+	{
+		SetGLMVec2(name, glm::vec2(x, y));
 	}
 
 	void Material::SetVec3(const std::string& name, const Vector3& value)
