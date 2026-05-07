@@ -9,6 +9,7 @@
 #include <ECS/Mesh/MeshID.h>
 #include <ECS/MaterialID.h>
 #include <ECS/Transform/ECSTransform.h>
+#include <ModelImporter/ModelImporter.h>
 
 namespace WaveEngine
 {
@@ -103,31 +104,34 @@ namespace WaveEngine
 
 		int MatID = GetMaterialFactory()->CreateMaterial("Test", GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"), GetFileReader()->ReadFile("Shaders/ECS/newShader.frag"));
 
-		unsigned int textureIndex = GetTextureImporter()->LoadTextureAbsolutePath("Sprites/battlecity_general.png");
+		unsigned int textureIndex = GetTextureImporter()->LoadTextureAbsolutePath("Sprites/whiteImage.png");
+		GetTextureImporter()->LoadTextureAbsolutePath("Sprites/battlecity_general.png");
 		unsigned int albedo = GetTextureManager()->GetTexture(textureIndex)->GetTextureID();
 
-		unsigned int meshID = GetMeshFactory()->CreateMesh("Square", vertex, vertexSize, indices, indexSize);
+		ModelImporter modelImporter;
 
-		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uAlbedo", albedo);
+		unsigned int meshID = modelImporter.LoadMesh("Rata", "C:\\Users\\Kapnack\\Downloads\\PlayerCharacter.fbx");
 
-		for (int i = 1; i <= 20; ++i)
+		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uTexture", albedo);
+
+		for (int i = 1; i <= 2; ++i)
 		{
 			GetComponentRegistry()->AddComponent<ECSTransform>(i);
 			GetComponentRegistry()->AddComponent<MeshID>(i);
 			GetComponentRegistry()->AddComponent<MeshRenderer>(i);
 
 			GetComponentRegistry()->Get<ECSTransform>(i).SetPosition(rand() % 200 - 100, rand() % 200 - 100, rand() % 200 - 100);
-			GetComponentRegistry()->Get<ECSTransform>(i).SetScale(32, 32, 32);
+			GetComponentRegistry()->Get<ECSTransform>(i).SetScale(100, 100, 100);
 
 			GetComponentRegistry()->Get<MeshID>(i).meshID = meshID;
 			GetComponentRegistry()->Get<MeshRenderer>(i).materialID = MatID;
 		}
-			//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetParent(1);
-			//GetComponentRegistry()->GetComponent<ECSTransform>(1).AddChild(3);
-			//
-			//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetPosition(10,0,0);
-			//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetScale(1,1,1);
-			//
+		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetParent(1);
+		//GetComponentRegistry()->GetComponent<ECSTransform>(1).AddChild(3);
+		//
+		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetPosition(10,0,0);
+		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetScale(1,1,1);
+		//
 
 	}
 
