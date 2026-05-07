@@ -6,6 +6,8 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
+#include "Mesh/MeshFactory/MeshFactory.h"
+
 #include <string>
 
 using namespace std;
@@ -16,10 +18,12 @@ namespace WaveEngine
 	{
 	private:
 
-		void InitFromScene(const aiScene* pScene, const string_view filepath);
+		unsigned int InitFromScene(string_view assetName, const aiScene* pScene, const string_view filepath);
+
+		MeshFactory* GetMeshFactory();
 
 	public:
 
-		WAVEEXPORT void LoadMesh(const string_view filePath);
+		WAVEEXPORT unsigned int LoadMesh(string_view assetName, const string_view filePath);
 	};
 }
