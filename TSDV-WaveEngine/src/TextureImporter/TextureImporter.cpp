@@ -61,6 +61,8 @@ namespace WaveEngine
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
+		glBindTexture(GL_TEXTURE_2D, 0);
+
 		Texture* newTexture = new Texture(texture, width, height);
 
 		std::filesystem::path path = filePath;
