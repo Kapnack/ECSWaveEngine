@@ -2,13 +2,11 @@
 
 #include "Export.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
+#include <utility>
+
 #include <assimp/scene.h>
 
 #include "Mesh/MeshFactory/MeshFactory.h"
-
-#include <string>
 
 using namespace std;
 
@@ -21,6 +19,8 @@ namespace WaveEngine
 		unsigned int InitFromScene(string_view assetName, const aiScene* pScene, const string_view filepath);
 
 		MeshFactory* GetMeshFactory();
+
+		pair<unsigned int, unsigned int> GetVertexAndIndexSizes(const aiScene& pScene);
 
 	public:
 
