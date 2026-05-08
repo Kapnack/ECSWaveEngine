@@ -1,6 +1,17 @@
 #include "ModelImporter.h"
-#include <Mesh/Mesh.h>
-#include <ServiceProvider/ServiceProvider.h>
+
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
+#include <assimp/color4.h>
+#include <assimp/mesh.h>
+#include <vector>
+
+#include "ServiceProvider/ServiceProvider.h"
+#include "VertexData.h"
+#include "Mesh/Mesh.h"
+#include "WaveMath/Vector3/Vector3.h"
+#include "WaveMath/Vector4/Vector4.h"
 
 namespace WaveEngine
 {
@@ -58,10 +69,6 @@ namespace WaveEngine
                         mesh->mTextureCoords[0][j].x,
                         mesh->mTextureCoords[0][j].y
                     );
-                }
-                else
-                {
-                    vertex.textureCordinates = Vector2(0, 0);
                 }
 
                 if (mesh->HasVertexColors(0))
