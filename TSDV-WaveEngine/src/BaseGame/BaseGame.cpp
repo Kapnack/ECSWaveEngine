@@ -126,13 +126,6 @@ namespace WaveEngine
 			GetComponentRegistry()->Get<MeshID>(i).meshID = meshID;
 			GetComponentRegistry()->Get<MeshRenderer>(i).materialID = MatID;
 		}
-		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetParent(1);
-		//GetComponentRegistry()->GetComponent<ECSTransform>(1).AddChild(3);
-		//
-		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetPosition(10,0,0);
-		//GetComponentRegistry()->GetComponent<ECSTransform>(3).SetScale(1,1,1);
-		//
-
 	}
 
 	void BaseGame::EndEngine()
@@ -158,28 +151,10 @@ namespace WaveEngine
 	{
 		GetTime()->UpdateDeltaTime();
 
-		auto& transformEntity = GetComponentRegistry()->Get<ECSTransform>(1);
-
-		//if (GetInput()->IsKeyPressed(Keys::UP))
-		//{
-		//	transformEntity.Translate(Vector3::Up() * GetDeltaTime() * 100);
-		//}
-		//else if (GetInput()->IsKeyPressed(Keys::LEFT))
-		//{
-		//	transformEntity.Translate(Vector3::Left() * GetDeltaTime() * 100);
-		//}
-		//else if (GetInput()->IsKeyPressed(Keys::DOWN))
-		//{
-		//	transformEntity.Translate(Vector3::Down() * GetDeltaTime() * 100);
-		//}
-		//else if (GetInput()->IsKeyPressed(Keys::RIGHT))
-		//{
-		//	transformEntity.Translate(Vector3::Right() * GetDeltaTime() * 100);
-		//}
-
 		auto& camera = GetComponentRegistry()->Get<Camera>(0);
 		auto& transform = GetComponentRegistry()->Get<ECSTransform>(0);
 		const float camereSpeed = 300;
+
 		if (GetInput()->IsKeyPressed(Keys::W))
 		{
 			transform.Translate(Vector3::Up() * GetDeltaTime() * camereSpeed);
