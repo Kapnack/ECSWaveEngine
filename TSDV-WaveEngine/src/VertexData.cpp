@@ -10,26 +10,26 @@ VertexData::VertexData(float x, float y, float z, float r, float g, float b, flo
 	position.y = y;
 	position.z = z;
 
-	color.x = r;
-	color.y = g;
-	color.z = b;
-	color.w = a;
+	color.r = r;
+	color.g = g;
+	color.b = b;
+	color.a = a;
 }
 
-VertexData::VertexData(Vector3 position, Vector4 color)
+VertexData::VertexData(Vector3 position, Color color)
 {
 	this->position = position;
 	this->color = color;
 }
 
-VertexData::VertexData(Vector3 position, Vector4 color, Vector2 textureCordinates)
+VertexData::VertexData(Vector3 position, Color color, Vector2 textureCordinates)
 {
 	this->position = position;
 	this->color = color;
 	this->textureCordinates = textureCordinates;
 }
 
-VertexData::VertexData(Vector3 position, Vector4 color, Vector2 textureCordinates, Vector3 normal)
+VertexData::VertexData(Vector3 position, Color color, Vector2 textureCordinates, Vector3 normal)
 {
 	this->position = position;
 	this->color = color;
@@ -37,7 +37,7 @@ VertexData::VertexData(Vector3 position, Vector4 color, Vector2 textureCordinate
 	this->normal = normal;
 }
 
-void VertexData::SetColor(Vector4 color)
+void VertexData::SetColor(Color color)
 {
 	this->color = color;
 }
