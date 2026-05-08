@@ -51,37 +51,39 @@ namespace WaveEngine
 
 		const unsigned int vertexSize = 24;
 
+		const Color white = Color::White();
+
 		VertexData* vertex = new VertexData[24]
 		{
-			VertexData(Vector3(-0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(0,0,1)),
-			VertexData(Vector3(0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(0,0,1)),
-			VertexData(Vector3(0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(0,0,1)),
-			VertexData(Vector3(-0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(0,0,1)),
+			VertexData(Vector3(-0.5f,-0.5f, 0.5f), white, Vector2(0,0), Vector3(0,0,1)),
+			VertexData(Vector3(0.5f,-0.5f, 0.5f), white, Vector2(1,0), Vector3(0,0,1)),
+			VertexData(Vector3(0.5f, 0.5f, 0.5f), white, Vector2(1,1), Vector3(0,0,1)),
+			VertexData(Vector3(-0.5f, 0.5f, 0.5f), white, Vector2(0,1), Vector3(0,0,1)),
 
-			VertexData(Vector3(0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(0,0,-1)),
-			VertexData(Vector3(-0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(0,0,-1)),
-			VertexData(Vector3(-0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(0,0,-1)),
-			VertexData(Vector3(0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(0,0,-1)),
+			VertexData(Vector3(0.5f,-0.5f,-0.5f), white, Vector2(0,0), Vector3(0,0,-1)),
+			VertexData(Vector3(-0.5f,-0.5f,-0.5f), white, Vector2(1,0), Vector3(0,0,-1)),
+			VertexData(Vector3(-0.5f, 0.5f,-0.5f), white, Vector2(1,1), Vector3(0,0,-1)),
+			VertexData(Vector3(0.5f, 0.5f,-0.5f), white, Vector2(0,1), Vector3(0,0,-1)),
 
-			VertexData(Vector3(-0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(-1,0,0)),
-			VertexData(Vector3(-0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(-1,0,0)),
-			VertexData(Vector3(-0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(-1,0,0)),
-			VertexData(Vector3(-0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(-1,0,0)),
+			VertexData(Vector3(-0.5f,-0.5f,-0.5f), white, Vector2(0,0), Vector3(-1,0,0)),
+			VertexData(Vector3(-0.5f,-0.5f, 0.5f), white, Vector2(1,0), Vector3(-1,0,0)),
+			VertexData(Vector3(-0.5f, 0.5f, 0.5f), white, Vector2(1,1), Vector3(-1,0,0)),
+			VertexData(Vector3(-0.5f, 0.5f,-0.5f), white, Vector2(0,1), Vector3(-1,0,0)),
 
-			VertexData(Vector3(0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(1,0,0)),
-			VertexData(Vector3(0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(1,0,0)),
-			VertexData(Vector3(0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(1,0,0)),
-			VertexData(Vector3(0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(1,0,0)),
+			VertexData(Vector3(0.5f,-0.5f, 0.5f), white, Vector2(0,0), Vector3(1,0,0)),
+			VertexData(Vector3(0.5f,-0.5f,-0.5f), white, Vector2(1,0), Vector3(1,0,0)),
+			VertexData(Vector3(0.5f, 0.5f,-0.5f), white, Vector2(1,1), Vector3(1,0,0)),
+			VertexData(Vector3(0.5f, 0.5f, 0.5f), white, Vector2(0,1), Vector3(1,0,0)),
 
-			VertexData(Vector3(-0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(0,1,0)),
-			VertexData(Vector3(0.5f, 0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(0,1,0)),
-			VertexData(Vector3(0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(0,1,0)),
-			VertexData(Vector3(-0.5f, 0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(0,1,0)),
+			VertexData(Vector3(-0.5f, 0.5f, 0.5f), white, Vector2(0,0), Vector3(0,1,0)),
+			VertexData(Vector3(0.5f, 0.5f, 0.5f), white, Vector2(1,0), Vector3(0,1,0)),
+			VertexData(Vector3(0.5f, 0.5f,-0.5f), white, Vector2(1,1), Vector3(0,1,0)),
+			VertexData(Vector3(-0.5f, 0.5f,-0.5f), white, Vector2(0,1), Vector3(0,1,0)),
 
-			VertexData(Vector3(-0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(0,0), Vector3(0,-1,0)),
-			VertexData(Vector3(0.5f,-0.5f,-0.5f), Vector4(1,1,1,1), Vector2(1,0), Vector3(0,-1,0)),
-			VertexData(Vector3(0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(1,1), Vector3(0,-1,0)),
-			VertexData(Vector3(-0.5f,-0.5f, 0.5f), Vector4(1,1,1,1), Vector2(0,1), Vector3(0,-1,0))
+			VertexData(Vector3(-0.5f,-0.5f,-0.5f), white, Vector2(0,0), Vector3(0,-1,0)),
+			VertexData(Vector3(0.5f,-0.5f,-0.5f), white, Vector2(1,0), Vector3(0,-1,0)),
+			VertexData(Vector3(0.5f,-0.5f, 0.5f), white, Vector2(1,1), Vector3(0,-1,0)),
+			VertexData(Vector3(-0.5f,-0.5f, 0.5f), white, Vector2(0,1), Vector3(0,-1,0))
 		};
 
 		const unsigned int indexSize = 36;
