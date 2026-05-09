@@ -23,13 +23,12 @@ namespace WaveEngine
 			aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs |
 			aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices);
 
-		return InitFromScene(assetName, pScene, filePath);
+		return InitFromScene(assetName, pScene);
 	}
 
 	unsigned int ModelImporter::InitFromScene(
 		string_view assetName,
-		const aiScene* pScene,
-		const string_view filepath)
+		const aiScene* pScene)
 	{
 		pair<int, int> count = GetVertexAndIndexSizes(*pScene);
 

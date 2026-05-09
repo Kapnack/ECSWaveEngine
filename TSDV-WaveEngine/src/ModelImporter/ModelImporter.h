@@ -16,7 +16,7 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int InitFromScene(string_view assetName, const aiScene* pScene, const string_view filepath);
+		unsigned int InitFromScene(string_view assetName, const aiScene* pScene);
 
 		MeshFactory* GetMeshFactory();
 
