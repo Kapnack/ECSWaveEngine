@@ -34,28 +34,46 @@ struct Color
 		this->a = a;
 	}
 
+	static Color Color32(const float& r, const float& g, const float& b)
+	{
+		const float color32MaxValue = 255.0f;
+		return Color(r / color32MaxValue, g / color32MaxValue, b / color32MaxValue);
+	}
+
+	static Color Color32(const float& r, const float& g, const float& b, const float& a)
+	{
+		const float color32MaxValue = 255.0f;
+		return Color(r / color32MaxValue, g / color32MaxValue, b / color32MaxValue, a / color32MaxValue);
+	}
+
+	Color GetAsColor32()
+	{
+		const float color32MaxValue = 255.0f;
+		return Color(r * color32MaxValue, g * color32MaxValue, b * color32MaxValue, a * color32MaxValue);
+	}
+
 	static Color White()
 	{
-		return Color(1.0f, 1.0f, 1.0f, 1.0f);
+		return Color(1.0f, 1.0f, 1.0f);
 	}
 
 	static Color Black()
 	{
-		return Color(0.0f, 0.0f, 0.0f, 1.0f);
+		return Color(0.0f, 0.0f, 0.0f);
 	}
 
 	static Color Red()
 	{
-		return Color(1.0f, 0.0f, 0.0f, 1.0f);
+		return Color(1.0f, 0.0f, 0.0f);
 	}
 
 	static Color Green()
 	{
-		return Color(0.0f, 1.0f, 0.0f, 1.0f);
+		return Color(0.0f, 1.0f, 0.0f);
 	}
 
 	static Color Blue()
 	{
-		return Color(0.0f, 0.0f, 1.0f, 1.0f);
+		return Color(0.0f, 0.0f, 1.0f);
 	}
 };
