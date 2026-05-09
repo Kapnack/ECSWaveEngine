@@ -4,7 +4,7 @@ VertexData::VertexData()
 {
 }
 
-VertexData::VertexData(float x, float y, float z, float r, float g, float b, float a)
+VertexData::VertexData(const float& x, const float& y, const float& z, const float& r, const float& g, const float& b, const float& a)
 {
 	position.x = x;
 	position.y = y;
@@ -16,20 +16,20 @@ VertexData::VertexData(float x, float y, float z, float r, float g, float b, flo
 	color.a = a;
 }
 
-VertexData::VertexData(Vector3 position, Color color)
+VertexData::VertexData(const Vector3& position, const Color& color)
 {
 	this->position = position;
 	this->color = color;
 }
 
-VertexData::VertexData(Vector3 position, Color color, Vector2 textureCordinates)
+VertexData::VertexData(const Vector3& position, const Color& color, const Vector2& textureCordinates)
 {
 	this->position = position;
 	this->color = color;
 	this->textureCordinates = textureCordinates;
 }
 
-VertexData::VertexData(Vector3 position, Color color, Vector2 textureCordinates, Vector3 normal)
+VertexData::VertexData(const Vector3& position, const Color& color, const Vector2& textureCordinates, const Vector3& normal)
 {
 	this->position = position;
 	this->color = color;
@@ -37,17 +37,7 @@ VertexData::VertexData(Vector3 position, Color color, Vector2 textureCordinates,
 	this->normal = normal;
 }
 
-void VertexData::SetColor(Color color)
+void VertexData::SetColor(const Color& color)
 {
 	this->color = color;
-}
-
-TextureData::TextureData()
-{
-}
-
-TextureData::TextureData(float u, float v)
-{
-	this->u = u;
-	this->v = v;
 }
