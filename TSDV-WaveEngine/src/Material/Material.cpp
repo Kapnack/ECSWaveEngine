@@ -42,9 +42,9 @@ namespace WaveEngine
 		return ID;
 	}
 
-	unsigned int Material::GetProgram() const
+	unsigned int Material::GetGPUID() const
 	{
-		return program;
+		return gpuID;
 	}
 
 	void Material::SetTexture(const std::string& uniformName, unsigned int textureID)
@@ -88,9 +88,19 @@ namespace WaveEngine
 		SetGLMVec3(name, glm::vec3(value.x, value.y, value.z));
 	}
 
+	void Material::SetVec3(const std::string& name, const float& x, const float& y, const float& z)
+	{
+		SetGLMVec3(name, glm::vec3(x, y, z));
+	}
+
 	void Material::SetVec4(const std::string& name, const Vector4& value)
 	{
 		SetGLMVec4(name, glm::vec4(value.x, value.y, value.z, value.w));
+	}
+
+	void Material::SetVec4(const std::string& name, const float& x, const float& y, const float& z, const float& w)
+	{
+		SetGLMVec4(name, glm::vec4(x, y, z, w));
 	}
 
 	void Material::SetMat4(const std::string& name, const glm::mat4& value)
@@ -149,7 +159,7 @@ namespace WaveEngine
 
 	void Material::Bind()
 	{
-		glUseProgram(program);
+		glUseProgram(gpuID);
 
 		int textureSlot = 0;
 
@@ -176,6 +186,6 @@ namespace WaveEngine
 
 	void Material::Unload()
 	{
-		glDeleteProgram(program);
+		glDeleteProgram(gpuID);
 	}
 }

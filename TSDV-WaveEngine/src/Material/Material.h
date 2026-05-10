@@ -1,19 +1,13 @@
 #pragma once
 
-#include <iostream>
 #include <unordered_map>
 #include <string>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
-#include "TextureImporter/Texture.h"
 #include "WaveMath/Vector4/Vector4.h"
 #include "WaveMath/Vector2/Vector2.h"
 #include "WaveMath/Vector3/Vector3.h"
+#include <glm/fwd.hpp>
 
 namespace WaveEngine
 {
@@ -42,7 +36,7 @@ namespace WaveEngine
 
 		unsigned int ID = 0;
 
-		unsigned int program = 0;
+		unsigned int gpuID = 0;
 
 		vector<Uniform*> samplerUniforms;
 		unordered_map<string, Uniform> uniforms;
@@ -69,7 +63,7 @@ namespace WaveEngine
 
 		Vector4 GetColor() const;
 		unsigned int GetID() const;
-		unsigned int GetProgram() const;
+		unsigned int GetGPUID() const;
 		void SetTexture(const std::string& uniformName, unsigned int textureID);
 		void SetColor(const Vector4& color);
 
