@@ -74,9 +74,8 @@ namespace WaveEngine
 				const aiFace& face = mesh.mFaces[j];
 
 				for (unsigned int k = 0; k < face.mNumIndices; ++k)
-				{
 					indicesToSubmit[indexGlobalOffset++] = face.mIndices[k] + vertexGlobalOffset;
-				}
+				
 			}
 
 			vertexGlobalOffset += mesh.mNumVertices;
