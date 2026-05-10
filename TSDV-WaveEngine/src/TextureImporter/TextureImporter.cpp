@@ -7,6 +7,8 @@
 #include <iostream>
 #include <filesystem>
 
+#include "ServiceProvider/ServiceProvider.h"
+
 namespace WaveEngine
 {
 	TextureImporter::TextureImporter() : Service()
@@ -69,7 +71,7 @@ namespace WaveEngine
 
 		newTexture->name = path.filename().string();
 
-		const unsigned int currentIndex = GetTextureManager()->Save(newTexture);
+		GetTextureManager()->Save(newTexture);
 
 		stbi_image_free(data);
 

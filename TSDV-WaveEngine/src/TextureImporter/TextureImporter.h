@@ -1,12 +1,9 @@
 #pragma once
 
 #include "Export.h"
-#include <string>
 
-#include "ServiceProvider/ServiceProvider.h"
 #include "ServiceProvider/Service.h"
 #include "TextureImporter/TextureManager.h"
-#include "TextureImporter/Texture.h"
 
 class BaseGame;
 
@@ -30,7 +27,7 @@ namespace WaveEngine
 
 	public:
 
-		WAVEEXPORT unsigned int  LoadTextureAbsolutePath(const string_view filePath);
-		WAVEEXPORT unsigned int  LoadTexture(const string_view filePath);
+		WAVEEXPORT unsigned int LoadTextureAbsolutePath(const string_view filePath);
+		WAVEEXPORT unsigned int LoadTexture(const string_view filePath);
 	};
 }
