@@ -69,20 +69,25 @@ namespace WaveEngine
 
 		ImGui::Separator();
 
-		ImGui::DragFloat3("Flash Pos", &Renderer::flashLight.position.x);
-		ImGui::DragFloat3("Flash Dir", &Renderer::flashLight.direction.x);
-		ImGui::DragFloat3("Flash Ambient", &Renderer::flashLight.ambient.x);
-		ImGui::DragFloat3("Flash Diffuse", &Renderer::flashLight.diffuse.x);
-		ImGui::DragFloat3("Flash Specular", &Renderer::flashLight.specular.x);
-		ImGui::DragFloat("Flash const", &Renderer::flashLight.constant);
-		ImGui::DragFloat("Flash linear", &Renderer::flashLight.linear);
-		ImGui::DragFloat("Flash Quad", &Renderer::flashLight.quadratic);
-		ImGui::DragFloat("Flash CutOff", &Renderer::flashLight.cutOff);
-		ImGui::DragFloat("Flash OutterCutOff", &Renderer::flashLight.outerCutOff);
-
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < Renderer::Amount_Per_Light; ++i)
 		{
-			string name = "PointLight" + to_string(i);
+			string name = "FlashLight " + to_string(i) + ": ";
+
+			ImGui::DragFloat3("Flash Pos", &Renderer::flashLights[i].position.x);
+			ImGui::DragFloat3("Flash Dir", &Renderer::flashLights[i].direction.x);
+			ImGui::DragFloat3("Flash Ambient", &Renderer::flashLights[i].ambient.x);
+			ImGui::DragFloat3("Flash Diffuse", &Renderer::flashLights[i].diffuse.x);
+			ImGui::DragFloat3("Flash Specular", &Renderer::flashLights[i].specular.x);
+			ImGui::DragFloat("Flash const", &Renderer::flashLights[i].constant);
+			ImGui::DragFloat("Flash linear", &Renderer::flashLights[i].linear);
+			ImGui::DragFloat("Flash Quad", &Renderer::flashLights[i].quadratic);
+			ImGui::DragFloat("Flash CutOff", &Renderer::flashLights[i].cutOff);
+			ImGui::DragFloat("Flash OutterCutOff", &Renderer::flashLights[i].outerCutOff);
+		}
+
+		for (int i = 0; i < Renderer::Amount_Per_Light; ++i)
+		{
+			string name = "PointLight " + to_string(i) + ": ";
 
 			ImGui::DragFloat3((name + " Pos").c_str(), &Renderer::pointLight[i].position.x);
 			ImGui::DragFloat3((name + " Ambient").c_str(), &Renderer::pointLight[i].ambient.x);
