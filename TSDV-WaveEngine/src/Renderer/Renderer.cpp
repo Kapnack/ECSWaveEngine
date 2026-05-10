@@ -17,8 +17,8 @@ using namespace std;
 namespace WaveEngine
 {
 	DirLight Renderer::dirLight;
-	SpotLight Renderer::flashLight;
-	PointLight Renderer::pointLight[4];
+	SpotLight Renderer::flashLights[Renderer::Amount_Per_Light];
+	PointLight Renderer::pointLight[Renderer::Amount_Per_Light];
 
 	Renderer::Renderer()
 	{
@@ -159,6 +159,12 @@ namespace WaveEngine
 		glBindVertexArray(0);
 	}
 
+	void Renderer::UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned& VBO)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vertexSize * sizeof(VertexData), vertex);
+	}
+
 	void Renderer::DeleteBuffers(unsigned int& VAO, unsigned int& VBO, unsigned int& EBO)
 	{
 		glDeleteVertexArrays(1, &VAO);
@@ -256,6 +262,13 @@ namespace WaveEngine
 				batch.instanceCapacity = 0;
 			}
 
+			if (mesh.GetDirty())
+			{
+				UpdateBuffer(mesh.GetVertexBuffer(), mesh.GetVertexSize(), batch.VBO);
+				mesh.UnDirt();
+			}
+
+
 			glBindVertexArray(batch.VAO);
 			glBindBuffer(GL_ARRAY_BUFFER, batch.instanceVBO);
 
@@ -303,9 +316,9 @@ namespace WaveEngine
 			materialToUse->SetVec3("dirLight.diffuse", dirLight.diffuse);
 			materialToUse->SetVec3("dirLight.specular", dirLight.specular);
 
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < Amount_Per_Light; ++i)
 			{
-				std::string base = "pointLights[" + std::to_string(i) + "]";
+				string base = "pointLights[" + std::to_string(i) + "]";
 
 				materialToUse->SetVec3(base + ".position", pointLight[i].position);
 
@@ -320,25 +333,25 @@ namespace WaveEngine
 
 			materialToUse->SetVec3("viewPos", cameraTransform.position);
 
-			// Position = camera position
-			materialToUse->SetVec3("flashlight.position", flashLight.position);
+			for (int i = 0; i < Amount_Per_Light; ++i)
+			{
+				string base = "flashlights[" + std::to_string(i) + "]";
 
-			// Direction = where camera is looking
-			materialToUse->SetVec3("flashlight.direction", flashLight.direction);
+				materialToUse->SetVec3(base + ".position", flashLights[i].position);
 
-			// Light color
-			materialToUse->SetVec3("flashlight.ambient", flashLight.ambient);
-			materialToUse->SetVec3("flashlight.diffuse", flashLight.diffuse);
-			materialToUse->SetVec3("flashlight.specular", flashLight.specular);
+				materialToUse->SetVec3(base + ".direction", flashLights[i].direction);
 
-			// Attenuation
-			materialToUse->SetFloat("flashlight.constant", flashLight.constant);
-			materialToUse->SetFloat("flashlight.linear", flashLight.linear);
-			materialToUse->SetFloat("flashlight.quadratic", flashLight.quadratic);
+				materialToUse->SetVec3(base + ".ambient", flashLights[i].ambient);
+				materialToUse->SetVec3(base + ".diffuse", flashLights[i].diffuse);
+				materialToUse->SetVec3(base + ".specular", flashLights[i].specular);
 
-			// Cone angles (IMPORTANT: use cos)
-			materialToUse->SetFloat("flashlight.cutOff", glm::cos(glm::radians(flashLight.cutOff)));
-			materialToUse->SetFloat("flashlight.outerCutOff", glm::cos(glm::radians(flashLight.outerCutOff)));
+				materialToUse->SetFloat(base + ".constant", flashLights[i].constant);
+				materialToUse->SetFloat(base + ".linear", flashLights[i].linear);
+				materialToUse->SetFloat(base + ".quadratic", flashLights[i].quadratic);
+
+				materialToUse->SetFloat(base + ".cutOff", glm::cos(glm::radians(flashLights[i].cutOff)));
+				materialToUse->SetFloat(base + ".outerCutOff", glm::cos(glm::radians(flashLights[i].outerCutOff)));
+			}
 
 			glDrawElementsInstanced(
 				GL_TRIANGLES,
