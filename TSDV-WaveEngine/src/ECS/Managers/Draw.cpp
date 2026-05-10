@@ -27,7 +27,7 @@ namespace WaveEngine
 	{
 		ComponentContainer<MeshRenderer>& meshRendererContainer = GetComponentRegistry()->GetComponentStorage<MeshRenderer>();
 		vector<MeshRenderer>& components = meshRendererContainer.GetComponents();
-		const vector<int>& entities = meshRendererContainer.GetEntities();
+		const vector<unsigned int>& entities = meshRendererContainer.GetEntities();
 
 		ComponentContainer<MeshID>& meshIDRendererStorage = GetComponentRegistry()->GetComponentStorage<MeshID>();
 		ComponentContainer<ECSTransform>& transfromStorage = GetComponentRegistry()->GetComponentStorage<ECSTransform>();
