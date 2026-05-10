@@ -8,6 +8,7 @@
 #include "WaveMath/Vector2/Vector2.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include <glm/fwd.hpp>
+#include "Color/Color.h"
 
 namespace WaveEngine
 {
@@ -72,6 +73,7 @@ namespace WaveEngine
 		void SetVec3(const std::string& name, const Vector3& value);
 		void SetVec3(const std::string& name, const float& x, const float& y, const float& z);
 		void SetVec4(const std::string& name, const Vector4& value);
+		void SetVec4(const std::string& name, const Color& value);
 		void SetVec4(const std::string& name, const float& x, const float& y, const float& z, const float& w);
 		void SetMat4(const std::string& name, const glm::mat4& value);
 		void SetGLMVec4(const std::string& name, const glm::vec4& value);

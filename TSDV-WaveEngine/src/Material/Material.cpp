@@ -99,6 +99,11 @@ namespace WaveEngine
 		SetGLMVec4(name, glm::vec4(value.x, value.y, value.z, value.w));
 	}
 
+	void Material::SetVec4(const std::string& name, const Color& value)
+	{
+		SetGLMVec4(name, glm::vec4(value.r, value.g, value.b, value.a));
+	}
+
 	void Material::SetVec4(const std::string& name, const float& x, const float& y, const float& z, const float& w)
 	{
 		SetGLMVec4(name, glm::vec4(x, y, z, w));
