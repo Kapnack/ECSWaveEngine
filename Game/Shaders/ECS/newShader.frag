@@ -48,12 +48,12 @@ out vec4 FragColor;
 
 uniform vec3 viewPos;
 uniform sampler2D uTexture;
-uniform SpotLight flashlight;
 
-#define NR_POINT_LIGHTS 4
+#define NR_POINT_LIGHTS 2
 
 uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
+uniform SpotLight flashlights[NR_POINT_LIGHTS];
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 {
@@ -131,7 +131,8 @@ void main()
         result += CalcPointLight(pointLights[i], norm, vFragPos, viewDir);
     }
 
-    result += CalcSpotLight(flashlight, norm, vFragPos, viewDir);
+    for(int i = 0; i < NR_POINT_LIGHTS; i++)
+        result += CalcSpotLight(flashlights[i], norm, vFragPos, viewDir);
 
     vec4 texColor = texture(uTexture, vTexCoord);
 
