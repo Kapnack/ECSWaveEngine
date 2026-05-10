@@ -35,9 +35,9 @@ namespace WaveEngine
 		return it->first;
 	}
 
-	void MaterialManager::SaveMaterial(const unsigned int& ID, Material* material)
+	void MaterialManager::SaveMaterial(Material*& material)
 	{
-		materials[ID] = material;
+		materials[material->GetID()] = material;
 	}
 
 	Material* MaterialManager::GetMaterial(const unsigned int id)

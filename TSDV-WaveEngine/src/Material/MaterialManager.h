@@ -27,7 +27,7 @@ namespace WaveEngine
 
 		unordered_map<unsigned int, Material*> materials;
 
-		void SaveMaterial(const unsigned int& ID, Material* material);
+		void SaveMaterial(Material*& material);
 
 		Material* GetMaterial(const unsigned int id);
 
