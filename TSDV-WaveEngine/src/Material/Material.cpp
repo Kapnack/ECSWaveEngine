@@ -166,14 +166,12 @@ namespace WaveEngine
 
 		for (Uniform* u : samplerUniforms)
 		{
-			auto it = textures.find(u->name);
+			unordered_map<string, unsigned int>::iterator it = textures.find(u->name);
 			if (it == textures.end())
 				continue;
 
-			unsigned int texID = it->second;
-
 			glActiveTexture(GL_TEXTURE0 + textureSlot);
-			glBindTexture(GL_TEXTURE_2D, texID);
+			glBindTexture(GL_TEXTURE_2D, it->second);
 			glUniform1i(u->location, textureSlot++);
 		}
 	}
