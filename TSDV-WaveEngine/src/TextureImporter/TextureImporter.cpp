@@ -46,10 +46,10 @@ namespace WaveEngine
 			return 0;
 		}
 
-		unsigned int texture = 0;
+		unsigned int textureGPUID = 0;
 
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glGenTextures(1, &textureGPUID);
+		glBindTexture(GL_TEXTURE_2D, textureGPUID);
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -63,7 +63,7 @@ namespace WaveEngine
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		Texture* newTexture = new Texture(texture, width, height);
+		Texture* newTexture = new Texture(++currentTextureID, textureGPUID, width, height);
 
 		std::filesystem::path path = filePath;
 
@@ -75,6 +75,6 @@ namespace WaveEngine
 
 		std::cout << "Loaded texture: " << filePath << " (" << width << "x" << height << ")" << std::endl;
 
-		return currentIndex;
+		return currentTextureID;
 	}
 }

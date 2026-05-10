@@ -18,6 +18,8 @@ namespace WaveEngine
 	{
 	private:
 
+		unsigned int currentTextureID = 0;
+
 		TextureManager* GetTextureManager();
 
 		TextureImporter();
