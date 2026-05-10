@@ -60,7 +60,7 @@ namespace WaveEngine
 
 		ModelImporter modelImporter;
 
-		unsigned int meshID = modelImporter.LoadMesh("Rata", "C:\\Users\\Kapnack\\Downloads\\PlayerCharacter.fbx");
+		unsigned int meshID = modelImporter.LoadMesh("C:\\Users\\Kapnack\\Downloads\\PlayerCharacter.fbx");
 
 		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uTexture", albedo);
 
