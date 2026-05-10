@@ -56,10 +56,11 @@ namespace WaveEngine
 		unsigned int textureIndex = GetTextureImporter()->LoadTextureAbsolutePath("Sprites/whiteImage.png");
 		unsigned int MatID = GetMaterialFactory()->CreateMaterial("Test", GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"), GetFileReader()->ReadFile("Shaders/ECS/newShader.frag"));
 
-
 		unsigned int albedo = GetTextureManager()->GetTexture(textureIndex)->GetGPUID();
 
-		unsigned int meshID = GetModelImporter()->LoadMesh("Rata", "C:\\Users\\Kapnack\\Downloads\\PlayerCharacter.fbx");
+		ModelImporter modelImporter;
+
+		unsigned int meshID = modelImporter.LoadMesh("Rata", "C:\\Users\\Kapnack\\Downloads\\PlayerCharacter.fbx");
 
 		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uTexture", albedo);
 
