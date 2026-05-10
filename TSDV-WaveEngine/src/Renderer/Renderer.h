@@ -48,19 +48,19 @@ namespace WaveEngine
 
 	struct SpotLight
 	{
-		Vector3 position = { 0.0f, 0.0f, 0.0f };
-		Vector3 direction = { 0.0f, 0.0f, -1.0f };
+		Vector3 position = { 96, 64.0f, 0.0f };
+		Vector3 direction = Vector3::Down();
 
-		Vector3 ambient = { 0.00f, 0.00f, 0.00f };
-		Vector3 diffuse = { 1.00f, 0.95f, 0.85f };
-		Vector3 specular = { 1.00f, 1.00f, 1.00f };
+		Vector3 ambient = Vector3::One() * 0.1f;
+		Vector3 diffuse = Vector3::One();
+		Vector3 specular = Vector3::One();
 
 		float constant = 1.0f;
-		float linear = 0.09f;
-		float quadratic = 0.032f;
+		float linear = 0.00032f;
+		float quadratic = 0.00032f;
 
-		float cutOff = 0.976f; // cos(12.5°)
-		float outerCutOff = 0.953f; // cos(17.5°)
+		float cutOff = 12.5f;
+		float outerCutOff = 15.5f;
 	};
 
 	struct BatchData
@@ -127,15 +127,19 @@ namespace WaveEngine
 
 		TextureManager* GetTextureManager();
 
+		void UpdateBuffer(VertexData* vertex, int vertexSize, unsigned& VBO);
+
 		Texture* ChooseTextureToUse(const unsigned int& ID);
 
 		ComponentRegistry* GetComponentRegistry();
 
 	public:
 
+		static const int Amount_Per_Light = 2;
+
 		static DirLight dirLight;
-		static PointLight pointLight[4];
-		static SpotLight flashLight;
+		static PointLight pointLight[Amount_Per_Light];
+		static SpotLight flashLights[Amount_Per_Light];
 
 		Renderer();
 		~Renderer();
@@ -153,7 +157,7 @@ namespace WaveEngine
 
 		void DeleteBuffers(unsigned int& VAO, unsigned int& VBO, unsigned int& EBO);
 
-		void UpdateBuffer(VertexData* vertex, int vertexSize, unsigned& VBO);
+		void UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned& VBO);
 
 		void Clear();
 
