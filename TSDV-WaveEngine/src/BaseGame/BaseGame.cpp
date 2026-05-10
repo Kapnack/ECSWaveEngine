@@ -28,8 +28,6 @@ namespace WaveEngine
 		if (!glfwInit())
 			exit(-1);
 
-		//Random::Init();
-
 		ServiceProvider::Instance().Register(new EventSystem());
 		ServiceProvider::Instance().Register(new ComponentRegistry());
 		ServiceProvider::Instance().Register(new Window(width, height, "WaveEngine", nullptr, nullptr));
@@ -89,12 +87,12 @@ namespace WaveEngine
 		const unsigned int indexSize = 36;
 		unsigned int* indices = new unsigned[indexSize]
 			{
-				0, 1, 2, 2, 3, 0,        // front
-					4, 5, 6, 6, 7, 4,        // back
-					8, 9, 10, 10, 11, 8,     // left
-					12, 13, 14, 14, 15, 12,  // right
-					16, 17, 18, 18, 19, 16,  // top
-					20, 21, 22, 22, 23, 20   // bottom
+				0, 1, 2, 2, 3, 0,
+					4, 5, 6, 6, 7, 4,
+					8, 9, 10, 10, 11, 8,
+					12, 13, 14, 14, 15, 12,
+					16, 17, 18, 18, 19, 16,
+					20, 21, 22, 22, 23, 20
 			};
 
 		GetComponentRegistry()->AddComponent<ECSTransform>(0);
@@ -116,7 +114,7 @@ namespace WaveEngine
 
 		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uTexture", albedo);
 
-		for (int i = 1; i <= 2; ++i)
+		for (unsigned int i = 1; i <= 2; ++i)
 		{
 			GetComponentRegistry()->AddComponent<ECSTransform>(i);
 			GetComponentRegistry()->AddComponent<MeshID>(i);
