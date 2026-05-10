@@ -5,13 +5,12 @@
 #include <assimp/Importer.hpp>
 #include <assimp/color4.h>
 #include <assimp/mesh.h>
-#include <vector>
 
 #include "ServiceProvider/ServiceProvider.h"
 #include "VertexData.h"
 #include "Mesh/Mesh.h"
 #include "WaveMath/Vector3/Vector3.h"
-#include "WaveMath/Vector4/Vector4.h"
+#include "WaveMath/Vector2/Vector2.h"
 
 namespace WaveEngine
 {
