@@ -41,76 +41,27 @@ namespace WaveEngine
 		ServiceProvider::Instance().Register(new Renderer());
 		ServiceProvider::Instance().Register(new Input());
 		ServiceProvider::Instance().Register(new Time());
+		imGui = new ImGuiClass();
 
 		transformLogic.Init();
 		drawLogic.Init();
 
-		imGui = new ImGuiClass();
-
-		const unsigned int vertexSize = 24;
-
-		const Color white = Color::White();
-
-		VertexData* vertex = new VertexData[24]
-		{
-			VertexData(Vector3(-0.5f,-0.5f, 0.5f), white, Vector2(0,0), Vector3(0,0,1)),
-			VertexData(Vector3(0.5f,-0.5f, 0.5f), white, Vector2(1,0), Vector3(0,0,1)),
-			VertexData(Vector3(0.5f, 0.5f, 0.5f), white, Vector2(1,1), Vector3(0,0,1)),
-			VertexData(Vector3(-0.5f, 0.5f, 0.5f), white, Vector2(0,1), Vector3(0,0,1)),
-
-			VertexData(Vector3(0.5f,-0.5f,-0.5f), white, Vector2(0,0), Vector3(0,0,-1)),
-			VertexData(Vector3(-0.5f,-0.5f,-0.5f), white, Vector2(1,0), Vector3(0,0,-1)),
-			VertexData(Vector3(-0.5f, 0.5f,-0.5f), white, Vector2(1,1), Vector3(0,0,-1)),
-			VertexData(Vector3(0.5f, 0.5f,-0.5f), white, Vector2(0,1), Vector3(0,0,-1)),
-
-			VertexData(Vector3(-0.5f,-0.5f,-0.5f), white, Vector2(0,0), Vector3(-1,0,0)),
-			VertexData(Vector3(-0.5f,-0.5f, 0.5f), white, Vector2(1,0), Vector3(-1,0,0)),
-			VertexData(Vector3(-0.5f, 0.5f, 0.5f), white, Vector2(1,1), Vector3(-1,0,0)),
-			VertexData(Vector3(-0.5f, 0.5f,-0.5f), white, Vector2(0,1), Vector3(-1,0,0)),
-
-			VertexData(Vector3(0.5f,-0.5f, 0.5f), white, Vector2(0,0), Vector3(1,0,0)),
-			VertexData(Vector3(0.5f,-0.5f,-0.5f), white, Vector2(1,0), Vector3(1,0,0)),
-			VertexData(Vector3(0.5f, 0.5f,-0.5f), white, Vector2(1,1), Vector3(1,0,0)),
-			VertexData(Vector3(0.5f, 0.5f, 0.5f), white, Vector2(0,1), Vector3(1,0,0)),
-
-			VertexData(Vector3(-0.5f, 0.5f, 0.5f), white, Vector2(0,0), Vector3(0,1,0)),
-			VertexData(Vector3(0.5f, 0.5f, 0.5f), white, Vector2(1,0), Vector3(0,1,0)),
-			VertexData(Vector3(0.5f, 0.5f,-0.5f), white, Vector2(1,1), Vector3(0,1,0)),
-			VertexData(Vector3(-0.5f, 0.5f,-0.5f), white, Vector2(0,1), Vector3(0,1,0)),
-
-			VertexData(Vector3(-0.5f,-0.5f,-0.5f), white, Vector2(0,0), Vector3(0,-1,0)),
-			VertexData(Vector3(0.5f,-0.5f,-0.5f), white, Vector2(1,0), Vector3(0,-1,0)),
-			VertexData(Vector3(0.5f,-0.5f, 0.5f), white, Vector2(1,1), Vector3(0,-1,0)),
-			VertexData(Vector3(-0.5f,-0.5f, 0.5f), white, Vector2(0,1), Vector3(0,-1,0))
-		};
-
-		const unsigned int indexSize = 36;
-		unsigned int* indices = new unsigned[indexSize]
-			{
-				0, 1, 2, 2, 3, 0,
-					4, 5, 6, 6, 7, 4,
-					8, 9, 10, 10, 11, 8,
-					12, 13, 14, 14, 15, 12,
-					16, 17, 18, 18, 19, 16,
-					20, 21, 22, 22, 23, 20
-			};
 
 		GetComponentRegistry()->AddComponent<ECSTransform>(0);
 		GetComponentRegistry()->AddComponent<Camera>(0);
 		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetFarPlane(10000);
 		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetOrthographic(false);
-
 		GetComponentRegistry()->Get<ECSTransform>(0).SetPosition(0, 0, 1000);
 
-		int MatID = GetMaterialFactory()->CreateMaterial("Test", GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"), GetFileReader()->ReadFile("Shaders/ECS/newShader.frag"));
 
 		unsigned int textureIndex = GetTextureImporter()->LoadTextureAbsolutePath("Sprites/whiteImage.png");
-		GetTextureImporter()->LoadTextureAbsolutePath("Sprites/battlecity_general.png");
 		unsigned int albedo = GetTextureManager()->GetTexture(textureIndex)->GetTextureID();
+		unsigned int MatID = GetMaterialFactory()->CreateMaterial("Test", GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"), GetFileReader()->ReadFile("Shaders/ECS/newShader.frag"));
 
-		ModelImporter modelImporter;
 
-		unsigned int meshID = modelImporter.LoadMesh("Rata", "C:\\Users\\Kapnack\\Downloads\\PlayerCharacter.fbx");
+		unsigned int albedo = GetTextureManager()->GetTexture(textureIndex)->GetGPUID();
+
+		unsigned int meshID = GetModelImporter()->LoadMesh("Rata", "C:\\Users\\Kapnack\\Downloads\\PlayerCharacter.fbx");
 
 		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uTexture", albedo);
 
