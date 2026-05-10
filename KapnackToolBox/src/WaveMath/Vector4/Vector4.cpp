@@ -4,10 +4,10 @@ Vector4::Vector4()
 {
 }
 
-Vector4::Vector4(float r, float g, float b, float a)
+Vector4::Vector4(const float& x, const float& y, const float& z, const float& w)
 {
-	x = r;
-	y = g;
-	z = b;
-	w = a;
+	this->x = x;
+	this->y = y;
+	this->z = z;
+	this->w = w;
 }
