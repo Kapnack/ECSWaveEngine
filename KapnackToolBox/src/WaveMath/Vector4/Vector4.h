@@ -10,7 +10,5 @@ WAVEEXPORT struct Vector4
 	float w = 0.0f;
 
 	WAVEEXPORT Vector4();
-	WAVEEXPORT Vector4(float r, float g, float b, float a);
+	WAVEEXPORT Vector4(const float& r, const float& g, const float& b, const float& a);
 };
-
-static const Vector4 Purple(0.5f, 0.0f, 0.5f, 1.0f);
