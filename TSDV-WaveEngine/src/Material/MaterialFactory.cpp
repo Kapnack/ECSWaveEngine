@@ -47,38 +47,36 @@ namespace WaveEngine
 		if (vs == 0 || fs == 0)
 			return Material::NULL_MATERIAL;
 
-		unsigned int programID = glCreateProgram();
+		unsigned int gpuID = glCreateProgram();
 
-		glAttachShader(programID, vs);
-		glAttachShader(programID, fs);
-		glLinkProgram(programID);
-		glValidateProgram(programID);
+		glAttachShader(gpuID, vs);
+		glAttachShader(gpuID, fs);
+		glLinkProgram(gpuID);
+		glValidateProgram(gpuID);
 
 		glDeleteShader(vs);
 		glDeleteShader(fs);
 
 		GLint success;
-		glGetProgramiv(programID, GL_LINK_STATUS, &success);
+		glGetProgramiv(gpuID, GL_LINK_STATUS, &success);
 
 		if (!success)
 		{
 			char infoLog[512];
-			glGetProgramInfoLog(programID, 512, nullptr, infoLog);
+			glGetProgramInfoLog(gpuID, 512, nullptr, infoLog);
 			std::cout << "Program Link Error:\n" << infoLog << std::endl;
 
-			glDeleteProgram(programID);
+			glDeleteProgram(gpuID);
 			return Material::NULL_MATERIAL;
 		}
 
-		++currentMaterialID;
-
-		Material* newMaterial = new Material(currentMaterialID);
+		Material* newMaterial = new Material(++currentMaterialID);
 
 		GLint uniformCount = 0;
-		glGetProgramiv(programID, GL_ACTIVE_UNIFORMS, &uniformCount);
+		glGetProgramiv(gpuID, GL_ACTIVE_UNIFORMS, &uniformCount);
 
 		GLint maxNameLength = 0;
-		glGetProgramiv(programID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxNameLength);
+		glGetProgramiv(gpuID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxNameLength);
 
 		std::vector<GLchar> buffer(maxNameLength);
 
@@ -88,7 +86,7 @@ namespace WaveEngine
 			GLint size;
 			GLenum type;
 
-			glGetActiveUniform(programID,
+			glGetActiveUniform(gpuID,
 				i,
 				maxNameLength,
 				&length,
@@ -97,7 +95,7 @@ namespace WaveEngine
 				buffer.data());
 
 			std::string uniformName(buffer.data(), length);
-			GLint location = glGetUniformLocation(programID, uniformName.c_str());
+			GLint location = glGetUniformLocation(gpuID, uniformName.c_str());
 
 			newMaterial->AddUniform(uniformName, type, location, size);
 
@@ -117,8 +115,8 @@ namespace WaveEngine
 		}
 
 		newMaterial->SetName(selectedName);
-		newMaterial->program = programID;
-		GetMaterialManager()->SaveMaterial(currentMaterialID, newMaterial);
+		newMaterial->gpuID = gpuID;
+		GetMaterialManager()->SaveMaterial(newMaterial);
 
 		return currentMaterialID;
 	}
