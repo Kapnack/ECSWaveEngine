@@ -1,41 +1,62 @@
 #include "Mesh.h"
 
-const unsigned int Mesh::NULL_MESH = 0;
-
-Mesh::Mesh(VertexData*& vertexBuffer, const unsigned int& vertexSize, unsigned int*& indexes, const unsigned int& indexAmount, const string_view name)
+namespace WaveEngine
 {
-	this->name = name;
-	this->vertexBuffer = vertexBuffer;
-	this->vertexSize = vertexSize;
-	this->indexes = indexes;
-	this->indexAmount = indexAmount;
-}
+	const unsigned int Mesh::NULL_MESH = 0;
 
-Mesh::~Mesh()
-{
-}
+	const bool Mesh::GetDirty() const
+	{
+		return isDirty;
+	}
 
-const VertexData* Mesh::GetVertexBuffer() const
-{
-	return vertexBuffer;
-}
+	Mesh::Mesh(VertexData*& vertexBuffer, const unsigned int& vertexSize, unsigned int*& indexes, const unsigned int& indexAmount, const string_view name)
+	{
+		this->name = name;
+		this->vertexBuffer = vertexBuffer;
+		this->vertexSize = vertexSize;
+		this->indexes = indexes;
+		this->indexAmount = indexAmount;
+	}
 
-const unsigned int Mesh::GetVertexSize() const
-{
-	return vertexSize;
-}
+	Mesh::~Mesh()
+	{
+	}
 
-string Mesh::GetName()
-{
-	return name;
-}
+	const VertexData* Mesh::GetVertexBuffer() const
+	{
+		return vertexBuffer;
+	}
 
-const unsigned int* Mesh::GetIndexes() const
-{
-	return indexes;
-}
+	const unsigned int Mesh::GetVertexSize() const
+	{
+		return vertexSize;
+	}
 
-const unsigned int Mesh::GetIndexesSize() const
-{
-	return indexAmount;
+	string Mesh::GetName()
+	{
+		return name;
+	}
+
+	void Mesh::SetVertexColor(const Color& color)
+	{
+		for (unsigned i = 0; i < vertexSize; ++i)
+			vertexBuffer[i].color = color;
+
+		isDirty = true;
+	}
+
+	void Mesh::UnDirt()
+	{
+		isDirty = false;
+	}
+
+	const unsigned int* Mesh::GetIndexes() const
+	{
+		return indexes;
+	}
+
+	const unsigned int Mesh::GetIndexesSize() const
+	{
+		return indexAmount;
+	}
 }
