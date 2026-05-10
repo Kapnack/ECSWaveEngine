@@ -19,11 +19,12 @@ namespace WaveEngine
 
 		string name;
 		unsigned int textureID = 0;
+		unsigned int gputID = 0;
 
 		int width;
 		int height;
 
-		Texture(const unsigned int& textureID, const int& width, const int& height);
+		Texture(const unsigned int& textureID, const unsigned int& gpuID, const int& width, const int& height);
 		~Texture();
 
 		friend class TextureManager;
@@ -40,5 +41,6 @@ namespace WaveEngine
 		Vector2 GetRes() const;
 
 		unsigned int GetTextureID() const;
+		unsigned int GetGPUID() const;
 	};
 }
