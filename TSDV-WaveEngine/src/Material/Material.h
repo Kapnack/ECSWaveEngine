@@ -32,7 +32,7 @@ namespace WaveEngine
 
 		string name;
 
-		Vector4 color = Vector4(1, 1, 1, 1);
+		Color color = Color::White();
 
 		unsigned int ID = 0;
 
@@ -61,11 +61,11 @@ namespace WaveEngine
 
 		const string GetName() const;
 
-		Vector4 GetColor() const;
+		Color GetColor() const;
 		unsigned int GetID() const;
 		unsigned int GetGPUID() const;
 		void SetTexture(const std::string& uniformName, unsigned int textureID);
-		void SetColor(const Vector4& color);
+		void SetColor(const Color& color);
 
 		void SetVec2(const std::string& name, const Vector2& value);
 		void SetVec2(const std::string& name, const float& x, const float& y);
