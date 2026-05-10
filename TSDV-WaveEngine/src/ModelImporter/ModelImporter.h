@@ -17,7 +17,7 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int InitFromScene(const string_view filename, const aiScene* pScene);
+		unsigned int InitFromScene(const string_view filename, const aiScene*& pScene);
 
 		MeshFactory* GetMeshFactory();
 
@@ -25,6 +25,6 @@ namespace WaveEngine
 
 	public:
 
-		WAVEEXPORT unsigned int LoadMesh(const filesystem::path filePath);
+		WAVEEXPORT unsigned int LoadMesh(filesystem::path filePath, const bool useAbsolutePath = true);
 	};
 }

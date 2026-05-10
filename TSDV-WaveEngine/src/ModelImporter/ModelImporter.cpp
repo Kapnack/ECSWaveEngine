@@ -14,8 +14,10 @@
 
 namespace WaveEngine
 {
-	unsigned int ModelImporter::LoadMesh(const filesystem::path filePath)
+	unsigned int ModelImporter::LoadMesh(filesystem::path filePath, const bool useAbsolutePath)
 	{
+		filePath = useAbsolutePath ? std::filesystem::absolute(filePath) : filePath;
+
 		Assimp::Importer importer;
 
 		const aiScene* pScene = importer.ReadFile(filePath.string().c_str(),
