@@ -30,7 +30,7 @@ namespace WaveEngine
 		}
 
 		template<typename T>
-		void AddComponent(const int& entity, const T& component = T())
+		void AddComponent(const unsigned int& entity, const T& component = T())
 		{
 			type_index typeIndex = typeid(T);
 
@@ -53,19 +53,19 @@ namespace WaveEngine
 		}
 
 		template<typename T>
-		T& Get(const int& entity)
+		T& Get(const unsigned int& entity)
 		{
 			return GetComponentStorage<T>().Get(entity);
 		}
 
 		template<typename T>
-		T* TryGet(const int& entity)
+		T* TryGet(const unsigned int& entity)
 		{
 			return GetComponentStorage<T>().TryGet(entity);
 		}
 
 		template<typename T>
-		void RemoveComponent(const int& entity)
+		void RemoveComponent(const unsigned int& entity)
 		{
 			type_index typeIndex = typeid(T);
 
@@ -109,7 +109,7 @@ namespace WaveEngine
 		}
 
 		template<typename T>
-		T& GetComponent(const int& entity)
+		T& GetComponent(const unsigned int& entity)
 		{
 			return GetComponentStorage<T>().Get(entity);
 		}
