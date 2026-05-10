@@ -14,21 +14,24 @@
 
 namespace WaveEngine
 {
-	unsigned int ModelImporter::LoadMesh(string_view assetName, const string_view filePath)
+	unsigned int ModelImporter::LoadMesh(const filesystem::path filePath)
 	{
 		Assimp::Importer importer;
 
-		const aiScene* pScene = importer.ReadFile(filePath.data(),
+		const aiScene* pScene = importer.ReadFile(filePath.string().c_str(),
 			aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs |
 			aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices);
 
-		return InitFromScene(assetName, pScene);
+		return InitFromScene(filePath.filename().string().c_str(), pScene);
 	}
 
 	unsigned int ModelImporter::InitFromScene(
 		string_view assetName,
-		const aiScene* pScene)
+		const aiScene*& pScene)
 	{
+		if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode)
+			return Mesh::NULL_MESH;
+
 		pair<int, int> count = GetVertexAndIndexSizes(*pScene);
 
 		VertexData* vertexToSubmit = new VertexData[count.first];
@@ -55,12 +58,12 @@ namespace WaveEngine
 					? Vector2(mesh.mTextureCoords[0][j].x, mesh.mTextureCoords[0][j].y)
 					: Vector2(0, 0);
 
-				if (mesh.HasVertexColors(0)) 
+				if (mesh.HasVertexColors(0))
 				{
 					aiColor4D color = mesh.mColors[0][j];
 					currentVertex.color = Color(color.r, color.g, color.b, color.a);
 				}
-				else 
+				else
 				{
 					currentVertex.color = Color::White();
 				}
