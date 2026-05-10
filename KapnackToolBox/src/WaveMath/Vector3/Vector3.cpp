@@ -90,6 +90,11 @@ Vector3 Vector3::operator-(const Vector3& other) const
 	return Vector3(x - other.x, y - other.y, z - other.z);
 }
 
+Vector3 Vector3::operator-() const
+{
+	return Vector3(-x, -y, -z);
+}
+
 void Vector3::operator-=(const Vector3& other)
 {
 	*this = *this - other;
@@ -116,6 +121,21 @@ void Vector3::operator*=(const float& scalar)
 	*this = *this * scalar;
 }
 
+Vector3 Vector3::X()
+{
+	return Vector3(1.0f, 0.0f, 0.0f);
+}
+
+Vector3 Vector3::Y()
+{
+	return Vector3(0.0f, 1.0f, 0.0f);
+}
+
+Vector3 Vector3::Z()
+{
+	return Vector3(0.0f, 0.0f, 1.0f);
+}
+
 Vector3 Vector3::One()
 {
 	return Vector3(1.0f, 1.0f, 1.0f);
@@ -123,32 +143,32 @@ Vector3 Vector3::One()
 
 Vector3 Vector3::Up()
 {
-	return Vector3(0.0f, 1.0f, 0.0f);
+	return Y();
 }
 
 Vector3 Vector3::Down()
 {
-	return Vector3(0.0f, -1.0f, 0.0f);
+	return -Y();
 }
 
 Vector3 Vector3::Right()
 {
-	return Vector3(1.0f, 0.0f, 0.0f);
+	return X();
 }
 
 Vector3 Vector3::Left()
 {
-	return Vector3(-1.0f, 0.0f, 0.0f);
+	return -X();
 }
 
 Vector3 Vector3::Foward()
 {
-	return Vector3(0.0f, 0.0f, 1.0f);
+	return Z();
 }
 
 Vector3 Vector3::Back()
 {
-	return Vector3(0.0f, 0.0f, -1.0f);
+	return -Z();
 }
 
 Vector3 Vector3::Zero()

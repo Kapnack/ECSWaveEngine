@@ -29,12 +29,16 @@ WAVEEXPORT struct Vector3 final
 	WAVEEXPORT Vector3 operator+(const Vector3& other) const;
 	WAVEEXPORT void operator+=(const Vector3& other);
 	WAVEEXPORT Vector3 operator-(const Vector3& other) const;
+	WAVEEXPORT Vector3 operator-() const;
 	WAVEEXPORT void operator-=(const Vector3& other);
 	WAVEEXPORT void operator=(const Vector2& vector2);
 	WAVEEXPORT Vector3 operator*(const float& scalar) const;
 	WAVEEXPORT friend Vector3 operator*(const float& scalar, const Vector3& vector3);
 	WAVEEXPORT void operator*=(const float& scalar);
 
+	WAVEEXPORT static Vector3 X();
+	WAVEEXPORT static Vector3 Y();
+	WAVEEXPORT static Vector3 Z();
 	WAVEEXPORT static Vector3 Up();
 	WAVEEXPORT static Vector3 Down();
 	WAVEEXPORT static Vector3 Right();
