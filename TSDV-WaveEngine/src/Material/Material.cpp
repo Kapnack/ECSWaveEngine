@@ -10,6 +10,7 @@
 #include <fstream>
 
 #include "MaterialManager.h"
+#include "Color/Color.h"
 
 using namespace std;
 
@@ -32,7 +33,7 @@ namespace WaveEngine
 		return name;
 	}
 
-	Vector4 Material::GetColor() const
+	Color Material::GetColor() const
 	{
 		return color;
 	}
@@ -68,7 +69,7 @@ namespace WaveEngine
 			samplerUniforms.push_back(&uniforms[name]);
 	}
 
-	void Material::SetColor(const Vector4& color)
+	void Material::SetColor(const Color& color)
 	{
 		this->color = color;
 	}
@@ -173,15 +174,13 @@ namespace WaveEngine
 
 			glActiveTexture(GL_TEXTURE0 + textureSlot);
 			glBindTexture(GL_TEXTURE_2D, texID);
-			glUniform1i(u->location, textureSlot);
-
-			++textureSlot;
+			glUniform1i(u->location, textureSlot++);
 		}
 	}
 
 	void Material::UnBind()
 	{
-		glUseProgram(0);
+		glUseProgram(NULL);
 	}
 
 	void Material::Unload()
