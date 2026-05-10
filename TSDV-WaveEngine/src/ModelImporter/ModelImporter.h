@@ -2,6 +2,7 @@
 
 #include "Export.h"
 
+#include <filesystem>
 #include <utility>
 
 #include <assimp/scene.h>
@@ -16,7 +17,7 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int InitFromScene(string_view assetName, const aiScene* pScene);
+		unsigned int InitFromScene(const string_view filename, const aiScene* pScene);
 
 		MeshFactory* GetMeshFactory();
 
@@ -24,6 +25,6 @@ namespace WaveEngine
 
 	public:
 
-		WAVEEXPORT unsigned int LoadMesh(string_view assetName, const string_view filePath);
+		WAVEEXPORT unsigned int LoadMesh(const filesystem::path filePath);
 	};
 }
