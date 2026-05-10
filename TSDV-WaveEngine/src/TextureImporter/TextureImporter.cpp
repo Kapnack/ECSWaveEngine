@@ -8,6 +8,7 @@
 #include <filesystem>
 
 #include "ServiceProvider/ServiceProvider.h"
+#include "Texture.h"
 
 namespace WaveEngine
 {
