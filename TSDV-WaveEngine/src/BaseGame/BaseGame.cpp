@@ -28,6 +28,8 @@ namespace WaveEngine
 		if (!glfwInit())
 			exit(-1);
 
+		srand(time(NULL));
+
 		ServiceProvider::Instance().Register(new EventSystem());
 		ServiceProvider::Instance().Register(new ComponentRegistry());
 		ServiceProvider::Instance().Register(new Window(width, height, "WaveEngine", nullptr, nullptr));
@@ -46,36 +48,122 @@ namespace WaveEngine
 		transformLogic.Init();
 		drawLogic.Init();
 
-
-		GetComponentRegistry()->AddComponent<ECSTransform>(0);
-		GetComponentRegistry()->AddComponent<Camera>(0);
-		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetFarPlane(10000);
-		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetOrthographic(false);
-		GetComponentRegistry()->Get<ECSTransform>(0).SetPosition(0, 0, 1000);
-
 		unsigned int textureIndex = GetTextureImporter()->LoadTextureAbsolutePath("Sprites/whiteImage.png");
 		unsigned int MatID = GetMaterialFactory()->CreateMaterial("Test", GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"), GetFileReader()->ReadFile("Shaders/ECS/newShader.frag"));
 
-		unsigned int albedo = GetTextureManager()->GetTexture(textureIndex)->GetGPUID();
+		unsigned int textureGPUID = GetTextureManager()->GetTexture(textureIndex)->GetGPUID();
 
 		ModelImporter modelImporter;
 
-		unsigned int meshID = modelImporter.LoadMesh("C:\\Users\\Kapnack\\Downloads\\PlayerCharacter.fbx");
+		vector<unsigned int> models;
 
-		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uTexture", albedo);
+		models.push_back(modelImporter.LoadMesh("Models/Rata_mutante_low.fbx"));
+		models.push_back(modelImporter.LoadMesh("Models/girl OBJ.obj"));
+		models.push_back(modelImporter.LoadMesh("Models/gold_headed_buddha_-_photogrammetry_test_2019.glb"));
+		models.push_back(modelImporter.LoadMesh("Models/Cube.fbx"));
 
-		for (unsigned int i = 1; i <= 2; ++i)
+		Renderer::dirLight.direction = Vector3::Back();
+
+		Renderer::flashLights[0] =
+		{
+			.position = { 96, 64.0f, 0.0f },
+			.direction = Vector3::Down(),
+
+			.ambient = Vector3::One() * 0.1f,
+			.diffuse = Vector3::One(),
+			.specular = Vector3::One(),
+
+			.constant = 1.0f,
+			.linear = 0.00032f,
+			.quadratic = 0.00032f,
+
+			.cutOff = 12.5f,
+			.outerCutOff = 15.5f
+		};
+
+		Renderer::flashLights[1] =
+		{
+			.position = { 0.0f, 0.0f, 0.0f },
+			.direction = Vector3::Down(),
+
+			.ambient = Vector3::One() * 0.1f,
+			.diffuse = Vector3::One(),
+			.specular = Vector3::One(),
+
+			.constant = 1.0f,
+			.linear = 0.00032f,
+			.quadratic = 0.00032f,
+
+			.cutOff = 12.5f,
+			.outerCutOff = 15.5f
+		};
+
+		Renderer::pointLight[0] =
+		{
+			.position = { - 100, 0.0f, 0.0f },
+
+			.ambient = Vector3::Y() * 0.1f,
+			.diffuse = Vector3::Y(),
+			.specular = Vector3::Y(),
+
+			.constant = 1.0f,
+			.linear = 0.00032f,
+			.quadratic = 0.00032f
+		};
+
+		Renderer::pointLight[1] =
+		{
+			.position = { 200, 0.0f, 0.0f },
+
+			.ambient = Vector3::X() * 0.1f,
+			.diffuse = Vector3::X(),
+			.specular = Vector3::X(),
+
+			.constant = 1.0f,
+			.linear = 0.00032f,
+			.quadratic = 0.00032f
+		};
+
+		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uTexture", textureGPUID);
+
+		const unsigned int defaultSize = 32;
+
+		for (unsigned int i = 1; i <= models.size() + 2; ++i)
 		{
 			GetComponentRegistry()->AddComponent<ECSTransform>(i);
 			GetComponentRegistry()->AddComponent<MeshID>(i);
 			GetComponentRegistry()->AddComponent<MeshRenderer>(i);
 
-			GetComponentRegistry()->Get<ECSTransform>(i).SetPosition(rand() % 200 - 100, rand() % 200 - 100, rand() % 200 - 100);
-			GetComponentRegistry()->Get<ECSTransform>(i).SetScale(100, 100, 100);
+			GetComponentRegistry()->Get<ECSTransform>(i).SetPosition(Vector3::Right() * (i * defaultSize));
 
-			GetComponentRegistry()->Get<MeshID>(i).meshID = meshID;
+			GetComponentRegistry()->Get<MeshID>(i).meshID = i < models.size() ? models[i - 1] : models[models.size() - 1];
+
 			GetComponentRegistry()->Get<MeshRenderer>(i).materialID = MatID;
 		}
+
+		GetComponentRegistry()->Get<ECSTransform>(1).Translate(Vector3::Up() * defaultSize);
+		GetComponentRegistry()->Get<ECSTransform>(1).SetScale(Vector3::One() * defaultSize * 0.5f);
+
+		GetComponentRegistry()->Get<ECSTransform>(2).SetScale(Vector3::One() * defaultSize);
+
+		GetComponentRegistry()->Get<ECSTransform>(3).SetScale(Vector3::One() * defaultSize * 4);
+		GetComponentRegistry()->Get<ECSTransform>(3).SetRotation(Vector3::Y() * (40 + 90));
+
+		GetComponentRegistry()->Get<ECSTransform>(4).SetPosition(GetComponentRegistry()->Get<ECSTransform>(models.size() * 0.5f).GetPosition() + Vector3::Down() * defaultSize);
+		GetComponentRegistry()->Get<ECSTransform>(4).SetScale((Vector3::Z() + Vector3::X()) * defaultSize * 10 + Vector3::Y());
+		GetMeshManager()->GetMesh("Cube.fbx")->SetVertexColor(Color::White());
+
+		GetComponentRegistry()->Get<ECSTransform>(models.size() + 1).SetPosition(Renderer::pointLight[0].position + Vector3::Back() * 25);
+		GetComponentRegistry()->Get<ECSTransform>(models.size() + 1).SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
+
+		GetComponentRegistry()->Get<ECSTransform>(models.size() + 2).SetPosition(Renderer::pointLight[1].position + Vector3::Back() * 25);
+		GetComponentRegistry()->Get<ECSTransform>(models.size() + 2).SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
+
+		GetComponentRegistry()->AddComponent<ECSTransform>(0);
+		GetComponentRegistry()->AddComponent<Camera>(0);
+		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetFarPlane(10000);
+		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetOrthographic(false);
+		GetComponentRegistry()->Get<ECSTransform>(0).SetPosition(Vector3::Right() * ((models.size() - 1) * defaultSize) + Vector3::Foward() * 150);
 	}
 
 	void BaseGame::EndEngine()
@@ -101,8 +189,8 @@ namespace WaveEngine
 	{
 		GetTime()->UpdateDeltaTime();
 
-		auto& camera = GetComponentRegistry()->Get<Camera>(0);
-		auto& transform = GetComponentRegistry()->Get<ECSTransform>(0);
+		Camera& camera = GetComponentRegistry()->Get<Camera>(0);
+		ECSTransform& transform = GetComponentRegistry()->Get<ECSTransform>(0);
 		const float camereSpeed = 300;
 
 		if (GetInput()->IsKeyPressed(Keys::W))
