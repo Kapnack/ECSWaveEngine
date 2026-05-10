@@ -53,9 +53,7 @@ namespace WaveEngine
 		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetOrthographic(false);
 		GetComponentRegistry()->Get<ECSTransform>(0).SetPosition(0, 0, 1000);
 
-
 		unsigned int textureIndex = GetTextureImporter()->LoadTextureAbsolutePath("Sprites/whiteImage.png");
-		unsigned int albedo = GetTextureManager()->GetTexture(textureIndex)->GetTextureID();
 		unsigned int MatID = GetMaterialFactory()->CreateMaterial("Test", GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"), GetFileReader()->ReadFile("Shaders/ECS/newShader.frag"));
 
 
