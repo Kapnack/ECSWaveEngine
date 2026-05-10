@@ -4,27 +4,41 @@
 
 #include "VertexData.h"
 
-class Mesh
+namespace WaveEngine
 {
-private:
+	class Renderer;
 
-	string name;
-	VertexData* vertexBuffer = nullptr;
-	unsigned int vertexSize = 0;
-	unsigned int* indexes = nullptr;
-	unsigned int indexAmount = 0;
+	class Mesh
+	{
+	private:
 
-public:
+		string name;
+		VertexData* vertexBuffer = nullptr;
+		unsigned int vertexSize = 0;
+		unsigned int* indexes = nullptr;
+		unsigned int indexAmount = 0;
 
-	static const unsigned int NULL_MESH;
+		bool isDirty = false;
 
-	Mesh(VertexData*& vertexBuffer, const unsigned int& vertexSize, unsigned int*& index, const unsigned int& indexAmount, const string_view name);
-	~Mesh();
+		const bool GetDirty() const;
+		void UnDirt();
 
-	const VertexData* GetVertexBuffer() const;
-	const unsigned int GetVertexSize() const;
-	string GetName();
+		friend class Renderer;
 
-	const unsigned int* GetIndexes() const;
-	const unsigned int GetIndexesSize() const;
-};
+	public:
+
+		static const unsigned int NULL_MESH;
+
+		Mesh(VertexData*& vertexBuffer, const unsigned int& vertexSize, unsigned int*& index, const unsigned int& indexAmount, const string_view name);
+		~Mesh();
+
+		const VertexData* GetVertexBuffer() const;
+		const unsigned int GetVertexSize() const;
+		string GetName();
+
+		void SetVertexColor(const Color& color);
+
+		const unsigned int* GetIndexes() const;
+		const unsigned int GetIndexesSize() const;
+	};
+}
