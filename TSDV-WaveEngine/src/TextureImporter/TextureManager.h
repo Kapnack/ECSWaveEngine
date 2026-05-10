@@ -1,11 +1,10 @@
 #pragma once
 
 #include "ServiceProvider/Service.h"
-#include "ServiceProvider/ServiceProvider.h"
 
 #include "TextureImporter/Texture.h"
 
-#include <unordered_map>
+#include <map>
 #include "Export.h"
 
 namespace WaveEngine
@@ -23,18 +22,18 @@ namespace WaveEngine
 	{
 	private:
 
-		vector<Texture*> textures;
-		unordered_map<string, unsigned int> indexByname;
+		map<unsigned int, Texture*> textures;
+		map<string, unsigned int> indexByname;
 
 		TextureManager();
 		~TextureManager();
 
-		const unsigned int Save(Texture* texture);
+		void Save(Texture*& texture);
 
 		Texture* GetTexture(const unsigned int& ID) const;
 		Texture* TryGetTexture(const unsigned int& ID) const;
 
-		vector<Texture*>& GetTextures();
+		map<unsigned int, Texture*>& GetTextures();
 
 		friend class BaseGame;
 		friend class TextureImporter;

@@ -10,20 +10,17 @@ namespace WaveEngine
 
 	TextureManager::~TextureManager()
 	{
-		for (Texture* texture : textures)
+		for (map<unsigned int, Texture*>::iterator iterator = textures.begin(); iterator != textures.end(); ++iterator)
 		{
-			glDeleteTextures(texture->textureID, &texture->textureID);
-			delete texture;
+			glDeleteTextures(iterator->second->textureID, &iterator->second->textureID);
+			delete iterator->second;
 		}
 	}
 
-	const unsigned int TextureManager::Save(Texture* texture)
+	void TextureManager::Save(Texture*& texture)
 	{
-		const unsigned int currentIndex = textures.size();
-		indexByname[texture->GetName()] = currentIndex;
-		textures.push_back(texture);
-
-		return currentIndex;
+		indexByname[texture->GetName()] = texture->GetTextureID();
+		textures[texture->GetTextureID()] = texture;
 	}
 
 	Texture* TextureManager::GetTexture(const unsigned int& ID) const
@@ -39,7 +36,7 @@ namespace WaveEngine
 		return textures.at(ID);
 	}
 
-	vector<Texture*>& TextureManager::GetTextures()
+	map<unsigned int, Texture*>& TextureManager::GetTextures()
 	{
 		return textures;
 	}
@@ -56,7 +53,7 @@ namespace WaveEngine
 
 	void TextureManager::DeleteTexture(const string_view name)
 	{
-		unordered_map<string, unsigned int>::iterator it = indexByname.find(string(name));
+		map<string, unsigned int>::iterator it = indexByname.find(string(name));
 
 		if (it == indexByname.end())
 			return;
