@@ -17,12 +17,12 @@ namespace WaveEngine
 	private:
 
 		vector<T> components;
-		vector<int> entities;
-		vector<int> componentByEntity;
+		vector<unsigned int> entities;
+		vector<unsigned int> componentByEntity;
 
 	public:
 
-		void Add(const int& entity, const T& component = T())
+		void Add(const unsigned int& entity, const T& component = T())
 		{
 			if (entity >= componentByEntity.size())
 			{
@@ -40,7 +40,7 @@ namespace WaveEngine
 			componentByEntity[entity] = index;
 		}
 
-		bool Has(int entity) const
+		bool Has(const unsigned int& entity) const
 		{
 			if (entity >= componentByEntity.size())
 				return false;
@@ -48,7 +48,7 @@ namespace WaveEngine
 			return componentByEntity[entity] != -1;
 		}
 
-		void Remove(int entity)
+		void Remove(const unsigned int& entity)
 		{
 			if (!Has(entity))
 				return;
@@ -70,17 +70,17 @@ namespace WaveEngine
 			componentByEntity[entity] = -1;
 		}
 
-		T& Get(const int& entity)
+		T& Get(const unsigned int& entity)
 		{
 			return components.at(componentByEntity.at(entity));
 		}
 
-		T* TryGet(int entity)
+		T* TryGet(const unsigned int& entity)
 		{
 			if (entity >= componentByEntity.size())
 				return nullptr;
 
-			int index = componentByEntity[entity];
+			const unsigned int index = componentByEntity[entity];
 
 			if (index == -1)
 				return nullptr;
@@ -93,7 +93,7 @@ namespace WaveEngine
 			return components;
 		}
 
-		const vector<int>& GetEntities() const
+		const vector<unsigned int>& GetEntities() const
 		{
 			return entities;
 		}
