@@ -164,9 +164,6 @@ namespace WaveEngine
 
 		GetComponentRegistry()->Get<ECSTransform>(models.size() + 2).SetPosition(Renderer::pointLight[1].position + Vector3::Back() * 25);
 		GetComponentRegistry()->Get<ECSTransform>(models.size() + 2).SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
-
-		GetComponentRegistry()->GetComponentStorage<ECSTransform>().Get(0).AddChild(1);
-		GetComponentRegistry()->GetComponentStorage<ECSTransform>().Get(1).SetParent(0);
 	}
 
 	void BaseGame::EndEngine()
