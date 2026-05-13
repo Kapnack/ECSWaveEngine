@@ -128,6 +128,12 @@ namespace WaveEngine
 
 		const unsigned int defaultSize = 32;
 
+		GetComponentRegistry()->AddComponent<ECSTransform>(0);
+		GetComponentRegistry()->AddComponent<Camera>(0);
+		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetFarPlane(10000);
+		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetOrthographic(false);
+		GetComponentRegistry()->Get<ECSTransform>(0).SetPosition(Vector3::Right()* ((models.size() - 1)* defaultSize) + Vector3::Foward() * 150);
+
 		for (unsigned int i = 1; i <= models.size() + 2; ++i)
 		{
 			GetComponentRegistry()->AddComponent<ECSTransform>(i);
@@ -159,11 +165,8 @@ namespace WaveEngine
 		GetComponentRegistry()->Get<ECSTransform>(models.size() + 2).SetPosition(Renderer::pointLight[1].position + Vector3::Back() * 25);
 		GetComponentRegistry()->Get<ECSTransform>(models.size() + 2).SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
 
-		GetComponentRegistry()->AddComponent<ECSTransform>(0);
-		GetComponentRegistry()->AddComponent<Camera>(0);
-		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetFarPlane(10000);
-		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetOrthographic(false);
-		GetComponentRegistry()->Get<ECSTransform>(0).SetPosition(Vector3::Right() * ((models.size() - 1) * defaultSize) + Vector3::Foward() * 150);
+		GetComponentRegistry()->GetComponentStorage<ECSTransform>().Get(0).AddChild(1);
+		GetComponentRegistry()->GetComponentStorage<ECSTransform>().Get(1).SetParent(0);
 	}
 
 	void BaseGame::EndEngine()
@@ -230,7 +233,7 @@ namespace WaveEngine
 
 		transformLogic.Update();
 
-		camera.CalculateMatrixes(transform.GetPosition(), transform.GetRotation());
+		camera.CalculateMatrixes();
 
 		drawLogic.Update();
 

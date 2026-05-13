@@ -5,7 +5,7 @@
 #include "Export.h"
 #include "Window/Window.h"
 #include "ECS/Component/Component.h"
-#include "WaveMath/Vector3/Vector3.h"
+#include "ECS/Transform/ECSTransform.h"
 
 namespace WaveEngine
 {
@@ -18,6 +18,8 @@ namespace WaveEngine
 	private:
 
 		bool shouldUpdateMatrix = true;
+
+		unsigned int ID = 0;
 
 		float fovDeg = 45.0f;
 		float nearPlane = 0.1f;
@@ -32,11 +34,9 @@ namespace WaveEngine
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 
-
 		Window* GetWindow() const;
 
-		Camera(const unsigned& ID);
-
+		ECSTransform* transform;
 
 	protected:
 
@@ -47,8 +47,9 @@ namespace WaveEngine
 		glm::mat4 GetView() const;
 		glm::mat4 GetProjection() const;
 
-		void CalculateMatrixes(const Vector3& position, const Vector3& rotation);
+		void CalculateMatrixes();
 
+		Camera(const unsigned& ID);
 		WAVEEXPORT	Camera();
 		WAVEEXPORT	~Camera();
 

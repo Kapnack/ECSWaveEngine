@@ -11,6 +11,10 @@ namespace WaveEngine
 		MarkDirty();
 	}
 
+	ECSTransform::ECSTransform(const unsigned int& ID)
+	{
+	}
+
 	ECSTransform::~ECSTransform()
 	{
 	}

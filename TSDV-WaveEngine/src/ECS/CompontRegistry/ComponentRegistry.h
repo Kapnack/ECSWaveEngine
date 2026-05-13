@@ -30,9 +30,11 @@ namespace WaveEngine
 		}
 
 		template<typename T>
-		void AddComponent(const unsigned int& entity, const T& component = T())
+		void AddComponent(const unsigned int& entity)
 		{
 			type_index typeIndex = typeid(T);
+
+			T component = T(entity);
 
 			if (!storages.contains(typeIndex))
 				storages[typeIndex] = new Storage<T>();

@@ -9,5 +9,11 @@ namespace WaveEngine
 	struct MeshID : Component
 	{
 		unsigned int meshID = Mesh::NULL_MESH;
+
+		MeshID(const unsigned int& ID)
+		{ }
+
+		MeshID()
+		{ }
 	};
 }

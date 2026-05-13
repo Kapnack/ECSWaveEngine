@@ -4,11 +4,24 @@
 #include <glm/gtx/euler_angles.hpp>
 
 #include "ServiceProvider/ServiceProvider.h"
+#include "../CompontRegistry/ComponentRegistry.h"
+#include "../Transform/ECSTransform.h"
 
 namespace WaveEngine
 {
 	Camera::Camera(const unsigned int& ID)
 	{
+		this->ID = ID;
+
+		ComponentRegistry& componentRegistry = *ServiceProvider::Instance().Get<ComponentRegistry>();
+
+		if (!componentRegistry.HasStorage<ECSTransform>())
+			componentRegistry.AddComponent<ECSTransform>(ID);
+
+		if (!componentRegistry.Has<ECSTransform>(ID))
+			componentRegistry.AddComponent<ECSTransform>(ID);
+
+		transform = &componentRegistry.Get<ECSTransform>(ID);
 	}
 
 	Camera::Camera()
@@ -116,19 +129,21 @@ namespace WaveEngine
 		return shouldUpdateMatrix;
 	}
 
-	void Camera::CalculateMatrixes(const Vector3& position, const Vector3& rotation)
+	void Camera::CalculateMatrixes()
 	{
 		float aspect =
 			static_cast<float>(GetWindow()->GetWidth()) /
 			static_cast<float>(GetWindow()->GetHeight());
 
-		glm::vec3 pos = glm::vec3(position.x, position.y, position.z);
+		ECSTransform& transform = ServiceProvider::Instance().Get<ComponentRegistry>()->Get<ECSTransform>(ID);
+
+		glm::vec3 pos = glm::vec3(transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z);
 
 		glm::mat4 rotationMatrix = glm::yawPitchRoll
 		(
-			glm::radians(rotation.y),
-			glm::radians(rotation.x),
-			glm::radians(rotation.z)
+			glm::radians(transform.GetRotation().y),
+			glm::radians(transform.GetRotation().x),
+			glm::radians(transform.GetRotation().z)
 		);
 
 		glm::vec3 forward = glm::vec3(rotationMatrix * glm::vec4(0, 0, -1, 0));

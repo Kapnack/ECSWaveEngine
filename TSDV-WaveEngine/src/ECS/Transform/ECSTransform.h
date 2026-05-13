@@ -46,6 +46,7 @@ namespace WaveEngine
 	public:
 
 		ECSTransform();
+		ECSTransform(const unsigned int& ID);
 
 		virtual ~ECSTransform();
 
