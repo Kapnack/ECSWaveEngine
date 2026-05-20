@@ -47,10 +47,12 @@ in vec3 vNormal;
 out vec4 FragColor;
 
 uniform vec3 viewPos;
-uniform sampler2D uTexture;
+
+#define MAX_ALBEDO 8
+uniform sampler2D uTexture[MAX_ALBEDO];
+uniform int uTextureAmount;
 
 #define NR_POINT_LIGHTS 2
-
 uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform SpotLight flashlights[NR_POINT_LIGHTS];
@@ -126,15 +128,17 @@ void main()
 
     result += CalcDirLight(dirLight, norm, viewDir);
 
-    for(int i = 0; i < NR_POINT_LIGHTS; i++)
+    for(int i = 0; i < NR_POINT_LIGHTS; ++i)
     {
         result += CalcPointLight(pointLights[i], norm, vFragPos, viewDir);
     }
 
-    for(int i = 0; i < NR_POINT_LIGHTS; i++)
+    for(int i = 0; i < NR_POINT_LIGHTS; ++i)
         result += CalcSpotLight(flashlights[i], norm, vFragPos, viewDir);
-
-    vec4 texColor = texture(uTexture, vTexCoord);
+    
+    vec4 texColor = vec4(0.0);
+    for (int i = 0; i < uTextureAmount; ++i)
+        texColor += texture(uTexture[i], vTexCoord);
 
     FragColor = (texColor * vColor) * vec4(result, 1.0);
 }

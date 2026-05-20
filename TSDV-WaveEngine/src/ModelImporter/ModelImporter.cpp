@@ -11,25 +11,27 @@
 #include "Mesh/Mesh.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Vector2/Vector2.h"
+#include <Material/Material.h>
 
 namespace WaveEngine
 {
-	unsigned int ModelImporter::LoadMesh(filesystem::path filePath, const bool useAbsolutePath)
+	void ModelImporter::LoadScene(filesystem::path filePath, const bool useAbsolutePath)
 	{
 		filePath = useAbsolutePath ? std::filesystem::absolute(filePath) : filePath;
 
-		Assimp::Importer importer;
+		directory = filePath.parent_path();
 
-		const aiScene* pScene = importer.ReadFile(filePath.string().c_str(),
-			aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs |
-			aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices);
+		pScene = importer.ReadFile(filePath.string().c_str(),
+			aiProcess_Triangulate |
+			aiProcess_GenSmoothNormals |
+			aiProcess_FlipUVs |
+			aiProcess_JoinIdenticalVertices |
+			aiProcess_CalcTangentSpace);
 
-		return InitFromScene(filePath.filename().string().c_str(), pScene);
+		filename = filePath.filename().string().c_str();
 	}
 
-	unsigned int ModelImporter::InitFromScene(
-		string_view assetName,
-		const aiScene*& pScene)
+	unsigned int ModelImporter::LoadMesh()
 	{
 		if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode)
 			return Mesh::NULL_MESH;
@@ -56,9 +58,15 @@ namespace WaveEngine
 					? Vector3(mesh.mNormals[j].x, mesh.mNormals[j].y, mesh.mNormals[j].z)
 					: Vector3(0, 1, 0);
 
-				currentVertex.textureCordinates = mesh.HasTextureCoords(0)
-					? Vector2(mesh.mTextureCoords[0][j].x, mesh.mTextureCoords[0][j].y)
-					: Vector2(0, 0);
+				if (mesh.GetNumUVChannels() > 0 &&
+					mesh.mTextureCoords[0] != nullptr)
+				{
+					const aiVector3D& uv = mesh.mTextureCoords[0][j];
+					currentVertex.textureCordinates = Vector2(uv.x, uv.y);
+				}
+				else
+					currentVertex.textureCordinates = Vector2(0, 0);
+				
 
 				if (mesh.HasVertexColors(0))
 				{
@@ -77,14 +85,14 @@ namespace WaveEngine
 
 				for (unsigned int k = 0; k < face.mNumIndices; ++k)
 					indicesToSubmit[indexGlobalOffset++] = face.mIndices[k] + vertexGlobalOffset;
-				
+
 			}
 
 			vertexGlobalOffset += mesh.mNumVertices;
 		}
 
 		return GetMeshFactory()->CreateMesh(
-			assetName,
+			filename,
 			vertexToSubmit,
 			count.first,
 			indicesToSubmit,
@@ -92,9 +100,72 @@ namespace WaveEngine
 		);
 	}
 
-	MeshFactory* ModelImporter::GetMeshFactory()
+	unsigned int ModelImporter::LoadMaterial()
 	{
-		return ServiceProvider::Instance().Get<MeshFactory>();
+		if (!pScene || !pScene->HasMaterials())
+			return Material::NULL_MATERIAL;
+
+		aiMaterial* material = pScene->mMaterials[0];
+
+		std::vector<unsigned int> albedoIDs = LoadMaterialTextures(material, aiTextureType_DIFFUSE);
+
+		if (albedoIDs.empty())
+			return Material::NULL_MATERIAL;
+
+		const unsigned int newMaterialID = GetMaterialFactory()->CreateMaterial(
+			filename,
+			GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"),
+			GetFileReader()->ReadFile("Shaders/ECS/newShader.frag")
+		);
+
+		Material* newMaterial = GetMaterialManager()->GetMaterial(newMaterialID);
+
+		for (size_t i = 0; i < albedoIDs.size() && i < Material::MAX_ALBEDO; ++i)
+			newMaterial->AddAlbedoTexture(albedoIDs[i]);
+
+		return newMaterialID;
+	}
+
+	std::vector<unsigned int> ModelImporter::LoadMaterialTextures(aiMaterial* mat, aiTextureType type)
+	{
+		std::vector<unsigned int> textures;
+		unsigned int count = mat->GetTextureCount(type);
+
+		for (unsigned int i = 0; i < count; i++)
+		{
+			aiString str;
+			if (mat->GetTexture(type, i, &str) != AI_SUCCESS)
+				continue;
+
+			std::string path = str.C_Str();
+
+			unsigned int textureID = 0;
+
+			if (!path.empty() && path[0] == '*')
+			{
+				int index = std::stoi(path.substr(1));
+				const aiTexture* tex = pScene->mTextures[index];
+
+				if (tex->mHeight == 0)
+				{
+					textureID = GetTextureImporter()->LoadTextureFromMemory(
+						reinterpret_cast<const unsigned char*>(tex->pcData),
+						tex->mWidth);
+				}
+			}
+			else
+			{
+				std::filesystem::path fullPath = directory / path;
+				textureID = GetTextureImporter()->LoadTexture(fullPath.string());
+			}
+
+			if (textureID != 0)
+			{
+				unsigned int gpuID = GetTextureManager()->GetTexture(textureID)->GetGPUID();
+				textures.push_back(gpuID);
+			}
+		}
+		return textures;
 	}
 
 	pair<unsigned int, unsigned int> ModelImporter::GetVertexAndIndexSizes(const aiScene& pScene)
@@ -111,5 +182,35 @@ namespace WaveEngine
 		}
 
 		return pair<int, int>(totalVertices, totalIndices);
+	}
+
+	MeshFactory* ModelImporter::GetMeshFactory()
+	{
+		return ServiceProvider::Instance().Get<MeshFactory>();
+	}
+
+	TextureImporter* ModelImporter::GetTextureImporter()
+	{
+		return ServiceProvider::Instance().Get<TextureImporter>();
+	}
+
+	TextureManager* ModelImporter::GetTextureManager()
+	{
+		return ServiceProvider::Instance().Get<TextureManager>();
+	}
+
+	MaterialFactory* ModelImporter::GetMaterialFactory()
+	{
+		return ServiceProvider::Instance().Get<MaterialFactory>();
+	}
+
+	MaterialManager* ModelImporter::GetMaterialManager()
+	{
+		return ServiceProvider::Instance().Get<MaterialManager>();
+	}
+
+	FileReader* ModelImporter::GetFileReader()
+	{
+		return ServiceProvider::Instance().Get<FileReader>();
 	}
 }

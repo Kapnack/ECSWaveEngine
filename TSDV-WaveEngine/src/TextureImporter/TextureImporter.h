@@ -29,5 +29,6 @@ namespace WaveEngine
 
 		WAVEEXPORT unsigned int LoadTextureAbsolutePath(const string_view filePath);
 		WAVEEXPORT unsigned int LoadTexture(const string_view filePath);
+		WAVEEXPORT unsigned int LoadTextureFromMemory(const unsigned char* buffer, int size);
 	};
 }

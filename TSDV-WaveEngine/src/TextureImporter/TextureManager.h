@@ -30,9 +30,6 @@ namespace WaveEngine
 
 		void Save(Texture*& texture);
 
-		Texture* GetTexture(const unsigned int& ID) const;
-		Texture* TryGetTexture(const unsigned int& ID) const;
-
 		map<unsigned int, Texture*>& GetTextures();
 
 		friend class BaseGame;
@@ -47,5 +44,8 @@ namespace WaveEngine
 
 		WAVEEXPORT void DeleteTexture(const unsigned int& ID);
 		WAVEEXPORT void DeleteTexture(const string_view name);
+
+		WAVEEXPORT Texture* GetTexture(const unsigned int& ID) const;
+		WAVEEXPORT Texture* TryGetTexture(const unsigned int& ID) const;
 	};
 }

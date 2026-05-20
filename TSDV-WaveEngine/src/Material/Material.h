@@ -58,6 +58,8 @@ namespace WaveEngine
 
 	public:
 
+		static const int MAX_ALBEDO = 8;
+
 		const static unsigned int NULL_MATERIAL;
 
 		const string GetName() const;
@@ -65,7 +67,8 @@ namespace WaveEngine
 		Color GetColor() const;
 		unsigned int GetID() const;
 		unsigned int GetGPUID() const;
-		void SetTexture(const std::string& uniformName, unsigned int textureID);
+		void SetTexture(const std::string& uniformName, unsigned int textureGPUID);
+		void AddAlbedoTexture(unsigned int textureGPUID);
 		void SetColor(const Color& color);
 
 		void SetVec2(const std::string& name, const Vector2& value);

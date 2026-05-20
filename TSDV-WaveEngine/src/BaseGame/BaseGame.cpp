@@ -30,6 +30,7 @@ namespace WaveEngine
 
 		srand(time(NULL));
 
+#pragma region InitServices
 		ServiceProvider::Instance().Register(new EventSystem());
 		ServiceProvider::Instance().Register(new ComponentRegistry());
 		ServiceProvider::Instance().Register(new Window(width, height, "WaveEngine", nullptr, nullptr));
@@ -43,25 +44,40 @@ namespace WaveEngine
 		ServiceProvider::Instance().Register(new Renderer());
 		ServiceProvider::Instance().Register(new Input());
 		ServiceProvider::Instance().Register(new Time());
+#pragma endregion
+
 		imGui = new ImGuiClass();
 
 		transformLogic.Init();
 		drawLogic.Init();
 
-		unsigned int textureIndex = GetTextureImporter()->LoadTextureAbsolutePath("Sprites/whiteImage.png");
-		unsigned int MatID = GetMaterialFactory()->CreateMaterial("Test", GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"), GetFileReader()->ReadFile("Shaders/ECS/newShader.frag"));
-
-		unsigned int textureGPUID = GetTextureManager()->GetTexture(textureIndex)->GetGPUID();
-
+#pragma region ImportModels
 		ModelImporter modelImporter;
-
 		vector<unsigned int> models;
+		vector<unsigned int> materialPerModel;
 
-		models.push_back(modelImporter.LoadMesh("Models/Rata_mutante_low.fbx"));
-		models.push_back(modelImporter.LoadMesh("Models/girl OBJ.obj"));
-		models.push_back(modelImporter.LoadMesh("Models/gold_headed_buddha_-_photogrammetry_test_2019.glb"));
-		models.push_back(modelImporter.LoadMesh("Models/Cube.fbx"));
+		modelImporter.LoadScene("Models/Rata_mutante_low.fbx");
+		models.push_back(modelImporter.LoadMesh());
+		materialPerModel.push_back(modelImporter.LoadMaterial());
 
+		modelImporter.LoadScene("Models/girl OBJ.obj");
+		models.push_back(modelImporter.LoadMesh());
+		materialPerModel.push_back(modelImporter.LoadMaterial());
+
+		modelImporter.LoadScene("Models/gold_headed_buddha_-_photogrammetry_test_2019.glb");
+		models.push_back(modelImporter.LoadMesh());
+		materialPerModel.push_back(modelImporter.LoadMaterial());
+
+		modelImporter.LoadScene("Models/Cube.fbx");
+		models.push_back(modelImporter.LoadMesh());
+		materialPerModel.push_back(modelImporter.LoadMaterial());
+
+		modelImporter.LoadScene("Models/LowPoly_SpiderBot_Rzenn.fbx");
+		models.push_back(modelImporter.LoadMesh());
+		materialPerModel.push_back(modelImporter.LoadMaterial());
+#pragma endregion
+
+#pragma region InitLights
 		Renderer::dirLight.direction = Vector3::Back();
 
 		Renderer::flashLights[0] =
@@ -100,7 +116,7 @@ namespace WaveEngine
 
 		Renderer::pointLight[0] =
 		{
-			.position = { - 100, 0.0f, 0.0f },
+			.position = { -100, 0.0f, 0.0f },
 
 			.ambient = Vector3::Y() * 0.1f,
 			.diffuse = Vector3::Y(),
@@ -123,16 +139,25 @@ namespace WaveEngine
 			.linear = 0.00032f,
 			.quadratic = 0.00032f
 		};
+#pragma endregion
 
-		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uTexture", textureGPUID);
+#pragma region CreateMaterial
+		unsigned int textureIndex = GetTextureImporter()->LoadTextureAbsolutePath("Sprites/whiteImage.png");
+		unsigned int MatID = GetMaterialFactory()->CreateMaterial("Test", GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"), GetFileReader()->ReadFile("Shaders/ECS/newShader.frag"));
 
+		unsigned int textureGPUID = GetTextureManager()->GetTexture(textureIndex)->GetGPUID();
+
+		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uTexture[0]", textureGPUID);
+#pragma endregion
+
+#pragma region SetUpEntitiesAndComponents
 		const unsigned int defaultSize = 32;
 
 		GetComponentRegistry()->AddComponent<ECSTransform>(0);
 		GetComponentRegistry()->AddComponent<Camera>(0);
 		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetFarPlane(10000);
 		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetOrthographic(false);
-		GetComponentRegistry()->Get<ECSTransform>(0).SetPosition(Vector3::Right()* ((models.size() - 1)* defaultSize) + Vector3::Foward() * 150);
+		GetComponentRegistry()->Get<ECSTransform>(0).SetPosition(Vector3::Right() * ((models.size() - 1) * defaultSize) + Vector3::Foward() * 150);
 
 		for (unsigned int i = 1; i <= models.size() + 2; ++i)
 		{
@@ -144,7 +169,8 @@ namespace WaveEngine
 
 			GetComponentRegistry()->Get<MeshID>(i).meshID = i < models.size() ? models[i - 1] : models[models.size() - 1];
 
-			GetComponentRegistry()->Get<MeshRenderer>(i).materialID = MatID;
+			if (i - 1 < models.size())
+				GetComponentRegistry()->Get<MeshRenderer>(i).materialID = materialPerModel[i - 1] == Material::NULL_MATERIAL ? MatID : materialPerModel[i - 1];
 		}
 
 		GetComponentRegistry()->Get<ECSTransform>(1).Translate(Vector3::Up() * defaultSize);
@@ -164,6 +190,7 @@ namespace WaveEngine
 
 		GetComponentRegistry()->Get<ECSTransform>(models.size() + 2).SetPosition(Renderer::pointLight[1].position + Vector3::Back() * 25);
 		GetComponentRegistry()->Get<ECSTransform>(models.size() + 2).SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
+#pragma endregion
 	}
 
 	void BaseGame::EndEngine()
@@ -189,9 +216,10 @@ namespace WaveEngine
 	{
 		GetTime()->UpdateDeltaTime();
 
+#pragma region UpdateCameraPositionLogic
 		Camera& camera = GetComponentRegistry()->Get<Camera>(0);
 		ECSTransform& transform = GetComponentRegistry()->Get<ECSTransform>(0);
-		const float camereSpeed = 300;
+		const float camereSpeed = 150;
 
 		if (GetInput()->IsKeyPressed(Keys::W))
 		{
@@ -219,6 +247,15 @@ namespace WaveEngine
 			transform.Rotate(Vector3::Right() * GetDeltaTime() * camereSpeed);
 		}
 
+		if (GetInput()->IsKeyPressed(Keys::Q))
+		{
+			transform.Rotate(Vector3::Up() * GetDeltaTime() * camereSpeed);
+		}
+		else if (GetInput()->IsKeyPressed(Keys::E))
+		{
+			transform.Rotate(Vector3::Down() * GetDeltaTime() * camereSpeed);
+		}
+
 		if (GetInput()->IsKeyPressed(Keys::SPACE))
 		{
 			transform.Translate(Vector3::Foward() * GetDeltaTime() * camereSpeed);
@@ -227,6 +264,7 @@ namespace WaveEngine
 		{
 			transform.Translate(Vector3::Back() * GetDeltaTime() * camereSpeed);
 		}
+#pragma endregion
 
 		transformLogic.Update();
 

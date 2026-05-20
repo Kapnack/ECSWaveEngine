@@ -53,6 +53,13 @@ namespace WaveEngine
 		textures[uniformName] = textureID;
 	}
 
+	void Material::AddAlbedoTexture(unsigned int textureGPUID)
+	{
+		const string albedoParamName = "uTexture";
+
+		SetTexture(albedoParamName + "[" + to_string(textures.size()) + "]", textureGPUID);
+	}
+
 	void Material::SetName(const string& name)
 	{
 		this->name = name;
@@ -179,6 +186,8 @@ namespace WaveEngine
 			glBindTexture(GL_TEXTURE_2D, it->second);
 			glUniform1i(u->location, textureSlot++);
 		}
+
+		SetInt("uTextureAmount", textures.size());
 	}
 
 	void Material::UnBind()

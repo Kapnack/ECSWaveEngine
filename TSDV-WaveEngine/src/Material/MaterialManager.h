@@ -29,8 +29,6 @@ namespace WaveEngine
 
 		void SaveMaterial(Material*& material);
 
-		Material* GetMaterial(const unsigned int id);
-
 		unordered_map<unsigned int, Material*>& GetMaterials();
 
 		MaterialManager();
@@ -45,6 +43,8 @@ namespace WaveEngine
 		friend class MaterialsImGui;
 
 	public:
+
+		WAVEEXPORT Material* GetMaterial(const unsigned int id);
 
 		WAVEEXPORT unsigned int GetMaterial(const string_view name);
 
