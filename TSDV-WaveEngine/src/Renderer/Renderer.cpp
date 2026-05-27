@@ -296,13 +296,13 @@ namespace WaveEngine
 
 			materialToUse->Bind();
 
-			auto& camera = GetComponentRegistry()
+			Camera& camera = GetComponentRegistry()
 				->GetComponentStorage<Camera>()
-				.Get(0);
+				.GetFirst();
 
-			auto& cameraTransform = GetComponentRegistry()
+			ECSTransform& cameraTransform = GetComponentRegistry()
 				->GetComponentStorage<ECSTransform>()
-				.Get(0);
+				.GetFirst();
 
 			glm::mat4 view = camera.GetView();
 			glm::mat4 proj = camera.GetProjection();
