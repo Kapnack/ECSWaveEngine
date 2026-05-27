@@ -6,10 +6,10 @@
 #include "TextureImporter/TextureImporter.h"
 #include "TextureImporter/TextureManager.h"
 #include "ECS/Camera/Camera.h"
-#include <ECS/Mesh/MeshID.h>
-#include <ECS/MaterialID.h>
-#include <ECS/Transform/ECSTransform.h>
-#include <ModelImporter/ModelImporter.h>
+#include "ECS/Mesh/MeshID.h"
+#include "ECS/MaterialID.h"
+#include "ECS/Transform/ECSTransform.h"
+#include "ModelImporter/ModelImporter.h"
 
 namespace WaveEngine
 {
@@ -33,6 +33,8 @@ namespace WaveEngine
 #pragma region InitServices
 		ServiceProvider::Instance().Register(new EventSystem());
 		ServiceProvider::Instance().Register(new ComponentRegistry());
+		ServiceProvider::Instance().Register(new WaveObjectRegistry());
+		ServiceProvider::Instance().Register(new WaveObjectFactory());
 		ServiceProvider::Instance().Register(new Window(width, height, "WaveEngine", nullptr, nullptr));
 		ServiceProvider::Instance().Register(new FileReader());
 		ServiceProvider::Instance().Register(new MeshFactory());
@@ -153,43 +155,46 @@ namespace WaveEngine
 #pragma region SetUpEntitiesAndComponents
 		const unsigned int defaultSize = 32;
 
-		GetComponentRegistry()->AddComponent<ECSTransform>(0);
-		GetComponentRegistry()->AddComponent<Camera>(0);
-		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetFarPlane(10000);
-		GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).SetOrthographic(false);
-		GetComponentRegistry()->Get<ECSTransform>(0).SetPosition(Vector3::Right() * ((models.size() - 1) * defaultSize) + Vector3::Foward() * 150);
+		cameraObject = &GetWaveObjectFactory()->Instantiate();
+
+		camera = &cameraObject->AddComponent<Camera>();
+		camera->SetFarPlane(10000);
+		camera->SetOrthographic(false);
+		cameraObject->GetTransform().SetPosition(Vector3::Right() * ((models.size() - 1) * defaultSize) + Vector3::Foward() * 150);
+
+		vector<WaveObject*> waveObject;
 
 		for (unsigned int i = 1; i <= models.size() + 2; ++i)
 		{
-			GetComponentRegistry()->AddComponent<ECSTransform>(i);
-			GetComponentRegistry()->AddComponent<MeshID>(i);
-			GetComponentRegistry()->AddComponent<MeshRenderer>(i);
+			waveObject.push_back(&GetWaveObjectFactory()->Instantiate());
 
-			GetComponentRegistry()->Get<ECSTransform>(i).SetPosition(Vector3::Right() * (i * defaultSize));
+			MeshRenderer& meshRenderer = waveObject[i - 1]->AddComponent<MeshRenderer>();
 
-			GetComponentRegistry()->Get<MeshID>(i).meshID = i < models.size() ? models[i - 1] : models[models.size() - 1];
+			waveObject[i - 1]->GetTransform().SetPosition(Vector3::Right() * (i * defaultSize));
+
+			waveObject[i - 1]->AddComponent<MeshID>().meshID = i < models.size() ? models[i - 1] : models[models.size() - 1];
 
 			if (i - 1 < models.size())
-				GetComponentRegistry()->Get<MeshRenderer>(i).materialID = materialPerModel[i - 1] == Material::NULL_MATERIAL ? MatID : materialPerModel[i - 1];
+				meshRenderer.materialID = materialPerModel[i - 1] == Material::NULL_MATERIAL ? MatID : materialPerModel[i - 1];
 		}
 
-		GetComponentRegistry()->Get<ECSTransform>(1).Translate(Vector3::Up() * defaultSize);
-		GetComponentRegistry()->Get<ECSTransform>(1).SetScale(Vector3::One() * defaultSize * 0.5f);
+		waveObject[0]->GetTransform().Translate(Vector3::Up() * defaultSize);
+		waveObject[0]->GetTransform().SetScale(Vector3::One() * defaultSize * 0.5f);
 
-		GetComponentRegistry()->Get<ECSTransform>(2).SetScale(Vector3::One() * defaultSize);
+		waveObject[1]->GetTransform().SetScale(Vector3::One() * defaultSize);
 
-		GetComponentRegistry()->Get<ECSTransform>(3).SetScale(Vector3::One() * defaultSize * 4);
-		GetComponentRegistry()->Get<ECSTransform>(3).SetRotation(Vector3::Y() * (40 + 90));
+		waveObject[2]->GetTransform().SetScale(Vector3::One() * defaultSize * 4);
+		waveObject[2]->GetTransform().SetRotation(Vector3::Y() * (40 + 90));
 
-		GetComponentRegistry()->Get<ECSTransform>(4).SetPosition(GetComponentRegistry()->Get<ECSTransform>(models.size() * 0.5f).GetPosition() + Vector3::Down() * defaultSize);
-		GetComponentRegistry()->Get<ECSTransform>(4).SetScale((Vector3::Z() + Vector3::X()) * defaultSize * 10 + Vector3::Y());
+		waveObject[3]->GetTransform().SetPosition(waveObject[models.size() * 0.5f]->GetTransform().GetPosition() + Vector3::Down() * defaultSize);
+		waveObject[3]->GetTransform().SetScale((Vector3::Z() + Vector3::X()) * defaultSize * 10 + Vector3::Y());
 		GetMeshManager()->GetMesh("Cube.fbx")->SetVertexColor(Color::White());
 
-		GetComponentRegistry()->Get<ECSTransform>(models.size() + 1).SetPosition(Renderer::pointLight[0].position + Vector3::Back() * 25);
-		GetComponentRegistry()->Get<ECSTransform>(models.size() + 1).SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
+		waveObject[models.size()]->GetTransform().SetPosition(Renderer::pointLight[0].position + Vector3::Back() * 25);
+		waveObject[models.size()]->GetTransform().SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
 
-		GetComponentRegistry()->Get<ECSTransform>(models.size() + 2).SetPosition(Renderer::pointLight[1].position + Vector3::Back() * 25);
-		GetComponentRegistry()->Get<ECSTransform>(models.size() + 2).SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
+		waveObject[models.size() + 1]->GetTransform().SetPosition(Renderer::pointLight[1].position + Vector3::Back() * 25);
+		waveObject[models.size() + 1]->GetTransform().SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
 #pragma endregion
 	}
 
@@ -217,58 +222,56 @@ namespace WaveEngine
 		GetTime()->UpdateDeltaTime();
 
 #pragma region UpdateCameraPositionLogic
-		Camera& camera = GetComponentRegistry()->Get<Camera>(0);
-		ECSTransform& transform = GetComponentRegistry()->Get<ECSTransform>(0);
 		const float camereSpeed = 150;
 
 		if (GetInput()->IsKeyPressed(Keys::W))
 		{
-			transform.Translate(Vector3::Up() * GetDeltaTime() * camereSpeed);
+			cameraObject->GetTransform().Translate(Vector3::Up() * GetDeltaTime() * camereSpeed);
 		}
 		else if (GetInput()->IsKeyPressed(Keys::A))
 		{
-			transform.Translate(Vector3::Left() * GetDeltaTime() * camereSpeed);
+			cameraObject->GetTransform().Translate(Vector3::Left() * GetDeltaTime() * camereSpeed);
 		}
 		else if (GetInput()->IsKeyPressed(Keys::S))
 		{
-			transform.Translate(Vector3::Down() * GetDeltaTime() * camereSpeed);
+			cameraObject->GetTransform().Translate(Vector3::Down() * GetDeltaTime() * camereSpeed);
 		}
 		else if (GetInput()->IsKeyPressed(Keys::D))
 		{
-			transform.Translate(Vector3::Right() * GetDeltaTime() * camereSpeed);
+			cameraObject->GetTransform().Translate(Vector3::Right() * GetDeltaTime() * camereSpeed);
 		}
 
 		if (GetInput()->IsKeyPressed(Keys::Z))
 		{
-			transform.Rotate(Vector3::Left() * GetDeltaTime() * camereSpeed);
+			cameraObject->GetTransform().Rotate(Vector3::Left() * GetDeltaTime() * camereSpeed);
 		}
 		else if (GetInput()->IsKeyPressed(Keys::X))
 		{
-			transform.Rotate(Vector3::Right() * GetDeltaTime() * camereSpeed);
+			cameraObject->GetTransform().Rotate(Vector3::Right() * GetDeltaTime() * camereSpeed);
 		}
 
 		if (GetInput()->IsKeyPressed(Keys::Q))
 		{
-			transform.Rotate(Vector3::Up() * GetDeltaTime() * camereSpeed);
+			cameraObject->GetTransform().Rotate(Vector3::Up() * GetDeltaTime() * camereSpeed);
 		}
 		else if (GetInput()->IsKeyPressed(Keys::E))
 		{
-			transform.Rotate(Vector3::Down() * GetDeltaTime() * camereSpeed);
+			cameraObject->GetTransform().Rotate(Vector3::Down() * GetDeltaTime() * camereSpeed);
 		}
 
 		if (GetInput()->IsKeyPressed(Keys::SPACE))
 		{
-			transform.Translate(Vector3::Foward() * GetDeltaTime() * camereSpeed);
+			cameraObject->GetTransform().Translate(Vector3::Foward() * GetDeltaTime() * camereSpeed);
 		}
 		else if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
 		{
-			transform.Translate(Vector3::Back() * GetDeltaTime() * camereSpeed);
+			cameraObject->GetTransform().Translate(Vector3::Back() * GetDeltaTime() * camereSpeed);
 		}
 #pragma endregion
 
 		transformLogic.Update();
 
-		camera.CalculateMatrixes();
+		camera->CalculateMatrixes();
 
 		drawLogic.Update();
 
@@ -305,11 +308,6 @@ namespace WaveEngine
 	MaterialManager* BaseGame::GetMaterialManager()
 	{
 		return ServiceProvider::Instance().Get<MaterialManager>();
-	}
-
-	ComponentRegistry* BaseGame::GetComponentRegistry()
-	{
-		return ServiceProvider::Instance().Get<ComponentRegistry>();
 	}
 
 	MaterialFactory* BaseGame::GetMaterialFactory()
@@ -350,5 +348,15 @@ namespace WaveEngine
 	MeshManager* BaseGame::GetMeshManager()
 	{
 		return ServiceProvider::Instance().Get<MeshManager>();
+	}
+
+	WaveObjectRegistry* BaseGame::GetWaveObjectRegistry()
+	{
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
+	}
+
+	WaveObjectFactory* BaseGame::GetWaveObjectFactory()
+	{
+		return ServiceProvider::Instance().Get<WaveObjectFactory>();
 	}
 }

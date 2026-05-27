@@ -30,7 +30,7 @@ namespace WaveEngine
 		}
 
 		template<typename T>
-		void AddComponent(const unsigned int& entity)
+		T& AddComponent(const unsigned int& entity)
 		{
 			type_index typeIndex = typeid(T);
 
@@ -40,6 +40,8 @@ namespace WaveEngine
 				storages[typeIndex] = new Storage<T>();
 
 			static_cast<Storage<T>*>(storages.at(typeIndex))->container.Add(entity, component);
+
+			return static_cast<Storage<T>*>(storages.at(typeIndex))->container.Get(entity);
 		}
 
 		template<typename T>

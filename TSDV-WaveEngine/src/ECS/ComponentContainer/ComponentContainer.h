@@ -75,6 +75,12 @@ namespace WaveEngine
 			return components.at(componentByEntity.at(entity));
 		}
 
+		T& GetFirst()
+		{
+			typename std::vector<T>::iterator iterator = components.begin();
+			return *iterator;
+		}
+
 		T* TryGet(const unsigned int& entity)
 		{
 			if (entity >= componentByEntity.size())

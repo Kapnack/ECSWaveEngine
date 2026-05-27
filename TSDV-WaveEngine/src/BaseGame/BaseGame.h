@@ -15,6 +15,10 @@
 #include <ImGuiClass/ImGuiClass.h>
 #include "../ECS/Managers/Draw.h"
 #include "ECS/Managers/TransformLogic/TransformLogic.h"
+#include <ECS/WaveObject/WaveObjectRegistry.h>
+#include <ECS/WaveObject/WaveObjectFactory.h>
+#include <ECS/Camera/Camera.h>
+#include <ECS/WaveObject/WaveObject.h>
 
 namespace WaveEngine
 {
@@ -37,6 +41,9 @@ namespace WaveEngine
 
 		ImGuiClass* imGui;
 
+		WaveObject* cameraObject;
+		Camera* camera;
+
 	protected:
 
 		WAVEEXPORT	virtual void Init(const int& width, const int& height) = 0;
@@ -45,7 +52,6 @@ namespace WaveEngine
 		WAVEEXPORT float GetDeltaTime();
 
 		WAVEEXPORT MaterialManager* GetMaterialManager();
-		WAVEEXPORT ComponentRegistry* GetComponentRegistry();
 		WAVEEXPORT MaterialFactory* GetMaterialFactory();
 		WAVEEXPORT Input* GetInput();
 		WAVEEXPORT Window* GetWindow();
@@ -56,6 +62,8 @@ namespace WaveEngine
 		WAVEEXPORT EventSystem* GetEventSystem();
 		WAVEEXPORT MeshFactory* GetMeshFactory();
 		WAVEEXPORT MeshManager* GetMeshManager();
+		WAVEEXPORT WaveObjectRegistry* GetWaveObjectRegistry();
+		WAVEEXPORT WaveObjectFactory* GetWaveObjectFactory();
 
 	public:
 
