@@ -36,7 +36,7 @@ namespace WaveEngine
 		if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode)
 			return Mesh::NULL_MESH;
 
-		pair<int, int> count = GetVertexAndIndexSizes(*pScene);
+		pair<unsigned int, unsigned int> count = GetVertexAndIndexSizes(*pScene);
 
 		VertexData* vertexToSubmit = new VertexData[count.first];
 		unsigned int* indicesToSubmit = new unsigned int[count.second];
@@ -66,7 +66,7 @@ namespace WaveEngine
 				}
 				else
 					currentVertex.textureCordinates = Vector2(0, 0);
-				
+
 
 				if (mesh.HasVertexColors(0))
 				{
@@ -126,31 +126,35 @@ namespace WaveEngine
 		return newMaterialID;
 	}
 
-	std::vector<unsigned int> ModelImporter::LoadMaterialTextures(aiMaterial* mat, aiTextureType type)
+	vector<unsigned int> ModelImporter::LoadMaterialTextures(aiMaterial* mat, aiTextureType type)
 	{
-		std::vector<unsigned int> textures;
+		vector<unsigned int> textures;
 		unsigned int count = mat->GetTextureCount(type);
+		int index = 0;
+		unsigned int textureID = 0;
+		aiString str;
+		string path;
+		unsigned int gpuID = 0;
 
-		for (unsigned int i = 0; i < count; i++)
+		for (unsigned int i = 0; i < count; ++i)
 		{
-			aiString str;
 			if (mat->GetTexture(type, i, &str) != AI_SUCCESS)
 				continue;
 
-			std::string path = str.C_Str();
+			path = str.C_Str();
 
-			unsigned int textureID = 0;
+			textureID = 0;
 
 			if (!path.empty() && path[0] == '*')
 			{
-				int index = std::stoi(path.substr(1));
-				const aiTexture* tex = pScene->mTextures[index];
+				index = std::stoi(path.substr(1));
+				const aiTexture& tex = *pScene->mTextures[index];
 
-				if (tex->mHeight == 0)
+				if (tex.mHeight == 0)
 				{
 					textureID = GetTextureImporter()->LoadTextureFromMemory(
-						reinterpret_cast<const unsigned char*>(tex->pcData),
-						tex->mWidth);
+						reinterpret_cast<const unsigned char*>(tex.pcData),
+						tex.mWidth);
 				}
 			}
 			else
@@ -161,10 +165,11 @@ namespace WaveEngine
 
 			if (textureID != 0)
 			{
-				unsigned int gpuID = GetTextureManager()->GetTexture(textureID)->GetGPUID();
+				gpuID = GetTextureManager()->GetTexture(textureID)->GetGPUID();
 				textures.push_back(gpuID);
 			}
 		}
+
 		return textures;
 	}
 
