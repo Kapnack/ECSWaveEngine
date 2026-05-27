@@ -6,7 +6,6 @@ layout(location = 2) in vec2 aTexCoord;
 layout(location = 3) in vec3 aNormal;
 
 layout(location = 4) in mat4 instanceModel;
-layout(location = 8) in vec4 aUVOffsetScale;
 
 out vec4 vColor;
 out vec2 vTexCoord;
@@ -18,10 +17,8 @@ uniform mat4 uProj;
 
 void main()
 {
-    vec2 uv = aTexCoord * aUVOffsetScale.zw + aUVOffsetScale.xy;
-
     vColor = aColor;
-    vTexCoord = uv;
+    vTexCoord = aTexCoord;
 
     gl_Position = uProj * uView * instanceModel * vec4(aPos, 1.0);
     vFragPos = vec3(instanceModel * vec4(aPos, 1.0));
