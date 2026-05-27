@@ -24,7 +24,6 @@ namespace WaveEngine
 		pScene = importer.ReadFile(filePath.string().c_str(),
 			aiProcess_Triangulate |
 			aiProcess_GenSmoothNormals |
-			aiProcess_FlipUVs |
 			aiProcess_JoinIdenticalVertices |
 			aiProcess_CalcTangentSpace);
 
@@ -70,13 +69,11 @@ namespace WaveEngine
 
 				if (mesh.HasVertexColors(0))
 				{
-					aiColor4D color = mesh.mColors[0][j];
+					aiColor4D& color = mesh.mColors[0][j];
 					currentVertex.color = Color(color.r, color.g, color.b, color.a);
 				}
 				else
-				{
 					currentVertex.color = Color::White();
-				}
 			}
 
 			for (unsigned int j = 0; j < mesh.mNumFaces; ++j)
@@ -202,6 +199,16 @@ namespace WaveEngine
 	TextureManager* ModelImporter::GetTextureManager()
 	{
 		return ServiceProvider::Instance().Get<TextureManager>();
+	}
+
+	WaveObjectRegistry* ModelImporter::GetWaveObjectRegistry()
+	{
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
+	}
+
+	WaveObjectFactory* ModelImporter::GetWaveObjectFactory()
+	{
+		return ServiceProvider::Instance().Get<WaveObjectFactory>();
 	}
 
 	MaterialFactory* ModelImporter::GetMaterialFactory()

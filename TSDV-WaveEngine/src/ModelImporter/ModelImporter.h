@@ -14,6 +14,8 @@
 #include <Material/MaterialFactory.h>
 #include <Material/MaterialManager.h>
 #include <FileReader/FileReader.h>
+#include <ECS/WaveObject/WaveObjectRegistry.h>
+#include <ECS/WaveObject/WaveObjectFactory.h>
 
 using namespace std;
 
@@ -34,6 +36,8 @@ namespace WaveEngine
 		MaterialFactory* GetMaterialFactory();
 		MaterialManager* GetMaterialManager();
 		TextureManager* GetTextureManager();
+		WaveObjectRegistry* GetWaveObjectRegistry();
+		WaveObjectFactory* GetWaveObjectFactory();
 
 		vector<unsigned int> LoadMaterialTextures(aiMaterial* mat, aiTextureType type);
 
