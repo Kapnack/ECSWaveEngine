@@ -4,8 +4,6 @@
 
 namespace WaveEngine::Objects
 {
-	unsigned int WaveObject::currentID = NULL_OBJECT;
-
 	ComponentRegistry* WaveObject::GetComponentRegistry()
 	{
 		return ServiceProvider::Instance().Get<ComponentRegistry>();
@@ -14,5 +12,10 @@ namespace WaveEngine::Objects
 	const unsigned int WaveObject::GetID() const
 	{
 		return ID;
+	}
+
+	ECSTransform& WaveObject::GetTransform()
+	{
+		return GetComponentRegistry()->GetComponent<ECSTransform>(ID);
 	}
 }
