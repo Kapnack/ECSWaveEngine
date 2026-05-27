@@ -77,6 +77,10 @@ namespace WaveEngine
 		modelImporter.LoadScene("Models/LowPoly_SpiderBot_Rzenn.fbx");
 		models.push_back(modelImporter.LoadMesh());
 		materialPerModel.push_back(modelImporter.LoadMaterial());
+
+		modelImporter.LoadScene("Models/Cat/concrete_cat_statue_1k.fbx");
+		models.push_back(modelImporter.LoadMesh());
+		materialPerModel.push_back(modelImporter.LoadMaterial());
 #pragma endregion
 
 #pragma region InitLights
@@ -189,6 +193,8 @@ namespace WaveEngine
 		waveObject[3]->GetTransform().SetPosition(waveObject[models.size() * 0.5f]->GetTransform().GetPosition() + Vector3::Down() * defaultSize);
 		waveObject[3]->GetTransform().SetScale((Vector3::Z() + Vector3::X()) * defaultSize * 10 + Vector3::Y());
 		GetMeshManager()->GetMesh("Cube.fbx")->SetVertexColor(Color::White());
+
+		waveObject[5]->GetTransform().SetScale(defaultSize, defaultSize, defaultSize);
 
 		waveObject[models.size()]->GetTransform().SetPosition(Renderer::pointLight[0].position + Vector3::Back() * 25);
 		waveObject[models.size()]->GetTransform().SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
