@@ -149,13 +149,6 @@ namespace WaveEngine
 			glVertexAttribDivisor(4 + i, 1);
 		}
 
-		glEnableVertexAttribArray(8);
-		glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE,
-			sizeof(InstanceData),
-			(void*)offsetof(InstanceData, uvOffsetScale));
-
-		glVertexAttribDivisor(8, 1);
-
 		glBindVertexArray(0);
 	}
 
@@ -232,7 +225,7 @@ namespace WaveEngine
 		};
 
 		batch.instances.reserve(MAX_INSTANCES);
-		batch.instances.push_back({ transform.GetGlobalModel(),  glm::vec4(0.8f, 0.0f, 1.0f, 1.0f) });
+		batch.instances.push_back({ transform.GetGlobalModel() });
 	}
 
 	void Renderer::Flush()

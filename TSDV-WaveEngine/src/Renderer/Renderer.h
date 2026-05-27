@@ -82,7 +82,6 @@ namespace WaveEngine
 		struct InstanceData
 		{
 			glm::mat4 model;
-			glm::vec4 uvOffsetScale;
 		};
 
 		struct RenderData
@@ -100,8 +99,6 @@ namespace WaveEngine
 			int instanceCapacity = 0;
 
 			unsigned int indexOffset = 0;
-
-			Vector4 uvOffsetScale;
 		};
 
 		unordered_map<size_t, RenderData> batching;
