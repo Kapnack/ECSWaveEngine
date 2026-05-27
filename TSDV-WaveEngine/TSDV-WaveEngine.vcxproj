@@ -163,6 +163,8 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.cpp" />
     <ClCompile Include="src\ECS\Component\Component.cpp" />
     <ClCompile Include="src\ECS\WaveObject\WaveObject.cpp" />
+    <ClCompile Include="src\ECS\WaveObject\WaveObjectFactory.cpp" />
+    <ClCompile Include="src\ECS\WaveObject\WaveObjectRegistry.cpp" />
     <ClCompile Include="src\ImGuiClass\ImGuiClass.cpp" />
     <ClCompile Include="src\Mesh\MeshManager\MeshManager.cpp" />
     <ClCompile Include="src\Mesh\MeshFactory\MeshFactory.cpp" />
@@ -202,6 +204,8 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\ECS\Mesh\MeshID.h" />
     <ClInclude Include="src\ECS\Texture\TextureID.h" />
     <ClInclude Include="src\ECS\WaveObject\WaveObject.h" />
+    <ClInclude Include="src\ECS\WaveObject\WaveObjectFactory.h" />
+    <ClInclude Include="src\ECS\WaveObject\WaveObjectRegistry.h" />
     <ClInclude Include="src\ImGuiClass\ImGuiClass.h" />
     <ClInclude Include="src\Material\Color\Color.h" />
     <ClInclude Include="src\Mesh\MeshManager\MeshManager.h" />
