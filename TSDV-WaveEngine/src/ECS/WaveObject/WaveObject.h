@@ -1,8 +1,9 @@
 #pragma once
 
-#include "EventSystem/EventSystem.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 #include <ECS/Transform/ECSTransform.h>
+
+class WaveObjectFactory;
 
 namespace WaveEngine::Objects
 {
@@ -10,29 +11,38 @@ namespace WaveEngine::Objects
 	{
 	private:
 
-		static const unsigned int NULL_OBJECT = 0;
-		static unsigned int currentID;
-		unsigned int ID = currentID;
+		unsigned int ID = NULL_OBJECT;
 
 		ComponentRegistry* GetComponentRegistry();
 
-	protected:
 
-
-		const unsigned int GetID() const;
+		friend class WaveObjectFactory;
 
 	public:
 
-		WaveObject()
+		ECSTransform* transform;
+
+		WaveObject(const unsigned int& ID)
 		{
-			ID = ++currentID;
-			AddComponent<ECSTransform>();
+			this->ID = ID;
+		}
+
+		static const unsigned int NULL_OBJECT = 0;
+
+		const unsigned int GetID() const;
+
+		ECSTransform& GetTransform();
+
+		template<typename T>
+		T& AddComponent()
+		{
+			return GetComponentRegistry()->AddComponent<T>(ID);
 		}
 
 		template<typename T>
-		void AddComponent()
+		T& GetComponent()
 		{
-			GetComponentRegistry()->AddComponent<T>(ID);
+			return GetComponentRegistry()->GetComponent<T>(ID);
 		}
 
 		template<typename T>
