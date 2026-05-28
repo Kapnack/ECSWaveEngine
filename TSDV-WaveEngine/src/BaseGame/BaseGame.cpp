@@ -54,33 +54,39 @@ namespace WaveEngine
 		drawLogic.Init();
 
 #pragma region ImportModels
+
+		const vector<string> modelsPaths
+		{
+			"Models/Cat/concrete_cat_statue_1k.fbx",
+			"Models/gold_headed_buddha_-_photogrammetry_test_2019.glb",
+			"Models/Statue/marble_bust_01_1k.fbx"
+		};
+
+		const unsigned int defaultSize = 32;
+
 		ModelImporter modelImporter;
-		vector<unsigned int> models;
-		vector<unsigned int> materialPerModel;
+		for (int i = 0; i < modelsPaths.size(); ++i)
+		{
+			modelImporter.LoadScene(modelsPaths.at(i));
 
-		modelImporter.LoadScene("Models/Rata_mutante_low.fbx");
-		models.push_back(modelImporter.LoadMesh());
-		materialPerModel.push_back(modelImporter.LoadMaterial());
+			WaveObject& waveObject = *modelImporter.IntantiateModel();
 
-		modelImporter.LoadScene("Models/girl OBJ.obj");
-		models.push_back(modelImporter.LoadMesh());
-		materialPerModel.push_back(modelImporter.LoadMaterial());
+			waveObject.GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f * i));
+			waveObject.GetTransform().SetScale(Vector3::One() * defaultSize);
 
-		modelImporter.LoadScene("Models/gold_headed_buddha_-_photogrammetry_test_2019.glb");
-		models.push_back(modelImporter.LoadMesh());
-		materialPerModel.push_back(modelImporter.LoadMaterial());
+			if (i != 1)
+				waveObject.GetTransform().Rotate(Vector3::Left() * 90);
+			else
+				waveObject.GetTransform().Rotate(Vector3::Up() * (45 + 90));
+		}
 
-		modelImporter.LoadScene("Models/Cube.fbx");
-		models.push_back(modelImporter.LoadMesh());
-		materialPerModel.push_back(modelImporter.LoadMaterial());
+		cameraObject = &GetWaveObjectFactory()->Instantiate();
 
-		modelImporter.LoadScene("Models/LowPoly_SpiderBot_Rzenn.fbx");
-		models.push_back(modelImporter.LoadMesh());
-		materialPerModel.push_back(modelImporter.LoadMaterial());
+		camera = &cameraObject->AddComponent<Camera>();
+		camera->SetFarPlane(10000);
+		camera->SetOrthographic(false);
+		cameraObject->GetTransform().SetPosition(Vector3::Right() * (modelsPaths.size() * 0.5f * defaultSize) + Vector3::Foward() * 150);
 
-		modelImporter.LoadScene("Models/Cat/concrete_cat_statue_1k.fbx");
-		models.push_back(modelImporter.LoadMesh());
-		materialPerModel.push_back(modelImporter.LoadMaterial());
 #pragma endregion
 
 #pragma region InitLights
@@ -146,62 +152,6 @@ namespace WaveEngine
 			.quadratic = 0.00032f
 		};
 #pragma endregion
-
-#pragma region CreateMaterial
-		unsigned int textureIndex = GetTextureImporter()->LoadTextureAbsolutePath("Sprites/whiteImage.png");
-		unsigned int MatID = GetMaterialFactory()->CreateMaterial("Test", GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"), GetFileReader()->ReadFile("Shaders/ECS/newShader.frag"));
-
-		unsigned int textureGPUID = GetTextureManager()->GetTexture(textureIndex)->GetGPUID();
-
-		GetMaterialManager()->GetMaterial(MatID)->SetTexture("uTexture[0]", textureGPUID);
-#pragma endregion
-
-#pragma region SetUpEntitiesAndComponents
-		const unsigned int defaultSize = 32;
-
-		cameraObject = &GetWaveObjectFactory()->Instantiate();
-
-		camera = &cameraObject->AddComponent<Camera>();
-		camera->SetFarPlane(10000);
-		camera->SetOrthographic(false);
-		cameraObject->GetTransform().SetPosition(Vector3::Right() * ((models.size() - 1) * defaultSize) + Vector3::Foward() * 150);
-
-		vector<WaveObject*> waveObject;
-
-		for (unsigned int i = 1; i <= models.size() + 2; ++i)
-		{
-			waveObject.push_back(&GetWaveObjectFactory()->Instantiate());
-
-			MeshRenderer& meshRenderer = waveObject[i - 1]->AddComponent<MeshRenderer>();
-
-			waveObject[i - 1]->GetTransform().SetPosition(Vector3::Right() * (i * defaultSize));
-
-			waveObject[i - 1]->AddComponent<MeshID>().meshID = i < models.size() ? models[i - 1] : models[models.size() - 1];
-
-			if (i - 1 < models.size())
-				meshRenderer.materialID = materialPerModel[i - 1] == Material::NULL_MATERIAL ? MatID : materialPerModel[i - 1];
-		}
-
-		waveObject[0]->GetTransform().Translate(Vector3::Up() * defaultSize);
-		waveObject[0]->GetTransform().SetScale(Vector3::One() * defaultSize * 0.5f);
-
-		waveObject[1]->GetTransform().SetScale(Vector3::One() * defaultSize);
-
-		waveObject[2]->GetTransform().SetScale(Vector3::One() * defaultSize * 4);
-		waveObject[2]->GetTransform().SetRotation(Vector3::Y() * (40 + 90));
-
-		waveObject[3]->GetTransform().SetPosition(waveObject[models.size() * 0.5f]->GetTransform().GetPosition() + Vector3::Down() * defaultSize);
-		waveObject[3]->GetTransform().SetScale((Vector3::Z() + Vector3::X()) * defaultSize * 10 + Vector3::Y());
-		GetMeshManager()->GetMesh("Cube.fbx")->SetVertexColor(Color::White());
-
-		waveObject[5]->GetTransform().SetScale(defaultSize, defaultSize, defaultSize);
-
-		waveObject[models.size()]->GetTransform().SetPosition(Renderer::pointLight[0].position + Vector3::Back() * 25);
-		waveObject[models.size()]->GetTransform().SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
-
-		waveObject[models.size() + 1]->GetTransform().SetPosition(Renderer::pointLight[1].position + Vector3::Back() * 25);
-		waveObject[models.size() + 1]->GetTransform().SetScale((Vector3::Y() + Vector3::X()) * 10 + Vector3::Z());
-#pragma endregion
 	}
 
 	void BaseGame::EndEngine()
@@ -228,50 +178,106 @@ namespace WaveEngine
 		GetTime()->UpdateDeltaTime();
 
 #pragma region UpdateCameraPositionLogic
-		const float camereSpeed = 150;
+		const float camereSpeed = 80.0f;
+		ECSTransform& transform = GetWaveObjectRegistry()->GetWaveObject(1).GetTransform();
 
-		if (GetInput()->IsKeyPressed(Keys::W))
+		if (!ImGuiClass::thirdPersonCamera)
 		{
-			cameraObject->GetTransform().Translate(Vector3::Up() * GetDeltaTime() * camereSpeed);
-		}
-		else if (GetInput()->IsKeyPressed(Keys::A))
-		{
-			cameraObject->GetTransform().Translate(Vector3::Left() * GetDeltaTime() * camereSpeed);
-		}
-		else if (GetInput()->IsKeyPressed(Keys::S))
-		{
-			cameraObject->GetTransform().Translate(Vector3::Down() * GetDeltaTime() * camereSpeed);
-		}
-		else if (GetInput()->IsKeyPressed(Keys::D))
-		{
-			cameraObject->GetTransform().Translate(Vector3::Right() * GetDeltaTime() * camereSpeed);
-		}
+			cameraObject->GetTransform().SetParent(-1);
+			transform.RemoveChild(cameraObject->GetID());
 
-		if (GetInput()->IsKeyPressed(Keys::Z))
-		{
-			cameraObject->GetTransform().Rotate(Vector3::Left() * GetDeltaTime() * camereSpeed);
-		}
-		else if (GetInput()->IsKeyPressed(Keys::X))
-		{
-			cameraObject->GetTransform().Rotate(Vector3::Right() * GetDeltaTime() * camereSpeed);
-		}
+			if (GetInput()->IsKeyPressed(Keys::W))
+			{
+				cameraObject->GetTransform().Translate(Vector3::Up() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::A))
+			{
+				cameraObject->GetTransform().Translate(Vector3::Left() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::S))
+			{
+				cameraObject->GetTransform().Translate(Vector3::Down() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::D))
+			{
+				cameraObject->GetTransform().Translate(Vector3::Right() * GetDeltaTime() * camereSpeed);
+			}
 
-		if (GetInput()->IsKeyPressed(Keys::Q))
-		{
-			cameraObject->GetTransform().Rotate(Vector3::Up() * GetDeltaTime() * camereSpeed);
-		}
-		else if (GetInput()->IsKeyPressed(Keys::E))
-		{
-			cameraObject->GetTransform().Rotate(Vector3::Down() * GetDeltaTime() * camereSpeed);
-		}
+			if (GetInput()->IsKeyPressed(Keys::Z))
+			{
+				cameraObject->GetTransform().Rotate(Vector3::Left() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::X))
+			{
+				cameraObject->GetTransform().Rotate(Vector3::Right() * GetDeltaTime() * camereSpeed);
+			}
 
-		if (GetInput()->IsKeyPressed(Keys::SPACE))
-		{
-			cameraObject->GetTransform().Translate(Vector3::Foward() * GetDeltaTime() * camereSpeed);
+			if (GetInput()->IsKeyPressed(Keys::Q))
+			{
+				cameraObject->GetTransform().Rotate(Vector3::Up() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::E))
+			{
+				cameraObject->GetTransform().Rotate(Vector3::Down() * GetDeltaTime() * camereSpeed);
+			}
+
+			if (GetInput()->IsKeyPressed(Keys::SPACE))
+			{
+				cameraObject->GetTransform().Translate(Vector3::Foward() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
+			{
+				cameraObject->GetTransform().Translate(Vector3::Back() * GetDeltaTime() * camereSpeed);
+			}
 		}
-		else if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
+		else
 		{
-			cameraObject->GetTransform().Translate(Vector3::Back() * GetDeltaTime() * camereSpeed);
+			cameraObject->GetTransform().SetParent(1);
+			transform.AddChild(cameraObject->GetID());
+
+			if (GetInput()->IsKeyPressed(Keys::W))
+			{
+				transform.Translate(Vector3::Up() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::A))
+			{
+				transform.Translate(Vector3::Left() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::S))
+			{
+				transform.Translate(Vector3::Down() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::D))
+			{
+				transform.Translate(Vector3::Right() * GetDeltaTime() * camereSpeed);
+			}
+
+			if (GetInput()->IsKeyPressed(Keys::Z))
+			{
+				transform.Rotate(Vector3::Left() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::X))
+			{
+				transform.Rotate(Vector3::Right() * GetDeltaTime() * camereSpeed);
+			}
+
+			if (GetInput()->IsKeyPressed(Keys::Q))
+			{
+				transform.Rotate(Vector3::Up() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::E))
+			{
+				transform.Rotate(Vector3::Down() * GetDeltaTime() * camereSpeed);
+			}
+
+			if (GetInput()->IsKeyPressed(Keys::SPACE))
+			{
+				transform.Translate(Vector3::Foward() * GetDeltaTime() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
+			{
+				transform.Translate(Vector3::Back() * GetDeltaTime() * camereSpeed);
+			}
 		}
 #pragma endregion
 

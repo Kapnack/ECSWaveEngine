@@ -20,12 +20,15 @@ namespace WaveEngine
 		WaveObjectFactory();
 		~WaveObjectFactory();
 
-		WaveObject& Instantiate();
 
 		ComponentRegistry* GetComponenetRegistry();
 		WaveObjectRegistry* GetWaveObjectRegistry();
 
 		friend class ServiceProvider;
 		friend class BaseGame;
+
+	public:
+
+		WaveObject& Instantiate();
 	};
 }

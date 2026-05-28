@@ -99,7 +99,7 @@ namespace WaveEngine
 		int GetParent() const { return parentID; }
 		const vector<int>& GetChildren() const { return children; }
 
-		void SetParent(unsigned int id);
+		void SetParent(int id);
 		void AddChild(unsigned int id);
 		void RemoveChild(unsigned int id)
 		{

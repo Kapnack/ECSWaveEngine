@@ -10,6 +10,8 @@
 
 namespace WaveEngine
 {
+	bool ImGuiClass::thirdPersonCamera = false;
+
 	ImGuiClass::ImGuiClass()
 	{
 		Init();
@@ -59,6 +61,10 @@ namespace WaveEngine
 		ImGui::Text(text.c_str());
 		text = "Draw Calls: " + to_string(ServiceProvider::Instance().Get<Renderer>()->GetDrawCalls()) + ".";
 		ImGui::Text(text.c_str());
+
+		ImGui::Separator();
+
+		ImGui::Checkbox("Third Person Camera: ", &thirdPersonCamera);
 
 		ImGui::Separator();
 

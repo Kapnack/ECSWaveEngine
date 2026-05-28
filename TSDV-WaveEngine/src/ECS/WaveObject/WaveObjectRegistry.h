@@ -28,6 +28,9 @@ namespace WaveEngine
 
 		WaveObjectRegistry();
 		~WaveObjectRegistry();
+
 		void AddObject(WaveObject*& newWaveObject);
+
+		WaveObject& GetWaveObject(const unsigned int& ID);
 	};
 }

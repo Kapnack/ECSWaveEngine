@@ -222,13 +222,20 @@ namespace WaveEngine
 		globalModel = m;
 	}
 
-	void ECSTransform::SetParent(unsigned int id)
+	void ECSTransform::SetParent(int id)
 	{
+		if (id != 0)
+			SetScale(1, 1, 1);
+
 		parentID = id;
 	}
 
 	void ECSTransform::AddChild(unsigned int id)
 	{
+		for (int i = 0; i < children.size(); ++i)
+			if (children[i] == id)
+				return;
+
 		children.push_back(id);
 	}
 

@@ -31,5 +31,9 @@ namespace WaveEngine
 
 		friend class BaseGame;
 		friend class ServiceProvider;
+
+	public:
+
+		static bool thirdPersonCamera;
 	};
 }

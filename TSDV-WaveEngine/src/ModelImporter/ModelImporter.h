@@ -40,13 +40,14 @@ namespace WaveEngine
 		WaveObjectFactory* GetWaveObjectFactory();
 
 		vector<unsigned int> LoadMaterialTextures(aiMaterial* mat, aiTextureType type);
-
-		pair<unsigned int, unsigned int> GetVertexAndIndexSizes(const aiScene& pScene);
+	
+		void ProcessNode(aiNode* node, WaveObject& waveObject);
+		void ProcessMesh(aiMesh* meshRenderer, WaveObject& meshWaveObject);
+		unsigned int ProcessMaterial(aiMaterial* aiMaterial);
 
 	public:
 
 		WAVEEXPORT void LoadScene(filesystem::path filePath, const bool useAbsolutePath = true);
-		WAVEEXPORT unsigned int LoadMesh();
-		WAVEEXPORT unsigned int LoadMaterial();
+		WAVEEXPORT WaveObject* IntantiateModel();
 	};
 }

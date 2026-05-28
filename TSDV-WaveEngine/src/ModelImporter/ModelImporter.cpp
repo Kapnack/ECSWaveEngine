@@ -1,4 +1,4 @@
-#include "ModelImporter.h"
+﻿#include "ModelImporter.h"
 
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -12,6 +12,8 @@
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Vector2/Vector2.h"
 #include <Material/Material.h>
+#include <ECS/MaterialID.h>
+#include <ECS/Mesh/MeshID.h>
 
 namespace WaveEngine
 {
@@ -30,97 +32,145 @@ namespace WaveEngine
 		filename = filePath.filename().string().c_str();
 	}
 
-	unsigned int ModelImporter::LoadMesh()
+	WaveObject* ModelImporter::IntantiateModel()
 	{
 		if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode)
-			return Mesh::NULL_MESH;
+			return nullptr;
 
-		pair<unsigned int, unsigned int> count = GetVertexAndIndexSizes(*pScene);
+		WaveObject& root = GetWaveObjectFactory()->Instantiate();
 
-		VertexData* vertexToSubmit = new VertexData[count.first];
-		unsigned int* indicesToSubmit = new unsigned int[count.second];
+		ProcessNode(pScene->mRootNode, root);
 
-		unsigned int vertexGlobalOffset = 0;
-		unsigned int indexGlobalOffset = 0;
-
-		for (unsigned int i = 0; i < pScene->mNumMeshes; ++i)
-		{
-			const aiMesh& mesh = *pScene->mMeshes[i];
-
-			for (unsigned int j = 0; j < mesh.mNumVertices; ++j)
-			{
-				VertexData& currentVertex = vertexToSubmit[vertexGlobalOffset + j];
-
-				currentVertex.position = Vector3(mesh.mVertices[j].x, mesh.mVertices[j].y, mesh.mVertices[j].z);
-
-				currentVertex.normal = mesh.HasNormals()
-					? Vector3(mesh.mNormals[j].x, mesh.mNormals[j].y, mesh.mNormals[j].z)
-					: Vector3(0, 1, 0);
-
-				if (mesh.GetNumUVChannels() > 0 &&
-					mesh.mTextureCoords[0] != nullptr)
-				{
-					const aiVector3D& uv = mesh.mTextureCoords[0][j];
-					currentVertex.textureCordinates = Vector2(uv.x, uv.y);
-				}
-				else
-					currentVertex.textureCordinates = Vector2(0, 0);
-
-
-				if (mesh.HasVertexColors(0))
-				{
-					aiColor4D& color = mesh.mColors[0][j];
-					currentVertex.color = Color(color.r, color.g, color.b, color.a);
-				}
-				else
-					currentVertex.color = Color::White();
-			}
-
-			for (unsigned int j = 0; j < mesh.mNumFaces; ++j)
-			{
-				const aiFace& face = mesh.mFaces[j];
-
-				for (unsigned int k = 0; k < face.mNumIndices; ++k)
-					indicesToSubmit[indexGlobalOffset++] = face.mIndices[k] + vertexGlobalOffset;
-
-			}
-
-			vertexGlobalOffset += mesh.mNumVertices;
-		}
-
-		return GetMeshFactory()->CreateMesh(
-			filename,
-			vertexToSubmit,
-			count.first,
-			indicesToSubmit,
-			count.second
-		);
+		return &root;
 	}
 
-	unsigned int ModelImporter::LoadMaterial()
+	void ModelImporter::ProcessNode(aiNode* node, WaveObject& waveObject)
 	{
-		if (!pScene || !pScene->HasMaterials())
-			return Material::NULL_MATERIAL;
+		std::cout << "Node: " << node->mName.C_Str()
+			<< " | Meshes: " << node->mNumMeshes
+			<< " | Children: " << node->mNumChildren
+			<< std::endl;
 
-		aiMaterial* material = pScene->mMaterials[0];
+		for (unsigned int i = 0; i < node->mNumMeshes; ++i)
+		{
+			aiMesh* mesh = pScene->mMeshes[node->mMeshes[i]];
 
-		std::vector<unsigned int> albedoIDs = LoadMaterialTextures(material, aiTextureType_DIFFUSE);
+			WaveObject& meshObject = GetWaveObjectFactory()->Instantiate();
 
-		if (albedoIDs.empty())
-			return Material::NULL_MATERIAL;
+			waveObject.GetTransform().AddChild(meshObject.GetID());
+			meshObject.GetTransform().SetParent(waveObject.GetID());
 
-		const unsigned int newMaterialID = GetMaterialFactory()->CreateMaterial(
+			ProcessMesh(mesh, meshObject);
+		}
+
+		for (unsigned int i = 0; i < node->mNumChildren; i++)
+		{
+			WaveObject& childObject = GetWaveObjectFactory()->Instantiate();
+
+			waveObject.GetTransform().AddChild(childObject.GetID());
+			childObject.GetTransform().SetParent(waveObject.GetID());
+
+			ProcessNode(node->mChildren[i], childObject);
+		}
+	}
+
+	void ModelImporter::ProcessMesh(aiMesh* mesh, WaveObject& meshWaveObject)
+	{
+		VertexData* vertices = new VertexData[mesh->mNumVertices];
+		std::vector<unsigned int> indices;
+
+		VertexData vertexData;
+
+		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		{
+			vertexData.position = Vector3(
+				mesh->mVertices[i].x,
+				mesh->mVertices[i].y,
+				mesh->mVertices[i].z
+			);
+
+			if (mesh->HasNormals())
+			{
+				vertexData.normal = Vector3(
+					mesh->mNormals[i].x,
+					mesh->mNormals[i].y,
+					mesh->mNormals[i].z
+				);
+			}
+			else
+				vertexData.normal = Vector3(0, 1, 0);
+
+			if (mesh->mTextureCoords[0])
+			{
+				vertexData.textureCordinates = Vector2(
+					mesh->mTextureCoords[0][i].x,
+					mesh->mTextureCoords[0][i].y
+				);
+			}
+			else
+				vertexData.textureCordinates = Vector2(0, 0);
+
+			if (mesh->HasVertexColors(0))
+			{
+				aiColor4D color = mesh->mColors[0][i];
+				vertexData.color = Color(color.r, color.g, color.b, color.a);
+			}
+			else
+				vertexData.color = Color::White();
+
+			vertices[i] = vertexData;
+		}
+
+		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+		{
+			const aiFace& face = mesh->mFaces[i];
+
+			for (unsigned int j = 0; j < face.mNumIndices; j++)
+			{
+				indices.push_back(face.mIndices[j]);
+			}
+		}
+
+		unsigned int* indexBuffer = new unsigned int[indices.size()];
+		for (unsigned int i = 0; i < indices.size(); ++i)
+			indexBuffer[i] = indices[i];
+
+		unsigned int meshID = GetMeshFactory()->CreateMesh(
 			filename,
+			vertices,
+			mesh->mNumVertices,
+			indexBuffer,
+			indices.size()
+		);
+
+		meshWaveObject.AddComponent<MeshID>().meshID = meshID;
+
+		aiMaterial* material = pScene->mMaterials[mesh->mMaterialIndex];
+
+		unsigned int materialID = ProcessMaterial(material);
+
+		meshWaveObject.AddComponent<MeshRenderer>().materialID = materialID;
+	}
+
+	unsigned int ModelImporter::ProcessMaterial(aiMaterial* mat)
+	{
+		if (!mat)
+			return Material::NULL_MATERIAL;
+
+		vector<unsigned int> albedoIDs = LoadMaterialTextures(mat, aiTextureType_DIFFUSE);
+
+		unsigned int materialID = GetMaterialFactory()->CreateMaterial(
+			"ImportedMaterial",
 			GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"),
 			GetFileReader()->ReadFile("Shaders/ECS/newShader.frag")
 		);
 
-		Material* newMaterial = GetMaterialManager()->GetMaterial(newMaterialID);
+		Material* newMaterial = GetMaterialManager()->GetMaterial(materialID);
 
-		for (size_t i = 0; i < albedoIDs.size() && i < Material::MAX_ALBEDO; ++i)
+		for (int i = 0; i < albedoIDs.size() && i < Material::MAX_ALBEDO; i++)
 			newMaterial->AddAlbedoTexture(albedoIDs[i]);
 
-		return newMaterialID;
+		return materialID;
 	}
 
 	vector<unsigned int> ModelImporter::LoadMaterialTextures(aiMaterial* mat, aiTextureType type)
@@ -168,22 +218,6 @@ namespace WaveEngine
 		}
 
 		return textures;
-	}
-
-	pair<unsigned int, unsigned int> ModelImporter::GetVertexAndIndexSizes(const aiScene& pScene)
-	{
-		unsigned int totalVertices = 0;
-		unsigned int totalIndices = 0;
-
-		for (unsigned int i = 0; i < pScene.mNumMeshes; ++i)
-		{
-			totalVertices += pScene.mMeshes[i]->mNumVertices;
-
-			for (unsigned int j = 0; j < pScene.mMeshes[i]->mNumFaces; ++j)
-				totalIndices += pScene.mMeshes[i]->mFaces[j].mNumIndices;
-		}
-
-		return pair<int, int>(totalVertices, totalIndices);
 	}
 
 	MeshFactory* ModelImporter::GetMeshFactory()
