@@ -1,15 +1,13 @@
 #include "Renderer.h"
 
-#include "FileReader/FileReader.h"
 #include "ServiceProvider/ServiceProvider.h"
-#include "Material/MaterialFactory.h"
 #include "VertexData.h"
 
 #include "ECS/Camera/Camera.h"
-#include <ECS/Transform/ECSTransform.h>
-#include <ECS/Mesh/MeshID.h>
-#include <ECS/MaterialID.h>
-#include <Mesh/Mesh.h>
+#include "ECS/Transform/ECSTransform.h"
+#include "ECS/Mesh/MeshID.h"
+#include "ECS/MaterialID.h"
+#include "ECS/WaveObject/WaveObject.h"
 
 #define MAX_INSTANCES 1000
 
@@ -51,11 +49,6 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<TextureManager>();
 	}
 
-	Texture* Renderer::ChooseTextureToUse(const unsigned int& ID)
-	{
-		return GetTextureManager()->TryGetTexture(ID) ? GetTextureManager()->GetTexture(ID) : GetTextureManager()->GetTexture(defualtTextureID);
-	}
-
 	ComponentRegistry* Renderer::GetComponentRegistry()
 	{
 		return ServiceProvider::Instance().Get<ComponentRegistry>();
@@ -63,8 +56,6 @@ namespace WaveEngine
 
 	void Renderer::Init()
 	{
-		defualtTextureID = ServiceProvider::Instance().Get<TextureImporter>()->LoadTextureAbsolutePath("Sprites/whiteImage.png");
-
 		glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
 
 		glEnable(GL_DEPTH_TEST);
@@ -74,21 +65,6 @@ namespace WaveEngine
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glDisable(GL_CULL_FACE);
-
-		FileReader* fileReader = ServiceProvider::Instance().Get<FileReader>();
-
-		string vertexShader = fileReader->ReadFile("Shaders/Shapes/basicVertexShader.shader");
-
-		string fragmentShader = fileReader->ReadFile("Shaders/Shapes/defaultFragmentShader.shader");
-
-		shapeShaders = ServiceProvider::Instance().Get<MaterialFactory>()->CreateMaterial("defaultShapeShader", vertexShader, fragmentShader);
-
-		vertexShader = fileReader->ReadFile("Shaders/Sprites/basicVertexShader.shader");
-
-		fragmentShader = fileReader->ReadFile("Shaders/Sprites/defaultFragmentShader.shader");
-
-		spriteShaders = ServiceProvider::Instance().Get<MaterialFactory>()->CreateMaterial("defaultSpriteShader", vertexShader, fragmentShader);
-
 	}
 
 	const unsigned int Renderer::ReturnWorkingMaterial(const unsigned int& materialIDToTry, const unsigned int& materialIDfallBack)
@@ -188,29 +164,6 @@ namespace WaveEngine
 		return batchCalls;
 	}
 
-	void Renderer::DrawElement(const unsigned int& materialID, const unsigned int& indicesSize, const unsigned int& VAO)
-	{
-		Material* materialToUse =
-			GetMaterialManager()->GetMaterial(
-				ReturnWorkingMaterial(materialID, spriteShaders));
-
-		if (!materialToUse)
-			return;
-
-		materialToUse->Bind();
-
-		materialToUse->SetVec4("uColor", materialToUse->GetColor());
-		materialToUse->SetMat4("uView", GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).GetView());
-		materialToUse->SetMat4("uProj", GetComponentRegistry()->GetComponentStorage<Camera>().Get(0).GetProjection());
-
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, indicesSize, GL_UNSIGNED_INT, (void*)0);
-
-		materialToUse->UnBind();
-
-		++drawCalls;
-	}
-
 	void Renderer::Submit(const ECSTransform& transform, const MeshID& meshComp, const MeshRenderer& matComp)
 	{
 		++batchCalls;
@@ -262,7 +215,6 @@ namespace WaveEngine
 				mesh.UnDirt();
 			}
 
-
 			glBindVertexArray(batch.VAO);
 			glBindBuffer(GL_ARRAY_BUFFER, batch.instanceVBO);
 
@@ -282,8 +234,7 @@ namespace WaveEngine
 				batch.instances.data());
 
 			Material* materialToUse =
-				GetMaterialManager()->GetMaterial(
-					ReturnWorkingMaterial(batch.batchData.materialID, spriteShaders));
+				GetMaterialManager()->GetMaterial(batch.batchData.materialID);
 
 			if (!materialToUse)
 				continue;
@@ -294,9 +245,7 @@ namespace WaveEngine
 				->GetComponentStorage<Camera>()
 				.GetFirst();
 
-			ECSTransform& cameraTransform = GetComponentRegistry()
-				->GetComponentStorage<ECSTransform>()
-				.GetFirst();
+			ECSTransform& cameraTransform = camera.GetWaveObject().GetTransform();
 
 			glm::mat4 view = camera.GetView();
 			glm::mat4 proj = camera.GetProjection();
