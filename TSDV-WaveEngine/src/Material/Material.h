@@ -66,7 +66,8 @@ namespace WaveEngine
 		const unsigned int& GetID() const;
 		const unsigned int& GetGPUID() const;
 		void SetTexture(const std::string& uniformName, unsigned int textureGPUID);
-		void AddAlbedoTexture(unsigned int textureGPUID);
+		void AddAlbedoTexture(const unsigned int& textureGPUID);
+		void AddNormalMap(const unsigned int& textureGPUID);
 		void SetColor(const Color& color);
 
 		void SetVec2(const std::string& name, const Vector2& value);

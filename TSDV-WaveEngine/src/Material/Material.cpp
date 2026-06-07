@@ -51,9 +51,16 @@ namespace WaveEngine
 		textures[uniformName] = textureID;
 	}
 
-	void Material::AddAlbedoTexture(unsigned int textureGPUID)
+	void Material::AddAlbedoTexture(const unsigned int& textureGPUID)
 	{
 		const string albedoParamName = "uAlbedo";
+
+		SetTexture(albedoParamName, textureGPUID);
+	}
+
+	void Material::AddNormalMap(const unsigned int& textureGPUID)
+	{
+		const string albedoParamName = "uNormal";
 
 		SetTexture(albedoParamName, textureGPUID);
 	}
