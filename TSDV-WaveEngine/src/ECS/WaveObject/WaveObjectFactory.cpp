@@ -1,4 +1,7 @@
 #include "WaveObjectFactory.h"
+
+#include <string>
+
 #include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
@@ -17,6 +20,8 @@ namespace WaveEngine
 		WaveObject* newWaveObject = new WaveObject(++currentObjectID);
 
 		newWaveObject->AddComponent<ECSTransform>();
+
+		newWaveObject->SetName("WaveObject: " + to_string(currentObjectID) + ".");
 		 
 		GetWaveObjectRegistry()->AddObject(newWaveObject);
 
