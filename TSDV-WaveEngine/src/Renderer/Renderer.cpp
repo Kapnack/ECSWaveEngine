@@ -9,6 +9,7 @@
 #include <ECS/Transform/ECSTransform.h>
 #include <ECS/Mesh/MeshID.h>
 #include <ECS/MaterialID.h>
+#include <Mesh/Mesh.h>
 
 #define MAX_INSTANCES 1000
 
