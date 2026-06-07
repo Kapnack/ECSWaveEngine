@@ -27,4 +27,8 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\ECS\newShader.vert" />
+    <None Include="Shaders\ECS\newShader.frag" />
+  </ItemGroup>
 </Project>

@@ -25,6 +25,12 @@
   <ItemGroup>
     <ClInclude Include="src\Game\Game.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\ECS\newShader.frag">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\ECS\newShader.vert" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
