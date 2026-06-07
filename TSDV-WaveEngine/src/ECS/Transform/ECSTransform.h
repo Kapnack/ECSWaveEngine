@@ -13,6 +13,7 @@ namespace WaveEngine
 {
 	class Renderer;
 	class TransformLogic;
+	class ImGuiClass;
 
 	WAVEEXPORT class ECSTransform : Component
 	{
@@ -25,6 +26,7 @@ namespace WaveEngine
 
 		friend class Renderer;
 		friend class TransformLogic;
+		friend class ImGuiClass;
 
 		Vector3 scale = Vector3(1, 1, 1);
 		Vector3 rotation;
@@ -64,11 +66,11 @@ namespace WaveEngine
 
 		virtual ~ECSTransform();
 
-		WAVEEXPORT Vector3 GetPosition() const;
-		WAVEEXPORT Vector3 GetScale() const;
-		WAVEEXPORT Vector3 GetRotation() const;
+		WAVEEXPORT const Vector3& GetPosition() const;
+		WAVEEXPORT const Vector3& GetScale() const;
+		WAVEEXPORT const Vector3& GetRotation() const;
 
-		WAVEEXPORT Vector3 GetPreviousPos() const;
+		WAVEEXPORT const Vector3& GetPreviousPos() const;
 		WAVEEXPORT void GoToPreviousPos();
 
 		WAVEEXPORT void SetPosition(const Vector3& vector);

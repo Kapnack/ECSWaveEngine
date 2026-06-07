@@ -17,22 +17,22 @@ namespace WaveEngine
 	{
 	}
 
-	Vector3 ECSTransform::GetPosition() const
+	const Vector3& ECSTransform::GetPosition() const
 	{
 		return position;
 	}
 
-	Vector3 ECSTransform::GetScale() const
+	const Vector3& ECSTransform::GetScale() const
 	{
 		return scale;
 	}
 
-	Vector3 ECSTransform::GetRotation() const
+	const Vector3& ECSTransform::GetRotation() const
 	{
 		return rotation;
 	}
 
-	Vector3 ECSTransform::GetPreviousPos() const
+	const Vector3& ECSTransform::GetPreviousPos() const
 	{
 		return previousPosition;
 	}
@@ -195,11 +195,11 @@ namespace WaveEngine
 		glm::vec3 pos(position.x, position.y, position.z);
 		glm::vec3 tgt(target.x, target.y, target.z);
 
-		glm::mat4 view = glm::lookAt(pos, tgt, glm::vec3(0, 1, 0));
+		glm::vec3 forward = glm::normalize(pos - tgt);
 
-		glm::mat4 modelRot = glm::inverse(view);
+		glm::quat rot = glm::quatLookAt(forward, glm::vec3(0, 1, 0));
 
-		glm::vec3 euler = glm::degrees(glm::eulerAngles(glm::quat_cast(modelRot)));
+		glm::vec3 euler = glm::degrees(glm::eulerAngles(rot));
 
 		rotation.x = euler.x;
 		rotation.y = euler.y;
