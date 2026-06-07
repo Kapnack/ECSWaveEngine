@@ -3,19 +3,18 @@
 #include "Export.h"
 
 #include <filesystem>
-#include <utility>
 
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 
 #include "Mesh/MeshFactory/MeshFactory.h"
-#include <TextureImporter/Texture.h>
-#include <TextureImporter/TextureImporter.h>
-#include <Material/MaterialFactory.h>
-#include <Material/MaterialManager.h>
-#include <FileReader/FileReader.h>
-#include <ECS/WaveObject/WaveObjectRegistry.h>
-#include <ECS/WaveObject/WaveObjectFactory.h>
+#include "TextureImporter/Texture.h"
+#include "TextureImporter/TextureImporter.h"
+#include "Material/MaterialFactory.h"
+#include "Material/MaterialManager.h"
+#include "FileReader/FileReader.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/WaveObject/WaveObjectFactory.h"
 
 using namespace std;
 
