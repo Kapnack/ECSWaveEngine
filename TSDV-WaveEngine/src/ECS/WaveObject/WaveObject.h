@@ -30,7 +30,7 @@ namespace WaveEngine
 		~WaveObject();
 
 		void SetName(const string& name);
-		const string& GetName();
+		const string& GetName() const;
 
 		const unsigned int& GetID() const;
 

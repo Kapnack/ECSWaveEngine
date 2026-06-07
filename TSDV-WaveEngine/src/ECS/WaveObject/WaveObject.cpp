@@ -24,7 +24,7 @@ namespace WaveEngine
 		this->name = name;
 	}
 
-	const string& WaveObject::GetName()
+	const string& WaveObject::GetName() const
 	{
 		return name;
 	}
