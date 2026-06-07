@@ -1,7 +1,5 @@
 #pragma once
 
-#include <glm/mat4x4.hpp>
-
 #include "Export.h"
 #include "Window/Window.h"
 #include "ECS/Component/Component.h"
@@ -19,12 +17,13 @@ namespace WaveEngine
 
 		bool shouldUpdateMatrix = true;
 
-		unsigned int ID = 0;
-
 		float fovDeg = 45.0f;
 		float nearPlane = 0.1f;
 		float farPlane = 100.0f;
 		float orthoSize = 500.0f;
+
+		float yaw;
+		float pitch;
 
 		float movementSpeed = 100.0f;
 		float sensitivity = 100.0f;

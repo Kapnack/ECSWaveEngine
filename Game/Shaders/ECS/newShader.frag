@@ -137,8 +137,17 @@ void main()
         result += CalcSpotLight(flashlights[i], norm, vFragPos, viewDir);
     
     vec4 texColor = vec4(0.0);
-    for (int i = 0; i < uTextureAmount; ++i)
-        texColor += texture(uTexture[i], vTexCoord);
+
+    if (uTextureAmount > 0)
+    {
+      texColor = vec4(0.0);
+      for (int i = 0; i < uTextureAmount; ++i)
+          texColor += texture(uTexture[i], vTexCoord);
+   }
+   else
+   {
+     texColor = vec4(1.0);
+   }
 
     FragColor = (texColor * vColor) * vec4(result, 1.0);
 }

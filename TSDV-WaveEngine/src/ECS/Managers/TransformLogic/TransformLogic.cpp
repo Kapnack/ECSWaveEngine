@@ -1,7 +1,10 @@
 #include "TransformLogic.h"
 
+#include <vector>
+
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/Transform/ECSTransform.h"
+#include "ECS/ComponentContainer/ComponentContainer.h"
 
 namespace WaveEngine
 {

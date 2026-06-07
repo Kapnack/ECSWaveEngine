@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ServiceProvider/Service.h"
-
 #include "Window/Window.h"
 #include "Input/Input.h"
+#include <ECS/WaveObject/WaveObjectRegistry.h>
+#include <WaveMath/Vector3/Vector3.h>
 
 using namespace std;
 
@@ -21,6 +21,10 @@ namespace WaveEngine
 
 		bool isActive = false;
 
+		Vector3 newPos = Vector3::Zero();
+		Vector3 newRot = Vector3::Zero();
+		Vector3 newScale = Vector3::Zero();
+
 		void Init();
 		void Update();
 		void Draw();
@@ -28,6 +32,8 @@ namespace WaveEngine
 
 		ImGuiClass();
 		~ImGuiClass();
+
+		WaveObjectRegistry* GetWaveObjectRegistry();
 
 		friend class BaseGame;
 		friend class ServiceProvider;

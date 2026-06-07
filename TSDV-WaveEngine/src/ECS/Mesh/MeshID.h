@@ -10,10 +10,7 @@ namespace WaveEngine
 	{
 		unsigned int meshID = Mesh::NULL_MESH;
 
-		MeshID(const unsigned int& ID)
-		{ }
-
-		MeshID()
+		MeshID(const unsigned int& ID) : Component(ID)
 		{ }
 	};
 }

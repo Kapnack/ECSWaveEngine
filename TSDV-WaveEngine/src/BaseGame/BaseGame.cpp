@@ -59,13 +59,15 @@ namespace WaveEngine
 		{
 			"Models/Cat/concrete_cat_statue_1k.fbx",
 			"Models/gold_headed_buddha_-_photogrammetry_test_2019.glb",
-			"Models/Statue/marble_bust_01_1k.fbx"
+			"Models/Statue/marble_bust_01_1k.fbx",
+			"Models/TanqueDePrueba.fbx",
+			"Models/Cube.fbx"
 		};
 
 		const unsigned int defaultSize = 32;
 
 		ModelImporter modelImporter;
-		for (int i = 0; i < modelsPaths.size(); ++i)
+		for (int i = 0; i < modelsPaths.size() - 1; ++i)
 		{
 			modelImporter.LoadScene(modelsPaths.at(i));
 
@@ -83,9 +85,17 @@ namespace WaveEngine
 		cameraObject = &GetWaveObjectFactory()->Instantiate();
 
 		camera = &cameraObject->AddComponent<Camera>();
-		camera->SetFarPlane(10000);
+		camera->SetFarPlane(100000.0f);
+		camera->SetNearPlane(0.1f);
 		camera->SetOrthographic(false);
 		cameraObject->GetTransform().SetPosition(Vector3::Right() * (modelsPaths.size() * 0.5f * defaultSize) + Vector3::Foward() * 150);
+
+		modelImporter.LoadScene(modelsPaths.at(modelsPaths.size() - 1));
+
+		WaveObject* waveObject = modelImporter.IntantiateModel();
+
+		waveObject->GetTransform().SetPosition(Vector3::Down() * 32.0f);
+		waveObject->GetTransform().Scale((Vector3::X() + Vector3::Z()) * 100.0f);
 
 #pragma endregion
 
@@ -178,106 +188,90 @@ namespace WaveEngine
 		GetTime()->UpdateDeltaTime();
 
 #pragma region UpdateCameraPositionLogic
-		const float camereSpeed = 80.0f;
+		const float camereSpeed = 180.0f * GetDeltaTime();
 		ECSTransform& transform = GetWaveObjectRegistry()->GetWaveObject(1).GetTransform();
+		ECSTransform& cameraTransform = cameraObject->GetTransform();
 
 		if (!ImGuiClass::thirdPersonCamera)
 		{
-			cameraObject->GetTransform().SetParent(-1);
-			transform.RemoveChild(cameraObject->GetID());
-
 			if (GetInput()->IsKeyPressed(Keys::W))
-			{
-				cameraObject->GetTransform().Translate(Vector3::Up() * GetDeltaTime() * camereSpeed);
-			}
-			else if (GetInput()->IsKeyPressed(Keys::A))
-			{
-				cameraObject->GetTransform().Translate(Vector3::Left() * GetDeltaTime() * camereSpeed);
-			}
-			else if (GetInput()->IsKeyPressed(Keys::S))
-			{
-				cameraObject->GetTransform().Translate(Vector3::Down() * GetDeltaTime() * camereSpeed);
-			}
-			else if (GetInput()->IsKeyPressed(Keys::D))
-			{
-				cameraObject->GetTransform().Translate(Vector3::Right() * GetDeltaTime() * camereSpeed);
-			}
+				cameraTransform.Translate(Vector3::Foward() * camereSpeed);
 
-			if (GetInput()->IsKeyPressed(Keys::Z))
-			{
-				cameraObject->GetTransform().Rotate(Vector3::Left() * GetDeltaTime() * camereSpeed);
-			}
-			else if (GetInput()->IsKeyPressed(Keys::X))
-			{
-				cameraObject->GetTransform().Rotate(Vector3::Right() * GetDeltaTime() * camereSpeed);
-			}
+			if (GetInput()->IsKeyPressed(Keys::S))
+				cameraTransform.Translate(Vector3::Back() * camereSpeed);
 
-			if (GetInput()->IsKeyPressed(Keys::Q))
-			{
-				cameraObject->GetTransform().Rotate(Vector3::Up() * GetDeltaTime() * camereSpeed);
-			}
-			else if (GetInput()->IsKeyPressed(Keys::E))
-			{
-				cameraObject->GetTransform().Rotate(Vector3::Down() * GetDeltaTime() * camereSpeed);
-			}
+			if (GetInput()->IsKeyPressed(Keys::A))
+				cameraTransform.Translate(Vector3::Left() * camereSpeed);
+
+			if (GetInput()->IsKeyPressed(Keys::D))
+				cameraTransform.Translate(Vector3::Right() * camereSpeed);
 
 			if (GetInput()->IsKeyPressed(Keys::SPACE))
-			{
-				cameraObject->GetTransform().Translate(Vector3::Foward() * GetDeltaTime() * camereSpeed);
-			}
-			else if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
-			{
-				cameraObject->GetTransform().Translate(Vector3::Back() * GetDeltaTime() * camereSpeed);
-			}
+				cameraTransform.Translate(Vector3::Up() * camereSpeed);
+
+			if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
+				cameraTransform.Translate(Vector3::Down() * camereSpeed);
+
+			if (GetInput()->IsKeyPressed(Keys::Q))
+				cameraTransform.Rotate(Vector3::Up() * camereSpeed);
+
+			if (GetInput()->IsKeyPressed(Keys::E))
+				cameraTransform.Rotate(Vector3::Down() * camereSpeed);
+
+			if (GetInput()->IsKeyPressed(Keys::Z))
+				cameraTransform.Rotate(Vector3::Left() * camereSpeed);
+
+			if (GetInput()->IsKeyPressed(Keys::X))
+				cameraTransform.Rotate(Vector3::Right() * camereSpeed);
 		}
 		else
 		{
-			cameraObject->GetTransform().SetParent(1);
-			transform.AddChild(cameraObject->GetID());
-
 			if (GetInput()->IsKeyPressed(Keys::W))
 			{
-				transform.Translate(Vector3::Up() * GetDeltaTime() * camereSpeed);
+				transform.Translate(Vector3::Up() * camereSpeed);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::A))
 			{
-				transform.Translate(Vector3::Left() * GetDeltaTime() * camereSpeed);
+				transform.Translate(Vector3::Left() * camereSpeed);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::S))
 			{
-				transform.Translate(Vector3::Down() * GetDeltaTime() * camereSpeed);
+				transform.Translate(Vector3::Down() * camereSpeed);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::D))
 			{
-				transform.Translate(Vector3::Right() * GetDeltaTime() * camereSpeed);
+				transform.Translate(Vector3::Right() * camereSpeed);
 			}
 
 			if (GetInput()->IsKeyPressed(Keys::Z))
 			{
-				transform.Rotate(Vector3::Left() * GetDeltaTime() * camereSpeed);
+				transform.Rotate(Vector3::Left() * camereSpeed);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::X))
 			{
-				transform.Rotate(Vector3::Right() * GetDeltaTime() * camereSpeed);
+				transform.Rotate(Vector3::Right() * camereSpeed);
 			}
 
 			if (GetInput()->IsKeyPressed(Keys::Q))
 			{
-				transform.Rotate(Vector3::Up() * GetDeltaTime() * camereSpeed);
+				transform.Rotate(Vector3::Up() * camereSpeed);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::E))
 			{
-				transform.Rotate(Vector3::Down() * GetDeltaTime() * camereSpeed);
+				transform.Rotate(Vector3::Down() * camereSpeed);
 			}
 
 			if (GetInput()->IsKeyPressed(Keys::SPACE))
 			{
-				transform.Translate(Vector3::Foward() * GetDeltaTime() * camereSpeed);
+				transform.Translate(Vector3::Foward() * camereSpeed);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
 			{
-				transform.Translate(Vector3::Back() * GetDeltaTime() * camereSpeed);
+				transform.Translate(Vector3::Back() * camereSpeed);
 			}
+
+			cameraObject->GetTransform().LookAt(transform.GetPosition());
+			cameraObject->GetTransform().SetPosition(transform.GetPosition() + Vector3::Foward() * 100.0f);
 		}
 #pragma endregion
 

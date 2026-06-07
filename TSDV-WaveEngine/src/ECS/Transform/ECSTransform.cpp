@@ -3,16 +3,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "ServiceProvider/ServiceProvider.h"
 #include <ECS/CompontRegistry/ComponentRegistry.h>
+#include <glm/gtc/quaternion.hpp>
+#include <cmath>
 
 namespace WaveEngine
 {
-	ECSTransform::ECSTransform()
+	ECSTransform::ECSTransform(const unsigned int& ID) : Component(ID)
 	{
 		MarkDirty();
-	}
-
-	ECSTransform::ECSTransform(const unsigned int& ID)
-	{
 	}
 
 	ECSTransform::~ECSTransform()
@@ -192,6 +190,24 @@ namespace WaveEngine
 		MarkDirty();
 	}
 
+	void ECSTransform::LookAt(const Vector3& target)
+	{
+		glm::vec3 pos(position.x, position.y, position.z);
+		glm::vec3 tgt(target.x, target.y, target.z);
+
+		glm::mat4 view = glm::lookAt(pos, tgt, glm::vec3(0, 1, 0));
+
+		glm::mat4 modelRot = glm::inverse(view);
+
+		glm::vec3 euler = glm::degrees(glm::eulerAngles(glm::quat_cast(modelRot)));
+
+		rotation.x = euler.x;
+		rotation.y = euler.y;
+		rotation.z = euler.z;
+
+		MarkDirty();
+	}
+
 	void ECSTransform::FlipX()
 	{
 		SetScale(-scale.x, scale.y, scale.z);
@@ -205,6 +221,24 @@ namespace WaveEngine
 	void ECSTransform::FlipZ()
 	{
 		SetScale(scale.x, scale.y, -scale.z);
+	}
+
+	Vector3 ECSTransform::GetForward() const
+	{
+		glm::vec3 vector = GetForwardGLM(globalModel);
+		return Vector3(vector.x, vector.y, vector.z).Normalized();
+	}
+
+	Vector3 ECSTransform::GetRight() const
+	{
+		glm::vec3 vector = GetRightGLM(globalModel);
+		return Vector3(vector.x, vector.y, vector.z).Normalized();
+	}
+
+	Vector3 ECSTransform::GetUp() const
+	{
+		glm::vec3 vector = GetUpGLM(globalModel);
+		return Vector3(vector.x, vector.y, vector.z).Normalized();
 	}
 
 	const glm::mat4& ECSTransform::GetLocalModel() const

@@ -6,13 +6,12 @@
 #include "ServiceProvider/ServiceProvider.h"
 #include "../CompontRegistry/ComponentRegistry.h"
 #include "../Transform/ECSTransform.h"
+#include "ECS/WaveObject/WaveObject.h"
 
 namespace WaveEngine
 {
-	Camera::Camera(const unsigned int& ID)
+	Camera::Camera(const unsigned int& ID) : Component(ID)
 	{
-		this->ID = ID;
-
 		ComponentRegistry& componentRegistry = *ServiceProvider::Instance().Get<ComponentRegistry>();
 
 		if (!componentRegistry.HasStorage<ECSTransform>())
@@ -22,10 +21,6 @@ namespace WaveEngine
 			componentRegistry.AddComponent<ECSTransform>(ID);
 
 		transform = &componentRegistry.Get<ECSTransform>(ID);
-	}
-
-	Camera::Camera()
-	{
 	}
 
 	Camera::~Camera()
@@ -135,7 +130,7 @@ namespace WaveEngine
 			static_cast<float>(GetWindow()->GetWidth()) /
 			static_cast<float>(GetWindow()->GetHeight());
 
-		ECSTransform& transform = ServiceProvider::Instance().Get<ComponentRegistry>()->Get<ECSTransform>(ID);
+		ECSTransform& transform = GetWaveObject().GetTransform();
 
 		glm::vec3 pos = glm::vec3(transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z);
 
@@ -146,7 +141,7 @@ namespace WaveEngine
 			glm::radians(transform.GetRotation().z)
 		);
 
-		glm::vec3 forward = glm::vec3(rotationMatrix * glm::vec4(0, 0, -1, 0));
+		glm::vec3 forward = glm::vec3(rotationMatrix * glm::vec4(0, 0, 1, 0));
 		glm::vec3 up = glm::vec3(rotationMatrix * glm::vec4(0, 1, 0, 0));
 
 		float halfHeight = orthoSize;

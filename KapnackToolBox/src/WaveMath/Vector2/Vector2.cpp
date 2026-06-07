@@ -57,6 +57,11 @@ Vector2 Vector2::operator*(const float& scalar)
 	return Vector2(x * scalar, y * scalar);
 }
 
+Vector2 Vector2::Zero()
+{
+	return Vector2(0.0f, 0.0f);
+}
+
 Vector2 Vector2::Up()
 {
 	return Vector2(0.0f, 1.0f);

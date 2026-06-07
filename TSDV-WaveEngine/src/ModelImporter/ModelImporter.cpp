@@ -14,6 +14,7 @@
 #include <Material/Material.h>
 #include <ECS/MaterialID.h>
 #include <ECS/Mesh/MeshID.h>
+#include "ECS/Transform/ECSTransform.h"
 
 namespace WaveEngine
 {
@@ -98,7 +99,7 @@ namespace WaveEngine
 				);
 			}
 			else
-				vertexData.normal = Vector3(0, 1, 0);
+				vertexData.normal = Vector3::Up();
 
 			if (mesh->mTextureCoords[0])
 			{
@@ -108,7 +109,7 @@ namespace WaveEngine
 				);
 			}
 			else
-				vertexData.textureCordinates = Vector2(0, 0);
+				vertexData.textureCordinates = Vector2::Zero();
 
 			if (mesh->HasVertexColors(0))
 			{
@@ -166,6 +167,18 @@ namespace WaveEngine
 		);
 
 		Material* newMaterial = GetMaterialManager()->GetMaterial(materialID);
+
+		aiColor4D diffuseColor(1, 1, 1, 1);
+
+		if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor))
+		{
+			newMaterial->SetColor(Color(
+				diffuseColor.r,
+				diffuseColor.g,
+				diffuseColor.b,
+				diffuseColor.a
+			));
+		}
 
 		for (int i = 0; i < albedoIDs.size() && i < Material::MAX_ALBEDO; i++)
 			newMaterial->AddAlbedoTexture(albedoIDs[i]);

@@ -4,8 +4,6 @@
 #include <ServiceProvider/Service.h>
 #include "WaveObjectRegistry.h"
 
-using namespace WaveEngine::Objects;
-
 class ServiceProvider;
 class BaseGame;
 
@@ -19,7 +17,6 @@ namespace WaveEngine
 
 		WaveObjectFactory();
 		~WaveObjectFactory();
-
 
 		ComponentRegistry* GetComponenetRegistry();
 		WaveObjectRegistry* GetWaveObjectRegistry();

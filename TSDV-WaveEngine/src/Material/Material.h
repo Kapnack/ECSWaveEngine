@@ -62,11 +62,11 @@ namespace WaveEngine
 
 		const static unsigned int NULL_MATERIAL;
 
-		const string GetName() const;
+		const string& GetName() const;
 
-		Color GetColor() const;
-		unsigned int GetID() const;
-		unsigned int GetGPUID() const;
+		const Color& GetColor() const;
+		const unsigned int& GetID() const;
+		const unsigned int& GetGPUID() const;
 		void SetTexture(const std::string& uniformName, unsigned int textureGPUID);
 		void AddAlbedoTexture(unsigned int textureGPUID);
 		void SetColor(const Color& color);

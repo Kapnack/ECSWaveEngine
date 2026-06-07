@@ -1,15 +1,35 @@
 #include "WaveObject.h"
 
 #include "ServiceProvider/ServiceProvider.h"
+#include "ECS/Transform/ECSTransform.h"
 
-namespace WaveEngine::Objects
+namespace WaveEngine
 {
 	ComponentRegistry* WaveObject::GetComponentRegistry()
 	{
 		return ServiceProvider::Instance().Get<ComponentRegistry>();
 	}
 
-	const unsigned int WaveObject::GetID() const
+	WaveObject::WaveObject(const unsigned int& ID)
+	{
+		this->ID = ID;
+	}
+
+	WaveObject::~WaveObject()
+	{
+	}
+
+	void WaveObject::SetName(const string& name)
+	{
+		this->name = name;
+	}
+
+	const string& WaveObject::GetName()
+	{
+		return name;
+	}
+
+	const unsigned int& WaveObject::GetID() const
 	{
 		return ID;
 	}

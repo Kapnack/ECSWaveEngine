@@ -3,28 +3,13 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <string>
-#include <sstream>
 
 #include "Material.h"
-#include "FileReader/FileReader.h"
 
 namespace WaveEngine
 {
 	MaterialFactory::MaterialFactory() : Service()
-	{
-		FileReader* fileReader = ServiceProvider::Instance().Get<FileReader>();
-
-		string vertexShader = fileReader->ReadFile("Shaders/Shapes/basicVertexShader.shader");
-
-		string fragmentShader = fileReader->ReadFile("Shaders/Shapes/basicFragmentShader.shader");
-
-		CreateMaterial("basicShapeMaterial", vertexShader, fragmentShader);
-
-		vertexShader = fileReader->ReadFile("Shaders/Sprites/basicVertexShader.shader");
-
-		fragmentShader = fileReader->ReadFile("Shaders/Sprites/basicFragmentShader.shader");
-
-		CreateMaterial("basicSpriteMaterial", vertexShader, fragmentShader);
+	{	
 	}
 
 	MaterialFactory::~MaterialFactory()
@@ -57,7 +42,7 @@ namespace WaveEngine
 		glDeleteShader(vs);
 		glDeleteShader(fs);
 
-		GLint success;
+		GLint success = 0;
 		glGetProgramiv(gpuID, GL_LINK_STATUS, &success);
 
 		if (!success)
@@ -78,7 +63,7 @@ namespace WaveEngine
 		GLint maxNameLength = 0;
 		glGetProgramiv(gpuID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxNameLength);
 
-		std::vector<GLchar> buffer(maxNameLength);
+		GLchar* nameBuffer = new GLchar[maxNameLength];
 
 		for (GLint i = 0; i < uniformCount; i++)
 		{
@@ -92,18 +77,19 @@ namespace WaveEngine
 				&length,
 				&size,
 				&type,
-				buffer.data());
+				nameBuffer);
 
-			std::string uniformName(buffer.data(), length);
+			string uniformName = string(nameBuffer, length);
 			GLint location = glGetUniformLocation(gpuID, uniformName.c_str());
 
 			newMaterial->AddUniform(uniformName, type, location, size);
 
-			std::cout << "Uniform: " << uniformName
+			cout << "Uniform: " << uniformName
 				<< " | Location: " << location
 				<< std::endl;
 		}
 
+		delete[] nameBuffer;
 
 		int i = 0;
 		string selectedName = name.data();

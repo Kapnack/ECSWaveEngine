@@ -16,7 +16,7 @@ namespace WaveEngine
 	{
 		WaveObject* newWaveObject = new WaveObject(++currentObjectID);
 
-		newWaveObject->transform = &newWaveObject->AddComponent<ECSTransform>();
+		newWaveObject->AddComponent<ECSTransform>();
 		 
 		GetWaveObjectRegistry()->AddObject(newWaveObject);
 

@@ -11,6 +11,11 @@ namespace WaveEngine
 		waveObjects[newWaveObject->GetID()] = newWaveObject;
 	}
 
+	map<unsigned int, WaveObject*>& WaveObjectRegistry::GetWaveObjects()
+	{
+		return waveObjects;
+	}
+
 	WaveObject& WaveObjectRegistry::GetWaveObject(const unsigned int& ID)
 	{
 		return *waveObjects.at(ID);

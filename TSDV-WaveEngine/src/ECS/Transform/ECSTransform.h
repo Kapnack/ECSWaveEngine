@@ -43,9 +43,23 @@ namespace WaveEngine
 
 		const bool IsDirty() const;
 
+		glm::vec3 GetForwardGLM(const glm::mat4& transformMatrix) const
+		{
+			return glm::vec3(transformMatrix[2]);
+		}
+
+		glm::vec3 GetRightGLM(const glm::mat4& transformMatrix) const
+		{
+			return glm::vec3(transformMatrix[0]);
+		}
+
+		glm::vec3 GetUpGLM(const glm::mat4& transformMatrix) const
+		{
+			return glm::vec3(transformMatrix[1]);
+		}
+
 	public:
 
-		ECSTransform();
 		ECSTransform(const unsigned int& ID);
 
 		virtual ~ECSTransform();
@@ -87,9 +101,15 @@ namespace WaveEngine
 		WAVEEXPORT void Rotate(const float& x, const float& y);
 		WAVEEXPORT virtual void Rotate(const float& x, const float& y, const float& z);
 
+		WAVEEXPORT void LookAt(const Vector3& vector);
+
 		WAVEEXPORT void FlipX();
 		WAVEEXPORT void FlipY();
 		WAVEEXPORT void FlipZ();
+
+		WAVEEXPORT Vector3 GetForward() const;
+		WAVEEXPORT Vector3 GetRight() const;
+		WAVEEXPORT Vector3 GetUp() const;
 
 		const glm::mat4& GetLocalModel() const;
 		const glm::mat4& GetGlobalModel() const;

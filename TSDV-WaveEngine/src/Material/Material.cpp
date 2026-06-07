@@ -7,9 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <fstream>
 
-#include "MaterialManager.h"
 #include "Color/Color.h"
 
 using namespace std;
@@ -28,22 +26,22 @@ namespace WaveEngine
 		Unload();
 	}
 
-	const string Material::GetName() const
+	const string& Material::GetName() const
 	{
 		return name;
 	}
 
-	Color Material::GetColor() const
+	const Color& Material::GetColor() const
 	{
 		return color;
 	}
 
-	unsigned int Material::GetID() const
+	const unsigned int& Material::GetID() const
 	{
 		return ID;
 	}
 
-	unsigned int Material::GetGPUID() const
+	const unsigned int& Material::GetGPUID() const
 	{
 		return gpuID;
 	}
@@ -188,6 +186,7 @@ namespace WaveEngine
 		}
 
 		SetInt("uTextureAmount", textures.size());
+		SetVec4("uColor", color);
 	}
 
 	void Material::UnBind()

@@ -291,6 +291,9 @@ Vector3 Vector3::Normalized(const Vector3& a)
 	if (mag < epsilon)
 		return Vector3::Zero();
 
+	if (abs(mag - 1.0f) < epsilon)
+		return a;
+
 	return a / mag;
 }
 

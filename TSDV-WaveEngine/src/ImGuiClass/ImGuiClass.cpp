@@ -7,6 +7,7 @@
 #include "ServiceProvider/ServiceProvider.h"
 #include <string>
 #include <Renderer/Renderer.h>
+#include <ECS/WaveObject/WaveObjectRegistry.h>
 
 namespace WaveEngine
 {
@@ -20,6 +21,11 @@ namespace WaveEngine
 	ImGuiClass::~ImGuiClass()
 	{
 		Unload();
+	}
+
+	WaveObjectRegistry* ImGuiClass::GetWaveObjectRegistry()
+	{
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
 	}
 
 	Window* ImGuiClass::GetWindow()
@@ -77,36 +83,58 @@ namespace WaveEngine
 
 		for (int i = 0; i < Renderer::Amount_Per_Light; ++i)
 		{
-			string name = "FlashLight " + to_string(i) + ": ";
+			text = "FlashLight " + to_string(i) + ": ";
 
-			ImGui::DragFloat3("Flash Pos", &Renderer::flashLights[i].position.x);
-			ImGui::DragFloat3("Flash Dir", &Renderer::flashLights[i].direction.x);
-			ImGui::DragFloat3("Flash Ambient", &Renderer::flashLights[i].ambient.x);
-			ImGui::DragFloat3("Flash Diffuse", &Renderer::flashLights[i].diffuse.x);
-			ImGui::DragFloat3("Flash Specular", &Renderer::flashLights[i].specular.x);
-			ImGui::DragFloat("Flash const", &Renderer::flashLights[i].constant);
-			ImGui::DragFloat("Flash linear", &Renderer::flashLights[i].linear);
-			ImGui::DragFloat("Flash Quad", &Renderer::flashLights[i].quadratic);
-			ImGui::DragFloat("Flash CutOff", &Renderer::flashLights[i].cutOff);
-			ImGui::DragFloat("Flash OutterCutOff", &Renderer::flashLights[i].outerCutOff);
+			ImGui::DragFloat3((text + " Pos").c_str(), &Renderer::flashLights[i].position.x);
+			ImGui::DragFloat3((text + " Dir").c_str(), &Renderer::flashLights[i].direction.x);
+			ImGui::DragFloat3((text + " Ambient").c_str(), &Renderer::flashLights[i].ambient.x);
+			ImGui::DragFloat3((text + " Diffuse").c_str(), &Renderer::flashLights[i].diffuse.x);
+			ImGui::DragFloat3((text + " Specular").c_str(), &Renderer::flashLights[i].specular.x);
+			ImGui::DragFloat((text + " const").c_str(), &Renderer::flashLights[i].constant);
+			ImGui::DragFloat((text + " linear").c_str(), &Renderer::flashLights[i].linear);
+			ImGui::DragFloat((text + " Quad").c_str(), &Renderer::flashLights[i].quadratic);
+			ImGui::DragFloat((text + " CutOff").c_str(), &Renderer::flashLights[i].cutOff);
+			ImGui::DragFloat((text + " OutterCutOff").c_str(), &Renderer::flashLights[i].outerCutOff);
+			ImGui::Separator();
+			ImGui::Separator();
 		}
 
 		for (int i = 0; i < Renderer::Amount_Per_Light; ++i)
 		{
-			string name = "PointLight " + to_string(i) + ": ";
+			text = "PointLight " + to_string(i) + ": ";
 
-			ImGui::DragFloat3((name + " Pos").c_str(), &Renderer::pointLight[i].position.x);
-			ImGui::DragFloat3((name + " Ambient").c_str(), &Renderer::pointLight[i].ambient.x);
-			ImGui::DragFloat3((name + " Diffuse").c_str(), &Renderer::pointLight[i].diffuse.x);
-			ImGui::DragFloat3((name + " Specular").c_str(), &Renderer::pointLight[i].specular.x);
+			ImGui::DragFloat3((text + " Pos").c_str(), &Renderer::pointLight[i].position.x);
+			ImGui::DragFloat3((text + " Ambient").c_str(), &Renderer::pointLight[i].ambient.x);
+			ImGui::DragFloat3((text + " Diffuse").c_str(), &Renderer::pointLight[i].diffuse.x);
+			ImGui::DragFloat3((text + " Specular").c_str(), &Renderer::pointLight[i].specular.x);
 
-			ImGui::DragFloat((name + " const").c_str(), &Renderer::pointLight[i].constant);
-			ImGui::DragFloat((name + " linear").c_str(), &Renderer::pointLight[i].linear);
-			ImGui::DragFloat((name + " Quad").c_str(), &Renderer::pointLight[i].quadratic);
+			ImGui::DragFloat((text + " const").c_str(), &Renderer::pointLight[i].constant);
+			ImGui::DragFloat((text + " linear").c_str(), &Renderer::pointLight[i].linear);
+			ImGui::DragFloat((text + " Quad").c_str(), &Renderer::pointLight[i].quadratic);
 
-			if (i < 3)
-				ImGui::Separator();
+			ImGui::Separator();
+			ImGui::Separator();
+		}
 
+		map<unsigned int, WaveObject*> waveObjects = GetWaveObjectRegistry()->GetWaveObjects();
+
+		for (map<unsigned int, WaveObject*>::iterator it = waveObjects.begin(); it != waveObjects.end(); ++it)
+		{
+			text = "WaveObject: " + to_string(it->first);
+
+			ImGui::Text(text.c_str());
+
+			if (ImGui::DragFloat3((text + " Pos").c_str(), &newPos.x))
+				it->second->GetTransform().SetPosition(newPos);
+
+			if (ImGui::DragFloat3((text + " Rot").c_str(), &newRot.x))
+				it->second->GetTransform().SetRotation(newRot);
+
+			if (ImGui::DragFloat3((text + " Scale").c_str(), &newScale.x))
+				it->second->GetTransform().SetRotation(newScale);
+
+			ImGui::Separator();
+			ImGui::Separator();
 		}
 
 		ImGui::End();

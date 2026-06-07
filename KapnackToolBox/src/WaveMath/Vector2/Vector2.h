@@ -21,6 +21,7 @@ WAVEEXPORT struct Vector2 final
 	WAVEEXPORT	void operator=(const Vector2& other);
 	WAVEEXPORT	void operator=(const Vector3& vector3);
 
+	WAVEEXPORT	static Vector2 Zero();
 	WAVEEXPORT	static Vector2 Up();
 	WAVEEXPORT	static Vector2 Down();
 	WAVEEXPORT	static Vector2 Right();
