@@ -48,9 +48,8 @@ out vec4 FragColor;
 
 uniform vec3 viewPos;
 
-#define MAX_ALBEDO 8
-uniform sampler2D uTexture[MAX_ALBEDO];
-uniform int uTextureAmount;
+uniform sampler2D uAlbedo;
+uniform bool hasuAlbedo;
 
 #define NR_POINT_LIGHTS 2
 uniform DirLight dirLight;
@@ -138,16 +137,10 @@ void main()
     
     vec4 texColor = vec4(0.0);
 
-    if (uTextureAmount > 0)
-    {
-      texColor = vec4(0.0);
-      for (int i = 0; i < uTextureAmount; ++i)
-          texColor += texture(uTexture[i], vTexCoord);
-   }
+    if (hasuAlbedo)
+      texColor = texture(uAlbedo, vTexCoord);
    else
-   {
      texColor = vec4(1.0);
-   }
 
     FragColor = (texColor * vColor) * vec4(result, 1.0);
 }

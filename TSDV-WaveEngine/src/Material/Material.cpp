@@ -53,9 +53,9 @@ namespace WaveEngine
 
 	void Material::AddAlbedoTexture(unsigned int textureGPUID)
 	{
-		const string albedoParamName = "uTexture";
+		const string albedoParamName = "uAlbedo";
 
-		SetTexture(albedoParamName + "[" + to_string(textures.size()) + "]", textureGPUID);
+		SetTexture(albedoParamName, textureGPUID);
 	}
 
 	void Material::SetName(const string& name)
@@ -168,12 +168,20 @@ namespace WaveEngine
 		glUniform1i(it->second.location, value);
 	}
 
+	void Material::SetBool(const std::string& name, const bool& value)
+	{
+		unordered_map<string, Uniform>::iterator it = uniforms.find(name);
+		if (it == uniforms.end())
+			return;
+
+		glUniform1i(it->second.location, value);
+	}
+
 	void Material::Bind()
 	{
 		glUseProgram(gpuID);
 
-		int textureSlot = 0;
-
+		unsigned int textureSlot = 0;
 		for (Uniform* u : samplerUniforms)
 		{
 			unordered_map<string, unsigned int>::iterator it = textures.find(u->name);
@@ -183,9 +191,9 @@ namespace WaveEngine
 			glActiveTexture(GL_TEXTURE0 + textureSlot);
 			glBindTexture(GL_TEXTURE_2D, it->second);
 			glUniform1i(u->location, textureSlot++);
+			SetBool("has" + u->name, textures.size());
 		}
 
-		SetInt("uTextureAmount", textures.size());
 		SetVec4("uColor", color);
 	}
 

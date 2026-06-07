@@ -58,8 +58,6 @@ namespace WaveEngine
 
 	public:
 
-		static const int MAX_ALBEDO = 8;
-
 		const static unsigned int NULL_MATERIAL;
 
 		const string& GetName() const;
@@ -84,6 +82,7 @@ namespace WaveEngine
 		void SetGLMVec2(const std::string& name, const glm::vec2& value);
 		void SetFloat(const std::string& name, const float& value);
 		void SetInt(const std::string& name, const int& value);
+		void SetBool(const std::string& name, const bool& value);
 
 		void Bind();
 		void UnBind();
