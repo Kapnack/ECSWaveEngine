@@ -39,6 +39,7 @@ namespace WaveEngine
 			return nullptr;
 
 		WaveObject& root = GetWaveObjectFactory()->Instantiate();
+		root.SetName(filename);
 
 		ProcessNode(pScene->mRootNode, root);
 
@@ -57,6 +58,8 @@ namespace WaveEngine
 			aiMesh* mesh = pScene->mMeshes[node->mMeshes[i]];
 
 			WaveObject& meshObject = GetWaveObjectFactory()->Instantiate();
+
+			meshObject.SetName(mesh->mName.C_Str());
 
 			waveObject.GetTransform().AddChild(meshObject.GetID());
 			meshObject.GetTransform().SetParent(waveObject.GetID());
