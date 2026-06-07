@@ -2,10 +2,7 @@
 
 #include "ServiceProvider/Service.h"
 
-#include <GL/glew.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include <functional>
 #include <unordered_map>
@@ -19,6 +16,7 @@
 #include "ECS/MaterialID.h"
 #include "ECS/Mesh/MeshID.h"
 #include "ECS/Transform/ECSTransform.h"
+#include "WaveMath/Vector3/Vector3.h"
 
 using namespace std;
 
@@ -103,16 +101,11 @@ namespace WaveEngine
 
 		unordered_map<size_t, RenderData> batching;
 
-		unsigned int shapeShaders;
-		unsigned int spriteShaders;
-
 		unsigned int drawCalls = 0;
 		unsigned int batchCalls = 0;
 
 		void Init();
 		void Unload();
-
-		unsigned int defualtTextureID = 0;
 
 		const unsigned int ReturnWorkingMaterial(const unsigned int& materialIDToTry, const unsigned int& materialIDfallBack);
 
@@ -125,8 +118,6 @@ namespace WaveEngine
 		TextureManager* GetTextureManager();
 
 		void UpdateBuffer(VertexData* vertex, int vertexSize, unsigned& VBO);
-
-		Texture* ChooseTextureToUse(const unsigned int& ID);
 
 		ComponentRegistry* GetComponentRegistry();
 
@@ -160,8 +151,6 @@ namespace WaveEngine
 
 		unsigned int GetDrawCalls() const;
 		unsigned int GetBatchCalls() const;
-
-		void DrawElement(const unsigned int& materialID, const unsigned int& indicesSize, const unsigned int& VAO);
 
 		void Submit(const ECSTransform& transform, const MeshID& meshComp, const MeshRenderer& matComp);
 		void Flush();
