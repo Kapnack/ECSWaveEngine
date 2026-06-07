@@ -13,6 +13,7 @@ WAVEEXPORT struct Vector3 final
 	static const float epsilon;
 
 	WAVEEXPORT Vector3();
+	WAVEEXPORT Vector3(const Vector3& vector3);
 	WAVEEXPORT Vector3(const Vector2& vector2);
 	WAVEEXPORT Vector3(const float& x, const float& y, const float& z = 0.0f);
 	WAVEEXPORT void ClampMagnitude(const float& maxLength);

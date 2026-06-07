@@ -11,6 +11,13 @@ Vector3::Vector3()
 	*this = Zero();
 }
 
+Vector3::Vector3(const Vector3& vector3)
+{
+	x = vector3.x;
+	y = vector3.y;
+	z = vector3.z;
+}
+
 Vector3::Vector3(const Vector2& vector2)
 {
 	x = vector2.x;
