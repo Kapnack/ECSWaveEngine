@@ -120,9 +120,7 @@ namespace WaveEngine
 
 		for (map<unsigned int, WaveObject*>::iterator it = waveObjects.begin(); it != waveObjects.end(); ++it)
 		{
-			text = "WaveObject: " + to_string(it->first);
-
-			ImGui::Text(text.c_str());
+			ImGui::Text(it->second->GetName().c_str());
 
 			if (ImGui::DragFloat3((text + " Pos").c_str(), &newPos.x))
 				it->second->GetTransform().SetPosition(newPos);
