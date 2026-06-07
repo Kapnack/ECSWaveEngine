@@ -161,7 +161,7 @@ namespace WaveEngine
 		if (!mat)
 			return Material::NULL_MATERIAL;
 
-		vector<unsigned int> albedoIDs = LoadMaterialTextures(mat, aiTextureType_DIFFUSE);
+		unsigned int albedoIDs = LoadMaterialTextures(mat, aiTextureType_DIFFUSE);
 
 		unsigned int materialID = GetMaterialFactory()->CreateMaterial(
 			"ImportedMaterial",
@@ -183,21 +183,20 @@ namespace WaveEngine
 			));
 		}
 
-		for (int i = 0; i < albedoIDs.size() && i < Material::MAX_ALBEDO; i++)
-			newMaterial->AddAlbedoTexture(albedoIDs[i]);
+		if (albedoIDs)
+			newMaterial->AddAlbedoTexture(albedoIDs);
 
 		return materialID;
 	}
 
-	vector<unsigned int> ModelImporter::LoadMaterialTextures(aiMaterial* mat, aiTextureType type)
+	unsigned int ModelImporter::LoadMaterialTextures(aiMaterial* mat, aiTextureType type)
 	{
-		vector<unsigned int> textures;
+		unsigned int textureGPUID = 0;
 		unsigned int count = mat->GetTextureCount(type);
 		int index = 0;
 		unsigned int textureID = 0;
 		aiString str;
 		string path;
-		unsigned int gpuID = 0;
 
 		for (unsigned int i = 0; i < count; ++i)
 		{
@@ -210,7 +209,7 @@ namespace WaveEngine
 
 			if (!path.empty() && path[0] == '*')
 			{
-				index = std::stoi(path.substr(1));
+				index = stoi(path.substr(1));
 				const aiTexture& tex = *pScene->mTextures[index];
 
 				if (tex.mHeight == 0)
@@ -222,18 +221,15 @@ namespace WaveEngine
 			}
 			else
 			{
-				std::filesystem::path fullPath = directory / path;
+				filesystem::path fullPath = directory / path;
 				textureID = GetTextureImporter()->LoadTexture(fullPath.string());
 			}
 
-			if (textureID != 0)
-			{
-				gpuID = GetTextureManager()->GetTexture(textureID)->GetGPUID();
-				textures.push_back(gpuID);
-			}
+			if (textureID != Texture::NULL_TEXTURE)
+				textureGPUID = GetTextureManager()->GetTexture(textureID)->GetGPUID();
 		}
 
-		return textures;
+		return textureGPUID;
 	}
 
 	MeshFactory* ModelImporter::GetMeshFactory()

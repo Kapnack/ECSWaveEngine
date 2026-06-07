@@ -38,7 +38,7 @@ namespace WaveEngine
 		WaveObjectRegistry* GetWaveObjectRegistry();
 		WaveObjectFactory* GetWaveObjectFactory();
 
-		vector<unsigned int> LoadMaterialTextures(aiMaterial* mat, aiTextureType type);
+		unsigned int LoadMaterialTextures(aiMaterial* mat, aiTextureType type);
 	
 		void ProcessNode(aiNode* node, WaveObject& waveObject);
 		void ProcessMesh(aiMesh* meshRenderer, WaveObject& meshWaveObject);
