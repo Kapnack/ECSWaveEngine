@@ -15,7 +15,7 @@ namespace WaveEngine
 		Component(const unsigned int& ID);
 		~Component();
 
-		WaveObject& GetWaveObject();
+		WaveObject& GetWaveObject() const;
 
 		const unsigned int& GetID() const;
 	};
