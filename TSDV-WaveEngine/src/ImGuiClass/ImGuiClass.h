@@ -2,8 +2,7 @@
 
 #include "Window/Window.h"
 #include "Input/Input.h"
-#include <ECS/WaveObject/WaveObjectRegistry.h>
-#include <WaveMath/Vector3/Vector3.h>
+#include "ECS/WaveObject/WaveObjectRegistry.h"
 
 using namespace std;
 
@@ -18,12 +17,6 @@ namespace WaveEngine
 		Window* GetWindow();
 
 		Input* GetInput();
-
-		bool isActive = false;
-
-		Vector3 newPos = Vector3::Zero();
-		Vector3 newRot = Vector3::Zero();
-		Vector3 newScale = Vector3::Zero();
 
 		void Init();
 		void Update();
