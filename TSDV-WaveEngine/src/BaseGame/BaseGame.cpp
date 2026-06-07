@@ -57,8 +57,8 @@ namespace WaveEngine
 
 		const vector<string> modelsPaths
 		{
-			"Models/Cat/concrete_cat_statue_1k.fbx",
 			"Models/gold_headed_buddha_-_photogrammetry_test_2019.glb",
+			"Models/Cat/concrete_cat_statue_1k.fbx",
 			"Models/Statue/marble_bust_01_1k.fbx",
 			"Models/TanqueDePrueba.fbx",
 			"Models/Cube.fbx"
@@ -76,14 +76,14 @@ namespace WaveEngine
 			waveObject.GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f * i));
 			waveObject.GetTransform().SetScale(Vector3::One() * defaultSize);
 
-			if (i != 1)
+			if (i != 0)
 				waveObject.GetTransform().Rotate(Vector3::Left() * 90);
 			else
-				waveObject.GetTransform().Rotate(Vector3::Up() * (45 + 90));
+				waveObject.GetTransform().Rotate(Vector3::Up() * 135);
 		}
 
 		cameraObject = &GetWaveObjectFactory()->Instantiate();
-
+		cameraObject->GetTransform().SetRotation(Vector3::Y() * 180.0f);
 		camera = &cameraObject->AddComponent<Camera>();
 		camera->SetFarPlane(100000.0f);
 		camera->SetNearPlane(0.1f);
