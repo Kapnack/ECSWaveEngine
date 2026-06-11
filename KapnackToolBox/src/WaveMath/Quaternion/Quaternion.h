@@ -45,6 +45,7 @@ WAVEEXPORT struct Quaternion final
 	WAVEEXPORT static Quaternion Normalized(const Quaternion& a);
 	WAVEEXPORT static Quaternion AngleAxis(const float& angle, const Vector3& axis);
 	WAVEEXPORT static Quaternion Lerp(const Quaternion& a, const Quaternion& b, float t);
+	WAVEEXPORT static Quaternion Slerp(const Quaternion& a, const Quaternion& b, float t);
 	WAVEEXPORT static Quaternion UnclampLerp(const Quaternion& a, const Quaternion& b, const float& t);
 	WAVEEXPORT static Quaternion Euler(const float& x, const float& y, const float& z = 0.0f);
 	WAVEEXPORT static Quaternion Euler(const Vector3& eulerAngles);

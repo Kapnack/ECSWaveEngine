@@ -161,16 +161,12 @@ Quaternion Quaternion::Normalized(const Quaternion& a)
 Quaternion Quaternion::AngleAxis(const float& angle, const Vector3& axis)
 {
 	const float PI = 3.14159274f;
-	const float Deg2Rad = PI * 180.0f;
+	const float Deg2Rad = PI / 180.0f;
 
 	const float rad = angle * Deg2Rad;
 	const float halfAngle = rad * 0.5f;
 
-	return Quaternion
-	(
-		axis.Normalized() * std::sinf(halfAngle),
-		std::cosf(halfAngle)
-	);
+	return Quaternion(axis.Normalized() * std::sinf(halfAngle), std::cosf(halfAngle));
 }
 
 Quaternion Quaternion::Lerp(const Quaternion& a, const Quaternion& b, float t)
@@ -178,6 +174,27 @@ Quaternion Quaternion::Lerp(const Quaternion& a, const Quaternion& b, float t)
 	t = t < -1.0f ? -1.0f : t > 1.0f ? 1.0f : t;
 
 	return UnclampLerp(a, b, t);
+}
+
+Quaternion Quaternion::Slerp(const Quaternion& a, const Quaternion& b, float t)
+{
+	t = t < 0.0f ? 0.0f : t > 1.0f ? 1.0f : t;
+
+	float dot = Dot(a, b);
+
+	// If dot is negative, negate one quaternion to take the shorter arc
+	Quaternion b2 = dot < 0.0f ? b * -1.0f : b;
+	dot = std::abs(dot);
+
+	if (dot > 0.9995f)
+		return Normalized(a + (b2 - a) * t); // Nearly identical — linear is fine
+
+	float theta0 = std::acos(dot);
+	float theta = theta0 * t;
+	float s0 = std::cos(theta) - dot * std::sin(theta) / std::sin(theta0);
+	float s1 = std::sin(theta) / std::sin(theta0);
+
+	return Normalized(a * s0 + b2 * s1);
 }
 
 Quaternion Quaternion::UnclampLerp(const Quaternion& a, const Quaternion& b, const float& t)
