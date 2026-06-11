@@ -85,7 +85,7 @@ namespace WaveEngine
 		cameraObject = &GetWaveObjectFactory()->Instantiate();
 		cameraObject->GetTransform().SetRotation(Vector3::Y() * 180.0f);
 		camera = &cameraObject->AddComponent<Camera>();
-		camera->SetFarPlane(100000.0f);
+		camera->SetFarPlane(1000000.0f);
 		camera->SetNearPlane(0.1f);
 		camera->SetOrthographic(false);
 		cameraObject->GetTransform().SetPosition(Vector3::Right() * (modelsPaths.size() * 0.5f * defaultSize) + Vector3::Foward() * 150);
