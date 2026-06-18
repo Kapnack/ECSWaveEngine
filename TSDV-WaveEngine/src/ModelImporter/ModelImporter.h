@@ -15,6 +15,7 @@
 #include "FileReader/FileReader.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/WaveObject/WaveObjectFactory.h"
+#include <ECS/Transform/ECSTransform.h>
 
 using namespace std;
 
@@ -43,6 +44,11 @@ namespace WaveEngine
 		void ProcessNode(aiNode* node, WaveObject& waveObject);
 		void ProcessMesh(aiMesh* meshRenderer, WaveObject& meshWaveObject);
 		unsigned int ProcessMaterial(aiMaterial* aiMaterial);
+		void ApplyNodeTransform(ECSTransform& transform, const aiNode* node);
+
+		std::filesystem::path FindTexture(
+			const std::filesystem::path& modelDirectory,
+			const std::string& textureName);
 
 	public:
 
