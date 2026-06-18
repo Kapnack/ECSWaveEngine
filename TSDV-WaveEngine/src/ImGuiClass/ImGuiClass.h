@@ -3,6 +3,7 @@
 #include "Window/Window.h"
 #include "Input/Input.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "Material/MaterialManager.h"
 
 using namespace std;
 
@@ -18,6 +19,8 @@ namespace WaveEngine
 
 		Input* GetInput();
 
+		Color color = Color::White();
+
 		void Init();
 		void Update();
 		void Draw();
@@ -27,6 +30,7 @@ namespace WaveEngine
 		~ImGuiClass();
 
 		WaveObjectRegistry* GetWaveObjectRegistry();
+		MaterialManager* GetMaterialManager();
 
 		friend class BaseGame;
 		friend class ServiceProvider;
