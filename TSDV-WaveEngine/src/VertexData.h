@@ -18,6 +18,8 @@ WAVEEXPORT struct VertexData
 
 	Vector3 normal;
 
+	Vector3 tangent;
+
 	WAVEEXPORT VertexData();
 	WAVEEXPORT VertexData(const float& v1, const float& v2, const float& v3, const float& r, const float& g, const float& b, const float& a);
 	WAVEEXPORT VertexData(const Vector3& position, const Color& color);
