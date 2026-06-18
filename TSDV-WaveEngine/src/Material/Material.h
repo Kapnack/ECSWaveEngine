@@ -39,6 +39,9 @@ namespace WaveEngine
 
 		unsigned int gpuID = 0;
 
+		float metalic = 0.0f;
+		float roughness = 1.0f;
+
 		vector<Uniform*> samplerUniforms;
 		unordered_map<string, Uniform> uniforms;
 
@@ -62,13 +65,18 @@ namespace WaveEngine
 
 		const string& GetName() const;
 
-		const Color& GetColor() const;
 		const unsigned int& GetID() const;
 		const unsigned int& GetGPUID() const;
+		const Color& GetColor() const;
+		const float& GetMetallic() const;
+		const float& GetRoughness() const;
+
 		void SetTexture(const std::string& uniformName, unsigned int textureGPUID);
 		void AddAlbedoTexture(const unsigned int& textureGPUID);
 		void AddNormalMap(const unsigned int& textureGPUID);
 		void SetColor(const Color& color);
+		void SetMetallic(const float& metallic);
+		void SetRoughness(const float& roughtness);
 
 		void SetVec2(const std::string& name, const Vector2& value);
 		void SetVec2(const std::string& name, const float& x, const float& y);
