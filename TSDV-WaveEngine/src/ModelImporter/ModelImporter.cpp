@@ -15,6 +15,7 @@
 #include <ECS/MaterialID.h>
 #include <ECS/Mesh/MeshID.h>
 #include "ECS/Transform/ECSTransform.h"
+#include <glm/gtc/quaternion.hpp>
 
 namespace WaveEngine
 {
@@ -28,6 +29,7 @@ namespace WaveEngine
 			aiProcess_Triangulate |
 			aiProcess_GenSmoothNormals |
 			aiProcess_JoinIdenticalVertices |
+			aiProcess_CalcTangentSpace |
 			aiProcess_CalcTangentSpace);
 
 		filename = filePath.filename().string().c_str();
@@ -53,18 +55,15 @@ namespace WaveEngine
 			<< " | Children: " << node->mNumChildren
 			<< std::endl;
 
+		ApplyNodeTransform(waveObject.GetTransform(), node);
+
 		for (unsigned int i = 0; i < node->mNumMeshes; ++i)
 		{
 			aiMesh* mesh = pScene->mMeshes[node->mMeshes[i]];
 
-			WaveObject& meshObject = GetWaveObjectFactory()->Instantiate();
+			waveObject.SetName(mesh->mName.C_Str());
 
-			meshObject.SetName(mesh->mName.C_Str());
-
-			waveObject.GetTransform().AddChild(meshObject.GetID());
-			meshObject.GetTransform().SetParent(waveObject.GetID());
-
-			ProcessMesh(mesh, meshObject);
+			ProcessMesh(mesh, waveObject);
 		}
 
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -77,6 +76,40 @@ namespace WaveEngine
 			ProcessNode(node->mChildren[i], childObject);
 		}
 	}
+
+	//void ModelImporter::ProcessNode(aiNode* node, WaveObject& waveObject)
+	//{
+	//	std::cout << "Node: " << node->mName.C_Str()
+	//		<< " | Meshes: " << node->mNumMeshes
+	//		<< " | Children: " << node->mNumChildren
+	//		<< std::endl;
+	//
+	//	ApplyNodeTransform(waveObject.GetTransform(), node);
+	//
+	//	for (unsigned int i = 0; i < node->mNumMeshes; ++i)
+	//	{
+	//		aiMesh* mesh = pScene->mMeshes[node->mMeshes[i]];
+	//
+	//		WaveObject& meshObject = GetWaveObjectFactory()->Instantiate();
+	//
+	//		meshObject.SetName(mesh->mName.C_Str());
+	//
+	//		waveObject.GetTransform().AddChild(meshObject.GetID());
+	//		meshObject.GetTransform().SetParent(waveObject.GetID());
+	//
+	//		ProcessMesh(mesh, meshObject);
+	//	}
+	//
+	//	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	//	{
+	//		WaveObject& childObject = GetWaveObjectFactory()->Instantiate();
+	//
+	//		waveObject.GetTransform().AddChild(childObject.GetID());
+	//		childObject.GetTransform().SetParent(waveObject.GetID());
+	//
+	//		ProcessNode(node->mChildren[i], childObject);
+	//	}
+	//}
 
 	void ModelImporter::ProcessMesh(aiMesh* mesh, WaveObject& meshWaveObject)
 	{
@@ -122,6 +155,13 @@ namespace WaveEngine
 			else
 				vertexData.color = Color::White();
 
+			vertexData.tangent =
+			{
+				mesh->mTangents[i].x,
+				mesh->mTangents[i].y,
+				mesh->mTangents[i].z
+			};
+
 			vertices[i] = vertexData;
 		}
 
@@ -162,6 +202,12 @@ namespace WaveEngine
 			return Material::NULL_MATERIAL;
 
 		unsigned int albedoIDs = LoadMaterialTextures(mat, aiTextureType_DIFFUSE);
+		unsigned int roughnessMap = LoadMaterialTextures(mat, aiTextureType_DIFFUSE_ROUGHNESS);
+		unsigned int normalMap = LoadMaterialTextures(mat, aiTextureType_NORMALS);
+		unsigned int metallicMap = LoadMaterialTextures(mat, aiTextureType_METALNESS);
+		unsigned int aoMap = LoadMaterialTextures(mat, aiTextureType_LIGHTMAP);
+		unsigned int emissiveMap = LoadMaterialTextures(mat, aiTextureType_EMISSIVE);
+		unsigned int heightMap = LoadMaterialTextures(mat, aiTextureType_HEIGHT);
 
 		unsigned int materialID = GetMaterialFactory()->CreateMaterial(
 			"ImportedMaterial",
@@ -183,10 +229,66 @@ namespace WaveEngine
 			));
 		}
 
+		float roughnessFactor = 0.0f;
+		if (mat->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughnessFactor) == AI_SUCCESS)
+			newMaterial->SetRoughness(roughnessFactor);
+
+		float metallicFactor = 0.0f;
+		if (mat->Get(AI_MATKEY_METALLIC_FACTOR, metallicFactor) == AI_SUCCESS)
+			newMaterial->SetMetallic(metallicFactor);
+
 		if (albedoIDs)
 			newMaterial->AddAlbedoTexture(albedoIDs);
 
+		if (normalMap)
+			newMaterial->SetTexture("uNormalMap", normalMap);
+
+		if (roughnessMap)
+			newMaterial->SetTexture("uRoughnessMap", roughnessMap);
+
+		if (metallicMap)
+			newMaterial->SetTexture("uMetallicMap", metallicMap);
+
+		if (aoMap)
+			newMaterial->SetTexture("uAOMap", aoMap);
+
+		if (emissiveMap)
+			newMaterial->SetTexture("uEmissiveMap", emissiveMap);
+
 		return materialID;
+	}
+
+	void ModelImporter::ApplyNodeTransform(ECSTransform& transform, const aiNode* node)
+	{
+		aiVector3D pos, scale;
+		aiQuaternion aiQuat;
+
+		node->mTransformation.Decompose(scale, aiQuat, pos);
+
+		transform.SetPosition(pos.x, pos.y, pos.z);
+		transform.SetScale(scale.x, scale.y, scale.z);
+
+		glm::quat glmQuat = glm::quat(aiQuat.w, aiQuat.x, aiQuat.y, aiQuat.z);
+		glm::vec3 euler = glm::degrees(glm::eulerAngles(glmQuat));
+
+		transform.SetRotation(euler.x, euler.y, euler.z);
+	}
+
+	std::filesystem::path ModelImporter::FindTexture(const std::filesystem::path& modelDirectory, const std::string& textureName)
+	{
+		// Strip to just the filename in case Assimp gave a relative path
+		std::string filename = std::filesystem::path(textureName).filename().string();
+
+		for (auto& entry : std::filesystem::recursive_directory_iterator(modelDirectory))
+		{
+			if (!entry.is_regular_file())
+				continue;
+
+			if (entry.path().filename().string() == filename)
+				return entry.path();
+		}
+
+		return {}; // not found
 	}
 
 	unsigned int ModelImporter::LoadMaterialTextures(aiMaterial* mat, aiTextureType type)
@@ -214,15 +316,30 @@ namespace WaveEngine
 
 				if (tex.mHeight == 0)
 				{
+					// Compressed (PNG, JPG, etc.)
 					textureID = GetTextureImporter()->LoadTextureFromMemory(
 						reinterpret_cast<const unsigned char*>(tex.pcData),
 						tex.mWidth);
 				}
+				else
+				{
+					// Raw ARGB8888 pixels
+					textureID = GetTextureImporter()->LoadTextureFromPixels(
+						reinterpret_cast<const unsigned char*>(tex.pcData),
+						tex.mWidth,
+						tex.mHeight);
+				}
 			}
 			else
 			{
-				filesystem::path fullPath = directory / path;
-				textureID = GetTextureImporter()->LoadTexture(fullPath.string());
+				std::filesystem::path fullPath = directory / path;
+
+				// If the direct path doesn't exist, search recursively
+				if (!std::filesystem::exists(fullPath))
+					fullPath = FindTexture(directory, path);
+
+				if (!fullPath.empty())
+					textureID = GetTextureImporter()->LoadTexture(fullPath.string());
 			}
 
 			if (textureID != Texture::NULL_TEXTURE)
