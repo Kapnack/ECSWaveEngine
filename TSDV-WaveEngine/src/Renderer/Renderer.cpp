@@ -126,6 +126,9 @@ namespace WaveEngine
 			glVertexAttribDivisor(4 + i, 1);
 		}
 
+		glVertexAttribPointer(8, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (void*)offsetof(VertexData, tangent));
+		glEnableVertexAttribArray(8);
+
 		glBindVertexArray(0);
 	}
 
