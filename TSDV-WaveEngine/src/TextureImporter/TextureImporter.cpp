@@ -128,4 +128,35 @@ namespace WaveEngine
 
 		return currentTextureID;
 	}
+
+	unsigned int TextureImporter::LoadTextureFromPixels(const unsigned char* buffer, const unsigned int& width, const unsigned int& height)
+	{
+		unsigned int textureGPUID = 0;
+
+		glGenTextures(1, &textureGPUID);
+		glBindTexture(GL_TEXTURE_2D, textureGPUID);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		// aiTexel is BGRA, no stbi involved — upload raw pixels directly
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, buffer);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		Texture* newTexture = new Texture(++currentTextureID, textureGPUID, width, height);
+		newTexture->name = "embedded_pixels_" + std::to_string(currentTextureID);
+
+		GetTextureManager()->Save(newTexture);
+
+		std::cout << "Loaded embedded raw texture (" << width << "x" << height << ")" << std::endl;
+
+		return currentTextureID;
+	}
 }
