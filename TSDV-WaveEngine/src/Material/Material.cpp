@@ -36,6 +36,16 @@ namespace WaveEngine
 		return color;
 	}
 
+	const float& Material::GetMetallic() const
+	{
+		return metalic;
+	}
+
+	const float& Material::GetRoughness() const
+	{
+		return roughness;
+	}
+
 	const unsigned int& Material::GetID() const
 	{
 		return ID;
@@ -84,6 +94,16 @@ namespace WaveEngine
 	void Material::SetColor(const Color& color)
 	{
 		this->color = color;
+	}
+
+	void Material::SetMetallic(const float& metallic)
+	{
+		this->metalic = metallic;
+	}
+
+	void Material::SetRoughness(const float& roughtness)
+	{
+		this->roughness = roughtness;
 	}
 
 	void Material::SetVec2(const std::string& name, const Vector2& value)
@@ -193,15 +213,20 @@ namespace WaveEngine
 		{
 			unordered_map<string, unsigned int>::iterator it = textures.find(u->name);
 			if (it == textures.end())
+			{
+				SetBool("has" + u->name, false);
 				continue;
+			}
 
 			glActiveTexture(GL_TEXTURE0 + textureSlot);
 			glBindTexture(GL_TEXTURE_2D, it->second);
 			glUniform1i(u->location, textureSlot++);
-			SetBool("has" + u->name, textures.size());
+			SetBool("has" + u->name, true);
 		}
 
-		SetVec4("uColor", color);
+		SetVec4("uMatColor", color);
+		SetFloat("uMetallic", metalic);
+		SetFloat("uRoughness", roughness);
 	}
 
 	void Material::UnBind()
