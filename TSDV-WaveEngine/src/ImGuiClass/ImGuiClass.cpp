@@ -8,6 +8,7 @@
 #include <string>
 #include <Renderer/Renderer.h>
 #include <ECS/WaveObject/WaveObjectRegistry.h>
+#include <Material/Material.h>
 
 namespace WaveEngine
 {
@@ -26,6 +27,11 @@ namespace WaveEngine
 	WaveObjectRegistry* ImGuiClass::GetWaveObjectRegistry()
 	{
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
+	}
+
+	MaterialManager* ImGuiClass::GetMaterialManager()
+	{
+		return ServiceProvider::Instance().Get<MaterialManager>();
 	}
 
 	Window* ImGuiClass::GetWindow()
@@ -83,7 +89,7 @@ namespace WaveEngine
 
 		for (int i = 0; i < Renderer::Amount_Per_Light; ++i)
 		{
-			text = "FlashLight " + to_string(i)+ ".";
+			text = "FlashLight " + to_string(i) + ".";
 			ImGui::Text(text.c_str());
 
 			text = "##xx" + text;
@@ -140,6 +146,22 @@ namespace WaveEngine
 
 			if (ImGui::DragFloat3(("Scale" + text).c_str(), &it->second->GetTransform().scale.x))
 				it->second->GetTransform().MarkDirty();
+
+			ImGui::Separator();
+			ImGui::Separator();
+		}
+
+		unordered_map<unsigned int, Material*>& materials = GetMaterialManager()->GetMaterials();
+
+		for (unordered_map<unsigned int, Material*>::iterator it = materials.begin(); it != materials.end(); ++it)
+		{
+			text = it->second->GetName();
+			ImGui::Text(text.c_str());
+
+			text = "##xx" + text;
+
+			if (ImGui::DragFloat4(("Color" + text).c_str(), &color.r))
+				it->second->SetColor(color);
 
 			ImGui::Separator();
 			ImGui::Separator();
