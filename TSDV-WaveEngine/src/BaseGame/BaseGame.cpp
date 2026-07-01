@@ -279,23 +279,23 @@ namespace WaveEngine
 				transform.Translate(Vector3::Back() * camereSpeed);
 			}
 		
-			ECSTransform& childsTransform = transform.GetChild(0).GetTransform().GetChild(0).GetTransform();
-			const int dived = 3;
+			ECSTransform& childsTransform = transform.GetChild(0).GetTransform().GetChild(0).GetTransform().GetChild(0).GetTransform();
+			const int dived = 2;
 			if (GetInput()->IsKeyPressed(Keys::I))
 			{
 				childsTransform.Rotate(Vector3::Up() / dived);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::J))
 			{
-				childsTransform.Rotate(Vector3::Up() / dived);
+				childsTransform.Rotate(Vector3::Left() / dived);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::K))
 			{
-				childsTransform.Rotate(Vector3::Up() / dived);
+				childsTransform.Rotate(Vector3::Down() / dived);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::L))
 			{
-				childsTransform.Rotate(Vector3::Up() / dived);
+				childsTransform.Rotate(Vector3::Right() / dived);
 			}
 
 			if (GetInput()->IsKeyPressed(Keys::T))
@@ -304,15 +304,15 @@ namespace WaveEngine
 			}
 			else if (GetInput()->IsKeyPressed(Keys::F))
 			{
-				childsTransform.Scale(Vector3::Up() / dived);
+				childsTransform.Scale(Vector3::Left() / dived);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::G))
 			{
-				childsTransform.Scale(Vector3::Up() / dived);
+				childsTransform.Scale(Vector3::Down() / dived);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::H))
 			{
-				childsTransform.Scale(Vector3::Up() / dived);
+				childsTransform.Scale(Vector3::Right() / dived);
 			}
 
 			cameraObject->GetTransform().LookAt(transform.GetPosition());
