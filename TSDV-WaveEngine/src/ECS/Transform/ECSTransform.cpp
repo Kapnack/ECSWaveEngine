@@ -1,10 +1,14 @@
 #include "ECSTransform.h"
 
 #include <glm/gtc/matrix_transform.hpp>
-#include "ServiceProvider/ServiceProvider.h"
-#include <ECS/CompontRegistry/ComponentRegistry.h>
 #include <glm/gtc/quaternion.hpp>
 #include <cmath>
+#include <glm/fwd.hpp>
+
+#include "ServiceProvider/ServiceProvider.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
+#include "ECS/WaveObject/WaveObject.h"
+#include <ECS/WaveObject/WaveObjectRegistry.h>
 
 namespace WaveEngine
 {
@@ -190,12 +194,18 @@ namespace WaveEngine
 		MarkDirty();
 	}
 
+	Vector3 ECSTransform::WorldToLocal(const Vector3& worldPoint) const
+	{
+		glm::vec4 local = glm::inverse(globalModel) * glm::vec4(worldPoint.x, worldPoint.y, worldPoint.z, 1.0f);
+		return Vector3(local.x, local.y, local.z);
+	}
+
 	void ECSTransform::LookAt(const Vector3& target)
 	{
 		glm::vec3 pos(position.x, position.y, position.z);
 		glm::vec3 tgt(target.x, target.y, target.z);
 
-		glm::vec3 forward = glm::normalize(pos - tgt);
+		glm::vec3 forward = glm::normalize(tgt -pos);
 
 		glm::quat rot = glm::quatLookAt(forward, glm::vec3(0, 1, 0));
 
@@ -225,20 +235,35 @@ namespace WaveEngine
 
 	Vector3 ECSTransform::GetForward() const
 	{
-		glm::vec3 vector = GetForwardGLM(globalModel);
-		return Vector3(vector.x, vector.y, vector.z).Normalized();
+		glm::vec3 forward = normalize(glm::vec3(-globalModel[2]));
+		return Vector3(forward.x, forward.y, forward.z);
+	}
+
+	Vector3 ECSTransform::GetBack() const
+	{
+		return -GetForward();
 	}
 
 	Vector3 ECSTransform::GetRight() const
 	{
-		glm::vec3 vector = GetRightGLM(globalModel);
-		return Vector3(vector.x, vector.y, vector.z).Normalized();
+		glm::vec3 right = glm::normalize(glm::vec3(globalModel[0]));
+		return Vector3(right.x, right.y, right.z);
+	}
+
+	Vector3 ECSTransform::GetLeft() const
+	{
+		return -GetRight();
 	}
 
 	Vector3 ECSTransform::GetUp() const
 	{
-		glm::vec3 vector = GetUpGLM(globalModel);
-		return Vector3(vector.x, vector.y, vector.z).Normalized();
+		glm::vec3 up = glm::normalize(glm::vec3(globalModel[1]));
+		return Vector3(up.x, up.y, up.z);
+	}
+
+	Vector3 ECSTransform::GetDown() const
+	{
+		return -GetUp();
 	}
 
 	const glm::mat4& ECSTransform::GetLocalModel() const
@@ -256,9 +281,14 @@ namespace WaveEngine
 		globalModel = m;
 	}
 
-	void ECSTransform::SetParent(int id)
+	WaveObject& ECSTransform::GetChild(const unsigned int index)
 	{
-		if (id != 0)
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(children[index]);
+	}
+
+	void ECSTransform::SetParent(unsigned int id)
+	{
+		if (id != WaveObject::NULL_OBJECT)
 			SetScale(1, 1, 1);
 
 		parentID = id;
@@ -282,7 +312,7 @@ namespace WaveEngine
 		localModel = glm::rotate(localModel, glm::radians(rotation.z), glm::vec3(0, 0, 1));
 		localModel = glm::scale(localModel, glm::vec3(scale.x, scale.y, scale.z));
 
-		dirty = false;
+		UnDirty();
 	}
 
 	const glm::mat4& ECSTransform::GetModel() const
@@ -304,10 +334,35 @@ namespace WaveEngine
 			if (child)
 				child->MarkDirty();
 		}
+
+		if (parentID != WaveObject::NULL_OBJECT)
+		{
+			ECSTransform* parent = ServiceProvider::Instance().Get<ComponentRegistry>()->TryGet<ECSTransform>(parentID);
+
+			if (parent)
+				parent->MarkDirty();
+		}
+	}
+
+	void ECSTransform::UnDirty()
+	{
+		dirty = false;
+		wasDirty = true;
+	}
+
+	void ECSTransform::ClearDirtFlags()
+	{
+		dirty = false;
+		wasDirty = false;
 	}
 
 	const bool ECSTransform::IsDirty() const
 	{
 		return dirty;
+	}
+
+	const bool ECSTransform::WasDirty() const
+	{
+		return wasDirty;
 	}
 }
