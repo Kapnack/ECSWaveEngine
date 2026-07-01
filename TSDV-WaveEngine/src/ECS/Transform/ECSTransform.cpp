@@ -205,7 +205,7 @@ namespace WaveEngine
 		glm::vec3 pos(position.x, position.y, position.z);
 		glm::vec3 tgt(target.x, target.y, target.z);
 
-		glm::vec3 forward = glm::normalize(tgt -pos);
+		glm::vec3 forward = glm::normalize(tgt - pos);
 
 		glm::quat rot = glm::quatLookAt(forward, glm::vec3(0, 1, 0));
 
@@ -286,6 +286,11 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(children[index]);
 	}
 
+	WaveObject& ECSTransform::GetParent()
+	{
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(parentID);
+	}
+
 	void ECSTransform::SetParent(unsigned int id)
 	{
 		if (id != WaveObject::NULL_OBJECT)
@@ -326,6 +331,7 @@ namespace WaveEngine
 			return;
 
 		dirty = true;
+		MarkHasChildDirty();
 
 		for (int childID : children)
 		{
@@ -340,20 +346,32 @@ namespace WaveEngine
 			ECSTransform* parent = ServiceProvider::Instance().Get<ComponentRegistry>()->TryGet<ECSTransform>(parentID);
 
 			if (parent)
-				parent->MarkDirty();
+				parent->HasChildDirty();
 		}
+	}
+
+	void ECSTransform::MarkHasChildDirty()
+	{
+		if (hasChildDirty)
+			return;
+
+		hasChildDirty = true;
+
+		if (parentID == WaveObject::NULL_OBJECT)
+			return;
+
+		GetParent().GetTransform().MarkHasChildDirty();
 	}
 
 	void ECSTransform::UnDirty()
 	{
 		dirty = false;
-		wasDirty = true;
 	}
 
 	void ECSTransform::ClearDirtFlags()
 	{
-		dirty = false;
-		wasDirty = false;
+		UnDirty();
+		UnMarkChildDirty();
 	}
 
 	const bool ECSTransform::IsDirty() const
@@ -361,8 +379,13 @@ namespace WaveEngine
 		return dirty;
 	}
 
-	const bool ECSTransform::WasDirty() const
+	const bool ECSTransform::HasChildDirty() const
 	{
-		return wasDirty;
+		return hasChildDirty;
+	}
+
+	void ECSTransform::UnMarkChildDirty()
+	{
+		hasChildDirty = false;
 	}
 }
