@@ -29,7 +29,7 @@ namespace WaveEngine
 		unsigned int vs = CompileShader(vertexShader, GL_VERTEX_SHADER);
 		unsigned int fs = CompileShader(fragmentShader, GL_FRAGMENT_SHADER);
 
-		if (vs == 0 || fs == 0)
+		if (vs == NULL || fs == NULL)
 			return Material::NULL_MATERIAL;
 
 		unsigned int gpuID = glCreateProgram();
@@ -130,7 +130,7 @@ namespace WaveEngine
 
 			glDeleteShader(id);
 
-			return 0;
+			return NULL;
 		}
 
 		return id;
