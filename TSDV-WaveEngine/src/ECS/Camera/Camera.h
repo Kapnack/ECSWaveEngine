@@ -1,12 +1,21 @@
 #pragma once
 
+#include <glm/fwd.hpp>
+
 #include "Export.h"
-#include "Window/Window.h"
-#include "ECS/Component/Component.h"
 #include "ECS/Transform/ECSTransform.h"
+#include "ECS/Component/Component.h"
+#include "BoundingBox/BoundingBox.h"
+#include "Window/Window.h"
 
 namespace WaveEngine
 {
+
+	struct Frustum
+	{
+		glm::vec4 planes[6];
+	};
+
 	class EntityManager;
 	class EntityFactory;
 	class Renderer;
@@ -30,6 +39,8 @@ namespace WaveEngine
 
 		bool orthografic = false;
 
+		Frustum frustum;
+
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 
@@ -47,6 +58,11 @@ namespace WaveEngine
 		glm::mat4 GetProjection() const;
 
 		void CalculateMatrixes();
+
+		Frustum GetFrustum() const;
+
+		void ExtractFrustumPlanes();
+		bool IsInsideFrustum(const BoundingBox& box) const;
 
 		Camera(const unsigned& ID);
 		WAVEEXPORT	Camera();
