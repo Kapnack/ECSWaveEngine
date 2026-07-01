@@ -8,6 +8,11 @@
 #include "ECS/Mesh/MeshID.h"
 #include "ECS/MaterialID.h"
 #include "ECS/WaveObject/WaveObject.h"
+#include "Material/MaterialFactory.h"
+#include "Material/Material.h"
+#include "FileReader/FileReader.h"
+#include "WaveMath/Vector4/Vector4.h"
+#include "BoundingBox/BoundingBox.h"
 
 #define MAX_INSTANCES 1000
 
@@ -54,6 +59,16 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<ComponentRegistry>();
 	}
 
+	MaterialFactory* Renderer::GetMaterialFactory()
+	{
+		return ServiceProvider::Instance().Get<MaterialFactory>();
+	}
+
+	FileReader* Renderer::GetFileReader()
+	{
+		return ServiceProvider::Instance().Get<FileReader>();
+	}
+
 	void Renderer::Init()
 	{
 		glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
@@ -65,6 +80,8 @@ namespace WaveEngine
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glDisable(GL_CULL_FACE);
+
+		debugMaterialID = GetMaterialFactory()->CreateMaterial("WireFrame", GetFileReader()->ReadFile("Shaders/WireFrame/WireFrame.vert"), GetFileReader()->ReadFile("Shaders/WireFrame/WireFrame.frag"));
 	}
 
 	const unsigned int Renderer::ReturnWorkingMaterial(const unsigned int& materialIDToTry, const unsigned int& materialIDfallBack)
@@ -136,6 +153,78 @@ namespace WaveEngine
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertexSize * sizeof(VertexData), vertex);
+	}
+
+	void Renderer::SubmitWireBox(const BoundingBox& box, const Color& color)
+	{
+		debugBoxes.push_back({ box, color });
+	}
+
+	void Renderer::DrawWireBoxImmediate(const BoundingBox& box, const Color& color)
+	{
+		glm::vec3 min(box.GetMin().x, box.GetMin().y, box.GetMin().z);
+		glm::vec3 max(box.GetMax().x, box.GetMax().y, box.GetMax().z);
+
+		std::vector<glm::vec3> vertices =
+		{
+			{ min.x, min.y, min.z },
+			{ max.x, min.y, min.z },
+			{ max.x, min.y, max.z },
+			{ min.x, min.y, max.z },
+			{ min.x, max.y, min.z },
+			{ max.x, max.y, min.z },
+			{ max.x, max.y, max.z },
+			{ min.x, max.y, max.z }
+		};
+
+		const GLuint indices[] = {
+			0, 1, 1, 2, 2, 3, 3, 0, // Bottom face
+			4, 5, 5, 6, 6, 7, 7, 4, // Top face
+			0, 4, 1, 5, 2, 6, 3, 7  // Vertical edges
+		};
+
+		GLuint VAO, VBO, EBO;
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
+		glGenBuffers(1, &EBO);
+
+		glBindVertexArray(VAO);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		Camera& camera = GetComponentRegistry()->GetComponentStorage<Camera>().GetFirst();
+		Material* mat = GetMaterialManager()->GetMaterial(debugMaterialID);
+
+		if (!mat)
+		{
+			glBindVertexArray(0);
+			glDeleteVertexArrays(1, &VAO);
+			glDeleteBuffers(1, &VBO);
+			glDeleteBuffers(1, &EBO);
+			return;
+		}
+
+		mat->Bind();
+		mat->SetMat4("uView", camera.GetView());
+		mat->SetMat4("uProj", camera.GetProjection());
+		mat->SetMat4("uModel", glm::mat4(1.0f));
+		mat->SetColor(color);
+
+		glDrawElements(GL_LINES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+
+		mat->UnBind();
+
+		glBindVertexArray(0);
+		glDeleteVertexArrays(1, &VAO);
+		glDeleteBuffers(1, &VBO);
+		glDeleteBuffers(1, &EBO);
 	}
 
 	void Renderer::DeleteBuffers(unsigned int& VAO, unsigned int& VBO, unsigned int& EBO)
@@ -313,6 +402,17 @@ namespace WaveEngine
 
 			batch.instances.clear();
 		}
+	}
+
+	void Renderer::FlushDebug()
+	{
+		//glDisable(GL_DEPTH_TEST);
+
+		for (std::pair<BoundingBox, Color> pair : debugBoxes)
+			DrawWireBoxImmediate(pair.first, pair.second);
+
+		//glEnable(GL_DEPTH_TEST);
+		debugBoxes.clear();
 	}
 
 	void Renderer::Unload()

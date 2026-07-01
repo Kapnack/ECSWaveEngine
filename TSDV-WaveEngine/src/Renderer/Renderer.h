@@ -17,6 +17,13 @@
 #include "ECS/Mesh/MeshID.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "WaveMath/Vector3/Vector3.h"
+#include "BoundingBox/BoundingBox.h"
+#include "WaveMath/Vector4/Vector4.h"
+#include "Material/Material.h"
+#include "FileReader/FileReader.h"
+#include "Material/MaterialFactory.h"
+#include "Material/Color/Color.h"
+#include <utility>
 
 using namespace std;
 
@@ -101,8 +108,12 @@ namespace WaveEngine
 
 		unordered_map<size_t, RenderData> batching;
 
+		vector<pair<BoundingBox, Color>> debugBoxes;
+
 		unsigned int drawCalls = 0;
 		unsigned int batchCalls = 0;
+
+		unsigned int debugMaterialID = Material::NULL_MATERIAL;
 
 		void Init();
 		void Unload();
@@ -120,6 +131,10 @@ namespace WaveEngine
 		void UpdateBuffer(VertexData* vertex, int vertexSize, unsigned& VBO);
 
 		ComponentRegistry* GetComponentRegistry();
+
+		MaterialFactory* GetMaterialFactory();
+
+		FileReader* GetFileReader();
 
 	public:
 
@@ -147,6 +162,9 @@ namespace WaveEngine
 
 		void UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned& VBO);
 
+		void SubmitWireBox(const BoundingBox& box, const Color& color = Color::Red());
+		void DrawWireBoxImmediate(const BoundingBox& box, const Color& color);
+
 		void Clear();
 
 		unsigned int GetDrawCalls() const;
@@ -154,6 +172,7 @@ namespace WaveEngine
 
 		void Submit(const ECSTransform& transform, const MeshID& meshComp, const MeshRenderer& matComp);
 		void Flush();
+		void FlushDebug();
 	};
 }
 
