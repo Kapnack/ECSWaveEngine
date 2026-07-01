@@ -279,6 +279,8 @@ namespace WaveEngine
 
 		camera->CalculateMatrixes();
 
+		meshLogic.Update();
+
 		drawLogic.Update();
 
 		imGui->Update();
@@ -288,6 +290,7 @@ namespace WaveEngine
 	{
 		GetRenderer()->Clear();
 		GetRenderer()->Flush();
+		GetRenderer()->FlushDebug();
 		imGui->Draw();
 	}
 
