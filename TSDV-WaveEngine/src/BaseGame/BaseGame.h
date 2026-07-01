@@ -39,6 +39,7 @@ namespace WaveEngine
 
 		DrawLogic drawLogic;
 		TransformLogic transformLogic;
+		MeshLogic meshLogic;
 
 		ImGuiClass* imGui;
 
