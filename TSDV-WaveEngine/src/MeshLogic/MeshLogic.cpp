@@ -56,10 +56,10 @@ namespace WaveEngine
 		{
 			ECSTransform& transform = pair.second->GetTransform();
 
-			if (transform.GetParent() != WaveObject::NULL_OBJECT)
+			if (transform.GetParentID() != WaveObject::NULL_OBJECT)
 				continue;
 
-			if (transform.WasDirty())
+			if (transform.HasChildDirty())
 				UpdateBoundingBox(*pair.second);
 
 			SubmitBoundingBox(*pair.second);
