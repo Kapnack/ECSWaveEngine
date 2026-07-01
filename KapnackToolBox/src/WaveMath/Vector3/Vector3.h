@@ -48,6 +48,8 @@ WAVEEXPORT struct Vector3 final
 	WAVEEXPORT static Vector3 Foward();
 	WAVEEXPORT static Vector3 Back();
 	WAVEEXPORT static Vector3 Zero();
+	WAVEEXPORT static Vector3 Max();
+	WAVEEXPORT static Vector3 Min();
 
 	WAVEEXPORT static float Angle(const Vector3& from, const Vector3& to);
 	WAVEEXPORT static Vector3 ClampMagnitude(const Vector3& vector, const float& maxLength);

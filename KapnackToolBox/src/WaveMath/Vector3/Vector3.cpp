@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include "Wavemath/Vector2/Vector2.h"
+#include <limits>
 
 const float Vector3::epsilon = 1e-05f;
 
@@ -181,6 +182,18 @@ Vector3 Vector3::Back()
 Vector3 Vector3::Zero()
 {
 	return Vector3(0.0f, 0.0f, 0.0f);
+}
+
+Vector3 Vector3::Max()
+{
+	const float maxFloat = std::numeric_limits<float>::max();
+	return Vector3(maxFloat, maxFloat, maxFloat);
+}
+
+Vector3 Vector3::Min()
+{
+	const float minFloat = std::numeric_limits<float>::min();
+	return Vector3(minFloat, minFloat, minFloat);
 }
 
 float Vector3::Angle(const Vector3& from, const Vector3& to)
