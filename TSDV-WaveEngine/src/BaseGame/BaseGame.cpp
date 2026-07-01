@@ -271,7 +271,6 @@ namespace WaveEngine
 			}
 
 			cameraObject->GetTransform().LookAt(transform.GetPosition());
-			cameraObject->GetTransform().SetPosition(transform.GetPosition() + Vector3::Foward() * 100.0f);
 		}
 #pragma endregion
 
