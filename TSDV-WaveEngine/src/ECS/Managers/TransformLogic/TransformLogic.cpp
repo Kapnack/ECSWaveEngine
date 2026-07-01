@@ -39,7 +39,7 @@ namespace WaveEngine
 
 		for (ECSTransform& transform : transformComponents)
 		{
-			if (transform.GetParent() != WaveObject::NULL_OBJECT)
+			if (transform.GetParentID() != WaveObject::NULL_OBJECT)
 				continue;
 
 			UpdateHierarchy(transforStorage, transform, glm::mat4(1.0f));
