@@ -92,7 +92,6 @@ namespace WaveEngine
 				box.Encapsulate(UpdateBoundingBox(childObj));
 			}
 
-			// Also fold in this node's own mesh, if it happens to have one.
 			box = EncapsulateMeshVerts(waveObject, box);
 		}
 
