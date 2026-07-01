@@ -158,6 +158,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\BoundingBox\BoundingBox.cpp" />
     <ClCompile Include="src\ECS\Managers\Draw.cpp" />
     <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.cpp" />
     <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.cpp" />
@@ -166,6 +167,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\WaveObject\WaveObjectFactory.cpp" />
     <ClCompile Include="src\ECS\WaveObject\WaveObjectRegistry.cpp" />
     <ClCompile Include="src\ImGuiClass\ImGuiClass.cpp" />
+    <ClCompile Include="src\MeshLogic\MeshLogic.cpp" />
     <ClCompile Include="src\Mesh\MeshManager\MeshManager.cpp" />
     <ClCompile Include="src\Mesh\MeshFactory\MeshFactory.cpp" />
     <ClCompile Include="src\Mesh\Mesh.cpp" />
@@ -195,6 +197,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\Managers\TransformLogic\TransformLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BoundingBox\BoundingBox.h" />
     <ClInclude Include="src\ECS\Events\RequestAddComponent.h" />
     <ClInclude Include="src\ECS\Managers\Draw.h" />
     <ClInclude Include="src\ECS\CompontRegistry\ComponentRegistry.h" />
@@ -208,6 +211,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\ECS\WaveObject\WaveObjectRegistry.h" />
     <ClInclude Include="src\ImGuiClass\ImGuiClass.h" />
     <ClInclude Include="src\Material\Color\Color.h" />
+    <ClInclude Include="src\MeshLogic\MeshLogic.h" />
     <ClInclude Include="src\Mesh\MeshManager\MeshManager.h" />
     <ClInclude Include="src\Mesh\MeshFactory\MeshFactory.h" />
     <ClInclude Include="src\Mesh\Mesh.h" />
