@@ -120,6 +120,12 @@
     <ClCompile Include="src\ECS\WaveObject\WaveObjectRegistry.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\BoundingBox\BoundingBox.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshLogic\MeshLogic.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Window\Window.h">
@@ -252,6 +258,12 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\ECS\WaveObject\WaveObjectRegistry.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BoundingBox\BoundingBox.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshLogic\MeshLogic.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
