@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ServiceProvider/Service.h"
-
-#include "Mesh/Mesh.h"
 #include <string_view>
-
 #include <vector>
 #include <unordered_map>
+#include <string>
+
+#include "ServiceProvider/Service.h"
+#include "Mesh/Mesh.h"
 
 using namespace std;
 
@@ -34,6 +34,8 @@ namespace WaveEngine
 		Mesh* GetMesh(const string_view name);
 
 		unsigned int GetMeshID(const string_view name);
+
+		vector<Mesh*>& GetMeshes();
 
 		Mesh& Get(const unsigned int meshID);
 	};
