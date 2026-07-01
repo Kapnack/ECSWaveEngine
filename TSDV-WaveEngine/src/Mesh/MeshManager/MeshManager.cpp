@@ -36,6 +36,11 @@ namespace WaveEngine
 		return idByName.at(string(name));
 	}
 
+	vector<Mesh*>& MeshManager::GetMeshes()
+	{
+		return meshByID;
+	}
+
 	Mesh& MeshManager::Get(const unsigned int meshID)
 	{
 		return *meshByID.at(meshID);
