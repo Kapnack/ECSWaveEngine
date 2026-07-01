@@ -30,6 +30,8 @@
       <FileType>Document</FileType>
     </None>
     <None Include="Shaders\ECS\newShader.vert" />
+    <None Include="Shaders\WireFrame\WireFrame.frag" />
+    <None Include="Shaders\WireFrame\WireFrame.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
