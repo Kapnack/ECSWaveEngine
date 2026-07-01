@@ -30,5 +30,7 @@
   <ItemGroup>
     <None Include="Shaders\ECS\newShader.vert" />
     <None Include="Shaders\ECS\newShader.frag" />
+    <None Include="Shaders\WireFrame\WireFrame.vert" />
+    <None Include="Shaders\WireFrame\WireFrame.frag" />
   </ItemGroup>
 </Project>
