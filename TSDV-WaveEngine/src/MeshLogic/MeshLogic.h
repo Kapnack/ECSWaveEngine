@@ -18,10 +18,6 @@ namespace WaveEngine
 		ComponentRegistry* GetComponentRegistry();
 		WaveObjectRegistry* GetWaveObjectRegistry();
 
-		Renderer* GetRenderer();
-
-		void SubmitBoundingBox(WaveObject& waveObject);
-
 		BoundingBox UpdateBoundingBox(WaveObject& waveObject);
 		BoundingBox EncapsulateMeshVerts(WaveObject& waveObject, BoundingBox box);
 

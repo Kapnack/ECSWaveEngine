@@ -31,25 +31,6 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
 	}
 
-	Renderer* MeshLogic::GetRenderer()
-	{
-		return ServiceProvider::Instance().Get<Renderer>();
-	}
-
-	void MeshLogic::SubmitBoundingBox(WaveObject& waveObject)
-	{
-		MeshID* meshID = waveObject.TryGetComponent<MeshID>();
-
-		if (meshID && !meshID->boundingBox.IsEmpty())
-			GetRenderer()->SubmitWireBox(meshID->boundingBox);
-
-		for (int childID : waveObject.GetTransform().GetChildren())
-		{
-			WaveObject& child = GetWaveObjectRegistry()->GetWaveObject(childID);
-			SubmitBoundingBox(child);
-		}
-	}
-
 	void MeshLogic::Update()
 	{
 		for (std::pair<const unsigned int, WaveObject*> pair : GetWaveObjectRegistry()->GetWaveObjects())
@@ -61,8 +42,6 @@ namespace WaveEngine
 
 			if (transform.HasChildDirty())
 				UpdateBoundingBox(*pair.second);
-
-			SubmitBoundingBox(*pair.second);
 		}
 	}
 
@@ -103,17 +82,10 @@ namespace WaveEngine
 
 		if (children.empty())
 		{
-			// Leaf node: box is just this object's own mesh, if any.
 			box = EncapsulateMeshVerts(waveObject, box);
 		}
 		else
 		{
-			// Internal node: merge every child's box first, regardless of
-			// whether the child itself has a MeshID component. This is the
-			// fix - previously children without a MeshID were skipped
-			// entirely, which left parent boxes stuck at Reset() (huge boxes)
-			// whenever any group/empty node sat between a parent and its
-			// mesh-bearing descendants.
 			for (unsigned int childID : children)
 			{
 				WaveObject& childObj = GetWaveObjectRegistry()->GetWaveObject(childID);
@@ -126,24 +98,9 @@ namespace WaveEngine
 
 		transform.ClearDirtFlags();
 
-		// Only store/submit the box on objects that actually carry a MeshID
-		// component (i.e. objects that are meant to track a bounding box).
 		if (meshID)
-		{
 			meshID->boundingBox = box;
 
-			if (!box.IsEmpty())
-			{
-				printf("Submitting box min(%.2f %.2f %.2f) max(%.2f %.2f %.2f)\n",
-					box.GetMin().x, box.GetMin().y, box.GetMin().z,
-					box.GetMax().x, box.GetMax().y, box.GetMax().z);
-
-				GetRenderer()->SubmitWireBox(box);
-			}
-		}
-
-		// Always return the computed box up the call stack so parents can
-		// merge it, even if this node has no MeshID component to persist it.
 		return box;
 	}
 }
