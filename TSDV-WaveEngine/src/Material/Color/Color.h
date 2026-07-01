@@ -76,4 +76,9 @@ struct Color
 	{
 		return Color(0.0f, 0.0f, 1.0f);
 	}
+
+	static Color Yellow()
+	{
+		return Color(1.0f, 1.0f, 0.0f);
+	}
 };
