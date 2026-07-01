@@ -8,6 +8,7 @@
 #include "ECS/ComponentContainer/ComponentContainer.h"
 
 #include <vector>
+#include "ECS/Camera/Camera.h"
 
 namespace WaveEngine
 {
@@ -32,6 +33,8 @@ namespace WaveEngine
 		ComponentContainer<MeshID>& meshIDRendererStorage = GetComponentRegistry()->GetComponentStorage<MeshID>();
 		ComponentContainer<ECSTransform>& transfromStorage = GetComponentRegistry()->GetComponentStorage<ECSTransform>();
 
+		Camera& camera = GetComponentRegistry()->GetComponentStorage<Camera>().GetFirst();
+
 		for (size_t i = 0; i < components.size(); ++i)
 		{
 			int entityID = entities[i];
@@ -41,6 +44,9 @@ namespace WaveEngine
 			const ECSTransform* transform = transfromStorage.TryGet(entityID);
 
 			if (!meshComp || !transform)
+				continue;
+
+			if (!camera.IsInsideFrustum(meshComp->boundingBox))
 				continue;
 
 			GetRenderer()->Submit(*transform, *meshComp, meshRenderer);
