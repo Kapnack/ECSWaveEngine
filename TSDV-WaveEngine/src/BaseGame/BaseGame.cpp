@@ -57,33 +57,24 @@ namespace WaveEngine
 
 		const vector<string> modelsPaths
 		{
-			"Models/gold_headed_buddha_-_photogrammetry_test_2019.glb",
-			"Models/Cat/concrete_cat_statue_1k.fbx",
-			"Models/Statue/marble_bust_01_1k.fbx",
-			"Models/TanqueDePrueba.fbx",
+			//"Models/gold_headed_buddha_-_photogrammetry_test_2019.glb",
+			//"Models/Cat/concrete_cat_statue_1k.fbx",
+			//"Models/Statue/marble_bust_01_1k.fbx",
+			"Models/Tank.fbx",
 			"Models/Cube.fbx"
 		};
 
 		const unsigned int defaultSize = 32;
 
 		ModelImporter modelImporter;
-		for (int i = 0; i < modelsPaths.size() - 1; ++i)
-		{
-			modelImporter.LoadScene(modelsPaths.at(i));
 
-			WaveObject& waveObject = *modelImporter.IntantiateModel();
+		modelImporter.LoadScene(modelsPaths.at(0));
+		tank = modelImporter.IntantiateModel();
 
-			waveObject.GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f * i));
-			waveObject.GetTransform().SetScale(Vector3::One() * defaultSize);
-
-			if (i != 0)
-				waveObject.GetTransform().Rotate(Vector3::Left() * 90);
-			else
-				waveObject.GetTransform().Rotate(Vector3::Up() * 135);
-		}
+		tank->GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f));
+		tank->GetTransform().SetScale(Vector3::One() * defaultSize);
 
 		cameraObject = &GetWaveObjectFactory()->Instantiate();
-		cameraObject->GetTransform().SetRotation(Vector3::Y() * 180.0f);
 		camera = &cameraObject->AddComponent<Camera>();
 		camera->SetFarPlane(1000000.0f);
 		camera->SetNearPlane(0.1f);
@@ -94,7 +85,7 @@ namespace WaveEngine
 
 		WaveObject* waveObject = modelImporter.IntantiateModel();
 
-		waveObject->GetTransform().SetPosition(Vector3::Down() * 32.0f);
+		waveObject->GetTransform().SetPosition(Vector3::Down() * 150.000f);
 		waveObject->GetTransform().Scale((Vector3::X() + Vector3::Z()) * 100.0f);
 
 #pragma endregion
@@ -189,38 +180,39 @@ namespace WaveEngine
 
 #pragma region UpdateCameraPositionLogic
 		const float camereSpeed = 180.0f * GetDeltaTime();
-		ECSTransform& transform = GetWaveObjectRegistry()->GetWaveObject(1).GetTransform();
+		ECSTransform& transform = tank->GetTransform();
 		ECSTransform& cameraTransform = cameraObject->GetTransform();
 
+		
 		if (!ImGuiClass::thirdPersonCamera)
 		{
 			if (GetInput()->IsKeyPressed(Keys::W))
-				cameraTransform.Translate(Vector3::Foward() * camereSpeed);
-
+				cameraTransform.Translate(cameraTransform.GetForward() * camereSpeed);
+		
 			if (GetInput()->IsKeyPressed(Keys::S))
-				cameraTransform.Translate(Vector3::Back() * camereSpeed);
-
+				cameraTransform.Translate(-cameraTransform.GetForward() * camereSpeed);
+		
 			if (GetInput()->IsKeyPressed(Keys::A))
-				cameraTransform.Translate(Vector3::Left() * camereSpeed);
-
+				cameraTransform.Translate(-cameraTransform.GetRight() * camereSpeed);
+		
 			if (GetInput()->IsKeyPressed(Keys::D))
-				cameraTransform.Translate(Vector3::Right() * camereSpeed);
-
+				cameraTransform.Translate(cameraTransform.GetRight() * camereSpeed);
+		
 			if (GetInput()->IsKeyPressed(Keys::SPACE))
 				cameraTransform.Translate(Vector3::Up() * camereSpeed);
-
+		
 			if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
 				cameraTransform.Translate(Vector3::Down() * camereSpeed);
-
+		
 			if (GetInput()->IsKeyPressed(Keys::Q))
 				cameraTransform.Rotate(Vector3::Up() * camereSpeed);
-
+		
 			if (GetInput()->IsKeyPressed(Keys::E))
 				cameraTransform.Rotate(Vector3::Down() * camereSpeed);
-
+		
 			if (GetInput()->IsKeyPressed(Keys::Z))
 				cameraTransform.Rotate(Vector3::Left() * camereSpeed);
-
+		
 			if (GetInput()->IsKeyPressed(Keys::X))
 				cameraTransform.Rotate(Vector3::Right() * camereSpeed);
 		}
@@ -228,21 +220,38 @@ namespace WaveEngine
 		{
 			if (GetInput()->IsKeyPressed(Keys::W))
 			{
-				transform.Translate(Vector3::Up() * camereSpeed);
+				transform.Rotate(Vector3::Up() * camereSpeed);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::A))
 			{
-				transform.Translate(Vector3::Left() * camereSpeed);
+				transform.Rotate(Vector3::Left() * camereSpeed);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::S))
 			{
-				transform.Translate(Vector3::Down() * camereSpeed);
+				transform.Rotate(Vector3::Down() * camereSpeed);
 			}
 			else if (GetInput()->IsKeyPressed(Keys::D))
 			{
-				transform.Translate(Vector3::Right() * camereSpeed);
+				transform.Rotate(Vector3::Right() * camereSpeed);
 			}
 
+			if (GetInput()->IsKeyPressed(Keys::UP))
+			{
+				transform.Scale(Vector3::Up() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::LEFT))
+			{
+				transform.Scale(Vector3::Left() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::DOWN))
+			{
+				transform.Scale(Vector3::Down() * camereSpeed);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::RIGHT))
+			{
+				transform.Scale(Vector3::Right() * camereSpeed);
+			}
+		
 			if (GetInput()->IsKeyPressed(Keys::Z))
 			{
 				transform.Rotate(Vector3::Left() * camereSpeed);
@@ -251,7 +260,7 @@ namespace WaveEngine
 			{
 				transform.Rotate(Vector3::Right() * camereSpeed);
 			}
-
+		
 			if (GetInput()->IsKeyPressed(Keys::Q))
 			{
 				transform.Rotate(Vector3::Up() * camereSpeed);
@@ -260,7 +269,7 @@ namespace WaveEngine
 			{
 				transform.Rotate(Vector3::Down() * camereSpeed);
 			}
-
+		
 			if (GetInput()->IsKeyPressed(Keys::SPACE))
 			{
 				transform.Translate(Vector3::Foward() * camereSpeed);
@@ -268,6 +277,42 @@ namespace WaveEngine
 			else if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
 			{
 				transform.Translate(Vector3::Back() * camereSpeed);
+			}
+		
+			ECSTransform& childsTransform = transform.GetChild(0).GetTransform().GetChild(0).GetTransform();
+			const int dived = 3;
+			if (GetInput()->IsKeyPressed(Keys::I))
+			{
+				childsTransform.Rotate(Vector3::Up() / dived);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::J))
+			{
+				childsTransform.Rotate(Vector3::Up() / dived);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::K))
+			{
+				childsTransform.Rotate(Vector3::Up() / dived);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::L))
+			{
+				childsTransform.Rotate(Vector3::Up() / dived);
+			}
+
+			if (GetInput()->IsKeyPressed(Keys::T))
+			{
+				childsTransform.Scale(Vector3::Up() / dived);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::F))
+			{
+				childsTransform.Scale(Vector3::Up() / dived);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::G))
+			{
+				childsTransform.Scale(Vector3::Up() / dived);
+			}
+			else if (GetInput()->IsKeyPressed(Keys::H))
+			{
+				childsTransform.Scale(Vector3::Up() / dived);
 			}
 
 			cameraObject->GetTransform().LookAt(transform.GetPosition());

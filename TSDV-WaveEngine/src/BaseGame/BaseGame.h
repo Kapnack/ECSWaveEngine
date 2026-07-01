@@ -37,6 +37,8 @@ namespace WaveEngine
 
 		Renderer* GetRenderer();
 
+		WaveObject* tank;
+
 		DrawLogic drawLogic;
 		TransformLogic transformLogic;
 		MeshLogic meshLogic;
