@@ -22,8 +22,8 @@ namespace WaveEngine
 		Vector3 previousPosition;
 		Vector3 position;
 
-		bool dirty = false;
-		bool wasDirty = false;
+		bool dirty = true;
+		bool hasChildDirty = true;
 
 		friend class Renderer;
 		friend class TransformLogic;
@@ -44,12 +44,14 @@ namespace WaveEngine
 		const glm::mat4& GetModel() const;
 
 		void MarkDirty();
+		void MarkHasChildDirty();
 		void UnDirty();
 
 		void ClearDirtFlags();
 
 		const bool IsDirty() const;
-		const bool WasDirty() const;
+		const bool HasChildDirty() const;
+		void UnMarkChildDirty();
 
 		glm::vec3 GetForwardGLM(const glm::mat4& transformMatrix) const
 		{
@@ -108,7 +110,7 @@ namespace WaveEngine
 		WAVEEXPORT void Rotate(const Vector2& vector);
 		WAVEEXPORT void Rotate(const float& x, const float& y);
 		WAVEEXPORT virtual void Rotate(const float& x, const float& y, const float& z);
-	
+
 		WAVEEXPORT Vector3 WorldToLocal(const Vector3& worldPoint) const;
 
 		WAVEEXPORT void LookAt(const Vector3& vector);
@@ -129,10 +131,12 @@ namespace WaveEngine
 
 		WAVEEXPORT void SetGlobalModel(const glm::mat4& m);
 
-		unsigned int GetParent() const { return parentID; }
+		unsigned int GetParentID() const { return parentID; }
 		const vector<int>& GetChildren() const { return children; }
 
 		WaveObject& GetChild(const unsigned int index);
+
+		WaveObject& GetParent();
 
 		void SetParent(unsigned int id);
 		void AddChild(unsigned int id);
