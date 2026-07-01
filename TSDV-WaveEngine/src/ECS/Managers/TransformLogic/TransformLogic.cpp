@@ -5,6 +5,7 @@
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "ECS/ComponentContainer/ComponentContainer.h"
+#include "ECS/WaveObject/WaveObject.h"
 
 namespace WaveEngine
 {
@@ -20,48 +21,48 @@ namespace WaveEngine
 	{
 	}
 
-    void TransformLogic::Update()
-    {
-        ComponentContainer<ECSTransform>& transforStorage =
-            GetComponentRegistry()->CreateOrGetComponentStorage<ECSTransform>();
+	void TransformLogic::Update()
+	{
+		ComponentContainer<ECSTransform>& transforStorage =
+			GetComponentRegistry()->CreateOrGetComponentStorage<ECSTransform>();
 
-        vector<ECSTransform>& transformComponents =
-            transforStorage.GetComponents();
+		vector<ECSTransform>& transformComponents =
+			transforStorage.GetComponents();
 
-        for (ECSTransform& transform : transformComponents)
-        {
-            if (!transform.IsDirty())
-                continue;
+		for (ECSTransform& transform : transformComponents)
+		{
+			if (!transform.IsDirty())
+				continue;
 
-            transform.CalculateTRS();
-        }
+			transform.CalculateTRS();
+		}
 
-        for (ECSTransform& transform : transformComponents)
-        {
-            if (transform.GetParent() == -1)
-            {
-                UpdateHierarchy(transforStorage, transform, glm::mat4(1.0f));
-            }
-        }
-    }
+		for (ECSTransform& transform : transformComponents)
+		{
+			if (transform.GetParent() != WaveObject::NULL_OBJECT)
+				continue;
 
-    void TransformLogic::UpdateHierarchy(ComponentContainer<ECSTransform>& storage,
-        ECSTransform& transform,
-        const glm::mat4& parentMatrix)
-    {
-        glm::mat4 global = parentMatrix * transform.GetLocalModel();
+			UpdateHierarchy(transforStorage, transform, glm::mat4(1.0f));
+		}
+	}
 
-        transform.SetGlobalModel(global);
+	void TransformLogic::UpdateHierarchy(ComponentContainer<ECSTransform>& storage,
+		ECSTransform& transform,
+		const glm::mat4& parentMatrix)
+	{
+		glm::mat4 global = parentMatrix * transform.GetLocalModel();
 
-        for (unsigned int childID : transform.GetChildren())
-        {
-            ECSTransform* child = storage.TryGet(childID);
-            if (!child)
-                continue;
+		transform.SetGlobalModel(global);
 
-            UpdateHierarchy(storage, *child, global);
-        }
-    }
+		for (unsigned int childID : transform.GetChildren())
+		{
+			ECSTransform* child = storage.TryGet(childID);
+			if (!child)
+				continue;
+
+			UpdateHierarchy(storage, *child, global);
+		}
+	}
 
 	ComponentRegistry* TransformLogic::GetComponentRegistry()
 	{
