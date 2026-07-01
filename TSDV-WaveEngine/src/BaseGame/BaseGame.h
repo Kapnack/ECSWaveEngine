@@ -15,10 +15,11 @@
 #include <ImGuiClass/ImGuiClass.h>
 #include "../ECS/Managers/Draw.h"
 #include "ECS/Managers/TransformLogic/TransformLogic.h"
-#include <ECS/WaveObject/WaveObjectRegistry.h>
-#include <ECS/WaveObject/WaveObjectFactory.h>
-#include <ECS/Camera/Camera.h>
-#include <ECS/WaveObject/WaveObject.h>
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/WaveObject/WaveObjectFactory.h"
+#include "ECS/Camera/Camera.h"
+#include "ECS/WaveObject/WaveObject.h"
+#include "MeshLogic/MeshLogic.h"
 
 namespace WaveEngine
 {
