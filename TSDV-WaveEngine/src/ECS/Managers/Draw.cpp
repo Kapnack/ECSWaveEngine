@@ -50,6 +50,8 @@ namespace WaveEngine
 				continue;
 
 			GetRenderer()->Submit(*transform, *meshComp, meshRenderer);
+
+			GetRenderer()->SubmitWireBox(meshComp->boundingBox, Color::Yellow());
 		}
 	}
 
