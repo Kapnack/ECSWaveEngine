@@ -43,7 +43,7 @@ namespace WaveEngine
 		}
 
 		template<typename T>
-		T& GetComponent()
+		T& GetComponent() const
 		{
 			return GetComponentRegistry()->GetComponent<T>(ID);
 		}
