@@ -221,7 +221,7 @@ namespace WaveEngine
 		{
 			type_index eventType = typeid(TEvent);
 
-			queue<Event*>& queue = events.at(eventType);
+			queue<Event*>& queue = events[eventType];
 
 			TEvent* event;
 
