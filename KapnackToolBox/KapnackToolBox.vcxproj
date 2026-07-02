@@ -149,7 +149,6 @@
     <ClCompile Include="src\ServiceProvider\Service.cpp" />
     <ClCompile Include="src\WaveMath\Matrix4x4\Matrix4x4.cpp" />
     <ClCompile Include="src\WaveMath\Quaternion\Quaternion.cpp" />
-    <ClCompile Include="src\WaveMath\Transform\Transform.cpp" />
     <ClCompile Include="src\WaveMath\Vector2\Vector2.cpp" />
     <ClCompile Include="src\WaveMath\Vector3\Vector3.cpp" />
     <ClCompile Include="src\WaveMath\Vector4\Vector4.cpp" />
@@ -163,7 +162,6 @@
     <ClInclude Include="src\Singleton\Singleton.h" />
     <ClInclude Include="src\WaveMath\Matrix4x4\Matrix4x4.h" />
     <ClInclude Include="src\WaveMath\Quaternion\Quaternion.h" />
-    <ClInclude Include="src\WaveMath\Transform\Transform.h" />
     <ClInclude Include="src\WaveMath\Vector2\Vector2.h" />
     <ClInclude Include="src\WaveMath\Vector3\Vector3.h" />
     <ClInclude Include="src\WaveMath\Vector4\Vector4.h" />
