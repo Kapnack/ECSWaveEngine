@@ -5,17 +5,18 @@
 #include <assimp/Importer.hpp>
 #include <assimp/color4.h>
 #include <assimp/mesh.h>
+#include <assimp/material.h>
+#include <glm/gtc/quaternion.inl>
 
 #include "ServiceProvider/ServiceProvider.h"
 #include "VertexData.h"
-#include "Mesh/Mesh.h"
+#include "Material/Color/Color.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Vector2/Vector2.h"
-#include <Material/Material.h>
-#include <ECS/MaterialID.h>
-#include <ECS/Mesh/MeshID.h>
+#include "Material/Material.h"
+#include "ECS/MaterialID.h"
+#include "ECS/Mesh/MeshID.h"
 #include "ECS/Transform/ECSTransform.h"
-#include <glm/gtc/quaternion.hpp>
 
 namespace WaveEngine
 {
@@ -76,40 +77,6 @@ namespace WaveEngine
 			ProcessNode(node->mChildren[i], childObject);
 		}
 	}
-
-	//void ModelImporter::ProcessNode(aiNode* node, WaveObject& waveObject)
-	//{
-	//	std::cout << "Node: " << node->mName.C_Str()
-	//		<< " | Meshes: " << node->mNumMeshes
-	//		<< " | Children: " << node->mNumChildren
-	//		<< std::endl;
-	//
-	//	ApplyNodeTransform(waveObject.GetTransform(), node);
-	//
-	//	for (unsigned int i = 0; i < node->mNumMeshes; ++i)
-	//	{
-	//		aiMesh* mesh = pScene->mMeshes[node->mMeshes[i]];
-	//
-	//		WaveObject& meshObject = GetWaveObjectFactory()->Instantiate();
-	//
-	//		meshObject.SetName(mesh->mName.C_Str());
-	//
-	//		waveObject.GetTransform().AddChild(meshObject.GetID());
-	//		meshObject.GetTransform().SetParent(waveObject.GetID());
-	//
-	//		ProcessMesh(mesh, meshObject);
-	//	}
-	//
-	//	for (unsigned int i = 0; i < node->mNumChildren; i++)
-	//	{
-	//		WaveObject& childObject = GetWaveObjectFactory()->Instantiate();
-	//
-	//		waveObject.GetTransform().AddChild(childObject.GetID());
-	//		childObject.GetTransform().SetParent(waveObject.GetID());
-	//
-	//		ProcessNode(node->mChildren[i], childObject);
-	//	}
-	//}
 
 	void ModelImporter::ProcessMesh(aiMesh* mesh, WaveObject& meshWaveObject)
 	{
@@ -179,15 +146,9 @@ namespace WaveEngine
 		for (unsigned int i = 0; i < indices.size(); ++i)
 			indexBuffer[i] = indices[i];
 
-		unsigned int meshID = GetMeshFactory()->CreateMesh(
-			filename,
-			vertices,
-			mesh->mNumVertices,
-			indexBuffer,
-			indices.size()
-		);
+		unsigned int meshID = GetMeshFactory()->CreateMesh(filename, vertices, mesh->mNumVertices, indexBuffer, indices.size());
 
-		meshWaveObject.AddComponent<MeshID>().meshID = meshID;
+		meshWaveObject.GetComponent<MeshID>().meshID = meshID;
 
 		aiMaterial* material = pScene->mMaterials[mesh->mMaterialIndex];
 
