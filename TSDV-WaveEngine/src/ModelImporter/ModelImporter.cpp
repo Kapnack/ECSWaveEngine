@@ -1,11 +1,16 @@
 ﻿#include "ModelImporter.h"
 
+#include <iostream>
+#include <vector>
+
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <assimp/color4.h>
 #include <assimp/mesh.h>
 #include <assimp/material.h>
+#include <assimp/types.h>
+#include <assimp/texture.h>
 #include <glm/gtc/quaternion.hpp>
 
 #include "ServiceProvider/ServiceProvider.h"
@@ -17,6 +22,8 @@
 #include "ECS/MaterialID.h"
 #include "ECS/Mesh/MeshID.h"
 #include "ECS/Transform/ECSTransform.h"
+#include "ECS/WaveObject/WaveObject.h"
+#include "TextureImporter/Texture.h"
 
 namespace WaveEngine
 {
@@ -237,7 +244,6 @@ namespace WaveEngine
 
 	std::filesystem::path ModelImporter::FindTexture(const std::filesystem::path& modelDirectory, const std::string& textureName)
 	{
-		// Strip to just the filename in case Assimp gave a relative path
 		std::string filename = std::filesystem::path(textureName).filename().string();
 
 		for (auto& entry : std::filesystem::recursive_directory_iterator(modelDirectory))
@@ -249,7 +255,7 @@ namespace WaveEngine
 				return entry.path();
 		}
 
-		return {}; // not found
+		return "";
 	}
 
 	unsigned int ModelImporter::LoadMaterialTextures(aiMaterial* mat, aiTextureType type)
@@ -277,14 +283,12 @@ namespace WaveEngine
 
 				if (tex.mHeight == 0)
 				{
-					// Compressed (PNG, JPG, etc.)
 					textureID = GetTextureImporter()->LoadTextureFromMemory(
 						reinterpret_cast<const unsigned char*>(tex.pcData),
 						tex.mWidth);
 				}
 				else
 				{
-					// Raw ARGB8888 pixels
 					textureID = GetTextureImporter()->LoadTextureFromPixels(
 						reinterpret_cast<const unsigned char*>(tex.pcData),
 						tex.mWidth,
