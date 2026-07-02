@@ -102,7 +102,7 @@
     <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\ECS\Managers\Draw.cpp">
+    <ClCompile Include="src\ECS\Managers\DrawLogic.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\ImGuiClass\ImGuiClass.cpp">
@@ -233,7 +233,7 @@
     <ClInclude Include="src\ECS\Texture\TextureID.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\ECS\Managers\Draw.h">
+    <ClInclude Include="src\ECS\Managers\DrawLogic.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\ECS\MaterialID.h">
@@ -264,6 +264,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\MeshLogic\MeshLogic.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Transform\ObjectTransformDirtifyEvent.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
