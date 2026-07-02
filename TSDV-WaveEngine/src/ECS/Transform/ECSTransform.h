@@ -6,6 +6,7 @@
 #include "ECS/Component/Component.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Vector2/Vector2.h"
+#include "EventSystem/EventSystem.h"
 
 using namespace std;
 
@@ -22,8 +23,8 @@ namespace WaveEngine
 		Vector3 previousPosition;
 		Vector3 position;
 
-		bool dirty = true;
-		bool hasChildDirty = true;
+		bool dirty = false;
+		bool hasChildDirty = false;
 
 		friend class Renderer;
 		friend class TransformLogic;
@@ -52,6 +53,8 @@ namespace WaveEngine
 		const bool IsDirty() const;
 		const bool HasChildDirty() const;
 		void UnMarkChildDirty();
+
+		EventSystem* GetEventSystem();
 
 		glm::vec3 GetForwardGLM(const glm::mat4& transformMatrix) const
 		{
@@ -132,9 +135,10 @@ namespace WaveEngine
 		WAVEEXPORT void SetGlobalModel(const glm::mat4& m);
 
 		unsigned int GetParentID() const { return parentID; }
-		const vector<int>& GetChildren() const { return children; }
+		const vector<int>& GetChildsIDs() const { return children; }
 
 		WaveObject& GetChild(const unsigned int index);
+		vector<WaveObject*> GetChilds();
 
 		WaveObject& GetParent();
 
