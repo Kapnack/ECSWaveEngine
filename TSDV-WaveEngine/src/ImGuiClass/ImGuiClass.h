@@ -4,6 +4,7 @@
 #include "Input/Input.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "Material/MaterialManager.h"
+#include "Material/Color/Color.h"
 
 using namespace std;
 
