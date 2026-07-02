@@ -1,4 +1,6 @@
 #include "BoundingBox.h"
+
+#include <cmath>
 #include <cfloat>
 
 namespace WaveEngine
@@ -102,5 +104,12 @@ namespace WaveEngine
 	const Vector3& BoundingBox::GetMax() const
 	{
 		return max;
+	}
+
+	bool BoundingBox::Intersects(BoundingBox other) const
+	{
+		return std::abs(GetCenter().x - other.GetCenter().x) <= (GetSize().x + other.GetSize().x) * 0.5f &&
+			std::abs(GetCenter().y - other.GetSize().y) <= (GetSize().y + other.GetSize().y) * 0.5f &&
+			std::abs(GetCenter().z - other.GetCenter().z) <= (GetSize().z + other.GetSize().z) * 0.5f;
 	}
 }
