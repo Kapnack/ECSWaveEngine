@@ -1,14 +1,21 @@
 #pragma once
 
 #include "ECS/CompontRegistry/ComponentRegistry.h"
-#include <ECS/ComponentContainer/ComponentContainer.h>
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/Transform/ECSTransform.h"
+
 #include <glm/fwd.hpp>
-#include <ECS/Transform/ECSTransform.h>
 
 namespace WaveEngine
 {
 	class TransformLogic
 	{
+	private:
+
+		WaveObjectRegistry* GetWaveObjectRegistry();
+
+		void UpdateHierarchy(ECSTransform& transform, const glm::mat4& parentMatrix = glm::mat4(1.0f));
+
 	public:
 
 		TransformLogic();
@@ -20,9 +27,5 @@ namespace WaveEngine
 
 		ComponentRegistry* GetComponentRegistry();
 
-		void UpdateHierarchy(
-			ComponentContainer<ECSTransform>& storage,
-			ECSTransform& transform,
-			const glm::mat4& parentMatrix);
 	};
 }

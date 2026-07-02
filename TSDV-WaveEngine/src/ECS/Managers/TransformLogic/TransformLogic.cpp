@@ -1,11 +1,13 @@
 #include "TransformLogic.h"
 
 #include <vector>
+#include <glm/fwd.hpp>
 
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "ECS/ComponentContainer/ComponentContainer.h"
 #include "ECS/WaveObject/WaveObject.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
 
 namespace WaveEngine
 {
@@ -17,17 +19,19 @@ namespace WaveEngine
 	{
 	}
 
+	WaveObjectRegistry* TransformLogic::GetWaveObjectRegistry()
+	{
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
+	}
+
 	void TransformLogic::Init()
 	{
 	}
 
 	void TransformLogic::Update()
 	{
-		ComponentContainer<ECSTransform>& transforStorage =
-			GetComponentRegistry()->CreateOrGetComponentStorage<ECSTransform>();
-
 		vector<ECSTransform>& transformComponents =
-			transforStorage.GetComponents();
+			GetComponentRegistry()->CreateOrGetComponentStorage<ECSTransform>().GetComponents();
 
 		for (ECSTransform& transform : transformComponents)
 		{
@@ -37,31 +41,18 @@ namespace WaveEngine
 			transform.CalculateTRS();
 		}
 
-		for (ECSTransform& transform : transformComponents)
-		{
-			if (transform.GetParentID() != WaveObject::NULL_OBJECT)
-				continue;
-
-			UpdateHierarchy(transforStorage, transform, glm::mat4(1.0f));
-		}
+		for (WaveObject* waveObject : GetWaveObjectRegistry()->GetParentWaveObjects())
+			UpdateHierarchy(waveObject->GetTransform());
 	}
 
-	void TransformLogic::UpdateHierarchy(ComponentContainer<ECSTransform>& storage,
-		ECSTransform& transform,
-		const glm::mat4& parentMatrix)
+	void TransformLogic::UpdateHierarchy(ECSTransform& transform,const glm::mat4& parentMatrix)
 	{
 		glm::mat4 global = parentMatrix * transform.GetLocalModel();
 
 		transform.SetGlobalModel(global);
 
-		for (unsigned int childID : transform.GetChildren())
-		{
-			ECSTransform* child = storage.TryGet(childID);
-			if (!child)
-				continue;
-
-			UpdateHierarchy(storage, *child, global);
-		}
+		for (WaveObject* childWaveObject : transform.GetChilds())
+			UpdateHierarchy(childWaveObject->GetTransform(), global);
 	}
 
 	ComponentRegistry* TransformLogic::GetComponentRegistry()
