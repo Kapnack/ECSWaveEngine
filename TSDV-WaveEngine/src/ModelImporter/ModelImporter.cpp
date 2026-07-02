@@ -6,11 +6,11 @@
 #include <assimp/color4.h>
 #include <assimp/mesh.h>
 #include <assimp/material.h>
-#include <glm/gtc/quaternion.inl>
+#include <glm/gtc/quaternion.hpp>
 
 #include "ServiceProvider/ServiceProvider.h"
 #include "VertexData.h"
-#include "Material/Color/Color.h"
+#include "Mesh/Mesh.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Vector2/Vector2.h"
 #include "Material/Material.h"
