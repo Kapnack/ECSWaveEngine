@@ -9,11 +9,14 @@
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "ECS/WaveObject/WaveObject.h"
 #include <ECS/WaveObject/WaveObjectRegistry.h>
+#include "ObjectTransformDirtifyEvent.h"
+#include <vector>
 
 namespace WaveEngine
 {
 	ECSTransform::ECSTransform(const unsigned int& ID) : Component(ID)
 	{
+		SetParent(WaveObject::NULL_OBJECT);
 		MarkDirty();
 	}
 
@@ -286,6 +289,16 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(children[index]);
 	}
 
+	vector<WaveObject*> ECSTransform::GetChilds()
+	{
+		vector<WaveObject*> childsObjects;
+
+		for (unsigned int childID : children)
+			childsObjects.push_back(&ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(childID));
+
+		return childsObjects;
+	}
+
 	WaveObject& ECSTransform::GetParent()
 	{
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(parentID);
@@ -294,7 +307,12 @@ namespace WaveEngine
 	void ECSTransform::SetParent(unsigned int id)
 	{
 		if (id != WaveObject::NULL_OBJECT)
+		{
 			SetScale(1, 1, 1);
+			GetEventSystem()->Invoke<ObjectBecameChildEvent>(GetID());
+		}
+		else
+			GetEventSystem()->Invoke<ObjectBecameParentEvent>(GetID());
 
 		parentID = id;
 	}
@@ -329,6 +347,8 @@ namespace WaveEngine
 	{
 		if (dirty)
 			return;
+
+		GetEventSystem()->Invoke<ObjectTransformDirtifyEvent>(GetID());
 
 		dirty = true;
 		MarkHasChildDirty();
@@ -387,5 +407,11 @@ namespace WaveEngine
 	void ECSTransform::UnMarkChildDirty()
 	{
 		hasChildDirty = false;
+	}
+
+
+	EventSystem* ECSTransform::GetEventSystem()
+	{
+		return ServiceProvider::Instance().Get<EventSystem>();
 	}
 }
