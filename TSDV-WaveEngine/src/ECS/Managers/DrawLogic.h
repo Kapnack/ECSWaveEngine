@@ -2,6 +2,8 @@
 
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "Renderer/Renderer.h"
+#include "ECS/Camera/Camera.h"
+#include "ECS/WaveObject/WaveObject.h"
 
 namespace WaveEngine
 {
@@ -12,6 +14,8 @@ namespace WaveEngine
 		ComponentRegistry* GetComponentRegistry();
 
 		Renderer* GetRenderer();
+
+		void CheckChildsAreInFrustum(WaveObject& waveObject, Camera& camera);
 
 	public:
 

@@ -1,4 +1,4 @@
-#include "Draw.h"
+#include "DrawLogic.h"
 
 #include "ServiceProvider/ServiceProvider.h"
 
@@ -9,6 +9,10 @@
 
 #include <vector>
 #include "ECS/Camera/Camera.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/WaveObject/WaveObject.h"
+#include <Renderer/Renderer.h>
+#include <ECS/CompontRegistry/ComponentRegistry.h>
 
 namespace WaveEngine
 {
@@ -35,29 +39,34 @@ namespace WaveEngine
 
 		Camera& camera = GetComponentRegistry()->GetComponentStorage<Camera>().GetFirst();
 
-		for (size_t i = 0; i < components.size(); ++i)
+		for (WaveObject* waveObject : ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetParentWaveObjects())
 		{
-			int entityID = entities[i];
-			const MeshRenderer& meshRenderer = components[i];
-
-			const MeshID* meshComp = meshIDRendererStorage.TryGet(entityID);
-			const ECSTransform* transform = transfromStorage.TryGet(entityID);
-
-			if (!meshComp || !transform)
-				continue;
-
-			if (!camera.IsInsideFrustum(meshComp->boundingBox))
-				continue;
-
-			GetRenderer()->Submit(*transform, *meshComp, meshRenderer);
-
-			GetRenderer()->SubmitWireBox(meshComp->boundingBox, Color::Yellow());
+			CheckChildsAreInFrustum(*waveObject, camera);
 		}
 	}
 
 	Renderer* DrawLogic::GetRenderer()
 	{
 		return ServiceProvider::Instance().Get<Renderer>();
+	}
+
+	void DrawLogic::CheckChildsAreInFrustum(WaveObject& waveObject, Camera& camera)
+	{
+		const MeshID& meshComp = waveObject.GetComponent<MeshID>();
+		const ECSTransform& transform = waveObject.GetTransform();
+
+		GetRenderer()->SubmitWireBox(meshComp.boundingBox, Color::Yellow());
+
+		if (!camera.IsInsideFrustum(meshComp.boundingBox))
+			return;
+
+		const MeshRenderer* meshRenderer = waveObject.TryGetComponent<MeshRenderer>();
+
+		if (meshRenderer)
+			GetRenderer()->Submit(transform, meshComp, *meshRenderer);
+
+		for (WaveObject* childWaveObject : waveObject.GetTransform().GetChilds())
+			CheckChildsAreInFrustum(*childWaveObject, camera);
 	}
 
 	ComponentRegistry* DrawLogic::GetComponentRegistry()
