@@ -3,6 +3,7 @@
 #include <string>
 
 #include "ServiceProvider/ServiceProvider.h"
+#include "ECS/Mesh/MeshID.h"
 
 namespace WaveEngine
 {
@@ -20,9 +21,10 @@ namespace WaveEngine
 		WaveObject* newWaveObject = new WaveObject(++currentObjectID);
 
 		newWaveObject->AddComponent<ECSTransform>();
+		newWaveObject->AddComponent<MeshID>();
 
 		newWaveObject->SetName("WaveObject: " + to_string(currentObjectID) + ".");
-		 
+
 		GetWaveObjectRegistry()->AddObject(newWaveObject);
 
 		return *newWaveObject;
