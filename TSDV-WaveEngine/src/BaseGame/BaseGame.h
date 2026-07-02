@@ -11,9 +11,8 @@
 #include "Mesh/MeshManager/MeshManager.h"
 
 #include "EventSystem/EventSystem.h"
-#include <ECS/CompontRegistry/ComponentRegistry.h>
-#include <ImGuiClass/ImGuiClass.h>
-#include "../ECS/Managers/Draw.h"
+#include "ImGuiClass/ImGuiClass.h"
+#include "ECS/Managers/DrawLogic.h"
 #include "ECS/Managers/TransformLogic/TransformLogic.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/WaveObject/WaveObjectFactory.h"
@@ -43,7 +42,7 @@ namespace WaveEngine
 		TransformLogic transformLogic;
 		MeshLogic meshLogic;
 
-		ImGuiClass* imGui;
+		ImGuiClass imGui;
 
 		WaveObject* cameraObject;
 		Camera* camera;

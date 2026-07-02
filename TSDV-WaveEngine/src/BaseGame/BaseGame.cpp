@@ -48,10 +48,12 @@ namespace WaveEngine
 		ServiceProvider::Instance().Register(new Time());
 #pragma endregion
 
-		imGui = new ImGuiClass();
-
-		transformLogic.Init();
+		ServiceProvider::Instance().Get<WaveObjectRegistry>()->Init();
 		drawLogic.Init();
+		drawLogic.Init();
+		transformLogic.Init();
+
+		imGui.Init();
 
 #pragma region ImportModels
 
@@ -157,7 +159,7 @@ namespace WaveEngine
 
 	void BaseGame::EndEngine()
 	{
-		delete imGui;
+		imGui.Unload();
 		ServiceProvider::Instance().Clear();
 	}
 
@@ -327,7 +329,7 @@ namespace WaveEngine
 
 		drawLogic.Update();
 
-		imGui->Update();
+		imGui.Update();
 	}
 
 	void BaseGame::EngineDraw()
@@ -335,7 +337,7 @@ namespace WaveEngine
 		GetRenderer()->Clear();
 		GetRenderer()->Flush();
 		GetRenderer()->FlushDebug();
-		imGui->Draw();
+		imGui.Draw();
 	}
 
 	Time* BaseGame::GetTime()
