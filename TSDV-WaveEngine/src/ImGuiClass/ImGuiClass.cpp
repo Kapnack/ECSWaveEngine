@@ -16,12 +16,10 @@ namespace WaveEngine
 
 	ImGuiClass::ImGuiClass()
 	{
-		Init();
 	}
 
 	ImGuiClass::~ImGuiClass()
 	{
-		Unload();
 	}
 
 	WaveObjectRegistry* ImGuiClass::GetWaveObjectRegistry()
