@@ -33,15 +33,12 @@ namespace WaveEngine
 
 	void MeshLogic::Update()
 	{
-		for (std::pair<const unsigned int, WaveObject*> pair : GetWaveObjectRegistry()->GetWaveObjects())
+		for (WaveObject* waveObject : GetWaveObjectRegistry()->GetParentWaveObjects())
 		{
-			ECSTransform& transform = pair.second->GetTransform();
-
-			if (transform.GetParentID() != WaveObject::NULL_OBJECT)
-				continue;
+			ECSTransform& transform = waveObject->GetTransform();
 
 			if (transform.HasChildDirty())
-				UpdateBoundingBox(*pair.second);
+				UpdateBoundingBox(*waveObject);
 		}
 	}
 
@@ -50,7 +47,10 @@ namespace WaveEngine
 		MeshID* meshID = waveObject.TryGetComponent<MeshID>();
 
 		if (!meshID || meshID->meshID == Mesh::NULL_MESH)
+		{
+			box.Encapsulate(waveObject.GetTransform().GetPosition());
 			return box;
+		}
 
 		ECSTransform& transform = waveObject.GetTransform();
 		Mesh& mesh = GetMeshManager()->Get(meshID->meshID);
@@ -75,7 +75,7 @@ namespace WaveEngine
 		ECSTransform& transform = waveObject.GetTransform();
 		MeshID* meshID = waveObject.TryGetComponent<MeshID>();
 
-		const vector<int>& children = transform.GetChildren();
+		const vector<int>& children = transform.GetChildsIDs();
 
 		BoundingBox box;
 		box.Reset();
