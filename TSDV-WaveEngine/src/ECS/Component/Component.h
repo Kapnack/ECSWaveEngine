@@ -3,6 +3,7 @@
 namespace WaveEngine
 {
 	class WaveObject;
+	class ECSTransform;
 
 	class Component
 	{
@@ -16,6 +17,8 @@ namespace WaveEngine
 		~Component();
 
 		WaveObject& GetWaveObject() const;
+
+		ECSTransform& GetTransform() const;
 
 		const unsigned int& GetID() const;
 	};

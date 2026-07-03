@@ -18,7 +18,7 @@ namespace WaveEngine
 		string name = "";
 		unsigned int ID = NULL_OBJECT;
 
-		ComponentRegistry* GetComponentRegistry();
+		ComponentRegistry* GetComponentRegistry() const;
 
 		friend class WaveObjectFactory;
 

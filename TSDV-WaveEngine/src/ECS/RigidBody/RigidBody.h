@@ -12,10 +12,7 @@ namespace WaveEngine
 	{
 	private:
 
-		WaveObjectRegistry* GetWaveObjectRegistry()
-		{
-			return ServiceProvider::Instance().Get<WaveObjectRegistry>();
-		}
+		WaveObjectRegistry* GetWaveObjectRegistry() const;
 
 		Vector3 velocity;
 
@@ -28,49 +25,24 @@ namespace WaveEngine
 
 	public:
 
-		void SetGravityAffected(bool isGravityAffected)
-		{
-			this->isGravityAffected = isGravityAffected;
-		}
+		RigidBody(const unsigned int& id);
 
-		void SetIsStatic(bool isStatic)
-		{
-			this->isStatic = isStatic;
-		}
+		void SetGravityAffected(bool isGravityAffected);
 
-		void SetRestitution(float restitution)
-		{
-			this->restitution = restitution;
-		}
+		void SetIsStatic(bool isStatic);
 
-		void SetMass(float mass)
-		{
-			this->mass = mass;
-		}
+		void SetRestitution(float restitution);
 
-		float GetInvMass() const
-		{
-			return mass <= 0.0f ? 0.0f : 1.0f / mass;
-		}
+		void SetMass(float mass);
 
-		void SetVelocity(Vector3 velocity)
-		{
-			this->velocity = velocity;
-		}
+		void SetVelocity(Vector3 velocity);
 
-		void AddVelocity(Vector3 velocity)
-		{
-			this->velocity += velocity;
-		}
+		void AddVelocity(Vector3 velocity);
 
-		Vector3 GetVelocity() const
-		{
-			return velocity;
-		}
+		float GetInvMass() const;
 
-		ECSTransform& GetTransform()
-		{
-			return GetWaveObjectRegistry()->GetWaveObject(GetID()).GetTransform();
-		}
+		bool IsGravityAffected() const;
+
+		Vector3 GetVelocity() const;
 	};
 }

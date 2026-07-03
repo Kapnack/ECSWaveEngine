@@ -36,5 +36,7 @@ namespace WaveEngine
 		const Vector3& GetSize() const;
 		const Vector3& GetMin() const;
 		const Vector3& GetMax() const;
+
+		bool Intersects(BoundingBox other) const;
 	};
 }

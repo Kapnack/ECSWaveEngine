@@ -16,7 +16,7 @@ namespace WaveEngine
 	class TransformLogic;
 	class ImGuiClass;
 
-	WAVEEXPORT class ECSTransform : Component
+	WAVEEXPORT class ECSTransform : public Component
 	{
 	private:
 

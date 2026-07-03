@@ -5,7 +5,7 @@
 
 namespace WaveEngine
 {
-	ComponentRegistry* WaveObject::GetComponentRegistry()
+	ComponentRegistry* WaveObject::GetComponentRegistry() const
 	{
 		return ServiceProvider::Instance().Get<ComponentRegistry>();
 	}

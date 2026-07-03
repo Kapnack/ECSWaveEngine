@@ -5,12 +5,20 @@
 
 namespace WaveEngine
 {
-	ComponentContainer<RigidBody>* RigidBodyLogic::GetRigidBodyContainer()
+	ComponentContainer<RigidBody>& RigidBodyLogic::GetRigidBodyContainer()
 	{
-		return ServiceProvider::Instance().Get<ComponentRegistry>();
+		return ServiceProvider::Instance().Get<ComponentRegistry>()->GetComponentStorage<RigidBody>();
 	}
+
 	void RigidBodyLogic::Update(float deltaTime)
 	{
-		
+		for (RigidBody& rigidBody : GetRigidBodyContainer().GetComponents())
+		{
+			if (rigidBody.IsGravityAffected())
+				rigidBody.AddVelocity(Vector3::Down() * (Gravity * deltaTime));
+
+			rigidBody.GetTransform().Translate(rigidBody.GetVelocity() * deltaTime);
+			rigidBody.AddVelocity(-rigidBody.GetVelocity() * deltaTime);
+		}
 	}
 }

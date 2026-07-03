@@ -20,6 +20,11 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(ownerID);
 	}
 
+	ECSTransform& Component::GetTransform() const
+	{
+		return GetWaveObject().GetTransform();
+	}
+
 	const unsigned int& Component::GetID() const
 	{
 		return ownerID;

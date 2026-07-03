@@ -97,10 +97,9 @@
       <AdditionalLibraryDirectories>$(ProjectDir)lib\glfw-3.4.bin.WIN32\lib-vc2022;$(LibraryPath);$(ProjectDir)lib\glew-2.2.0\lib\Release\Win32;$(ProjectDir)lib\assimp\lib;$(OutDir)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)lib\glew-2.2.0\bin\Release\Win32\glew32.dll" "$(OutDir)" /i/y/s
+      <Command>xcopy "$(ProjectDir)lib\glew-2.2.0\lib\Release\Win32\glew32.dll" "$(OutDir)" /i/y/s
 xcopy "$(ProjectDir)lib\assimp\lib\assimp-vc142-mtd.dll" "$(OutDir)" /i/y/s
-xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
-</Command>
+xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -163,6 +162,8 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.cpp" />
     <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.cpp" />
     <ClCompile Include="src\ECS\Component\Component.cpp" />
+    <ClCompile Include="src\ECS\RigidBody\RigidBody.cpp" />
+    <ClCompile Include="src\ECS\RigidBody\RigidBodyLogic.cpp" />
     <ClCompile Include="src\ECS\WaveObject\WaveObject.cpp" />
     <ClCompile Include="src\ECS\WaveObject\WaveObjectFactory.cpp" />
     <ClCompile Include="src\ECS\WaveObject\WaveObjectRegistry.cpp" />
@@ -198,6 +199,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BoundingBox\BoundingBox.h" />
+    <ClInclude Include="src\CollisionSystem\CollisionLogic\CollisionLogic.h" />
     <ClInclude Include="src\ECS\Events\RequestAddComponent.h" />
     <ClInclude Include="src\ECS\Managers\DrawLogic.h" />
     <ClInclude Include="src\ECS\CompontRegistry\ComponentRegistry.h" />
@@ -205,6 +207,8 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\ECS\Component\Component.h" />
     <ClInclude Include="src\ECS\MaterialID.h" />
     <ClInclude Include="src\ECS\Mesh\MeshID.h" />
+    <ClInclude Include="src\ECS\RigidBody\RigidBody.h" />
+    <ClInclude Include="src\ECS\RigidBody\RigidBodyLogic.h" />
     <ClInclude Include="src\ECS\Texture\TextureID.h" />
     <ClInclude Include="src\ECS\Transform\ObjectTransformDirtifyEvent.h" />
     <ClInclude Include="src\ECS\WaveObject\WaveObject.h" />

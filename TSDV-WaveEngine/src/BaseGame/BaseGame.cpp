@@ -73,6 +73,8 @@ namespace WaveEngine
 		modelImporter.LoadScene(modelsPaths.at(0));
 		tank = modelImporter.IntantiateModel();
 
+		tank->AddComponent<RigidBody>();
+
 		tank->GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f));
 		tank->GetTransform().SetScale(Vector3::One() * defaultSize);
 
@@ -184,7 +186,6 @@ namespace WaveEngine
 		const float camereSpeed = 180.0f * GetDeltaTime();
 		ECSTransform& transform = tank->GetTransform();
 		ECSTransform& cameraTransform = cameraObject->GetTransform();
-
 		
 		if (!ImGuiClass::thirdPersonCamera)
 		{
@@ -326,6 +327,8 @@ namespace WaveEngine
 		camera->CalculateMatrixes();
 
 		meshLogic.Update();
+
+		rigidBodyLogic.Update(GetDeltaTime());
 
 		drawLogic.Update();
 

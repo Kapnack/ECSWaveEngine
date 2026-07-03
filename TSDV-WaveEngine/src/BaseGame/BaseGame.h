@@ -19,6 +19,7 @@
 #include "ECS/Camera/Camera.h"
 #include "ECS/WaveObject/WaveObject.h"
 #include "MeshLogic/MeshLogic.h"
+#include "ECS/RigidBody/RigidBodyLogic.h"
 
 namespace WaveEngine
 {
@@ -41,6 +42,7 @@ namespace WaveEngine
 		DrawLogic drawLogic;
 		TransformLogic transformLogic;
 		MeshLogic meshLogic;
+		RigidBodyLogic rigidBodyLogic;
 
 		ImGuiClass imGui;
 
