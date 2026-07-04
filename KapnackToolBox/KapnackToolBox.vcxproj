@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -154,6 +154,8 @@
     <ClCompile Include="src\WaveMath\Vector4\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\CollisionSystem\Octree\Octree.h" />
+    <ClInclude Include="src\CollisionSystem\Octree\OctreeNode\OctreeNode.h" />
     <ClInclude Include="src\EventSystem\Event.h" />
     <ClInclude Include="src\EventSystem\EventSystem.h" />
     <ClInclude Include="src\Export.h" />
