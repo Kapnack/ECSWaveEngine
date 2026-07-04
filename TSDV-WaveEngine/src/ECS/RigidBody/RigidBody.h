@@ -41,6 +41,8 @@ namespace WaveEngine
 
 		float GetInvMass() const;
 
+		bool GetIsStatic() const;
+
 		bool IsGravityAffected() const;
 
 		Vector3 GetVelocity() const;

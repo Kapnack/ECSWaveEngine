@@ -37,6 +37,11 @@ namespace WaveEngine
 		return mass <= 0.0f ? 0.0f : 1.0f / mass;
 	}
 
+	bool RigidBody::GetIsStatic() const
+	{
+		return isStatic;
+	}
+
 	bool RigidBody::IsGravityAffected() const
 	{
 		return isGravityAffected;
