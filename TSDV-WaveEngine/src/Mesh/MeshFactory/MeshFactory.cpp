@@ -1,6 +1,8 @@
 #include "MeshFactory.h"
 
 #include "ServiceProvider/ServiceProvider.h"
+#include "Mesh/MeshManager/MeshManager.h"
+#include "Mesh/Mesh.h"
 
 namespace WaveEngine
 {
@@ -14,9 +16,11 @@ namespace WaveEngine
 
 	unsigned int MeshFactory::CreateMesh(const string_view name, VertexData* vertexBuffer, const unsigned int& vertexSize, unsigned int* index, const unsigned int& indexSize)
 	{
-		Mesh* newMesh = new Mesh(vertexBuffer, vertexSize, index, indexSize, name);
+		Mesh* newMesh = new Mesh(vertexBuffer, vertexSize, index, indexSize, name, ++currentMeshID);
 
-		return GetMeshManager()->SaveMesh(newMesh);
+		GetMeshManager()->SaveMesh(newMesh);
+
+		return currentMeshID;
 	}
 
 	MeshManager* MeshFactory::GetMeshManager()
