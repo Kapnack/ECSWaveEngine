@@ -1,7 +1,5 @@
 #include "MeshLogic.h"
 
-#include <vector>
-
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ServiceProvider/ServiceProvider.h"
@@ -9,6 +7,7 @@
 #include "ECS/Transform/ECSTransform.h"
 #include "ECS/WaveObject/WaveObject.h"
 #include "WaveMath/Vector3/Vector3.h"
+#include "BoundingBox/BoundingBox.h"
 #include "Renderer/Renderer.h"
 #include "ECS/Mesh/MeshID.h"
 #include "VertexData.h"
@@ -37,7 +36,7 @@ namespace WaveEngine
 		{
 			ECSTransform& transform = waveObject->GetTransform();
 
-			if (transform.HasChildDirty())
+			if (transform.IsDirty() || transform.HasChildDirty())
 				UpdateBoundingBox(*waveObject);
 		}
 	}
@@ -47,10 +46,7 @@ namespace WaveEngine
 		MeshID* meshID = waveObject.TryGetComponent<MeshID>();
 
 		if (!meshID || meshID->meshID == Mesh::NULL_MESH)
-		{
-			box.Encapsulate(waveObject.GetTransform().GetPosition());
 			return box;
-		}
 
 		ECSTransform& transform = waveObject.GetTransform();
 		Mesh& mesh = GetMeshManager()->Get(meshID->meshID);
@@ -75,25 +71,13 @@ namespace WaveEngine
 		ECSTransform& transform = waveObject.GetTransform();
 		MeshID* meshID = waveObject.TryGetComponent<MeshID>();
 
-		const vector<int>& children = transform.GetChildsIDs();
-
 		BoundingBox box;
 		box.Reset();
 
-		if (children.empty())
-		{
-			box = EncapsulateMeshVerts(waveObject, box);
-		}
-		else
-		{
-			for (unsigned int childID : children)
-			{
-				WaveObject& childObj = GetWaveObjectRegistry()->GetWaveObject(childID);
-				box.Encapsulate(UpdateBoundingBox(childObj));
-			}
+		for (WaveObject* childObj : waveObject.GetTransform().GetChilds())
+			box.Encapsulate(UpdateBoundingBox(*childObj));
 
-			box = EncapsulateMeshVerts(waveObject, box);
-		}
+		box = EncapsulateMeshVerts(waveObject, box);
 
 		transform.ClearDirtFlags();
 
