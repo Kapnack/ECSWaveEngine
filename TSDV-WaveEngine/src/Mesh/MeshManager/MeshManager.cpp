@@ -1,4 +1,5 @@
 #include "MeshManager.h"
+#include "Mesh/Mesh.h"
 
 namespace WaveEngine
 {
@@ -8,20 +9,17 @@ namespace WaveEngine
 
 	MeshManager::~MeshManager()
 	{
-		for (Mesh* mesh : meshByID)
+		for (auto& [id, mesh] : meshByID)
 			delete mesh;
 	}
 
-	const unsigned int MeshManager::SaveMesh(Mesh* mesh)
+	void MeshManager::SaveMesh(Mesh* mesh)
 	{
-		const unsigned int currentIndex = meshByID.size();
-		idByName[mesh->GetName()] = currentIndex;
-		meshByID.push_back(mesh);
-
-		return currentIndex;
+		meshByID[mesh->GetID()] = mesh;
+		idByName[mesh->GetName()] = mesh->GetID();
 	}
 
-	Mesh* MeshManager::GetMesh(const unsigned int& ID)
+	Mesh* MeshManager::GetMesh(const unsigned int ID)
 	{
 		return meshByID.at(ID);
 	}
@@ -34,11 +32,6 @@ namespace WaveEngine
 	unsigned int MeshManager::GetMeshID(const string_view name)
 	{
 		return idByName.at(string(name));
-	}
-
-	vector<Mesh*>& MeshManager::GetMeshes()
-	{
-		return meshByID;
 	}
 
 	Mesh& MeshManager::Get(const unsigned int meshID)
