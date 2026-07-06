@@ -1,8 +1,9 @@
 #include "ECSTransform.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include <cmath>
 #include <glm/fwd.hpp>
 
 #include "ServiceProvider/ServiceProvider.h"
@@ -37,6 +38,123 @@ namespace WaveEngine
 	const Vector3& ECSTransform::GetRotation() const
 	{
 		return rotation;
+	}
+
+	Vector3 ECSTransform::GetWorldPosition() const
+	{
+		glm::vec3 worldPos = glm::vec3(globalModel[3]);
+		return Vector3(worldPos.x, worldPos.y, worldPos.z);
+	}
+
+	Vector3 ECSTransform::GetWorldRotation() const
+	{
+		glm::vec3 scaleOut, translationOut, skewOut;
+		glm::vec4 perspectiveOut;
+		glm::quat rotationOut;
+
+		glm::decompose(globalModel, scaleOut, rotationOut, translationOut, skewOut, perspectiveOut);
+
+		glm::vec3 euler = glm::degrees(glm::eulerAngles(rotationOut));
+		return Vector3(euler.x, euler.y, euler.z);
+	}
+
+	Vector3 ECSTransform::GetWorldScale() const
+	{
+		glm::vec3 scaleOut, translationOut, skewOut;
+		glm::vec4 perspectiveOut;
+		glm::quat rotationOut;
+
+		glm::decompose(globalModel, scaleOut, rotationOut, translationOut, skewOut, perspectiveOut);
+
+		return Vector3(scaleOut.x, scaleOut.y, scaleOut.z);
+	}
+
+	void ECSTransform::SetWorldPosition(const Vector3& worldPosition)
+	{
+		if (parentID == WaveObject::NULL_OBJECT)
+		{
+			SetPosition(worldPosition);
+			return;
+		}
+
+		const glm::mat4& parentGlobal = GetParent().GetTransform().GetGlobalModel();
+		glm::vec4 localPos = glm::inverse(parentGlobal) *
+			glm::vec4(worldPosition.x, worldPosition.y, worldPosition.z, 1.0f);
+
+		SetPosition(localPos.x, localPos.y, localPos.z);
+	}
+
+	void ECSTransform::SetWorldRotation(const Vector3& worldRotation)
+	{
+		if (parentID == WaveObject::NULL_OBJECT)
+		{
+			SetRotation(worldRotation);
+			return;
+		}
+
+		ECSTransform& parentTransform = GetParent().GetTransform();
+
+		glm::quat worldQuat = glm::quat(glm::radians(
+			glm::vec3(worldRotation.x, worldRotation.y, worldRotation.z)));
+
+		Vector3 parentWorldRot = parentTransform.GetWorldRotation();
+		glm::quat parentQuat = glm::quat(glm::radians(
+			glm::vec3(parentWorldRot.x, parentWorldRot.y, parentWorldRot.z)));
+
+		glm::quat localQuat = glm::inverse(parentQuat) * worldQuat;
+		glm::vec3 localEuler = glm::degrees(glm::eulerAngles(localQuat));
+
+		SetRotation(localEuler.x, localEuler.y, localEuler.z);
+	}
+
+	void ECSTransform::SetWorldScale(const Vector3& worldScale)
+	{
+		if (parentID == WaveObject::NULL_OBJECT)
+		{
+			SetScale(worldScale);
+			return;
+		}
+
+		Vector3 parentWorldScale = GetParent().GetTransform().GetWorldScale();
+
+		SetScale(
+			worldScale.x / parentWorldScale.x,
+			worldScale.y / parentWorldScale.y,
+			worldScale.z / parentWorldScale.z
+		);
+	}
+
+	void ECSTransform::TranslateWorld(const Vector3& worldDelta)
+	{
+		Vector3 currentWorldPos = GetWorldPosition();
+
+		SetWorldPosition(Vector3(
+			currentWorldPos.x + worldDelta.x,
+			currentWorldPos.y + worldDelta.y,
+			currentWorldPos.z + worldDelta.z
+		));
+	}
+
+	void ECSTransform::RotateWorld(const Vector3& worldScale)
+	{
+		Vector3 currentWorldRotate = GetWorldRotation();
+
+		SetWorldRotation(Vector3(
+			currentWorldRotate.x + worldScale.x,
+			currentWorldRotate.y + worldScale.y,
+			currentWorldRotate.z + worldScale.z
+		));
+	}
+
+	void ECSTransform::ScaleWorld(const Vector3& worldDelta)
+	{
+		Vector3 currentWorldScale = GetWorldScale();
+
+		SetWorldPosition(Vector3(
+			currentWorldScale.x + worldDelta.x,
+			currentWorldScale.y + worldDelta.y,
+			currentWorldScale.z + worldDelta.z
+		));
 	}
 
 	const Vector3& ECSTransform::GetPreviousPos() const

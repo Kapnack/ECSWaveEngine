@@ -81,6 +81,18 @@ namespace WaveEngine
 		WAVEEXPORT const Vector3& GetScale() const;
 		WAVEEXPORT const Vector3& GetRotation() const;
 
+		WAVEEXPORT Vector3 GetWorldPosition() const;
+		WAVEEXPORT Vector3 GetWorldRotation() const;
+		WAVEEXPORT Vector3 GetWorldScale() const;
+
+		WAVEEXPORT void SetWorldPosition(const Vector3& worldPosition);
+		WAVEEXPORT void SetWorldRotation(const Vector3& worldRotation);
+		WAVEEXPORT void SetWorldScale(const Vector3& worldScale);
+
+		WAVEEXPORT void TranslateWorld(const Vector3& worldScale);
+		WAVEEXPORT void RotateWorld(const Vector3& worldScale);
+		WAVEEXPORT void ScaleWorld(const Vector3& worldScale);
+
 		WAVEEXPORT const Vector3& GetPreviousPos() const;
 		WAVEEXPORT void GoToPreviousPos();
 
