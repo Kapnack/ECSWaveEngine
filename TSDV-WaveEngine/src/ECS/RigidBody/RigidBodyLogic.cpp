@@ -1,7 +1,10 @@
 #include "RigidBodyLogic.h"
 
-#include "ServiceProvider/ServiceProvider.h"
+#include "ECS/ComponentContainer/ComponentContainer.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
+#include "ServiceProvider/ServiceProvider.h"
+#include "WaveMath/Vector3/Vector3.h"
+#include "RigidBody.h"
 
 namespace WaveEngine
 {
@@ -20,7 +23,7 @@ namespace WaveEngine
 			if (rigidBody.IsGravityAffected())
 				rigidBody.AddVelocity(Vector3::Down() * (Gravity * deltaTime));
 
-			rigidBody.GetTransform().Translate(rigidBody.GetVelocity() * deltaTime);
+			rigidBody.GetTransform().TranslateWorld(rigidBody.GetVelocity() * deltaTime);
 		}
 	}
 }
