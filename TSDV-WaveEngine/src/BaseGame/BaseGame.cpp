@@ -75,6 +75,11 @@ namespace WaveEngine
 
 		tank->AddComponent<RigidBody>();
 
+		for (WaveObject* rigidBody : tank->GetTransform().GetChilds())
+		{
+			rigidBody->AddComponent<RigidBody>();
+		}
+
 		tank->GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f));
 		tank->GetTransform().SetScale(Vector3::One() * defaultSize);
 
