@@ -31,8 +31,8 @@ namespace WaveEngine
 		float farPlane = 100.0f;
 		float orthoSize = 500.0f;
 
-		float yaw;
-		float pitch;
+		float yaw = 0.0f;
+		float pitch = 0.0f;
 
 		float movementSpeed = 100.0f;
 		float sensitivity = 100.0f;
