@@ -2,13 +2,12 @@
 
 #include "ServiceProvider/Service.h"
 
-#include <glm/glm.hpp>
-
-#include <functional>
+#include <utility>
+#include <glm/fwd.hpp>
+#include <vector>
 #include <unordered_map>
 
 #include "Window/Window.h"
-#include "TextureImporter/TextureImporter.h"
 #include "VertexData.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "Mesh/MeshManager/MeshManager.h"
@@ -18,12 +17,11 @@
 #include "ECS/Transform/ECSTransform.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "BoundingBox/BoundingBox.h"
-#include "WaveMath/Vector4/Vector4.h"
 #include "Material/Material.h"
 #include "FileReader/FileReader.h"
 #include "Material/MaterialFactory.h"
 #include "Material/Color/Color.h"
-#include <utility>
+#include "TextureImporter/TextureManager.h"
 
 using namespace std;
 
@@ -106,7 +104,7 @@ namespace WaveEngine
 			unsigned int indexOffset = 0;
 		};
 
-		unordered_map<size_t, RenderData> batching;
+		unordered_map<unsigned int, RenderData> batching;
 
 		vector<pair<BoundingBox, Color>> debugBoxes;
 
