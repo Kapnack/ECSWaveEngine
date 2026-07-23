@@ -10,6 +10,7 @@
 #include "ECS/MaterialID.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "ModelImporter/ModelImporter.h"
+#include "CameraManager/CameraManager.h"
 
 namespace WaveEngine
 {
@@ -46,9 +47,12 @@ namespace WaveEngine
 		ServiceProvider::Instance().Register(new Renderer());
 		ServiceProvider::Instance().Register(new Input());
 		ServiceProvider::Instance().Register(new Time());
+		ServiceProvider::Instance().Register(new CameraManager());
 #pragma endregion
 
 		ServiceProvider::Instance().Get<WaveObjectRegistry>()->Init();
+		ServiceProvider::Instance().Get<CameraManager>()->Init();
+
 		drawLogic.Init();
 		drawLogic.Init();
 		transformLogic.Init();
