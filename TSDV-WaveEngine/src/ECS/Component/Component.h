@@ -13,7 +13,9 @@ namespace WaveEngine
 
 	public:
 
-		Component(const unsigned int& ID);
+		static const unsigned int NULL_COMPONENT = 0;
+
+		Component(const unsigned int ID);
 		~Component();
 
 		WaveObject& GetWaveObject() const;
