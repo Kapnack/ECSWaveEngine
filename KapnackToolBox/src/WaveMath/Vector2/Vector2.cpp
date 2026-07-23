@@ -12,47 +12,47 @@ Vector2::Vector2(const Vector2& other)
 	y = other.y;
 }
 
-Vector2::Vector2(const Vector3& vector3)
+Vector2::Vector2(Vector3 vector3)
 {
 	x = vector3.x;
 	y = vector3.y;
 }
 
-Vector2::Vector2(const float& x, const float& y)
+Vector2::Vector2(float x, float y)
 {
 	this->x = x;
 	this->y = y;
 }
 
-Vector2 operator*(const float& scalar, const Vector2 vector2)
+Vector2 operator*(float scalar, Vector2 vector2)
 {
 	return Vector2(vector2.x * scalar, vector2.y * scalar);
 }
 
-void Vector2::operator*=(const float& scalar)
+void Vector2::operator*=(float scalar)
 {
 	x *= scalar;
 	y *= scalar;
 }
 
-void Vector2::operator=(const Vector2& other)
+void Vector2::operator=(Vector2 other)
 {
 	x = other.x;
 	y = other.y;
 }
 
-void Vector2::operator=(const Vector3& vector3)
+void Vector2::operator=(Vector3 vector3)
 {
 	x = vector3.x;
 	y = vector3.y;
 }
 
-Vector2 Vector2::operator/(const Vector2& other)
+Vector2 Vector2::operator/(Vector2 other)
 {
 	return Vector2(x / other.x, y / other.y);
 }
 
-Vector2 Vector2::operator*(const float& scalar)
+Vector2 Vector2::operator*(float scalar)
 {
 	return Vector2(x * scalar, y * scalar);
 }

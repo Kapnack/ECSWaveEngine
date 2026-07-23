@@ -11,15 +11,15 @@ WAVEEXPORT struct Vector2 final
 
 	WAVEEXPORT	Vector2();
 	WAVEEXPORT	Vector2(const Vector2& other);
-	WAVEEXPORT	Vector2(const Vector3& vector3);
-	WAVEEXPORT	Vector2(const float& x, const float& y);
+	WAVEEXPORT	Vector2(Vector3 vector3);
+	WAVEEXPORT	Vector2(float x, float y);
 
-	WAVEEXPORT	Vector2 operator/(const Vector2& other);
-	WAVEEXPORT	Vector2 operator*(const float& scalar);
-	WAVEEXPORT	friend Vector2 operator*(const float& scalar, const Vector2 vector2);
-	WAVEEXPORT	void operator*=(const float& scalar);
-	WAVEEXPORT	void operator=(const Vector2& other);
-	WAVEEXPORT	void operator=(const Vector3& vector3);
+	WAVEEXPORT	Vector2 operator/(Vector2 other);
+	WAVEEXPORT	Vector2 operator*(float scalar);
+	WAVEEXPORT	friend Vector2 operator*(float scalar, Vector2 vector2);
+	WAVEEXPORT	void operator*=(float scalar);
+	WAVEEXPORT	void operator=(Vector2 other);
+	WAVEEXPORT	void operator=(Vector3 vector3);
 
 	WAVEEXPORT	static Vector2 Zero();
 	WAVEEXPORT	static Vector2 Up();
