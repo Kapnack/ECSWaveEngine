@@ -29,4 +29,14 @@ namespace WaveEngine
 	{
 		return ownerID;
 	}
+
+	void Component::SetIsActive(bool isActive)
+	{
+		this->isActive = isActive;
+	}
+
+	bool Component::GetIsActive() const
+	{
+		return isActive;
+	}
 }
