@@ -9,6 +9,8 @@
 #include "../CompontRegistry/ComponentRegistry.h"
 #include "../Transform/ECSTransform.h"
 #include "ECS/WaveObject/WaveObject.h"
+#include <CameraManager/CameraManager.h>
+#include "WaveMath/Vector2/Vector2.h"
 
 namespace WaveEngine
 {
@@ -22,11 +24,18 @@ namespace WaveEngine
 		if (!componentRegistry.Has<ECSTransform>(ID))
 			componentRegistry.AddComponent<ECSTransform>(ID);
 
-		transform = &componentRegistry.Get<ECSTransform>(ID);
+		viewPortRes.position = Vector2::Zero();
+		viewPortRes.size = Vector2(GetWindow()->GetWidth(), GetWindow()->GetHeight());
 	}
 
 	Camera::~Camera()
 	{
+	}
+
+	void Camera::SetOrderIndex(int orderIndex)
+	{
+		this->orderIndex = orderIndex;
+		GetEventSystem()->Invoke<CameraChangeActiveStateEvent>(GetID(), orderIndex, GetIsActive());
 	}
 
 	void Camera::CalculateTRS()
@@ -132,7 +141,7 @@ namespace WaveEngine
 			static_cast<float>(GetWindow()->GetWidth()) /
 			static_cast<float>(GetWindow()->GetHeight());
 
-		ECSTransform& transform = GetWaveObject().GetTransform();
+		ECSTransform& transform = GetTransform();
 
 		glm::vec3 pos = glm::vec3(transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z);
 
@@ -200,8 +209,22 @@ namespace WaveEngine
 		return true;
 	}
 
+	void Camera::SetIsActive(bool isActive)
+	{
+		if (GetIsActive() == isActive)
+			return;
+
+		Component::SetIsActive(isActive);
+		SetOrderIndex(orderIndex);
+	}
+
 	Window* Camera::GetWindow() const
 	{
 		return ServiceProvider::Instance().Get<Window>();
+	}
+
+	EventSystem* Camera::GetEventSystem() const
+	{
+		return ServiceProvider::Instance().Get<EventSystem>();
 	}
 }
