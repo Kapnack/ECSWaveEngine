@@ -10,6 +10,7 @@ namespace WaveEngine
 	private:
 
 		unsigned int ownerID = 0;
+		bool isActive = true;
 
 	public:
 
@@ -23,5 +24,8 @@ namespace WaveEngine
 		ECSTransform& GetTransform() const;
 
 		const unsigned int& GetID() const;
+
+		virtual void SetIsActive(bool isActive);
+		bool GetIsActive() const;
 	};
 }
