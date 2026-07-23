@@ -69,6 +69,11 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<FileReader>();
 	}
 
+	CameraManager* Renderer::GetCamaraManager()
+	{
+		return ServiceProvider::Instance().Get<CameraManager>();
+	}
+
 	void Renderer::Init()
 	{
 		glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
