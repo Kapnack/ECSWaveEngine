@@ -12,7 +12,7 @@
 
 namespace WaveEngine
 {
-	Camera::Camera(const unsigned int& ID) : Component(ID)
+	Camera::Camera(const unsigned int ID) : Component(ID)
 	{
 		ComponentRegistry& componentRegistry = *ServiceProvider::Instance().Get<ComponentRegistry>();
 
@@ -34,54 +34,54 @@ namespace WaveEngine
 		shouldUpdateMatrix = true;
 	}
 
-	void Camera::SetOrthographic(const bool& value)
+	void Camera::SetOrthographic(const bool value)
 	{
 		orthografic = value;
 
 		CalculateTRS();
 	}
 
-	void Camera::SetFarPlane(const float& value)
+	void Camera::SetFarPlane(const float value)
 	{
 		farPlane = value;
 
 		shouldUpdateMatrix = true;
 	}
 
-	void Camera::AddToFarPlane(const float& value)
+	void Camera::AddToFarPlane(const float value)
 	{
 		farPlane += value;
 
 		CalculateTRS();
 	}
 
-	void Camera::SetNearPlane(const float& value)
+	void Camera::SetNearPlane(const float value)
 	{
 		nearPlane = value;
 
 		CalculateTRS();
 	}
 
-	void Camera::AddToNearPlane(const float& value)
+	void Camera::AddToNearPlane(const float value)
 	{
 		nearPlane += value;
 
 		CalculateTRS();
 	}
 
-	void Camera::SetFovDegree(const float& value)
+	void Camera::SetFovDegree(const float value)
 	{
 		fovDeg = value;
 
 		CalculateTRS();
 	}
 
-	void Camera::SetOrthoSize(const float& value)
+	void Camera::SetOrthoSize(const float value)
 	{
 		orthoSize = value;
 	}
 
-	void Camera::AddToOrthoSize(const float& value)
+	void Camera::AddToOrthoSize(const float value)
 	{
 		orthoSize += value;
 	}

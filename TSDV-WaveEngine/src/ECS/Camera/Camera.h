@@ -64,25 +64,24 @@ namespace WaveEngine
 		void ExtractFrustumPlanes();
 		bool IsInsideFrustum(const BoundingBox& box) const;
 
-		Camera(const unsigned& ID);
-		WAVEEXPORT	Camera();
-		WAVEEXPORT	~Camera();
+		Camera(unsigned int ID);
+		WAVEEXPORT ~Camera();
 
-		WAVEEXPORT	void SetOrthographic(const bool& value);
-		WAVEEXPORT	void SetFarPlane(const float& value);
-		WAVEEXPORT	void AddToFarPlane(const float& value);
-		WAVEEXPORT	void SetNearPlane(const float& value);
-		WAVEEXPORT	void AddToNearPlane(const float& value);
-		WAVEEXPORT	void SetFovDegree(const float& value);
-		WAVEEXPORT	void SetOrthoSize(const float& value);
-		WAVEEXPORT	void AddToOrthoSize(const float& value);
+		WAVEEXPORT void SetOrthographic(bool value);
+		WAVEEXPORT void SetFarPlane(float value);
+		WAVEEXPORT void AddToFarPlane(float value);
+		WAVEEXPORT void SetNearPlane(float value);
+		WAVEEXPORT void AddToNearPlane(float value);
+		WAVEEXPORT void SetFovDegree(float value);
+		WAVEEXPORT void SetOrthoSize(float value);
+		WAVEEXPORT void AddToOrthoSize(float value);
 
-		WAVEEXPORT	float GetFarPlane() const;
-		WAVEEXPORT	float GetNearPlane() const;
-		WAVEEXPORT	float GetFovDegree() const;
-		WAVEEXPORT	float GetMovementSpeed() const;
-		WAVEEXPORT	float GetOrthoSize() const;
+		WAVEEXPORT float GetFarPlane() const;
+		WAVEEXPORT float GetNearPlane() const;
+		WAVEEXPORT float GetFovDegree() const;
+		WAVEEXPORT float GetMovementSpeed() const;
+		WAVEEXPORT float GetOrthoSize() const;
 
-		WAVEEXPORT	bool GetShouldUpdateMatrix() const;
+		WAVEEXPORT bool GetShouldUpdateMatrix() const;
 	};
 }

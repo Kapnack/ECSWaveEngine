@@ -1,9 +1,9 @@
 #include "Vector3.h"
 
 #include <cmath>
+#include <cfloat>
 
 #include "Wavemath/Vector2/Vector2.h"
-#include <limits>
 
 const float Vector3::epsilon = 1e-05f;
 
@@ -19,21 +19,21 @@ Vector3::Vector3(const Vector3& vector3)
 	z = vector3.z;
 }
 
-Vector3::Vector3(const Vector2& vector2)
+Vector3::Vector3(Vector2 vector2)
 {
 	x = vector2.x;
 	y = vector2.y;
 	z = 0.0f;
 }
 
-Vector3::Vector3(const float& x, const float& y, const float& z)
+Vector3::Vector3(float x, float y, float z)
 {
 	this->x = x;
 	this->y = y;
 	this->z = z;
 }
 
-void Vector3::ClampMagnitude(const float& maxLength)
+void Vector3::ClampMagnitude(float maxLength)
 {
 	*this = ClampMagnitude(*this, maxLength);
 }
@@ -58,42 +58,42 @@ Vector3 Vector3::Normalized() const
 	return Normalized(*this);
 }
 
-void Vector3::MoveToWards(const Vector3& to, const float& distance)
+void Vector3::MoveToWards(Vector3 to, float distance)
 {
 	*this = MoveToWards(*this, to, distance);
 }
 
-Vector3 Vector3::operator/(const Vector3& other) const
+Vector3 Vector3::operator/(Vector3 other) const
 {
 	return Vector3(x / other.x, y / other.y, z / other.z);
 }
 
-Vector3 Vector3::operator/(const float& scalar) const
+Vector3 Vector3::operator/(float scalar) const
 {
 	return Vector3(x / scalar, y / scalar, z / scalar);
 }
 
-Vector3 operator/(const float& scalar, const Vector3& vector)
+Vector3 operator/(float scalar, Vector3 vector)
 {
 	return vector / scalar;
 }
 
-void Vector3::operator/=(const float& scalar)
+void Vector3::operator/=(float scalar)
 {
 	*this = *this / scalar;
 }
 
-Vector3 Vector3::operator+(const Vector3& other) const
+Vector3 Vector3::operator+(Vector3 other) const
 {
 	return Vector3(x + other.x, y + other.y, z + other.z);
 }
 
-void Vector3::operator+=(const Vector3& other)
+void Vector3::operator+=(Vector3 other)
 {
 	*this = *this + other;
 }
 
-Vector3 Vector3::operator-(const Vector3& other) const
+Vector3 Vector3::operator-(Vector3 other) const
 {
 	return Vector3(x - other.x, y - other.y, z - other.z);
 }
@@ -103,28 +103,28 @@ Vector3 Vector3::operator-() const
 	return Vector3(-x, -y, -z);
 }
 
-void Vector3::operator-=(const Vector3& other)
+void Vector3::operator-=(Vector3 other)
 {
 	*this = *this - other;
 }
 
-void Vector3::operator=(const Vector2& vector2)
+void Vector3::operator=(Vector2 vector2)
 {
 	x = vector2.x;
 	y = vector2.y;
 }
 
-Vector3 Vector3::operator*(const float& scalar) const
+Vector3 Vector3::operator*(float scalar) const
 {
 	return Vector3(x * scalar, y * scalar, z * scalar);
 }
 
-Vector3 operator*(const float& scalar, const Vector3& vector3)
+Vector3 operator*(float scalar, Vector3 vector3)
 {
 	return vector3 * scalar;
 }
 
-void Vector3::operator*=(const float& scalar)
+void Vector3::operator*=(float scalar)
 {
 	*this = *this * scalar;
 }
@@ -186,17 +186,25 @@ Vector3 Vector3::Zero()
 
 Vector3 Vector3::Max()
 {
-	const float maxFloat = std::numeric_limits<float>::max();
-	return Vector3(maxFloat, maxFloat, maxFloat);
+	return Vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+}
+
+Vector3 Vector3::NMax()
+{
+	return -Max();
 }
 
 Vector3 Vector3::Min()
 {
-	const float minFloat = std::numeric_limits<float>::min();
-	return Vector3(minFloat, minFloat, minFloat);
+	return Vector3(FLT_MIN, FLT_MIN, FLT_MIN);
 }
 
-float Vector3::Angle(const Vector3& from, const Vector3& to)
+Vector3 Vector3::NMin()
+{
+	return -Min();
+}
+
+float Vector3::Angle(Vector3 from, Vector3 to)
 {
 	float dot = Dot(from, to);
 
@@ -216,7 +224,7 @@ float Vector3::Angle(const Vector3& from, const Vector3& to)
 	return std::acos(cosTheta);
 }
 
-Vector3 Vector3::ClampMagnitude(const Vector3& vector, const float& maxLength)
+Vector3 Vector3::ClampMagnitude(Vector3 vector, float maxLength)
 {
 	float sqrMag = SqrMagnitude(vector);
 
@@ -232,7 +240,7 @@ Vector3 Vector3::ClampMagnitude(const Vector3& vector, const float& maxLength)
 }
 
 
-Vector3 Vector3::Cross(const Vector3& a, const Vector3& b)
+Vector3 Vector3::Cross(Vector3 a, Vector3 b)
 {
 	return Vector3
 	(
@@ -242,39 +250,39 @@ Vector3 Vector3::Cross(const Vector3& a, const Vector3& b)
 	);
 }
 
-float Vector3::Magnitude(const Vector3& vector)
+float Vector3::Magnitude(Vector3 vector)
 {
 	return std::sqrtf(SqrMagnitude(vector));
 }
 
-float Vector3::SqrMagnitude(const Vector3& vector)
+float Vector3::SqrMagnitude(Vector3 vector)
 {
 	return Dot(vector, vector);
 }
 
-float Vector3::Dot(const Vector3& a, const Vector3& b)
+float Vector3::Dot(Vector3 a, Vector3 b)
 {
 	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-Vector3 Vector3::Lerp(const Vector3& a, const Vector3& b, float t)
+Vector3 Vector3::Lerp(Vector3 a, Vector3 b, float t)
 {
 	t = t < -1.0f ? -1.0f : t > 1.0f ? 1.0f : t;
 
 	return LerpUnclamp(a, b, t);
 }
 
-Vector3 Vector3::LerpUnclamp(const Vector3& a, const Vector3& b, const float& t)
+Vector3 Vector3::LerpUnclamp(Vector3 a, Vector3 b, float t)
 {
 	return Vector3(a + (b - a) * t);
 }
 
-float Vector3::Distance(const Vector3& a, const Vector3& b)
+float Vector3::Distance(Vector3 a, Vector3 b)
 {
 	return (a - b).Magnitude();
 }
 
-Vector3 Vector3::Max(const Vector3& a, const Vector3& b)
+Vector3 Vector3::Max(Vector3 a, Vector3 b)
 {
 	float x = a.x > b.x ? a.x : b.x;
 	float y = a.y > b.y ? a.y : b.y;
@@ -283,7 +291,7 @@ Vector3 Vector3::Max(const Vector3& a, const Vector3& b)
 	return Vector3(x, y, z);
 }
 
-Vector3 Vector3::Min(const Vector3& a, const Vector3& b)
+Vector3 Vector3::Min(Vector3 a, Vector3 b)
 {
 	float x = a.x < b.x ? a.x : b.x;
 	float y = a.y < b.y ? a.y : b.y;
@@ -292,7 +300,7 @@ Vector3 Vector3::Min(const Vector3& a, const Vector3& b)
 	return Vector3(x, y, z);
 }
 
-Vector3 Vector3::Project(const Vector3& a, const Vector3& b)
+Vector3 Vector3::Project(Vector3 a, Vector3 b)
 {
 	float dot = Dot(a, b);
 	float sqrMag = SqrMagnitude(b);
@@ -304,7 +312,7 @@ Vector3 Vector3::Project(const Vector3& a, const Vector3& b)
 	return b * scale;
 }
 
-Vector3 Vector3::Normalized(const Vector3& a)
+Vector3 Vector3::Normalized(Vector3 a)
 {
 	float mag = a.Magnitude();
 
@@ -317,7 +325,7 @@ Vector3 Vector3::Normalized(const Vector3& a)
 	return a / mag;
 }
 
-Vector3 Vector3::MoveToWards(const Vector3& from, const Vector3& to, const float& distance)
+Vector3 Vector3::MoveToWards(Vector3 from, Vector3 to, float distance)
 {
 	Vector3 toVector = to - from;
 
@@ -331,7 +339,7 @@ Vector3 Vector3::MoveToWards(const Vector3& from, const Vector3& to, const float
 	return from + toVector / dist * distance;
 }
 
-Vector3 Vector3::Reflect(const Vector3& direction, const Vector3& normal)
+Vector3 Vector3::Reflect(Vector3 direction, Vector3 normal)
 {
 	float dot = Dot(direction, normal);
 	return direction - normal * (2.0f * dot);

@@ -16,27 +16,27 @@ namespace WaveEngine
 	public:
 
 		BoundingBox();
-		BoundingBox(const Vector3& center, const Vector3& size);
+		BoundingBox(Vector3 center, Vector3 size);
 		~BoundingBox();
 
 		void Encapsulate(const BoundingBox& boundingBox);
-		void Encapsulate(const Vector3& point);
+		void Encapsulate(Vector3 point);
 
-		void SetMinMax(const Vector3& vectorA, const Vector3& vectorB);
+		void SetMinMax(Vector3 vectorA, Vector3 vectorB);
 
-		void SetMin(const Vector3& min);
-		void SetMax(const Vector3& max);
-		void SetCenter(const Vector3& center);
-
-		void Reset();
+		void SetMin(Vector3 min);
+		void SetMax(Vector3 max);
+		void SetCenter(Vector3 center);
 
 		bool IsEmpty() const;
 
-		const Vector3& GetCenter() const;
-		const Vector3& GetSize() const;
-		const Vector3& GetMin() const;
-		const Vector3& GetMax() const;
+		void Reset();
 
-		bool Intersects(BoundingBox other) const;
+		Vector3 GetCenter() const;
+		Vector3 GetSize() const;
+		Vector3 GetMin() const;
+		Vector3 GetMax() const;
+
+		bool Intersects(const BoundingBox& other) const;
 	};
 }

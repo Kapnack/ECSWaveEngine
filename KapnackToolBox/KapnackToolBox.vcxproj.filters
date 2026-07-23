@@ -71,9 +71,16 @@
     <ClInclude Include="src\EventSystem\EventSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\CollisionSystem\Octree\Octree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CollisionSystem\Octree\OctreeNode\OctreeNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ServiceProvider\ServiceProvider.tpp" />
     <None Include="src\Singleton\Singleton.tpp" />
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

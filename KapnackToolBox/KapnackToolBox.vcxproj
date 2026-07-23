@@ -169,6 +169,7 @@
     <ClInclude Include="src\WaveMath\Vector4\Vector4.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="src\ServiceProvider\ServiceProvider.tpp" />
     <None Include="src\Singleton\Singleton.tpp" />
   </ItemGroup>

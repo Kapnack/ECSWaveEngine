@@ -1,7 +1,8 @@
 #include "BoundingBox.h"
 
-#include <cmath>
-#include <cfloat>
+#include <cstdlib>
+
+#include "WaveMath/Vector3/Vector3.h"
 
 namespace WaveEngine
 {
@@ -10,7 +11,7 @@ namespace WaveEngine
 		Reset();
 	}
 
-	BoundingBox::BoundingBox(const Vector3& center, const Vector3& size)
+	BoundingBox::BoundingBox(Vector3 center, Vector3 size)
 	{
 		this->center = center;
 		this->size = size;
@@ -24,10 +25,10 @@ namespace WaveEngine
 
 	void BoundingBox::Reset()
 	{
-		min = Vector3(FLT_MAX, FLT_MAX, FLT_MAX);
-		max = Vector3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-		center = Vector3(0, 0, 0);
-		size = Vector3(0, 0, 0);
+		min = Vector3::Max();
+		max = Vector3::NMax();
+		center = Vector3::Zero();
+		size = Vector3::Zero();
 	}
 
 	void BoundingBox::Encapsulate(const BoundingBox& boundingBox)
@@ -46,8 +47,7 @@ namespace WaveEngine
 		return min.x > max.x || min.y > max.y || min.z > max.z;
 	}
 
-
-	void BoundingBox::Encapsulate(const Vector3& point)
+	void BoundingBox::Encapsulate(Vector3 point)
 	{
 		Vector3 min = Vector3::Min(this->min, point);
 		Vector3 max = Vector3::Max(this->max, point);
@@ -55,7 +55,7 @@ namespace WaveEngine
 		SetMinMax(min, max);
 	}
 
-	void BoundingBox::SetMinMax(const Vector3& vectorA, const Vector3& vectorB)
+	void BoundingBox::SetMinMax(Vector3 vectorA, Vector3 vectorB)
 	{
 		min = Vector3::Min(vectorA, vectorB);
 		max = Vector3::Max(vectorA, vectorB);
@@ -64,21 +64,21 @@ namespace WaveEngine
 		size = max - min;
 	}
 
-	void BoundingBox::SetMin(const Vector3& min)
+	void BoundingBox::SetMin(Vector3 min)
 	{
 		this->min = min;
 		center = (min + max) * 0.5f;
 		size = max - min;
 	}
 
-	void BoundingBox::SetMax(const Vector3& max)
+	void BoundingBox::SetMax(Vector3 max)
 	{
 		this->max = max;
 		center = (min + max) * 0.5f;
 		size = max - min;
 	}
 
-	void BoundingBox::SetCenter(const Vector3& center)
+	void BoundingBox::SetCenter(Vector3 center)
 	{
 		Vector3 half = size * 0.5f;
 		this->center = center;
@@ -86,27 +86,27 @@ namespace WaveEngine
 		max = center + half;
 	}
 
-	const Vector3& BoundingBox::GetCenter() const
+	Vector3 BoundingBox::GetCenter() const
 	{
 		return center;
 	}
 
-	const Vector3& BoundingBox::GetSize() const
+	Vector3 BoundingBox::GetSize() const
 	{
 		return size;
 	}
 
-	const Vector3& BoundingBox::GetMin() const
+	Vector3 BoundingBox::GetMin() const
 	{
 		return min;
 	}
 
-	const Vector3& BoundingBox::GetMax() const
+	Vector3 BoundingBox::GetMax() const
 	{
 		return max;
 	}
 
-	bool BoundingBox::Intersects(BoundingBox other) const
+	bool BoundingBox::Intersects(const BoundingBox& other) const
 	{
 		return std::abs(GetCenter().x - other.GetCenter().x) <= (GetSize().x + other.GetSize().x) * 0.5f &&
 			std::abs(GetCenter().y - other.GetCenter().y) <= (GetSize().y + other.GetSize().y) * 0.5f &&

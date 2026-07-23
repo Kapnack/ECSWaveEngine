@@ -158,6 +158,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\BoundingBox\BoundingBox.cpp" />
+    <ClCompile Include="src\CameraManager\CameraManager.cpp" />
     <ClCompile Include="src\ECS\Managers\DrawLogic.cpp" />
     <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.cpp" />
     <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.cpp" />
@@ -199,6 +200,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BoundingBox\BoundingBox.h" />
+    <ClInclude Include="src\CameraManager\CameraManager.h" />
     <ClInclude Include="src\CollisionSystem\CollisionLogic\CollisionLogic.h" />
     <ClInclude Include="src\ECS\Events\RequestAddComponent.h" />
     <ClInclude Include="src\ECS\Managers\DrawLogic.h" />
