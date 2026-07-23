@@ -22,6 +22,7 @@
 #include "Material/MaterialFactory.h"
 #include "Material/Color/Color.h"
 #include "TextureImporter/TextureManager.h"
+#include "CameraManager/CameraManager.h"
 
 using namespace std;
 
@@ -133,6 +134,8 @@ namespace WaveEngine
 		MaterialFactory* GetMaterialFactory();
 
 		FileReader* GetFileReader();
+
+		CameraManager* GetCamaraManager();
 
 	public:
 
