@@ -6,7 +6,7 @@
 
 namespace WaveEngine
 {
-	Component::Component(const unsigned int& ID)
+	Component::Component(const unsigned int ID)
 	{
 		ownerID = ID;
 	}
