@@ -4,6 +4,7 @@
 #include "Renderer/Renderer.h"
 #include "ECS/Camera/Camera.h"
 #include "ECS/WaveObject/WaveObject.h"
+#include "CameraManager/CameraManager.h"
 
 namespace WaveEngine
 {
@@ -16,6 +17,8 @@ namespace WaveEngine
 		Renderer* GetRenderer();
 
 		void CheckChildsAreInFrustum(WaveObject& waveObject, Camera& camera);
+
+		CameraManager* GetCamaraManager();
 
 	public:
 
