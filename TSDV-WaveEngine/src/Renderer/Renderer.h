@@ -22,6 +22,7 @@
 #include "Material/MaterialFactory.h"
 #include "Material/Color/Color.h"
 #include "TextureImporter/TextureManager.h"
+#include "CameraManager/CameraManager.h"
 
 using namespace std;
 
@@ -134,6 +135,8 @@ namespace WaveEngine
 
 		FileReader* GetFileReader();
 
+		CameraManager* GetCamaraManager();
+
 	public:
 
 		static const int Amount_Per_Light = 2;
@@ -158,17 +161,17 @@ namespace WaveEngine
 
 		void DeleteBuffers(unsigned int& VAO, unsigned int& VBO, unsigned int& EBO);
 
-		void UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned int& VBO);
+		void UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned& VBO);
 
-		void SubmitWireBox(const BoundingBox& box, Color color = Color::Red());
-		void DrawWireBoxImmediate(const BoundingBox& box, Color color);
+		void SubmitWireBox(const BoundingBox& box, const Color& color = Color::Red());
+		void DrawWireBoxImmediate(const BoundingBox& box, const Color& color);
 
 		void Clear();
 
 		unsigned int GetDrawCalls() const;
 		unsigned int GetBatchCalls() const;
 
-		void Submit(const ECSTransform& transform, const MeshID& meshComp, const MeshRenderer& matComp, unsigned int cameraID);
+		void Submit(const ECSTransform& transform, const MeshID& meshComp, const MeshRenderer& matComp);
 		void Flush();
 		void FlushDebug();
 	};

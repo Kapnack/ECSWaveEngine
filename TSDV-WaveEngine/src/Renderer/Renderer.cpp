@@ -69,6 +69,11 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<FileReader>();
 	}
 
+	CameraManager* Renderer::GetCamaraManager()
+	{
+		return ServiceProvider::Instance().Get<CameraManager>();
+	}
+
 	void Renderer::Init()
 	{
 		glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
@@ -149,18 +154,18 @@ namespace WaveEngine
 		glBindVertexArray(0);
 	}
 
-	void Renderer::UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned int& VBO)
+	void Renderer::UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned& VBO)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertexSize * sizeof(VertexData), vertex);
 	}
 
-	void Renderer::SubmitWireBox(const BoundingBox& box, Color color)
+	void Renderer::SubmitWireBox(const BoundingBox& box, const Color& color)
 	{
 		debugBoxes.push_back({ box, color });
 	}
 
-	void Renderer::DrawWireBoxImmediate(const BoundingBox& box, Color color)
+	void Renderer::DrawWireBoxImmediate(const BoundingBox& box, const Color& color)
 	{
 		glm::vec3 min(box.GetMin().x, box.GetMin().y, box.GetMin().z);
 		glm::vec3 max(box.GetMax().x, box.GetMax().y, box.GetMax().z);
@@ -256,11 +261,13 @@ namespace WaveEngine
 		return batchCalls;
 	}
 
-	void Renderer::Submit(const ECSTransform& transform, const MeshID& meshComp, const MeshRenderer& matComp, unsigned int cameraID)
+	void Renderer::Submit(const ECSTransform& transform, const MeshID& meshComp, const MeshRenderer& matComp)
 	{
 		++batchCalls;
 
-		RenderData& batch = batching[cameraID];
+		RenderData& batch =
+			batching[hash<unsigned int>()(matComp.materialID) ^
+			(hash<unsigned int>()(meshComp.meshID) << 1)];
 
 		batch.batchData =
 		{
@@ -276,14 +283,8 @@ namespace WaveEngine
 	{
 		batchCalls = 0;
 
-		for (auto& [cameraID, batch] : batching)
+		for (auto& [key, batch] : batching)
 		{
-			Camera& currentCamera = GetComponentRegistry()->GetComponent<Camera>(cameraID);
-			Square currentCameraRes = currentCamera.viewPortRes;
-
-			glViewport(currentCameraRes.position.x, currentCameraRes.position.y,
-				GetWindow()->GetWidth() * currentCameraRes.size.x, GetWindow()->GetHeight() * currentCameraRes.size.y);
-
 			if (batch.instances.empty())
 				continue;
 

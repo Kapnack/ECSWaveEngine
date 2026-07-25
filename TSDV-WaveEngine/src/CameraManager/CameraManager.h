@@ -15,22 +15,11 @@ namespace WaveEngine
 		int orderIndex = -1;
 		bool isActive = false;
 
-		CameraChangeActiveStateEvent() : Event()
-		{
-		}
-
-		CameraChangeActiveStateEvent(unsigned int cameraID, int orderIndex, bool isActive) : Event()
+		CameraChangeActiveStateEvent(unsigned int cameraID, int orderIndex, bool isActive)
 		{
 			this->cameraID = cameraID;
 			this->orderIndex = orderIndex;
 			this->isActive = isActive;
-		}
-
-		void Reset() override
-		{
-			cameraID = Component::NULL_COMPONENT;
-			orderIndex = -1;
-			isActive = false;
 		}
 	};
 
