@@ -149,18 +149,18 @@ namespace WaveEngine
 		glBindVertexArray(0);
 	}
 
-	void Renderer::UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned& VBO)
+	void Renderer::UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned int& VBO)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertexSize * sizeof(VertexData), vertex);
 	}
 
-	void Renderer::SubmitWireBox(const BoundingBox& box, const Color& color)
+	void Renderer::SubmitWireBox(const BoundingBox& box, Color color)
 	{
 		debugBoxes.push_back({ box, color });
 	}
 
-	void Renderer::DrawWireBoxImmediate(const BoundingBox& box, const Color& color)
+	void Renderer::DrawWireBoxImmediate(const BoundingBox& box, Color color)
 	{
 		glm::vec3 min(box.GetMin().x, box.GetMin().y, box.GetMin().z);
 		glm::vec3 max(box.GetMax().x, box.GetMax().y, box.GetMax().z);
@@ -256,13 +256,11 @@ namespace WaveEngine
 		return batchCalls;
 	}
 
-	void Renderer::Submit(const ECSTransform& transform, const MeshID& meshComp, const MeshRenderer& matComp)
+	void Renderer::Submit(const ECSTransform& transform, const MeshID& meshComp, const MeshRenderer& matComp, unsigned int cameraID)
 	{
 		++batchCalls;
 
-		RenderData& batch =
-			batching[hash<unsigned int>()(matComp.materialID) ^
-			(hash<unsigned int>()(meshComp.meshID) << 1)];
+		RenderData& batch = batching[cameraID];
 
 		batch.batchData =
 		{
@@ -278,8 +276,14 @@ namespace WaveEngine
 	{
 		batchCalls = 0;
 
-		for (auto& [key, batch] : batching)
+		for (auto& [cameraID, batch] : batching)
 		{
+			Camera& currentCamera = GetComponentRegistry()->GetComponent<Camera>(cameraID);
+			Square currentCameraRes = currentCamera.viewPortRes;
+
+			glViewport(currentCameraRes.position.x, currentCameraRes.position.y,
+				GetWindow()->GetWidth() * currentCameraRes.size.x, GetWindow()->GetHeight() * currentCameraRes.size.y);
+
 			if (batch.instances.empty())
 				continue;
 
