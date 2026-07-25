@@ -22,7 +22,7 @@ namespace WaveEngine
 
 	void CameraManager::Init()
 	{
-		GetEventSystem()->Subscribe<CameraChangeActiveStateEvent>(this, OnCameraActive);
+		GetEventSystem()->Subscribe<CameraChangeActiveStateEvent>(this, &CameraManager::OnCameraActive);
 	}
 
 	void CameraManager::LateInit()
@@ -55,8 +55,8 @@ namespace WaveEngine
 
 	void CameraManager::RefreshOrderIndices(int from)
 	{
-		for (int i = from; i < activeCamerasOrder.size(); ++i)
-			GetCameraContainer().Get(activeCamerasOrder[i]).orderIndex = i;
+		//for (int i = from; i < activeCamerasOrder.size(); ++i)
+			//GetCameraContainer().Get(activeCamerasOrder[i]).orderIndex = i;
 	}
 
 	vector<Camera*> CameraManager::GetActiveCameras()
