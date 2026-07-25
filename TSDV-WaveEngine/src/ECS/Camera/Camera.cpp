@@ -25,7 +25,7 @@ namespace WaveEngine
 			componentRegistry.AddComponent<ECSTransform>(ID);
 
 		viewPortRes.position = Vector2::Zero();
-		viewPortRes.size = Vector2(GetWindow()->GetWidth(), GetWindow()->GetHeight());
+		viewPortRes.size = Vector2::One();
 	}
 
 	Camera::~Camera()

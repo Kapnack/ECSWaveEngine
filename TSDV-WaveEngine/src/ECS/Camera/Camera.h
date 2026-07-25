@@ -62,6 +62,8 @@ namespace WaveEngine
 
 	public:
 
+		Square viewPortRes;
+
 		glm::mat4 GetView() const;
 		glm::mat4 GetProjection() const;
 
