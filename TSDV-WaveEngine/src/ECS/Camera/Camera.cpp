@@ -209,15 +209,6 @@ namespace WaveEngine
 		return true;
 	}
 
-	void Camera::SetIsActive(bool isActive)
-	{
-		if (GetIsActive() == isActive)
-			return;
-
-		Component::SetIsActive(isActive);
-		SetOrderIndex(orderIndex);
-	}
-
 	Window* Camera::GetWindow() const
 	{
 		return ServiceProvider::Instance().Get<Window>();
