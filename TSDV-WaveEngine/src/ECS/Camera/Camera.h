@@ -48,8 +48,6 @@ namespace WaveEngine
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 
-		Square viewPortRes;
-
 		Window* GetWindow() const;
 
 		EventSystem* GetEventSystem() const;
@@ -73,8 +71,6 @@ namespace WaveEngine
 
 		void ExtractFrustumPlanes();
 		bool IsInsideFrustum(const BoundingBox& box) const;
-
-		void SetIsActive(bool isActive) override;
 
 		Camera(unsigned int ID);
 		WAVEEXPORT ~Camera();
