@@ -260,7 +260,9 @@ namespace WaveEngine
 	{
 		++batchCalls;
 
-		RenderData& batch = batching[cameraID];
+		RenderData& batch =
+			batching[hash<unsigned int>()(matComp.materialID) ^
+			(hash<unsigned int>()(meshComp.meshID) << 1)];
 
 		batch.batchData =
 		{
@@ -276,14 +278,8 @@ namespace WaveEngine
 	{
 		batchCalls = 0;
 
-		for (auto& [cameraID, batch] : batching)
+		for (auto& [key, batch] : batching)
 		{
-			Camera& currentCamera = GetComponentRegistry()->GetComponent<Camera>(cameraID);
-			Square currentCameraRes = currentCamera.viewPortRes;
-
-			glViewport(currentCameraRes.position.x, currentCameraRes.position.y,
-				GetWindow()->GetWidth() * currentCameraRes.size.x, GetWindow()->GetHeight() * currentCameraRes.size.y);
-
 			if (batch.instances.empty())
 				continue;
 
