@@ -63,7 +63,7 @@ namespace WaveEngine
 		const MeshRenderer* meshRenderer = waveObject.TryGetComponent<MeshRenderer>();
 
 		if (meshRenderer)
-			GetRenderer()->Submit(transform, meshComp, *meshRenderer);
+			GetRenderer()->Submit(transform, meshComp, *meshRenderer, camera.GetID());
 
 		for (WaveObject* childWaveObject : waveObject.GetTransform().GetChilds())
 			CheckChildsAreInFrustum(*childWaveObject, camera);
