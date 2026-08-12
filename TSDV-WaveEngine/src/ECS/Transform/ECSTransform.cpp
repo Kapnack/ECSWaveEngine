@@ -25,17 +25,17 @@ namespace WaveEngine
 	{
 	}
 
-	const Vector3& ECSTransform::GetPosition() const
+	Vector3 ECSTransform::GetPosition() const
 	{
 		return position;
 	}
 
-	const Vector3& ECSTransform::GetScale() const
+	Vector3 ECSTransform::GetScale() const
 	{
 		return scale;
 	}
 
-	const Vector3& ECSTransform::GetRotation() const
+	Vector3 ECSTransform::GetRotation() const
 	{
 		return rotation;
 	}
