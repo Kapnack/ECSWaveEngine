@@ -77,9 +77,9 @@ namespace WaveEngine
 
 		virtual ~ECSTransform();
 
-		WAVEEXPORT const Vector3& GetPosition() const;
-		WAVEEXPORT const Vector3& GetScale() const;
-		WAVEEXPORT const Vector3& GetRotation() const;
+		WAVEEXPORT  Vector3 GetPosition() const;
+		WAVEEXPORT  Vector3 GetScale() const;
+		WAVEEXPORT  Vector3 GetRotation() const;
 
 		WAVEEXPORT Vector3 GetWorldPosition() const;
 		WAVEEXPORT Vector3 GetWorldRotation() const;
