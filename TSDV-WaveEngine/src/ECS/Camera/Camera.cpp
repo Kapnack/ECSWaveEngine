@@ -6,26 +6,13 @@
 #include <glm/gtx/euler_angles.hpp>
 
 #include "ServiceProvider/ServiceProvider.h"
-#include "../CompontRegistry/ComponentRegistry.h"
 #include "../Transform/ECSTransform.h"
-#include "ECS/WaveObject/WaveObject.h"
 #include <CameraManager/CameraManager.h>
-#include "WaveMath/Vector2/Vector2.h"
 
 namespace WaveEngine
 {
 	Camera::Camera(const unsigned int ID) : Component(ID)
 	{
-		ComponentRegistry& componentRegistry = *ServiceProvider::Instance().Get<ComponentRegistry>();
-
-		if (!componentRegistry.HasStorage<ECSTransform>())
-			componentRegistry.AddComponent<ECSTransform>(ID);
-
-		if (!componentRegistry.Has<ECSTransform>(ID))
-			componentRegistry.AddComponent<ECSTransform>(ID);
-
-		viewPortRes.position = Vector2::Zero();
-		viewPortRes.size = Vector2::One();
 	}
 
 	Camera::~Camera()
