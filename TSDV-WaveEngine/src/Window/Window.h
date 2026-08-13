@@ -46,6 +46,7 @@ namespace WaveEngine
 		WAVEEXPORT int GetHeight();
 		WAVEEXPORT int GetBaseWidth();
 		WAVEEXPORT int GetBaseHeight();
+		WAVEEXPORT Vector2 GetSize();
 
 		WAVEEXPORT void SwapBuffer();
 		WAVEEXPORT void HandleInput();

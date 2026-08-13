@@ -1,6 +1,7 @@
 #include "Window.h"
 
 #include <iostream>
+#include <WaveMath/Vector2/Vector2.h>
 
 using namespace std;
 
@@ -72,6 +73,11 @@ namespace WaveEngine
 	int Window::GetBaseHeight()
 	{
 		return baseHeight;
+	}
+
+	Vector2 Window::GetSize()
+	{
+		return Vector2(width, height);
 	}
 
 	void Window::SwapBuffer()
