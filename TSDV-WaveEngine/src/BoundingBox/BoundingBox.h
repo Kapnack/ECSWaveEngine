@@ -8,8 +8,6 @@ namespace WaveEngine
 	{
 	private:
 
-		Vector3 center = Vector3::Zero();
-		Vector3 size = Vector3::Zero();
 		Vector3 min = Vector3::Zero();
 		Vector3 max = Vector3::Zero();
 
@@ -34,6 +32,7 @@ namespace WaveEngine
 
 		Vector3 GetCenter() const;
 		Vector3 GetSize() const;
+		Vector3 GetExtents() const;
 		Vector3 GetMin() const;
 		Vector3 GetMax() const;
 
