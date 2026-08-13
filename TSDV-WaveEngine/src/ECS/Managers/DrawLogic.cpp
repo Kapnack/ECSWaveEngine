@@ -37,12 +37,9 @@ namespace WaveEngine
 		ComponentContainer<MeshID>& meshIDRendererStorage = GetComponentRegistry()->GetComponentStorage<MeshID>();
 		ComponentContainer<ECSTransform>& transfromStorage = GetComponentRegistry()->GetComponentStorage<ECSTransform>();
 
-		Camera& camera = GetComponentRegistry()->GetComponentStorage<Camera>().GetFirst();
-
-		for (WaveObject* waveObject : ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetParentWaveObjects())
-		{
-			CheckChildsAreInFrustum(*waveObject, camera);
-		}
+		for (Camera& camera : GetComponentRegistry()->CreateOrGetComponentStorage<Camera>().GetComponents())
+			for (WaveObject* waveObject : ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetParentWaveObjects())
+				CheckChildsAreInFrustum(*waveObject, camera);
 	}
 
 	Renderer* DrawLogic::GetRenderer()
