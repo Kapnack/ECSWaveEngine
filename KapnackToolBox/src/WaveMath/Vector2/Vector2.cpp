@@ -47,6 +47,11 @@ void Vector2::operator=(Vector3 vector3)
 	y = vector3.y;
 }
 
+Vector2 Vector2::operator-() const
+{
+	return Vector2(-x, -y);
+}
+
 Vector2 Vector2::operator/(Vector2 other)
 {
 	return Vector2(x / other.x, y / other.y);

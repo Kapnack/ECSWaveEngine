@@ -20,6 +20,7 @@ WAVEEXPORT struct Vector2 final
 	WAVEEXPORT	void operator*=(float scalar);
 	WAVEEXPORT	void operator=(Vector2 other);
 	WAVEEXPORT	void operator=(Vector3 vector3);
+	WAVEEXPORT	Vector2 operator-() const;
 
 	WAVEEXPORT	static Vector2 Zero();
 	WAVEEXPORT	static Vector2 One();

@@ -20,6 +20,11 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<EventSystem>();
 	}
 
+	Window* CameraManager::GetWindow() const
+	{
+		return ServiceProvider::Instance().Get<Window>();
+	}
+
 	void CameraManager::Init()
 	{
 		GetEventSystem()->Subscribe<CameraChangeActiveStateEvent>(this, &CameraManager::OnCameraActive);
@@ -27,6 +32,20 @@ namespace WaveEngine
 
 	void CameraManager::LateInit()
 	{
+	}
+
+	void CameraManager::Update()
+	{
+		usableCameras.clear();
+
+		Square camerasTotalRes;
+
+		for (Camera& camera : GetCameraContainer().GetComponents())
+		{
+			usableCameras.push_back(&camera);
+
+			if ()
+		}
 	}
 
 	void CameraManager::OnCameraActive(const CameraChangeActiveStateEvent& event)

@@ -6,6 +6,7 @@
 #include "ECS/ComponentContainer/ComponentContainer.h"
 #include "EventSystem/EventSystem.h"
 #include "ECS/Camera/Camera.h"
+#include <Window/Window.h>
 
 namespace WaveEngine
 {
@@ -42,7 +43,10 @@ namespace WaveEngine
 
 		EventSystem* GetEventSystem() const;
 
+		Window* GetWindow() const;
+
 		vector<unsigned int> activeCamerasOrder;
+		vector<Camera*> usableCameras;
 
 		void OnCameraActive(const CameraChangeActiveStateEvent& cameraActiveEvent);
 
@@ -52,6 +56,7 @@ namespace WaveEngine
 
 		void Init();
 		void LateInit();
+		void Update();
 		vector<Camera*> GetActiveCameras();
 	};
 }
