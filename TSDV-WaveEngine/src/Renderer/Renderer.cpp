@@ -261,14 +261,7 @@ namespace WaveEngine
 		++batchCalls;
 
 		RenderData& batch =
-			batching[hash<unsigned int>()(matComp.materialID) ^
-			(hash<unsigned int>()(meshComp.meshID) << 1)];
-
-		batch.batchData =
-		{
-			matComp.materialID,
-			meshComp.meshID
-		};
+			batching[matComp.materialID][meshComp.meshID];
 
 		batch.instances.reserve(MAX_INSTANCES);
 		batch.instances.push_back({ transform.GetGlobalModel() });
@@ -278,55 +271,13 @@ namespace WaveEngine
 	{
 		batchCalls = 0;
 
-		for (auto& [key, batch] : batching)
+		for (unordered_map<unsigned int, unordered_map<unsigned int, RenderData>>::iterator batchingIT = batching.begin(); batchingIT != batching.end(); ++batchingIT)
 		{
-			if (batch.instances.empty())
+			if (batchingIT->second.empty())
 				continue;
 
-			Mesh& mesh = GetMeshManager()->Get(batch.batchData.meshID);
-
-			if (batch.VAO == 0)
-			{
-				CreateBuffers(
-					mesh.GetVertexBuffer(),
-					mesh.GetVertexSize(),
-					mesh.GetIndexes(),
-					mesh.GetIndexesSize(),
-					batch.VAO,
-					batch.VBO,
-					batch.EBO,
-					batch.instanceVBO
-				);
-
-				batch.instanceCapacity = 0;
-			}
-
-			if (mesh.GetDirty())
-			{
-				UpdateBuffer(mesh.GetVertexBuffer(), mesh.GetVertexSize(), batch.VBO);
-				mesh.UnDirt();
-			}
-
-			glBindVertexArray(batch.VAO);
-			glBindBuffer(GL_ARRAY_BUFFER, batch.instanceVBO);
-
-			if (batch.instances.size() > batch.instanceCapacity)
-			{
-				batch.instanceCapacity = batch.instances.size();
-
-				glBufferData(GL_ARRAY_BUFFER,
-					batch.instanceCapacity * sizeof(InstanceData),
-					nullptr,
-					GL_DYNAMIC_DRAW);
-			}
-
-			glBufferSubData(GL_ARRAY_BUFFER,
-				0,
-				batch.instances.size() * sizeof(InstanceData),
-				batch.instances.data());
-
 			Material* materialToUse =
-				GetMaterialManager()->GetMaterial(batch.batchData.materialID);
+				GetMaterialManager()->GetMaterial(batchingIT->first);
 
 			if (!materialToUse)
 				continue;
@@ -336,6 +287,9 @@ namespace WaveEngine
 			Camera& camera = GetComponentRegistry()
 				->GetComponentStorage<Camera>()
 				.GetFirst();
+
+			glViewport(camera.viewPortRes.position.x, camera.viewPortRes.position.y,
+				camera.viewPortRes.size.x * GetWindow()->GetWidth(), camera.viewPortRes.size.y * GetWindow()->GetHeight());
 
 			ECSTransform& cameraTransform = camera.GetWaveObject().GetTransform();
 
@@ -388,19 +342,69 @@ namespace WaveEngine
 				materialToUse->SetFloat(base + ".outerCutOff", glm::cos(glm::radians(flashLights[i].outerCutOff)));
 			}
 
-			glDrawElementsInstanced(
-				GL_TRIANGLES,
-				mesh.GetIndexesSize(),
-				GL_UNSIGNED_INT,
-				0,
-				batch.instances.size()
-			);
+			for (unordered_map<unsigned int, RenderData>::iterator meshBatchIT = batchingIT->second.begin(); meshBatchIT != batchingIT->second.end(); ++meshBatchIT)
+			{
+				RenderData& batch = meshBatchIT->second;
+
+				if (batch.instances.empty())
+					continue;
+
+				Mesh& mesh = GetMeshManager()->Get(meshBatchIT->first);
+
+				if (batch.VAO == 0)
+				{
+					CreateBuffers(
+						mesh.GetVertexBuffer(),
+						mesh.GetVertexSize(),
+						mesh.GetIndexes(),
+						mesh.GetIndexesSize(),
+						batch.VAO,
+						batch.VBO,
+						batch.EBO,
+						batch.instanceVBO
+					);
+
+					batch.instanceCapacity = 0;
+				}
+
+				if (mesh.GetDirty())
+				{
+					UpdateBuffer(mesh.GetVertexBuffer(), mesh.GetVertexSize(), batch.VBO);
+					mesh.UnDirt();
+				}
+
+				glBindVertexArray(batch.VAO);
+				glBindBuffer(GL_ARRAY_BUFFER, batch.instanceVBO);
+
+				if (batch.instances.size() > batch.instanceCapacity)
+				{
+					batch.instanceCapacity = batch.instances.size();
+
+					glBufferData(GL_ARRAY_BUFFER,
+						batch.instanceCapacity * sizeof(InstanceData),
+						nullptr,
+						GL_DYNAMIC_DRAW);
+				}
+
+				glBufferSubData(GL_ARRAY_BUFFER,
+					0,
+					batch.instances.size() * sizeof(InstanceData),
+					batch.instances.data());
+
+				glDrawElementsInstanced(
+					GL_TRIANGLES,
+					mesh.GetIndexesSize(),
+					GL_UNSIGNED_INT,
+					0,
+					batch.instances.size()
+				);
+
+				++drawCalls;
+
+				batch.instances.clear();
+			}
 
 			materialToUse->UnBind();
-
-			++drawCalls;
-
-			batch.instances.clear();
 		}
 	}
 
@@ -417,7 +421,8 @@ namespace WaveEngine
 
 	void Renderer::Unload()
 	{
-		for (auto& renderData : batching)
-			DeleteBuffers(renderData.second.VAO, renderData.second.VBO, renderData.second.EBO);
+		for (unordered_map<unsigned int, unordered_map<unsigned int, RenderData>>::iterator batchingIT = batching.begin(); batchingIT != batching.end(); ++batchingIT)
+			for (unordered_map<unsigned int, RenderData>::iterator meshBatching = batchingIT->second.begin(); meshBatching != batchingIT->second.end(); ++meshBatching)
+				DeleteBuffers(meshBatching->second.VAO, meshBatching->second.VBO, meshBatching->second.EBO);
 	}
 }
