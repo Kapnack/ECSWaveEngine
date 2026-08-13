@@ -47,19 +47,60 @@ void Vector2::operator=(Vector3 vector3)
 	y = vector3.y;
 }
 
+Vector2 Vector2::operator-(Vector2 other) const
+{
+	return Vector2(x - other.x, y - other.y);
+}
+
+Vector2 Vector2::operator+(Vector2 other) const
+{
+	return Vector2(x + other.x, y + other.y);
+}
+
 Vector2 Vector2::operator-() const
 {
 	return Vector2(-x, -y);
 }
 
-Vector2 Vector2::operator/(Vector2 other)
+Vector2 Vector2::operator/(Vector2 other) const
 {
 	return Vector2(x / other.x, y / other.y);
 }
 
-Vector2 Vector2::operator*(float scalar)
+Vector2 Vector2::operator*(float scalar) const
 {
 	return Vector2(x * scalar, y * scalar);
+}
+
+Vector2 Vector2::operator*(Vector2 other) const
+{
+	return Vector2(x * other.x, y * other.y);
+}
+
+bool Vector2::operator>(Vector2 other) const
+{
+	return x > other.x && y > other.y;
+}
+
+bool Vector2::operator<(Vector2 other) const
+{
+	return other > x;
+}
+
+Vector2 Vector2::Min(Vector2 vectorA, Vector2 vectorB)
+{
+	const float x = vectorA.x < vectorB.x ? vectorA.x : vectorB.x;
+	const float y = vectorA.y < vectorB.y ? vectorA.y : vectorB.y;
+
+	return Vector2(x, y);
+}
+
+Vector2 Vector2::Max(Vector2 vectorA, Vector2 vectorB)
+{
+	const float x = vectorA.x > vectorB.x ? vectorA.x : vectorB.x;
+	const float y = vectorA.y > vectorB.y ? vectorA.y : vectorB.y;
+
+	return Vector2(x, y);
 }
 
 Vector2 Vector2::Zero()
