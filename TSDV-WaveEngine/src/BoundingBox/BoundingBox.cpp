@@ -13,10 +13,7 @@ namespace WaveEngine
 
 	BoundingBox::BoundingBox(Vector3 center, Vector3 size)
 	{
-		this->center = center;
-		this->size = size;
-		this->min = center - size * 0.5f;
-		this->max = center + size * 0.5f;
+		SetMinMax(center - size * 0.5f, center + size * 0.5f);
 	}
 
 	BoundingBox::~BoundingBox()
@@ -27,8 +24,6 @@ namespace WaveEngine
 	{
 		min = Vector3::Max();
 		max = Vector3::NMax();
-		center = Vector3::Zero();
-		size = Vector3::Zero();
 	}
 
 	void BoundingBox::Encapsulate(const BoundingBox& boundingBox)
@@ -36,10 +31,7 @@ namespace WaveEngine
 		if (boundingBox.IsEmpty())
 			return;
 
-		Vector3 min = Vector3::Min(this->min, boundingBox.GetMin());
-		Vector3 max = Vector3::Max(this->max, boundingBox.GetMax());
-
-		SetMinMax(min, max);
+		SetMinMax(Vector3::Min(this->min, boundingBox.GetMin()), Vector3::Max(this->max, boundingBox.GetMax()));
 	}
 
 	bool BoundingBox::IsEmpty() const
@@ -49,51 +41,45 @@ namespace WaveEngine
 
 	void BoundingBox::Encapsulate(Vector3 point)
 	{
-		Vector3 min = Vector3::Min(this->min, point);
-		Vector3 max = Vector3::Max(this->max, point);
-
-		SetMinMax(min, max);
+		SetMinMax(Vector3::Min(this->min, point), Vector3::Max(this->max, point));
 	}
 
 	void BoundingBox::SetMinMax(Vector3 vectorA, Vector3 vectorB)
 	{
 		min = Vector3::Min(vectorA, vectorB);
 		max = Vector3::Max(vectorA, vectorB);
-
-		center = (min + max) * 0.5f;
-		size = max - min;
 	}
 
 	void BoundingBox::SetMin(Vector3 min)
 	{
 		this->min = min;
-		center = (min + max) * 0.5f;
-		size = max - min;
 	}
 
 	void BoundingBox::SetMax(Vector3 max)
 	{
 		this->max = max;
-		center = (min + max) * 0.5f;
-		size = max - min;
 	}
 
 	void BoundingBox::SetCenter(Vector3 center)
 	{
-		Vector3 half = size * 0.5f;
-		this->center = center;
+		Vector3 half = GetExtents();
 		min = center - half;
 		max = center + half;
 	}
 
 	Vector3 BoundingBox::GetCenter() const
 	{
-		return center;
+		return (max + min) * 0.5f;
 	}
 
 	Vector3 BoundingBox::GetSize() const
 	{
-		return size;
+		return max - min;
+	}
+
+	Vector3 BoundingBox::GetExtents() const
+	{
+		return (max - min) * 0.5f;
 	}
 
 	Vector3 BoundingBox::GetMin() const
