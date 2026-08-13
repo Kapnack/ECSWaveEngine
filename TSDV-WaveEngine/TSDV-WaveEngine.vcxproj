@@ -190,6 +190,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\Material\Material.cpp" />
     <ClCompile Include="src\ECS\Transform\ECSTransform.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Square\Square.cpp" />
     <ClCompile Include="src\TextureImporter\Texture.cpp" />
     <ClCompile Include="src\TextureImporter\TextureManager.cpp" />
     <ClCompile Include="src\VertexData.cpp" />
