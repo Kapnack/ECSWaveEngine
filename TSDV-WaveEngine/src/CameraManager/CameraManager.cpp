@@ -43,8 +43,10 @@ namespace WaveEngine
 		for (Camera& camera : GetCameraContainer().GetComponents())
 		{
 			usableCameras.push_back(&camera);
+			camerasTotalRes.Encapsulate(Square(camera.viewPortRes.GetCenter(), camera.viewPortRes.GetSize() * GetWindow()->GetSize()));
 
-			if ()
+			if (camerasTotalRes.GetSize() > GetWindow()->GetSize())
+				break;
 		}
 	}
 
