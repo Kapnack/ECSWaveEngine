@@ -66,18 +66,6 @@ namespace WaveEngine
 		float outerCutOff = 15.5f;
 	};
 
-	struct BatchData
-	{
-		unsigned int materialID = 0;
-		unsigned int meshID = 0;
-
-		bool operator==(const BatchData& other) const
-		{
-			return materialID == other.materialID &&
-				meshID == other.meshID;
-		}
-	};
-
 	class Renderer final : public Service
 	{
 	private:
@@ -89,8 +77,6 @@ namespace WaveEngine
 
 		struct RenderData
 		{
-			BatchData batchData;
-
 			unsigned int VAO = 0;
 			unsigned int VBO = 0;
 			unsigned int EBO = 0;
@@ -104,7 +90,7 @@ namespace WaveEngine
 			unsigned int indexOffset = 0;
 		};
 
-		unordered_map<unsigned int, RenderData> batching;
+		unordered_map<unsigned int, unordered_map<unsigned int, RenderData>> batching;
 
 		vector<pair<BoundingBox, Color>> debugBoxes;
 
