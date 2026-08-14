@@ -7,6 +7,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "WaveMath/Vector2/Vector2.h"
+
 namespace WaveEngine
 {
 	class BaseGame;
