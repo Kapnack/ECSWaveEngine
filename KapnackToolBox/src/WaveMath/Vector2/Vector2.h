@@ -24,8 +24,8 @@ WAVEEXPORT struct Vector2 final
 	WAVEEXPORT	void operator*=(float scalar);
 	WAVEEXPORT	void operator=(Vector2 other);
 	WAVEEXPORT	void operator=(Vector3 vector3);
-	WAVEEXPORT	bool operator>(Vector2 other) const;
 	WAVEEXPORT	bool operator<(Vector2 other) const;
+	WAVEEXPORT	bool operator>(Vector2 other) const;
 
 	WAVEEXPORT	static Vector2 Min(Vector2 vectorA, Vector2 vectorB);
 	WAVEEXPORT	static Vector2 Max(Vector2 vectorA, Vector2 vectorB);
