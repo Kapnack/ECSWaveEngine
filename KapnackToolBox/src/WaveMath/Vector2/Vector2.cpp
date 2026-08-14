@@ -84,7 +84,7 @@ bool Vector2::operator>(Vector2 other) const
 
 bool Vector2::operator<(Vector2 other) const
 {
-	return other > x;
+	return other > *this;
 }
 
 Vector2 Vector2::Min(Vector2 vectorA, Vector2 vectorB)
