@@ -92,6 +92,8 @@ namespace WaveEngine
 
 		unordered_map<unsigned int, unordered_map<unsigned int, RenderData>> batching;
 
+		unordered_map<unsigned int, list<unsigned int>> entityCameras;
+
 		vector<pair<BoundingBox, Color>> debugBoxes;
 
 		unsigned int drawCalls = 0;
