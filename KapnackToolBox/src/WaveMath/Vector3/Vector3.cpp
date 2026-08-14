@@ -5,8 +5,6 @@
 
 #include "Wavemath/Vector2/Vector2.h"
 
-const float Vector3::epsilon = 1e-05f;
-
 Vector3::Vector3()
 {
 	*this = Zero();
@@ -33,19 +31,24 @@ Vector3::Vector3(float x, float y, float z)
 	this->z = z;
 }
 
-void Vector3::ClampMagnitude(float maxLength)
+void Vector3::ClampMagnitude(float maxMagnitude)
 {
-	*this = ClampMagnitude(*this, maxLength);
+	*this = ClampedMagnitude(maxMagnitude);
+}
+
+Vector3 Vector3::ClampedMagnitude(float maxMagnitude) const
+{
+	return ClampMagnitude(*this, maxMagnitude);
 }
 
 float Vector3::Magnitude() const
 {
-	return Vector3::Magnitude(*this);
+	return Magnitude(*this);
 }
 
 float Vector3::SqrMagnitude() const
 {
-	return Vector3::SqrMagnitude(*this);
+	return SqrMagnitude(*this);
 }
 
 void Vector3::Normalize()
@@ -60,7 +63,22 @@ Vector3 Vector3::Normalized() const
 
 void Vector3::MoveToWards(Vector3 to, float distance)
 {
-	*this = MoveToWards(*this, to, distance);
+	*this = MovedToWards(to, distance);
+}
+
+Vector3 Vector3::MovedToWards(Vector3 to, float distance) const
+{
+	return MoveToWards(*this, to, distance);
+}
+
+void Vector3::Reflect(Vector3 normal)
+{
+	*this = Reflected(normal);
+}
+
+Vector3 Vector3::Reflected(Vector3 normal) const
+{
+	return Reflect(*this, normal);
 }
 
 Vector3 Vector3::operator/(Vector3 other) const
@@ -127,6 +145,16 @@ Vector3 operator*(float scalar, Vector3 vector3)
 void Vector3::operator*=(float scalar)
 {
 	*this = *this * scalar;
+}
+
+bool Vector3::operator>(Vector3 other) const
+{
+	return x > other.x && y > other.y;
+}
+
+bool Vector3::operator<(Vector3 other) const
+{
+	return other > *this;
 }
 
 Vector3 Vector3::X()
@@ -212,10 +240,7 @@ float Vector3::Angle(Vector3 from, Vector3 to)
 	float magTo = Magnitude(to);
 
 	if (magFrom == 0 || magTo == 0)
-	{
-
 		return 0.0f;
-	}
 
 	float cosTheta = dot / (magFrom * magTo);
 
@@ -224,14 +249,14 @@ float Vector3::Angle(Vector3 from, Vector3 to)
 	return std::acos(cosTheta);
 }
 
-Vector3 Vector3::ClampMagnitude(Vector3 vector, float maxLength)
+Vector3 Vector3::ClampMagnitude(Vector3 vector, float maxMagnitud)
 {
 	float sqrMag = SqrMagnitude(vector);
 
-	if (sqrMag > maxLength * maxLength)
+	if (sqrMag > maxMagnitud * maxMagnitud)
 	{
 		float mag = std::sqrt(sqrMag);
-		float scale = maxLength / mag;
+		float scale = maxMagnitud / mag;
 
 		return Vector3(vector.x * scale, vector.y * scale, vector.z * scale);
 	}
@@ -274,7 +299,7 @@ Vector3 Vector3::Lerp(Vector3 a, Vector3 b, float t)
 
 Vector3 Vector3::LerpUnclamp(Vector3 a, Vector3 b, float t)
 {
-	return Vector3(a + (b - a) * t);
+	return a + (b - a) * t;
 }
 
 float Vector3::Distance(Vector3 a, Vector3 b)
@@ -305,7 +330,7 @@ Vector3 Vector3::Project(Vector3 a, Vector3 b)
 	float dot = Dot(a, b);
 	float sqrMag = SqrMagnitude(b);
 
-	if (sqrMag < epsilon * epsilon)
+	if (sqrMag < 1e-05f * 1e-05f)
 		return Vector3::Zero();
 
 	float scale = dot / sqrMag;
@@ -316,10 +341,10 @@ Vector3 Vector3::Normalized(Vector3 a)
 {
 	float mag = a.Magnitude();
 
-	if (mag < epsilon)
+	if (mag < 1e-05f)
 		return Vector3::Zero();
 
-	if (abs(mag - 1.0f) < epsilon)
+	if (abs(mag - 1.0f) < 1e-05f)
 		return a;
 
 	return a / mag;
@@ -339,8 +364,8 @@ Vector3 Vector3::MoveToWards(Vector3 from, Vector3 to, float distance)
 	return from + toVector / dist * distance;
 }
 
-Vector3 Vector3::Reflect(Vector3 direction, Vector3 normal)
+Vector3 Vector3::Reflect(Vector3 vector, Vector3 normal)
 {
-	float dot = Dot(direction, normal);
-	return direction - normal * (2.0f * dot);
+	float dot = Dot(vector, normal);
+	return vector - normal * (2.0f * dot);
 }
