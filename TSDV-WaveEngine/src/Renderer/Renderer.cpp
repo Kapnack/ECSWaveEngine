@@ -260,6 +260,13 @@ namespace WaveEngine
 	{
 		++batchCalls;
 
+		list<unsigned int>::iterator it = std::find(entityCameras[transform.GetID()].begin(), entityCameras[transform.GetID()].end(), transform.GetID());
+
+		if (it != entityCameras[transform.GetID()].end())
+			return;
+
+		entityCameras[transform.GetID()].push_back(cameraID);
+
 		RenderData& batch =
 			batching[matComp.materialID][meshComp.meshID];
 
@@ -288,8 +295,8 @@ namespace WaveEngine
 				->GetComponentStorage<Camera>()
 				.GetFirst();
 
-			glViewport(camera.viewPortRes.position.x, camera.viewPortRes.position.y,
-				camera.viewPortRes.size.x * GetWindow()->GetWidth(), camera.viewPortRes.size.y * GetWindow()->GetHeight());
+			glViewport(camera.viewPortRes.GetCenter().x, camera.viewPortRes.GetCenter().y,
+				camera.viewPortRes.GetSize().x * GetWindow()->GetWidth(), camera.viewPortRes.GetSize().y * GetWindow()->GetHeight());
 
 			ECSTransform& cameraTransform = camera.GetWaveObject().GetTransform();
 
