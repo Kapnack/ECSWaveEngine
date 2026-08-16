@@ -36,6 +36,9 @@
     <ClCompile Include="src\EventSystem\EventSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\WaveMath\WaveMath\WaveMath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\WaveMath\Matrix4x4\Matrix4x4.h">
@@ -75,6 +78,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\CollisionSystem\Octree\OctreeNode\OctreeNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WaveMath\WaveMath\WaveMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
