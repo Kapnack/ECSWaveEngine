@@ -152,6 +152,7 @@
     <ClCompile Include="src\WaveMath\Vector2\Vector2.cpp" />
     <ClCompile Include="src\WaveMath\Vector3\Vector3.cpp" />
     <ClCompile Include="src\WaveMath\Vector4\Vector4.cpp" />
+    <ClCompile Include="src\WaveMath\WaveMath\WaveMath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CollisionSystem\Octree\Octree.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="src\WaveMath\Vector2\Vector2.h" />
     <ClInclude Include="src\WaveMath\Vector3\Vector3.h" />
     <ClInclude Include="src\WaveMath\Vector4\Vector4.h" />
+    <ClInclude Include="src\WaveMath\WaveMath\WaveMath.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
