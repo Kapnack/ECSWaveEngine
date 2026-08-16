@@ -6,15 +6,13 @@
 #include "TextureImporter/TextureImporter.h"
 #include "TextureImporter/TextureManager.h"
 #include "ECS/Camera/Camera.h"
-#include "ECS/Mesh/MeshID.h"
-#include "ECS/MaterialID.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "ModelImporter/ModelImporter.h"
 #include "CameraManager/CameraManager.h"
 
 namespace WaveEngine
 {
-	BaseGame::BaseGame(const int& width, const int& height)
+	BaseGame::BaseGame(int width, int height)
 	{
 		InitEngine(width, height);
 	}
@@ -24,7 +22,7 @@ namespace WaveEngine
 		EndEngine();
 	}
 
-	void BaseGame::InitEngine(const int& width, const int& height)
+	void BaseGame::InitEngine(int width, int height)
 	{
 		if (!glfwInit())
 			exit(-1);
@@ -50,8 +48,8 @@ namespace WaveEngine
 		ServiceProvider::Instance().Register(new CameraManager());
 #pragma endregion
 
-		ServiceProvider::Instance().Get<WaveObjectRegistry>()->Init();
-		ServiceProvider::Instance().Get<CameraManager>()->Init();
+		GetWaveObjectRegistry()->Init();
+		GetCameraManager()->Init();
 
 		drawLogic.Init();
 		drawLogic.Init();
@@ -88,10 +86,10 @@ namespace WaveEngine
 		tank->GetTransform().SetScale(Vector3::One() * defaultSize);
 
 		cameraObject = &GetWaveObjectFactory()->Instantiate();
-		camera = &cameraObject->AddComponent<Camera>();
-		camera->SetFarPlane(1000000.0f);
-		camera->SetNearPlane(0.1f);
-		camera->SetOrthographic(false);
+		Camera& camera = cameraObject->AddComponent<Camera>();
+		camera.SetFarPlane(1000000.0f);
+		camera.SetNearPlane(0.1f);
+		camera.SetOrthographic(false);
 		cameraObject->GetTransform().SetPosition(Vector3::Right() * (modelsPaths.size() * 0.5f * defaultSize) + Vector3::Foward() * 150);
 
 		modelImporter.LoadScene(modelsPaths.at(modelsPaths.size() - 1));
@@ -195,36 +193,36 @@ namespace WaveEngine
 		const float camereSpeed = 180.0f * GetDeltaTime();
 		ECSTransform& transform = tank->GetTransform();
 		ECSTransform& cameraTransform = cameraObject->GetTransform();
-		
+
 		if (!ImGuiClass::thirdPersonCamera)
 		{
 			if (GetInput()->IsKeyPressed(Keys::W))
 				cameraTransform.Translate(cameraTransform.GetForward() * camereSpeed);
-		
+
 			if (GetInput()->IsKeyPressed(Keys::S))
 				cameraTransform.Translate(-cameraTransform.GetForward() * camereSpeed);
-		
+
 			if (GetInput()->IsKeyPressed(Keys::A))
 				cameraTransform.Translate(-cameraTransform.GetRight() * camereSpeed);
-		
+
 			if (GetInput()->IsKeyPressed(Keys::D))
 				cameraTransform.Translate(cameraTransform.GetRight() * camereSpeed);
-		
+
 			if (GetInput()->IsKeyPressed(Keys::SPACE))
 				cameraTransform.Translate(Vector3::Up() * camereSpeed);
-		
+
 			if (GetInput()->IsKeyPressed(Keys::LEFT_CONTROL))
 				cameraTransform.Translate(Vector3::Down() * camereSpeed);
-		
+
 			if (GetInput()->IsKeyPressed(Keys::Q))
 				cameraTransform.Rotate(Vector3::Up() * camereSpeed);
-		
+
 			if (GetInput()->IsKeyPressed(Keys::E))
 				cameraTransform.Rotate(Vector3::Down() * camereSpeed);
-		
+
 			if (GetInput()->IsKeyPressed(Keys::Z))
 				cameraTransform.Rotate(Vector3::Left() * camereSpeed);
-		
+
 			if (GetInput()->IsKeyPressed(Keys::X))
 				cameraTransform.Rotate(Vector3::Right() * camereSpeed);
 		}
@@ -263,7 +261,7 @@ namespace WaveEngine
 			{
 				transform.Scale(Vector3::Right() * camereSpeed);
 			}
-		
+
 			if (GetInput()->IsKeyPressed(Keys::Z))
 			{
 				transform.Rotate(Vector3::Left() * camereSpeed);
@@ -272,7 +270,7 @@ namespace WaveEngine
 			{
 				transform.Rotate(Vector3::Right() * camereSpeed);
 			}
-		
+
 			if (GetInput()->IsKeyPressed(Keys::Q))
 			{
 				transform.Rotate(Vector3::Up() * camereSpeed);
@@ -281,7 +279,7 @@ namespace WaveEngine
 			{
 				transform.Rotate(Vector3::Down() * camereSpeed);
 			}
-		
+
 			if (GetInput()->IsKeyPressed(Keys::SPACE))
 			{
 				transform.Translate(Vector3::Foward() * camereSpeed);
@@ -290,7 +288,7 @@ namespace WaveEngine
 			{
 				transform.Translate(Vector3::Back() * camereSpeed);
 			}
-		
+
 			ECSTransform& childsTransform = transform.GetChild(0).GetTransform().GetChild(0).GetTransform().GetChild(0).GetTransform();
 			const int dived = 2;
 			if (GetInput()->IsKeyPressed(Keys::I))
@@ -333,7 +331,7 @@ namespace WaveEngine
 
 		transformLogic.Update();
 
-		camera->CalculateMatrixes();
+		GetCameraManager()->Update();
 
 		meshLogic.Update();
 
@@ -352,77 +350,82 @@ namespace WaveEngine
 		imGui.Draw();
 	}
 
-	Time* BaseGame::GetTime()
+	Time* BaseGame::GetTime() const
 	{
 		return ServiceProvider::Instance().Get<Time>();
 	}
 
-	Renderer* BaseGame::GetRenderer()
+	Renderer* BaseGame::GetRenderer() const
 	{
 		return ServiceProvider::Instance().Get<Renderer>();
 	}
 
-	float BaseGame::GetDeltaTime()
+	CameraManager* BaseGame::GetCameraManager() const
+	{
+		return ServiceProvider::Instance().Get<CameraManager>();
+	}
+
+	float BaseGame::GetDeltaTime() const
 	{
 		return GetTime()->GetDeltaTime();
 	}
 
-	Window* BaseGame::GetWindow()
+	Window* BaseGame::GetWindow() const
 	{
 		return ServiceProvider::Instance().Get<Window>();
 	}
 
-	MaterialManager* BaseGame::GetMaterialManager()
+	MaterialManager* BaseGame::GetMaterialManager() const
 	{
 		return ServiceProvider::Instance().Get<MaterialManager>();
 	}
 
-	MaterialFactory* BaseGame::GetMaterialFactory()
+	MaterialFactory* BaseGame::GetMaterialFactory() const
 	{
 		return ServiceProvider::Instance().Get<MaterialFactory>();
 	}
 
-	Input* BaseGame::GetInput()
+	Input* BaseGame::GetInput() const
 	{
 		return ServiceProvider::Instance().Get<Input>();
 	}
 
-	TextureManager* BaseGame::GetTextureManager()
+	TextureManager* BaseGame::GetTextureManager() const
 	{
 		return ServiceProvider::Instance().Get<TextureManager>();
 	}
 
-	TextureImporter* BaseGame::GetTextureImporter()
+	TextureImporter* BaseGame::GetTextureImporter() const
 	{
 		return ServiceProvider::Instance().Get<TextureImporter>();
 	}
 
-	FileReader* BaseGame::GetFileReader()
+	FileReader* BaseGame::GetFileReader() const
 	{
 		return ServiceProvider::Instance().Get<FileReader>();
 	}
 
-	EventSystem* BaseGame::GetEventSystem()
+	EventSystem* BaseGame::GetEventSystem() const
 	{
 		return ServiceProvider::Instance().Get<EventSystem>();
 	}
 
-	MeshFactory* BaseGame::GetMeshFactory()
+	MeshFactory* BaseGame::GetMeshFactory() const
 	{
 		return ServiceProvider::Instance().Get<MeshFactory>();
 	}
 
-	MeshManager* BaseGame::GetMeshManager()
+	MeshManager* BaseGame::GetMeshManager() const
 	{
 		return ServiceProvider::Instance().Get<MeshManager>();
 	}
 
-	WaveObjectRegistry* BaseGame::GetWaveObjectRegistry()
+	WaveObjectRegistry* BaseGame::GetWaveObjectRegistry() const
 	{
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
 	}
 
-	WaveObjectFactory* BaseGame::GetWaveObjectFactory()
+	WaveObjectFactory* BaseGame::GetWaveObjectFactory() const
 	{
 		return ServiceProvider::Instance().Get<WaveObjectFactory>();
 	}
