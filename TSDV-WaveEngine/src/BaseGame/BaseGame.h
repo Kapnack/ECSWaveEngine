@@ -1,25 +1,28 @@
 #pragma once
 
 #include "Export.h"
-#include "Window/Window.h"
-#include "Renderer/Renderer.h"
 #include "Time/Time.h"
 #include "Input/Input.h"
-#include "Material/MaterialManager.h"
+#include "Window/Window.h"
+#include "Renderer/Renderer.h"
+#include "MeshLogic/MeshLogic.h"
 #include "FileReader/FileReader.h"
-#include "Mesh/MeshFactory/MeshFactory.h"
-#include "Mesh/MeshManager/MeshManager.h"
-
-#include "EventSystem/EventSystem.h"
 #include "ImGuiClass/ImGuiClass.h"
 #include "ECS/Managers/DrawLogic.h"
-#include "ECS/Managers/TransformLogic/TransformLogic.h"
-#include "ECS/WaveObject/WaveObjectRegistry.h"
-#include "ECS/WaveObject/WaveObjectFactory.h"
-#include "ECS/Camera/Camera.h"
+#include "EventSystem/EventSystem.h"
+#include "Material/MaterialManager.h"
+#include "Material/MaterialFactory.h"
 #include "ECS/WaveObject/WaveObject.h"
-#include "MeshLogic/MeshLogic.h"
+#include "Mesh/MeshFactory/MeshFactory.h"
+#include "Mesh/MeshManager/MeshManager.h"
 #include "ECS/RigidBody/RigidBodyLogic.h"
+#include "TextureImporter/TextureManager.h"
+#include "TextureImporter/TextureImporter.h"
+#include "ECS/WaveObject/WaveObjectFactory.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/Managers/TransformLogic/TransformLogic.h"
+#include <CameraManager/CameraManager.h>
+
 
 namespace WaveEngine
 {
@@ -27,15 +30,13 @@ namespace WaveEngine
 	{
 	private:
 
-		void InitEngine(const int& width, const int& height);
+		void InitEngine(int width, int height);
 
 		void EndEngine();
 
 		void EngineUpdate();
 
 		void EngineDraw();
-
-		Renderer* GetRenderer();
 
 		WaveObject* tank;
 
@@ -47,35 +48,36 @@ namespace WaveEngine
 		ImGuiClass imGui;
 
 		WaveObject* cameraObject;
-		Camera* camera;
 
 	protected:
 
-		WAVEEXPORT	virtual void Init(const int& width, const int& height) = 0;
-		WAVEEXPORT	virtual void Unload() = 0;
+		WAVEEXPORT virtual void Init(const int& width, const int& height) = 0;
+		WAVEEXPORT virtual void Unload() = 0;
 
-		WAVEEXPORT float GetDeltaTime();
+		WAVEEXPORT float GetDeltaTime() const;
 
-		WAVEEXPORT MaterialManager* GetMaterialManager();
-		WAVEEXPORT MaterialFactory* GetMaterialFactory();
-		WAVEEXPORT Input* GetInput();
-		WAVEEXPORT Window* GetWindow();
-		WAVEEXPORT Time* GetTime();
-		WAVEEXPORT TextureImporter* GetTextureImporter();
-		WAVEEXPORT TextureManager* GetTextureManager();
-		WAVEEXPORT FileReader* GetFileReader();
-		WAVEEXPORT EventSystem* GetEventSystem();
-		WAVEEXPORT MeshFactory* GetMeshFactory();
-		WAVEEXPORT MeshManager* GetMeshManager();
-		WAVEEXPORT WaveObjectRegistry* GetWaveObjectRegistry();
-		WAVEEXPORT WaveObjectFactory* GetWaveObjectFactory();
+		WAVEEXPORT Renderer* GetRenderer() const;
+		WAVEEXPORT CameraManager* GetCameraManager() const;
+		WAVEEXPORT MaterialManager* GetMaterialManager() const;
+		WAVEEXPORT MaterialFactory* GetMaterialFactory() const;
+		WAVEEXPORT Input* GetInput() const;
+		WAVEEXPORT Window* GetWindow() const;
+		WAVEEXPORT Time* GetTime() const;
+		WAVEEXPORT TextureImporter* GetTextureImporter() const;
+		WAVEEXPORT TextureManager* GetTextureManager() const;
+		WAVEEXPORT FileReader* GetFileReader() const;
+		WAVEEXPORT EventSystem* GetEventSystem() const;
+		WAVEEXPORT MeshFactory* GetMeshFactory() const;
+		WAVEEXPORT MeshManager* GetMeshManager() const;
+		WAVEEXPORT WaveObjectRegistry* GetWaveObjectRegistry() const;
+		WAVEEXPORT WaveObjectFactory* GetWaveObjectFactory() const;
 
 	public:
 
-		WAVEEXPORT BaseGame(const int& width, const int& height);
+		WAVEEXPORT BaseGame(int width, int height);
 		WAVEEXPORT virtual ~BaseGame();
 
-		WAVEEXPORT	void Run();
+		WAVEEXPORT void Run();
 	};
 }
 
