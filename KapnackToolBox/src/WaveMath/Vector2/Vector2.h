@@ -51,6 +51,9 @@ struct WAVEEXPORT Vector2 final
 	void operator=(Vector3 vector3);
 	bool operator<(Vector2 other) const;
 	bool operator>(Vector2 other) const;
+	bool operator==(Vector2 other) const;
+	bool operator>=(Vector2 other) const;
+	bool operator<=(Vector2 other) const;
 
 	static float Angle(Vector2 from, Vector2 to);
 	static Vector2 ClampMagnitude(Vector2 vector, float maxMagnitud);
