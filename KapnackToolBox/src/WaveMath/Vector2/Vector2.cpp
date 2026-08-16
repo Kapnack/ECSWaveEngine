@@ -227,6 +227,21 @@ bool Vector2::operator>(Vector2 other) const
 	return x > other.x && y > other.y;
 }
 
+bool Vector2::operator==(Vector2 other) const
+{
+	return x == other.x && y == other.y;
+}
+
+bool Vector2::operator>=(Vector2 other) const
+{
+	return *this > other || *this == other;
+}
+
+bool Vector2::operator<=(Vector2 other) const
+{
+	return *this < other || *this == other;
+}
+
 float Vector2::Angle(Vector2 from, Vector2 to)
 {
 	float dot = Dot(from, to);
