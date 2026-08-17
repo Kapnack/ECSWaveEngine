@@ -62,6 +62,9 @@ namespace WaveEngine
 
 		Square viewPortRes;
 
+		Camera(unsigned int ID);
+		~Camera();
+
 		glm::mat4 GetView() const;
 		glm::mat4 GetProjection() const;
 
@@ -72,9 +75,7 @@ namespace WaveEngine
 		void ExtractFrustumPlanes();
 		bool IsInsideFrustum(const BoundingBox& box) const;
 
-		Camera(unsigned int ID);
-		WAVEEXPORT ~Camera();
-
+		WAVEEXPORT void SetIsActive(bool isActive) override;
 		WAVEEXPORT void SetOrderIndex(int orderIndex);
 
 		WAVEEXPORT void SetOrthographic(bool value);
