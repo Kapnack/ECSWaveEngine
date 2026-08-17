@@ -7,6 +7,8 @@
 #include "ServiceProvider/ServiceProvider.h"
 #include "EventSystem/EventSystem.h"
 #include "ECS/Camera/Camera.h"
+#include <algorithm>
+#include <iterator>
 
 namespace WaveEngine
 {
@@ -40,8 +42,10 @@ namespace WaveEngine
 
 		Square camerasTotalRes;
 
-		for (Camera& camera : GetCameraContainer().GetComponents())
+		for (unsigned int cameraID : activeCamerasOrder)
 		{
+			Camera& camera = GetCameraContainer().Get(cameraID);
+
 			camera.CalculateMatrixes();
 			usableCameras.push_back(&camera);
 			camerasTotalRes.Encapsulate(Square(camera.viewPortRes.GetCenter(), camera.viewPortRes.GetSize() * GetWindow()->GetSize()));
@@ -77,22 +81,12 @@ namespace WaveEngine
 
 	void CameraManager::RefreshOrderIndices(int from)
 	{
-		//for (int i = from; i < activeCamerasOrder.size(); ++i)
-			//GetCameraContainer().Get(activeCamerasOrder[i]).orderIndex = i;
+		for (int i = from; i < activeCamerasOrder.size(); ++i)
+			GetCameraContainer().Get(activeCamerasOrder[i]).orderIndex = i;
 	}
 
-	vector<Camera*> CameraManager::GetActiveCameras()
+	const vector<Camera*>& CameraManager::GetActiveCameras()
 	{
-		vector<Camera*> cameras;
-
-		for (unsigned int cameraID : activeCamerasOrder)
-		{
-			if (cameraID == Component::NULL_COMPONENT)
-				continue;
-
-			cameras.push_back(&GetCameraContainer().Get(cameraID));
-		}
-
-		return cameras;
+		return usableCameras;
 	}
 }
