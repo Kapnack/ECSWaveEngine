@@ -61,9 +61,6 @@ namespace WaveEngine
 
 		const vector<string> modelsPaths
 		{
-			//"Models/gold_headed_buddha_-_photogrammetry_test_2019.glb",
-			//"Models/Cat/concrete_cat_statue_1k.fbx",
-			//"Models/Statue/marble_bust_01_1k.fbx",
 			"Models/Tank.fbx",
 			"Models/Cube.fbx"
 		};
@@ -76,11 +73,6 @@ namespace WaveEngine
 		tank = modelImporter.IntantiateModel();
 
 		tank->AddComponent<RigidBody>();
-
-		for (WaveObject* rigidBody : tank->GetTransform().GetChilds())
-		{
-			rigidBody->AddComponent<RigidBody>();
-		}
 
 		tank->GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f));
 		tank->GetTransform().SetScale(Vector3::One() * defaultSize);
