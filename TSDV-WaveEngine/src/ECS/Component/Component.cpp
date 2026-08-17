@@ -6,12 +6,20 @@
 
 namespace WaveEngine
 {
-	Component::Component(const unsigned int ID)
+	Component::Component(unsigned int ID)
 	{
 		ownerID = ID;
 	}
 
 	Component::~Component()
+	{
+	}
+
+	void Component::Init()
+	{
+	}
+
+	void Component::LateInit()
 	{
 	}
 
@@ -25,7 +33,7 @@ namespace WaveEngine
 		return GetWaveObject().GetTransform();
 	}
 
-	const unsigned int& Component::GetID() const
+	unsigned int Component::GetID() const
 	{
 		return ownerID;
 	}
