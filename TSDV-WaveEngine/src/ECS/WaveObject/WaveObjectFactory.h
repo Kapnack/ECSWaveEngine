@@ -27,5 +27,12 @@ namespace WaveEngine
 	public:
 
 		WaveObject& Instantiate();
+
+		template<TypeComponent T>
+		T& Instantiate()
+		{
+			WaveObject& waveObject = Instantiate();
+			return waveObject.AddComponent<T>();
+		}
 	};
 }
