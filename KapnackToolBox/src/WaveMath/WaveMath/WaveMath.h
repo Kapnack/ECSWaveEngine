@@ -1,14 +1,10 @@
 #pragma once
 
 #include "Export.h"
+#include <type_traits>
 
 template<typename T>
-concept SignableObject = std::is_arithmetic_v<T> || 
-	requires(T a, T b) 
-{
-		{ a < b } -> std::convertible_to<bool>;
-		{ a > b } -> std::convertible_to<bool>;
-};;
+concept SignableObject = std::is_arithmetic_v<T>;
 
 WAVEEXPORT class WaveMath
 {
@@ -22,7 +18,7 @@ public:
 	WAVEEXPORT static int Abs(int number);
 
 	template<SignableObject T>
-	WAVEEXPORT static int Sign(T number)
+	static int Sign(T number)
 	{
 		return static_cast<int>((number > 0) - (number < 0));
 	}
