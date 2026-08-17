@@ -20,6 +20,8 @@ namespace WaveEngine
 
 		void SetMinMax(Vector2 vector2A, Vector2 vector2B);
 
+		void SetCenter(Vector2 center);
+		void SetSize(Vector2 size);
 		void SetMin(Vector2 min);
 		void SetMax(Vector2 max);
 
