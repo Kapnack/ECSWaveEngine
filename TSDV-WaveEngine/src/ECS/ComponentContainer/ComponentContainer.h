@@ -1,18 +1,22 @@
 #pragma once
 
 #include <vector>
+#include <ECS/Component/Component.h>
 
 using namespace std;
 
 namespace WaveEngine
 {
-	struct IStorage
+	class IStorage
 	{
 
 	};
 
-	template <typename T>
-	class ComponentContainer
+	template<typename T>
+	concept TypeComponent = std::derived_from<T, Component>;
+
+	template <TypeComponent T>
+	class ComponentContainer : public IStorage
 	{
 	private:
 
@@ -22,7 +26,7 @@ namespace WaveEngine
 
 	public:
 
-		void Add(const unsigned int& entity, const T& component = T())
+		void Add(unsigned int entity, const T& component = T())
 		{
 			if (entity >= componentByEntity.size())
 			{
@@ -40,7 +44,7 @@ namespace WaveEngine
 			componentByEntity[entity] = index;
 		}
 
-		bool Has(const unsigned int& entity) const
+		bool Has(unsigned int entity) const
 		{
 			if (entity >= componentByEntity.size())
 				return false;
@@ -48,7 +52,7 @@ namespace WaveEngine
 			return componentByEntity[entity] != -1;
 		}
 
-		void Remove(const unsigned int& entity)
+		void Remove(unsigned int entity)
 		{
 			if (!Has(entity))
 				return;
@@ -70,18 +74,18 @@ namespace WaveEngine
 			componentByEntity[entity] = -1;
 		}
 
-		T& Get(const unsigned int& entity)
+		T& Get(unsigned int entity)
 		{
 			return components.at(componentByEntity.at(entity));
 		}
 
 		T& GetFirst()
 		{
-			typename std::vector<T>::iterator iterator = components.begin();
-			return *iterator;
+			typename std::vector<T>::iterator it = components.begin();
+			return *it;
 		}
 
-		T* TryGet(const unsigned int& entity)
+		T* TryGet(unsigned int entity)
 		{
 			if (entity >= componentByEntity.size())
 				return nullptr;
@@ -103,11 +107,10 @@ namespace WaveEngine
 		{
 			return entities;
 		}
-	};
 
-	template <typename T>
-	struct Storage : IStorage
-	{
-		ComponentContainer<T> container;
+		T& operator[](unsigned int entityID)
+		{
+			return Get(entityID);
+		}
 	};
 }
