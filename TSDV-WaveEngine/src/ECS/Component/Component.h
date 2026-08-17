@@ -16,14 +16,17 @@ namespace WaveEngine
 
 		static const unsigned int NULL_COMPONENT = 0;
 
-		Component(const unsigned int ID);
+		Component(unsigned int ID);
 		~Component();
+
+		virtual void Init();
+		virtual void LateInit();
 
 		WaveObject& GetWaveObject() const;
 
 		ECSTransform& GetTransform() const;
 
-		const unsigned int& GetID() const;
+		unsigned int GetID() const;
 
 		virtual void SetIsActive(bool isActive);
 		bool GetIsActive() const;
