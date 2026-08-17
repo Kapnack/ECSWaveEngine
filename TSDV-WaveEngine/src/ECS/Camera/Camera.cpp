@@ -19,6 +19,12 @@ namespace WaveEngine
 	{
 	}
 
+	void Camera::SetIsActive(bool isActive)
+	{
+		Component::SetIsActive(isActive);
+		SetOrderIndex(orderIndex);
+	}
+
 	void Camera::SetOrderIndex(int orderIndex)
 	{
 		this->orderIndex = orderIndex;
