@@ -57,6 +57,6 @@ namespace WaveEngine
 		void Init();
 		void LateInit();
 		void Update();
-		vector<Camera*> GetActiveCameras();
+		const vector<Camera*>& GetActiveCameras();
 	};
 }
