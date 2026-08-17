@@ -72,6 +72,7 @@ namespace WaveEngine
 
 		struct InstanceData
 		{
+			unsigned int entityID;
 			glm::mat4 model;
 		};
 
