@@ -4,12 +4,12 @@ namespace WaveEngine
 {
 	const unsigned int Mesh::NULL_MESH = 0;
 
-	const bool Mesh::GetDirty() const
+	bool Mesh::GetDirty() const
 	{
 		return isDirty;
 	}
 
-	Mesh::Mesh(VertexData* vertexBuffer, const unsigned int vertexSize, unsigned int* indexes, const unsigned int indexAmount, const string_view name, const unsigned int meshID)
+	Mesh::Mesh(VertexData* vertexBuffer, unsigned int vertexSize, unsigned int* indexes, unsigned int indexAmount, string_view name, unsigned int meshID)
 	{
 		this->name = name;
 		this->vertexBuffer = vertexBuffer;
@@ -33,7 +33,7 @@ namespace WaveEngine
 		return vertexBuffer;
 	}
 
-	const unsigned int Mesh::GetVertexSize() const
+	unsigned int Mesh::GetVertexSize() const
 	{
 		return vertexSize;
 	}
@@ -43,7 +43,7 @@ namespace WaveEngine
 		return name;
 	}
 
-	void Mesh::SetVertexColor(const Color& color)
+	void Mesh::SetVertexColor(Color color)
 	{
 		for (unsigned i = 0; i < vertexSize; ++i)
 			vertexBuffer[i].color = color;
@@ -61,7 +61,7 @@ namespace WaveEngine
 		return indexes;
 	}
 
-	const unsigned int Mesh::GetIndexesSize() const
+	unsigned int Mesh::GetIndexesSize() const
 	{
 		return indexAmount;
 	}
