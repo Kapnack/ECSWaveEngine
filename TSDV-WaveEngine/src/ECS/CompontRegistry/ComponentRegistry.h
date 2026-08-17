@@ -4,8 +4,10 @@
 
 #include <unordered_map>
 #include <typeindex>
+#include <concepts>
 
 #include "ECS/ComponentContainer/ComponentContainer.h"
+#include "ECS/Component/Component.h"
 
 using namespace std;
 
@@ -29,79 +31,83 @@ namespace WaveEngine
 				delete storage->second;
 		}
 
-		template<typename T>
-		T& AddComponent(const unsigned int& entity)
+		template<TypeComponent T>
+		T& AddComponent(unsigned int entity)
 		{
 			type_index typeIndex = typeid(T);
 
 			T component = T(entity);
 
 			if (!storages.contains(typeIndex))
-				storages[typeIndex] = new Storage<T>();
+				storages[typeIndex] = new ComponentContainer<T>();
 
-			static_cast<Storage<T>*>(storages.at(typeIndex))->container.Add(entity, component);
+			static_cast<ComponentContainer<T>*>(storages.at(typeIndex))->Add(entity, component);
 
-			return static_cast<Storage<T>*>(storages.at(typeIndex))->container.Get(entity);
+			component.SetIsActive(true);
+			component.Init();
+			component.LateInit();
+
+			return static_cast<ComponentContainer<T>*>(storages.at(typeIndex))->Get(entity);
 		}
 
-		template<typename T>
+		template<TypeComponent T>
 		bool HasStorage()
 		{
 			return storages.find(typeid(T)) != storages.end();
 		}
 
-		template<typename T>
-		bool Has(const int& entity)
+		template<TypeComponent T>
+		bool Has(unsigned int entity)
 		{
 			return GetComponentStorage<T>().Has(entity);
 		}
 
-		template<typename T>
-		T& Get(const unsigned int& entity)
+		template<TypeComponent T>
+		T& Get(unsigned int entity)
 		{
 			return GetComponentStorage<T>().Get(entity);
 		}
 
-		template<typename T>
-		T* TryGet(const unsigned int& entity)
+		template<TypeComponent T>
+		T* TryGet(unsigned int entity)
 		{
 			return GetComponentStorage<T>().TryGet(entity);
 		}
 
-		template<typename T>
-		void RemoveComponent(const unsigned int& entity)
+		template<TypeComponent T>
+		void RemoveComponent(unsigned int entity)
 		{
 			type_index typeIndex = typeid(T);
 
 			if (!storages.contains(typeIndex))
 				return;
 
-			static_cast<Storage<T>*>(storages.at(typeIndex))->container.Remove(entity);
+			static_cast<ComponentContainer<T>*>(storages.at(typeIndex))->Remove(entity);
 		}
 
-		template<typename T>
+		template<TypeComponent T>
 		ComponentContainer<T>& GetComponentStorage()
 		{
-			return static_cast<Storage<T>*>(storages.at(typeid(T)))->container;
+			return *static_cast<ComponentContainer<T>*>(storages.at(typeid(T)));
 		}
 
-		template<typename T>
+		template<TypeComponent T>
 		ComponentContainer<T>& CreateOrGetComponentStorage()
 		{
 			type_index typeIndex = typeid(T);
 
 			if (!storages.contains(typeIndex))
 			{
-				Storage<T>* newStorage = new Storage<T>();
+				ComponentContainer<T>* newStorage = new ComponentContainer<T>();
 				storages[typeIndex] = newStorage;
 
-				return newStorage->container;
+				return *newStorage;
 			}
 
-			return static_cast<Storage<T>*>(storages.at(typeid(T)))->container;
+			return *static_cast<ComponentContainer<T>*>(storages.at(typeid(T)));
 		}
 
-		template<typename T>
+		template<TypeComponent T>
 		ComponentContainer<T>* TryGetComponentStorage()
 		{
 			type_index typeIndex = typeid(T);
@@ -109,10 +115,10 @@ namespace WaveEngine
 			if (!storages.contains(typeIndex))
 				return nullptr;
 
-			return static_cast<Storage<T>*>(storages.at(typeIndex))->container;
+			return static_cast<ComponentContainer<T>*>(storages.at(typeIndex));
 		}
 
-		template<typename T>
+		template<TypeComponent T>
 		T& GetComponent(const unsigned int& entity)
 		{
 			return GetComponentStorage<T>().Get(entity);
