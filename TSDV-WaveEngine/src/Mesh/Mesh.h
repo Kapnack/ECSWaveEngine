@@ -21,7 +21,7 @@ namespace WaveEngine
 
 		bool isDirty = false;
 
-		const bool GetDirty() const;
+		bool GetDirty() const;
 		void UnDirt();
 
 		friend class Renderer;
@@ -30,17 +30,17 @@ namespace WaveEngine
 
 		static const unsigned int NULL_MESH;
 
-		Mesh(VertexData* vertexBuffer, const unsigned int vertexSize, unsigned int* index, const unsigned int indexAmount, const string_view name, const unsigned int meshID);
+		Mesh(VertexData* vertexBuffer, unsigned int vertexSize, unsigned int* index, unsigned int indexAmount, const string_view name, unsigned int meshID);
 		~Mesh();
 
 		unsigned int GetID();
 		const VertexData* GetVertexBuffer() const;
-		const unsigned int GetVertexSize() const;
+		unsigned int GetVertexSize() const;
 		string GetName();
 
-		void SetVertexColor(const Color& color);
+		void SetVertexColor(Color color);
 
 		const unsigned int* GetIndexes() const;
-		const unsigned int GetIndexesSize() const;
+		unsigned int GetIndexesSize() const;
 	};
 }
