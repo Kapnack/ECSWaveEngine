@@ -22,6 +22,18 @@ namespace WaveEngine
 		max = Vector2::Max(vector2A, vector2B);
 	}
 
+	void Square::SetCenter(Vector2 center)
+	{
+		Vector2 extends = GetExtends();
+		SetMinMax(center - extends, center + extends);
+	}
+
+	void Square::SetSize(Vector2 size)
+	{
+		Vector2 center = GetCenter();
+		SetMinMax(center - size * 0.5f, center + size * 0.5f);
+	}
+
 	void Square::SetMin(Vector2 min)
 	{
 		this->min = min;
