@@ -28,16 +28,6 @@ int WaveMath::Abs(int number)
 	return (number + mask) ^ mask;
 }
 
-int WaveMath::Sign(int number)
-{
-	return (number > 0) - (number < 0);
-}
-
-int WaveMath::Sign(float number)
-{
-
-}
-
 float WaveMath::Opposite(float number)
 {
 #ifdef _WIN32
