@@ -14,8 +14,6 @@
 #include "WaveMath/Vector4/Vector4.h"
 #include "BoundingBox/BoundingBox.h"
 
-#define MAX_INSTANCES 1000
-
 using namespace std;
 
 namespace WaveEngine
@@ -260,18 +258,12 @@ namespace WaveEngine
 	{
 		++batchCalls;
 
-		list<unsigned int>::iterator it = std::find(entityCameras[transform.GetID()].begin(), entityCameras[transform.GetID()].end(), transform.GetID());
-
-		if (it != entityCameras[transform.GetID()].end())
-			return;
-
 		entityCameras[transform.GetID()].push_back(cameraID);
 
 		RenderData& batch =
 			batching[matComp.materialID][meshComp.meshID];
 
-		batch.instances.reserve(MAX_INSTANCES);
-		batch.instances.push_back({ transform.GetGlobalModel() });
+		batch.instances.push_back({ transform.GetID(), transform.GetGlobalModel() });
 	}
 
 	void Renderer::Flush()
@@ -413,6 +405,8 @@ namespace WaveEngine
 
 			materialToUse->UnBind();
 		}
+
+		entityCameras.clear();
 	}
 
 	void Renderer::FlushDebug()
