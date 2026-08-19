@@ -1,9 +1,10 @@
 #pragma once
 
-#include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "Renderer/Renderer.h"
 #include "ECS/Camera/Camera.h"
 #include "ECS/WaveObject/WaveObject.h"
+#include "CameraManager/CameraManager.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
 
 namespace WaveEngine
 {
@@ -16,6 +17,8 @@ namespace WaveEngine
 		Renderer* GetRenderer();
 
 		void CheckChildsAreInFrustum(WaveObject& waveObject, Camera& camera);
+
+		CameraManager* GetCameraManager() const;
 
 	public:
 
