@@ -46,12 +46,19 @@ namespace WaveEngine
 		{
 			Camera& camera = GetCameraContainer().Get(cameraID);
 
+			Square cameraRealRes = Square(camera.viewPortRes.GetCenter(), camera.viewPortRes.GetSize() * GetWindow()->GetSize());
+
+			if (camerasTotalRes.Contains(cameraRealRes))
+			{
+				if (camerasTotalRes.GetSize() >= GetWindow()->GetSize())
+					break;
+
+				continue;
+			}
+
 			camera.CalculateMatrixes();
 			usableCameras.push_back(&camera);
-			camerasTotalRes.Encapsulate(Square(camera.viewPortRes.GetCenter(), camera.viewPortRes.GetSize() * GetWindow()->GetSize()));
-
-			if (camerasTotalRes.GetSize() >= GetWindow()->GetSize())
-				break;
+			camerasTotalRes.Encapsulate(cameraRealRes);
 		}
 	}
 
