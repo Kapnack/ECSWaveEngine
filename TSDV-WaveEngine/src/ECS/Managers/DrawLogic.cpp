@@ -35,7 +35,7 @@ namespace WaveEngine
 				CheckChildsAreInFrustum(*waveObject, *camera);
 	}
 
-	Renderer* DrawLogic::GetRenderer()
+	Renderer* DrawLogic::GetRenderer() const
 	{
 		return ServiceProvider::Instance().Get<Renderer>();
 	}
