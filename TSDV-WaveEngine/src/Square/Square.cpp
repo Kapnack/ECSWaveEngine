@@ -16,6 +16,16 @@ namespace WaveEngine
 		SetMinMax(Vector2::Min(min, square.min), Vector2::Max(max, square.max));
 	}
 
+	bool Square::Contains(Square square)
+	{
+		return square.min >= min && square.max <= max;
+	}
+
+	bool Square::Contains(Vector2 point)
+	{
+		return point >= min && point <= max;
+	}
+
 	void Square::SetMinMax(Vector2 vector2A, Vector2 vector2B)
 	{
 		min = Vector2::Min(vector2A, vector2B);
@@ -36,12 +46,12 @@ namespace WaveEngine
 
 	void Square::SetMin(Vector2 min)
 	{
-		this->min = min;
+		SetMinMax(min, max);
 	}
 
 	void Square::SetMax(Vector2 max)
 	{
-		this->max = max;
+		SetMinMax(min, max);
 	}
 
 	Vector2 Square::GetSize() const
