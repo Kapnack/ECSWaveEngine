@@ -30,16 +30,9 @@ namespace WaveEngine
 
 	void DrawLogic::Update()
 	{
-		ComponentContainer<MeshRenderer>& meshRendererContainer = GetComponentRegistry()->GetComponentStorage<MeshRenderer>();
-		vector<MeshRenderer>& components = meshRendererContainer.GetComponents();
-		const vector<unsigned int>& entities = meshRendererContainer.GetEntities();
-
-		ComponentContainer<MeshID>& meshIDRendererStorage = GetComponentRegistry()->GetComponentStorage<MeshID>();
-		ComponentContainer<ECSTransform>& transfromStorage = GetComponentRegistry()->GetComponentStorage<ECSTransform>();
-
-		for (Camera& camera : GetComponentRegistry()->CreateOrGetComponentStorage<Camera>().GetComponents())
+		for (Camera* camera : GetCameraManager()->GetActiveCameras())
 			for (WaveObject* waveObject : ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetParentWaveObjects())
-				CheckChildsAreInFrustum(*waveObject, camera);
+				CheckChildsAreInFrustum(*waveObject, *camera);
 	}
 
 	Renderer* DrawLogic::GetRenderer()
@@ -64,6 +57,11 @@ namespace WaveEngine
 
 		for (WaveObject* childWaveObject : waveObject.GetTransform().GetChilds())
 			CheckChildsAreInFrustum(*childWaveObject, camera);
+	}
+
+	CameraManager* DrawLogic::GetCameraManager() const
+	{
+		return ServiceProvider::Instance().Get<CameraManager>();
 	}
 
 	ComponentRegistry* DrawLogic::GetComponentRegistry()
