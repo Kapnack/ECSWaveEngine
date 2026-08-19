@@ -14,7 +14,7 @@ namespace WaveEngine
 
 		ComponentRegistry* GetComponentRegistry();
 
-		Renderer* GetRenderer();
+		Renderer* GetRenderer() const;
 
 		void CheckChildsAreInFrustum(WaveObject& waveObject, Camera& camera);
 
