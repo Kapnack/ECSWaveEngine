@@ -18,6 +18,9 @@ namespace WaveEngine
 
 		void Encapsulate(Square square);
 
+		bool Contains(Square square);
+		bool Contains(Vector2 point);
+
 		void SetMinMax(Vector2 vector2A, Vector2 vector2B);
 
 		void SetCenter(Vector2 center);
