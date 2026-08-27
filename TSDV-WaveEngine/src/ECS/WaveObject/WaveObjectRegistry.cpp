@@ -1,5 +1,6 @@
 #include "WaveObjectRegistry.h"
 
+#include <string>
 #include <vector>
 #include <map>
 
@@ -16,6 +17,7 @@ namespace WaveEngine
 	{
 		GetEventSystem()->Subscribe<ObjectBecameParentEvent>(this, &WaveObjectRegistry::OnObjectBecameParent);
 		GetEventSystem()->Subscribe<ObjectBecameChildEvent>(this, &WaveObjectRegistry::OnObjectBecameChild);
+		GetEventSystem()->Subscribe<ObjectChangeName>(this, &WaveObjectRegistry::OnObjectChangesName);
 	}
 
 	void WaveObjectRegistry::OnObjectBecameParent(const ObjectBecameParentEvent& objectBecameParentEvent)
@@ -32,6 +34,19 @@ namespace WaveEngine
 		erase(parentsWaveObjects, objectBecameChildEvent.waveObjectID);
 	}
 
+	void WaveObjectRegistry::OnObjectChangesName(const ObjectChangeName& objectChangeNameEvent)
+	{
+		string nameToTest = objectChangeNameEvent.newName;
+		int attemps = 0;
+
+		while (waveObjectsIDByName.contains(nameToTest))
+			nameToTest = objectChangeNameEvent.newName + '_' + to_string(++attemps);
+
+		waveObjects[objectChangeNameEvent.entityID]->name = nameToTest;
+		waveObjectsIDByName.erase(objectChangeNameEvent.oldName);
+		waveObjectsIDByName[nameToTest] = objectChangeNameEvent.entityID;
+	}
+
 	EventSystem* WaveObjectRegistry::GetEventSystem()
 	{
 		return ServiceProvider::Instance().Get<EventSystem>();
@@ -40,6 +55,7 @@ namespace WaveEngine
 	void WaveObjectRegistry::AddObject(WaveObject*& newWaveObject)
 	{
 		waveObjects[newWaveObject->GetID()] = newWaveObject;
+		waveObjectsIDByName[newWaveObject->GetName()] = newWaveObject->GetID();
 	}
 
 	map<unsigned int, WaveObject*>& WaveObjectRegistry::GetWaveObjects()
