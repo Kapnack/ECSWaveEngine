@@ -52,6 +52,31 @@ namespace WaveEngine
 		}
 	};
 
+	struct ObjectChangeName : Event
+	{
+		unsigned int entityID = WaveObject::NULL_OBJECT;
+		string oldName = "";
+		string newName = "";
+
+		ObjectChangeName()
+		{
+		}
+
+		ObjectChangeName(unsigned int entityID, string oldName, string newName)
+		{
+			this->entityID = entityID;
+			this->oldName = oldName;
+			this->newName = newName;
+		}
+
+		void Reset() override
+		{
+			entityID = WaveObject::NULL_OBJECT;
+			oldName = "";
+			newName = "";
+		}
+	};
+
 	class WaveObjectRegistry : Service
 	{
 	private:
@@ -59,12 +84,14 @@ namespace WaveEngine
 		vector<unsigned int> parentsWaveObjects;
 
 		map<unsigned int, WaveObject*> waveObjects;
+		map<string, unsigned int> waveObjectsIDByName;
 
 		friend class BaseGame;
 		friend class ServiceProvider;
 
 		void OnObjectBecameParent(const ObjectBecameParentEvent& objectBecameParentEvent);
 		void OnObjectBecameChild(const ObjectBecameChildEvent& objectBecameChildEvent);
+		void OnObjectChangesName(const ObjectChangeName& objectChangeNameEvent);
 
 		EventSystem* GetEventSystem();
 
