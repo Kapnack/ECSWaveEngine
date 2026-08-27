@@ -13,6 +13,8 @@
 #include "ECS/WaveObject/WaveObject.h"
 #include <Renderer/Renderer.h>
 #include <ECS/CompontRegistry/ComponentRegistry.h>
+#include "Plane/Plane.h"
+#include "WaveMath/WaveMath/WaveMath.h"
 
 namespace WaveEngine
 {
@@ -32,7 +34,8 @@ namespace WaveEngine
 	{
 		for (Camera* camera : GetCameraManager()->GetActiveCameras())
 			for (WaveObject* waveObject : ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetParentWaveObjects())
-				CheckChildsAreInFrustum(*waveObject, *camera);
+				if (GetBinarySpacePartition()->ObjectsShareSpace(camera->GetWaveObject(), *waveObject))
+					CheckChildsAreInFrustum(*waveObject, *camera);
 	}
 
 	Renderer* DrawLogic::GetRenderer() const
@@ -62,6 +65,11 @@ namespace WaveEngine
 	CameraManager* DrawLogic::GetCameraManager() const
 	{
 		return ServiceProvider::Instance().Get<CameraManager>();
+	}
+
+	BinarySpacePartition* DrawLogic::GetBinarySpacePartition() const
+	{
+		return ServiceProvider::Instance().Get<BinarySpacePartition>();
 	}
 
 	ComponentRegistry* DrawLogic::GetComponentRegistry()
