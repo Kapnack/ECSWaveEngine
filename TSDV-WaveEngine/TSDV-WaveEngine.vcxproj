@@ -159,6 +159,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
   <ItemGroup>
     <ClCompile Include="src\BoundingBox\BoundingBox.cpp" />
     <ClCompile Include="src\CameraManager\CameraManager.cpp" />
+    <ClCompile Include="src\ECS\Managers\BinarySpacePartition\BinarySpacePartition.cpp" />
     <ClCompile Include="src\ECS\Managers\DrawLogic.cpp" />
     <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.cpp" />
     <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.cpp" />
@@ -189,6 +190,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\BaseGame\BaseGame.cpp" />
     <ClCompile Include="src\Material\Material.cpp" />
     <ClCompile Include="src\ECS\Transform\ECSTransform.cpp" />
+    <ClCompile Include="src\Plane\Plane.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Square\Square.cpp" />
     <ClCompile Include="src\TextureImporter\Texture.cpp" />
@@ -203,6 +205,8 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\BoundingBox\BoundingBox.h" />
     <ClInclude Include="src\CameraManager\CameraManager.h" />
     <ClInclude Include="src\CollisionSystem\CollisionLogic\CollisionLogic.h" />
+    <ClInclude Include="src\ECS\Managers\BinarySpacePartition\BinarySpacePartition.h" />
+    <ClInclude Include="src\Plane\Plane.h" />
     <ClInclude Include="src\Square\Square.h" />
     <ClInclude Include="src\ECS\Events\RequestAddComponent.h" />
     <ClInclude Include="src\ECS\Managers\DrawLogic.h" />
