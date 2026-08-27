@@ -6,24 +6,26 @@
 template<typename T>
 concept SignableObject = std::is_arithmetic_v<T>;
 
-WAVEEXPORT class WaveMath
+class WAVEEXPORT WaveMath
 {
 public:
 
-	static const float epsilon;
+	static float Epsilon();
 
-	WAVEEXPORT static bool Approximately(float a, float b);
+	static bool Approximately(float a, float b);
 
-	WAVEEXPORT static float Abs(float number);
-	WAVEEXPORT static int Abs(int number);
+	static float Abs(float number);
+	static int Abs(int number);
 
 	template<SignableObject T>
 	static int Sign(T number)
 	{
-		return static_cast<int>((number > 0) - (number < 0));
+		return number >= 0 ? 1 : -1;//static_cast<int>((number > 0) - (number < 0));
 	}
 
-	WAVEEXPORT static int Opposite(int number);
-	WAVEEXPORT static float Opposite(float number);
+	static int Opposite(int number);
+	static float Opposite(float number);
+
+	static float Sqrt(float number);
 };
 

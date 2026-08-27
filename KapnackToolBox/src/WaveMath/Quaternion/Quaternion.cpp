@@ -1,20 +1,19 @@
 #include "Quaternion.h"
 
 #include <cmath>
-
-const float Quaternion::epsilon = 1e-05f;
+#include <WaveMath/WaveMath/WaveMath.h>
 
 Quaternion::Quaternion()
 {
 	*this = Identity();
 }
 
-Quaternion::Quaternion(const Vector3& eulerAngles)
+Quaternion::Quaternion(Vector3 eulerAngles)
 {
 	*this = Euler(eulerAngles);
 }
 
-Quaternion::Quaternion(const Vector3& vector3, const float& w)
+Quaternion::Quaternion(Vector3 vector3, float w)
 {
 	this->x = vector3.x;
 	this->y = vector3.y;
@@ -22,7 +21,7 @@ Quaternion::Quaternion(const Vector3& vector3, const float& w)
 	this->w = w;
 }
 
-Quaternion::Quaternion(const float& x, const float& y, const float& z, const float& w)
+Quaternion::Quaternion(float x, float y, float z, float w)
 {
 	this->x = x;
 	this->y = y;
@@ -54,27 +53,27 @@ Quaternion Quaternion::Normalized() const
 	return Normalized(*this);
 }
 
-Quaternion Quaternion::operator+(const Quaternion& other) const
+Quaternion Quaternion::operator+(Quaternion other) const
 {
 	return Quaternion(x + other.x, y + other.y, z + other.z, w + other.w);
 }
 
-void Quaternion::operator+=(const Quaternion& other)
+void Quaternion::operator+=(Quaternion other)
 {
 	*this = *this + other;
 }
 
-Quaternion Quaternion::operator-(const Quaternion& other) const
+Quaternion Quaternion::operator-(Quaternion other) const
 {
 	return Quaternion(x - other.x, y - other.y, z - other.z, w - other.w);
 }
 
-void Quaternion::operator-=(const Quaternion& other)
+void Quaternion::operator-=(Quaternion other)
 {
 	*this = *this - other;
 }
 
-Vector3 Quaternion::operator*(const Vector3& v) const
+Vector3 Quaternion::operator*(Vector3 v) const
 {
 	Vector3 qVec(x, y, z);
 
@@ -82,7 +81,7 @@ Vector3 Quaternion::operator*(const Vector3& v) const
 	return v + w * t + Vector3::Cross(qVec, t);
 }
 
-Quaternion Quaternion::operator*(const Quaternion& other) const
+Quaternion Quaternion::operator*(Quaternion other) const
 {
 	return Quaternion
 	(
@@ -93,37 +92,37 @@ Quaternion Quaternion::operator*(const Quaternion& other) const
 	);
 }
 
-void Quaternion::operator*=(const Quaternion& other)
+void Quaternion::operator*=(Quaternion other)
 {
 	*this = *this * other;
 }
 
-Quaternion Quaternion::operator*(const float& scalar) const
+Quaternion Quaternion::operator*(float scalar) const
 {
 	return Quaternion(x * scalar, y * scalar, z * scalar, w * scalar);
 }
 
-Quaternion operator*(const float& scalar, const Quaternion& other)
+Quaternion operator*(float scalar, Quaternion other)
 {
 	return other * scalar;
 }
 
-void Quaternion::operator*=(const float& scalar)
+void Quaternion::operator*=(float scalar)
 {
 	*this = *this * scalar;
 }
 
-Quaternion Quaternion::operator/(const float& scalar) const
+Quaternion Quaternion::operator/(float scalar) const
 {
 	return Quaternion(x / scalar, y / scalar, z / scalar, w / scalar);
 }
 
-Quaternion operator/(const float& scalar, const Quaternion& quaternion)
+Quaternion operator/(float scalar, Quaternion quaternion)
 {
 	return quaternion / scalar;
 }
 
-void Quaternion::operator/=(const float& scalar)
+void Quaternion::operator/=(float scalar)
 {
 	*this = *this / scalar;
 }
@@ -133,32 +132,32 @@ Quaternion Quaternion::Identity()
 	return Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-float Quaternion::Magnitude(const Quaternion& a)
+float Quaternion::Magnitude(Quaternion a)
 {
-	return std::sqrt(SqrMagnitude(a));
+	return WaveMath::Sqrt(SqrMagnitude(a));
 }
 
-float Quaternion::SqrMagnitude(const Quaternion& a)
+float Quaternion::SqrMagnitude(Quaternion a)
 {
 	return Dot(a, a);
 }
 
-float Quaternion::Dot(const Quaternion& a, const Quaternion& b)
+float Quaternion::Dot(Quaternion a, Quaternion b)
 {
 	return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
-Quaternion Quaternion::Normalized(const Quaternion& a)
+Quaternion Quaternion::Normalized(Quaternion a)
 {
 	float sqrMag = SqrMagnitude(a);
 
-	if (sqrMag < epsilon * epsilon)
+	if (sqrMag < WaveMath::Epsilon() * WaveMath::Epsilon())
 		return Identity();
 
-	return a / std::sqrt(sqrMag);
+	return a / WaveMath::Sqrt(sqrMag);
 }
 
-Quaternion Quaternion::AngleAxis(const float& angle, const Vector3& axis)
+Quaternion Quaternion::AngleAxis(float angle, Vector3 axis)
 {
 	const float PI = 3.14159274f;
 	const float Deg2Rad = PI / 180.0f;
@@ -169,14 +168,14 @@ Quaternion Quaternion::AngleAxis(const float& angle, const Vector3& axis)
 	return Quaternion(axis.Normalized() * std::sinf(halfAngle), std::cosf(halfAngle));
 }
 
-Quaternion Quaternion::Lerp(const Quaternion& a, const Quaternion& b, float t)
+Quaternion Quaternion::Lerp(Quaternion a, Quaternion b, float t)
 {
 	t = t < -1.0f ? -1.0f : t > 1.0f ? 1.0f : t;
 
 	return UnclampLerp(a, b, t);
 }
 
-Quaternion Quaternion::Slerp(const Quaternion& a, const Quaternion& b, float t)
+Quaternion Quaternion::Slerp(Quaternion a, Quaternion b, float t)
 {
 	t = t < 0.0f ? 0.0f : t > 1.0f ? 1.0f : t;
 
@@ -184,7 +183,7 @@ Quaternion Quaternion::Slerp(const Quaternion& a, const Quaternion& b, float t)
 
 	// If dot is negative, negate one quaternion to take the shorter arc
 	Quaternion b2 = dot < 0.0f ? b * -1.0f : b;
-	dot = std::abs(dot);
+	dot = WaveMath::Abs(dot);
 
 	if (dot > 0.9995f)
 		return Normalized(a + (b2 - a) * t); // Nearly identical — linear is fine
@@ -197,12 +196,12 @@ Quaternion Quaternion::Slerp(const Quaternion& a, const Quaternion& b, float t)
 	return Normalized(a * s0 + b2 * s1);
 }
 
-Quaternion Quaternion::UnclampLerp(const Quaternion& a, const Quaternion& b, const float& t)
+Quaternion Quaternion::UnclampLerp(Quaternion a, Quaternion b, float t)
 {
 	return a + (b - a) * t;
 }
 
-Quaternion Quaternion::Euler(const float& x, const float& y, const float& z)
+Quaternion Quaternion::Euler(float x, float y, float z)
 {
 	Quaternion qx = AngleAxis(x, Vector3::Right()); // Pitch
 	Quaternion qy = AngleAxis(y, Vector3::Up()); // Yaw
@@ -211,26 +210,26 @@ Quaternion Quaternion::Euler(const float& x, const float& y, const float& z)
 	return (qz * qy * qx).Normalized();
 }
 
-Quaternion Quaternion::Euler(const Vector3& eulerAngles)
+Quaternion Quaternion::Euler(Vector3 eulerAngles)
 {
 	return Euler(eulerAngles.x, eulerAngles.y, eulerAngles.z);
 }
 
-Quaternion Quaternion::Euler(const Vector2& eulerAngles)
+Quaternion Quaternion::Euler(Vector2 eulerAngles)
 {
 	return Euler(eulerAngles.x, eulerAngles.y);
 }
 
-Quaternion Quaternion::Conjugate(const Quaternion& a)
+Quaternion Quaternion::Conjugate(Quaternion a)
 {
 	return Quaternion(-a.x, -a.y, -a.z, a.w);
 }
 
-Quaternion Quaternion::Inverse(const Quaternion& a)
+Quaternion Quaternion::Inverse(Quaternion a)
 {
 	float sqrMag = SqrMagnitude(a);
 
-	if (sqrMag < epsilon * epsilon)
+	if (sqrMag < WaveMath::Epsilon() * WaveMath::Epsilon())
 		return Quaternion::Identity();
 
 	return Conjugate(a) / sqrMag;

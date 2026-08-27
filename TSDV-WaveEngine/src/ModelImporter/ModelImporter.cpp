@@ -228,7 +228,8 @@ namespace WaveEngine
 
 	void ModelImporter::ApplyNodeTransform(ECSTransform& transform, const aiNode* node)
 	{
-		aiVector3D pos, scale;
+		aiVector3D pos;
+		aiVector3D scale;
 		aiQuaternion aiQuat;
 
 		node->mTransformation.Decompose(scale, aiQuat, pos);

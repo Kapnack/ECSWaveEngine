@@ -4,6 +4,7 @@
 #include <cfloat>
 
 #include "Wavemath/Vector2/Vector2.h"
+#include "WaveMath/WaveMath/WaveMath.h"
 
 Vector3::Vector3()
 {
@@ -157,6 +158,11 @@ bool Vector3::operator<(Vector3 other) const
 	return other > *this;
 }
 
+bool Vector3::operator==(Vector3 other) const
+{
+	return x == other.x && y == other.y == z == other.z;
+}
+
 Vector3 Vector3::X()
 {
 	return Vector3(1.0f, 0.0f, 0.0f);
@@ -255,7 +261,7 @@ Vector3 Vector3::ClampMagnitude(Vector3 vector, float maxMagnitud)
 
 	if (sqrMag > maxMagnitud * maxMagnitud)
 	{
-		float mag = std::sqrt(sqrMag);
+		float mag = WaveMath::Sqrt(sqrMag);
 		float scale = maxMagnitud / mag;
 
 		return Vector3(vector.x * scale, vector.y * scale, vector.z * scale);
@@ -277,7 +283,7 @@ Vector3 Vector3::Cross(Vector3 a, Vector3 b)
 
 float Vector3::Magnitude(Vector3 vector)
 {
-	return std::sqrtf(SqrMagnitude(vector));
+	return WaveMath::Sqrt(SqrMagnitude(vector));
 }
 
 float Vector3::SqrMagnitude(Vector3 vector)
@@ -330,7 +336,7 @@ Vector3 Vector3::Project(Vector3 a, Vector3 b)
 	float dot = Dot(a, b);
 	float sqrMag = SqrMagnitude(b);
 
-	if (sqrMag < 1e-05f * 1e-05f)
+	if (sqrMag < WaveMath::Epsilon() * WaveMath::Epsilon())
 		return Vector3::Zero();
 
 	float scale = dot / sqrMag;
@@ -341,10 +347,10 @@ Vector3 Vector3::Normalized(Vector3 a)
 {
 	float mag = a.Magnitude();
 
-	if (mag < 1e-05f)
+	if (mag < WaveMath::Epsilon())
 		return Vector3::Zero();
 
-	if (abs(mag - 1.0f) < 1e-05f)
+	if (WaveMath::Abs(mag - 1.0f) < WaveMath::Epsilon())
 		return a;
 
 	return a / mag;
@@ -359,7 +365,7 @@ Vector3 Vector3::MoveToWards(Vector3 from, Vector3 to, float distance)
 	if (sqDist <= distance * distance)
 		return to;
 
-	float dist = std::sqrt(sqDist);
+	float dist = WaveMath::Sqrt(sqDist);
 
 	return from + toVector / dist * distance;
 }

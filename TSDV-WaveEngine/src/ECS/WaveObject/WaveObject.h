@@ -11,16 +11,17 @@ using namespace std;
 namespace WaveEngine
 {
 	class WaveObjectFactory;
+	class WaveObjectRegistry;
 
 	class WaveObject
 	{
 	private:
 
-		string name = "";
 		unsigned int ID = NULL_OBJECT;
 
 		ComponentRegistry* GetComponentRegistry() const;
 		EventSystem* GetEventSystem() const;
+		WaveObjectRegistry* GetWaveObjectRegistry() const;
 
 		friend class WaveObjectFactory;
 		friend class WaveObjectRegistry;
@@ -33,7 +34,7 @@ namespace WaveEngine
 		~WaveObject();
 
 		void SetName(const string& name);
-		const string& GetName() const;
+		string GetName() const;
 
 		unsigned int GetID() const;
 

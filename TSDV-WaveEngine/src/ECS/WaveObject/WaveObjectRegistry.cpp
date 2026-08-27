@@ -18,6 +18,8 @@ namespace WaveEngine
 		GetEventSystem()->Subscribe<ObjectBecameParentEvent>(this, &WaveObjectRegistry::OnObjectBecameParent);
 		GetEventSystem()->Subscribe<ObjectBecameChildEvent>(this, &WaveObjectRegistry::OnObjectBecameChild);
 		GetEventSystem()->Subscribe<ObjectChangeName>(this, &WaveObjectRegistry::OnObjectChangesName);
+
+		//objectNameSearchStrategy[ObjectNameSearch::Exact].Subscribe(this, &WaveObjectRegistry::CheckObjecNameExact);
 	}
 
 	void WaveObjectRegistry::OnObjectBecameParent(const ObjectBecameParentEvent& objectBecameParentEvent)
@@ -36,15 +38,16 @@ namespace WaveEngine
 
 	void WaveObjectRegistry::OnObjectChangesName(const ObjectChangeName& objectChangeNameEvent)
 	{
-		string nameToTest = objectChangeNameEvent.newName;
+		string newName = objectChangeNameEvent.newName;
 		int attemps = 0;
 
-		while (waveObjectsIDByName.contains(nameToTest))
-			nameToTest = objectChangeNameEvent.newName + '_' + to_string(++attemps);
+		while (waveObjectsIDByName.contains(newName))
+			newName = objectChangeNameEvent.newName + '_' + to_string(++attemps);
 
-		waveObjects[objectChangeNameEvent.entityID]->name = nameToTest;
-		waveObjectsIDByName.erase(objectChangeNameEvent.oldName);
-		waveObjectsIDByName[nameToTest] = objectChangeNameEvent.entityID;
+		waveObjectsIDByName.erase(waveObjectsNamesByID[objectChangeNameEvent.entityID]);
+
+		waveObjectsIDByName[newName] = objectChangeNameEvent.entityID;
+		waveObjectsNamesByID[objectChangeNameEvent.entityID] = newName;
 	}
 
 	EventSystem* WaveObjectRegistry::GetEventSystem()
@@ -52,10 +55,26 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<EventSystem>();
 	}
 
-	void WaveObjectRegistry::AddObject(WaveObject*& newWaveObject)
+	bool WaveObjectRegistry::CheckObjecNameExact(const string_view name, const string_view lookingFor)
 	{
-		waveObjects[newWaveObject->GetID()] = newWaveObject;
-		waveObjectsIDByName[newWaveObject->GetName()] = newWaveObject->GetID();
+		return (name.data() == lookingFor.data());
+	}
+
+	void WaveObjectRegistry::AddObject(WaveObject*& newWaveObject, const string_view name)
+	{
+		const int entityID = newWaveObject->GetID();
+
+		waveObjects[entityID] = newWaveObject;
+
+		const string entityName = name.data();
+
+		waveObjectsIDByName[entityName] = entityID;
+		waveObjectsNamesByID[entityID] = entityName;
+	}
+
+	string WaveObjectRegistry::GetObjectName(unsigned int ID)
+	{
+		return waveObjectsNamesByID[ID];
 	}
 
 	map<unsigned int, WaveObject*>& WaveObjectRegistry::GetWaveObjects()
@@ -73,7 +92,18 @@ namespace WaveEngine
 		return waveObjects;
 	}
 
-	WaveObject& WaveObjectRegistry::GetWaveObject(const unsigned int& ID)
+	const vector<WaveObject*>& WaveObjectRegistry::GetWaveObject(const string_view name, ObjectNameSearch objectNameSearch)
+	{
+		vector<WaveObject*> waveObjectsToReturn;
+
+		for (map<string, unsigned int>::iterator iterator = waveObjectsIDByName.begin(); iterator != waveObjectsIDByName.end(); ++iterator)
+			//if (objectNameSearchStrategy[objectNameSearch].Invoke(iterator->first, name))
+				waveObjectsToReturn.push_back(waveObjects[iterator->second]);
+
+		return waveObjectsToReturn;
+	}
+
+	WaveObject& WaveObjectRegistry::GetWaveObject(unsigned int ID)
 	{
 		return *waveObjects.at(ID);
 	}

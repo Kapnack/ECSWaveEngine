@@ -1,8 +1,10 @@
 #include "Vector2.h"
 
-#include "WaveMath/Vector3/Vector3.h"
 #include <cmath>
 #include <cfloat>
+
+#include "WaveMath/Vector3/Vector3.h"
+#include "WaveMath/WaveMath/WaveMath.h"
 
 Vector2::Vector2()
 {
@@ -78,7 +80,7 @@ Vector2 Vector2::Reflected(Vector2 normal) const
 
 float Vector2::Magnitude(Vector2 vector)
 {
-	return std::sqrtf(SqrMagnitude(vector));
+	return WaveMath::Sqrt(SqrMagnitude(vector));
 }
 
 float Vector2::SqrMagnitude(Vector2 vector)
@@ -101,7 +103,7 @@ Vector2 Vector2::Project(Vector2 a, Vector2 b)
 	float dot = Dot(a, b);
 	float sqrMag = SqrMagnitude(b);
 
-	if (sqrMag < 1e-05f * 1e-05f)
+	if (sqrMag < WaveMath::Epsilon() * WaveMath::Epsilon())
 		return Vector2::Zero();
 
 	float scale = dot / sqrMag;
@@ -112,10 +114,10 @@ Vector2 Vector2::Normalized(Vector2 vector)
 {
 	float mag = vector.Magnitude();
 
-	if (mag < 1e-05f)
+	if (mag < WaveMath::Epsilon())
 		return Vector2::Zero();
 
-	if (abs(mag - 1.0f) < 1e-05f)
+	if (WaveMath::Abs(mag - 1.0f) < WaveMath::Epsilon())
 		return vector;
 
 	return vector / mag;
@@ -130,7 +132,7 @@ Vector2 Vector2::MoveToWards(Vector2 from, Vector2 to, float distance)
 	if (sqDist <= distance * distance)
 		return to;
 
-	float dist = std::sqrt(sqDist);
+	float dist = WaveMath::Sqrt(sqDist);
 
 	return from + toVector / dist * distance;
 }
@@ -265,7 +267,7 @@ Vector2 Vector2::ClampMagnitude(Vector2 vector, float maxMagnitud)
 
 	if (sqrMag > maxMagnitud * maxMagnitud)
 	{
-		float mag = std::sqrt(sqrMag);
+		float mag = WaveMath::Sqrt(sqrMag);
 		float scale = maxMagnitud / mag;
 
 		return Vector2(vector.x * scale, vector.y * scale);

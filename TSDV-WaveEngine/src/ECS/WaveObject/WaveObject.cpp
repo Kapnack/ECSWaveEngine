@@ -16,6 +16,11 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<EventSystem>();
 	}
 
+	WaveObjectRegistry* WaveObject::GetWaveObjectRegistry() const
+	{
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
+	}
+
 	WaveObject::WaveObject(unsigned int ID)
 	{
 		this->ID = ID;
@@ -27,12 +32,12 @@ namespace WaveEngine
 
 	void WaveObject::SetName(const string& name)
 	{
-		GetEventSystem()->Invoke<ObjectChangeName>(ID, this->name, name);
+		GetEventSystem()->Invoke<ObjectChangeName>(ID, name);
 	}
 
-	const string& WaveObject::GetName() const
+	string WaveObject::GetName() const
 	{
-		return name;
+		return GetWaveObjectRegistry()->GetObjectName(ID);
 	}
 
 	unsigned int WaveObject::GetID() const

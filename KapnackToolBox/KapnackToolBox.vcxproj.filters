@@ -83,6 +83,15 @@
     <ClInclude Include="src\WaveMath\WaveMath\WaveMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\EventSystem\Action.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EventSystem\Subscriber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EventSystem\Func.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ServiceProvider\ServiceProvider.tpp" />

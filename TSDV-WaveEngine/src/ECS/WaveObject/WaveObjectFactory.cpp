@@ -23,9 +23,7 @@ namespace WaveEngine
 		newWaveObject->AddComponent<ECSTransform>();
 		newWaveObject->AddComponent<MeshID>();
 
-		newWaveObject->name = "WaveObject: " + to_string(currentObjectID) + ".";
-
-		GetWaveObjectRegistry()->AddObject(newWaveObject);
+		GetWaveObjectRegistry()->AddObject(newWaveObject, "WaveObject: " + to_string(currentObjectID) + ".");
 
 		return *newWaveObject;
 	}

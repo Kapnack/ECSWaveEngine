@@ -8,6 +8,7 @@
 #include <typeindex>
 
 #include "Event.h"
+#include "Subscriber.h"
 
 using namespace std;
 
@@ -19,13 +20,6 @@ namespace WaveEngine
 	class EventSystem : public Service
 	{
 	private:
-
-		struct Subscriber
-		{
-			void* instance = nullptr;
-			void* method = nullptr;
-			void (*invoke)(void*, void*, const void*);
-		};
 
 		unordered_map<type_index, vector<Subscriber>> subscribers;
 		unordered_map<type_index, queue<Event*>> events;
