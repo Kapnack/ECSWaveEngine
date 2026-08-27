@@ -4,6 +4,7 @@
 
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "ECS/Transform/ECSTransform.h"
+#include "EventSystem/EventSystem.h"
 
 using namespace std;
 
@@ -19,22 +20,24 @@ namespace WaveEngine
 		unsigned int ID = NULL_OBJECT;
 
 		ComponentRegistry* GetComponentRegistry() const;
+		EventSystem* GetEventSystem() const;
 
 		friend class WaveObjectFactory;
+		friend class WaveObjectRegistry;
 
 	public:
 
 		static const unsigned int NULL_OBJECT = 0;
 
-		WaveObject(const unsigned int& ID);
+		WaveObject(unsigned int ID);
 		~WaveObject();
 
 		void SetName(const string& name);
 		const string& GetName() const;
 
-		const unsigned int& GetID() const;
+		unsigned int GetID() const;
 
-		ECSTransform& GetTransform();
+		ECSTransform& GetTransform() const;
 
 		template<typename T>
 		T& AddComponent()
