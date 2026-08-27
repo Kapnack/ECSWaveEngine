@@ -2,6 +2,7 @@
 
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/Transform/ECSTransform.h"
+#include "WaveObjectRegistry.h"
 
 namespace WaveEngine
 {
@@ -10,7 +11,12 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<ComponentRegistry>();
 	}
 
-	WaveObject::WaveObject(const unsigned int& ID)
+	EventSystem* WaveObject::GetEventSystem() const
+	{
+		return ServiceProvider::Instance().Get<EventSystem>();
+	}
+
+	WaveObject::WaveObject(unsigned int ID)
 	{
 		this->ID = ID;
 	}
@@ -21,7 +27,7 @@ namespace WaveEngine
 
 	void WaveObject::SetName(const string& name)
 	{
-		this->name = name;
+		GetEventSystem()->Invoke<ObjectChangeName>(ID, this->name, name);
 	}
 
 	const string& WaveObject::GetName() const
@@ -29,12 +35,12 @@ namespace WaveEngine
 		return name;
 	}
 
-	const unsigned int& WaveObject::GetID() const
+	unsigned int WaveObject::GetID() const
 	{
 		return ID;
 	}
 
-	ECSTransform& WaveObject::GetTransform()
+	ECSTransform& WaveObject::GetTransform() const
 	{
 		return GetComponentRegistry()->GetComponent<ECSTransform>(ID);
 	}
