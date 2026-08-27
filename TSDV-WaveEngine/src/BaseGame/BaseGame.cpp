@@ -9,6 +9,7 @@
 #include "ECS/Transform/ECSTransform.h"
 #include "ModelImporter/ModelImporter.h"
 #include "CameraManager/CameraManager.h"
+#include "ECS/Managers/BinarySpacePartition/BinarySpacePartition.h"
 
 namespace WaveEngine
 {
@@ -46,6 +47,7 @@ namespace WaveEngine
 		ServiceProvider::Instance().Register(new Input());
 		ServiceProvider::Instance().Register(new Time());
 		ServiceProvider::Instance().Register(new CameraManager());
+		ServiceProvider::Instance().Register(new BinarySpacePartition());
 #pragma endregion
 
 		GetWaveObjectRegistry()->Init();
@@ -72,8 +74,6 @@ namespace WaveEngine
 		modelImporter.LoadScene(modelsPaths.at(0));
 		tank = modelImporter.IntantiateModel();
 
-		tank->AddComponent<RigidBody>();
-
 		tank->GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f));
 		tank->GetTransform().SetScale(Vector3::One() * defaultSize);
 
@@ -82,7 +82,7 @@ namespace WaveEngine
 		camera.SetFarPlane(1000000.0f);
 		camera.SetNearPlane(0.1f);
 		camera.SetOrthographic(false);
-		cameraObject->GetTransform().SetPosition(Vector3::Right() * (modelsPaths.size() * 0.5f * defaultSize) + Vector3::Foward() * 150);
+		cameraObject->GetTransform().SetPosition(Vector3::Right() * (modelsPaths.size() * 0.5f * defaultSize) + Vector3::Foward() * 300);
 
 		modelImporter.LoadScene(modelsPaths.at(modelsPaths.size() - 1));
 
@@ -90,6 +90,11 @@ namespace WaveEngine
 
 		waveObject->GetTransform().SetPosition(Vector3::Down() * 150.000f);
 		waveObject->GetTransform().Scale((Vector3::X() + Vector3::Z()) * 100.0f);
+
+		waveObject = modelImporter.IntantiateModel();
+
+		waveObject->GetTransform().SetPosition((camera.GetTransform().GetPosition() + tank->GetTransform().GetPosition()) * 0.5f);
+		waveObject->GetTransform().SetScale(Vector3::One() * 0.2f);
 
 #pragma endregion
 
