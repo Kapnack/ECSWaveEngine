@@ -5,6 +5,7 @@
 #include "ECS/WaveObject/WaveObject.h"
 #include "CameraManager/CameraManager.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
+#include "BinarySpacePartition/BinarySpacePartition.h"
 
 namespace WaveEngine
 {
@@ -19,6 +20,8 @@ namespace WaveEngine
 		void CheckChildsAreInFrustum(WaveObject& waveObject, Camera& camera);
 
 		CameraManager* GetCameraManager() const;
+
+		BinarySpacePartition* GetBinarySpacePartition() const;
 
 	public:
 
