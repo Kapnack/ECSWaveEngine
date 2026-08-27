@@ -34,9 +34,9 @@ namespace WaveEngine
 
 	unsigned int TextureImporter::LoadTexture(const string_view filePath)
 	{
-		int width;
-		int height;
-		int nrChannels;
+		int width = 0;
+		int height = 0;
+		int nrChannels = 0;
 
 		stbi_set_flip_vertically_on_load(true);
 		unsigned char* data = stbi_load(filePath.data(), &width, &height, &nrChannels, 0);
