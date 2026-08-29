@@ -9,6 +9,7 @@
 
 #include "Event.h"
 #include "Subscriber.h"
+#include "Action.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ namespace WaveEngine
 	{
 	private:
 
-		unordered_map<type_index, vector<Subscriber>> subscribers;
+		unordered_map<type_index, Delegate*> subscribers;
 		unordered_map<type_index, queue<Event*>> events;
 
 	public:
@@ -40,6 +41,9 @@ namespace WaveEngine
 					it->second.pop();
 				}
 			}
+
+			for (unordered_map<type_index, Delegate*>::iterator it = subscribers.begin(); it != subscribers.end(); ++it)
+				delete it->second;
 		}
 
 		template<AvailableEvent TEvent>
@@ -49,45 +53,10 @@ namespace WaveEngine
 
 			events[eventType];
 
-			Subscriber sub;
+			if (!subscribers.contains(eventType))
+				subscribers[eventType] = new Action<const TEvent&>();
 
-			sub.instance = nullptr;
-			sub.method = reinterpret_cast<void*>(func);
-
-			sub.invoke =
-				[](void*, void* m, const void* event)
-				{
-					void(*funcPtr)(const TEvent&) = reinterpret_cast<void(*)(const TEvent&)>(m);
-
-					const TEvent* e = static_cast<const TEvent*>(event);
-
-					funcPtr(*e);
-				};
-
-			subscribers[eventType].push_back(sub);
-		}
-
-		template<AvailableEvent TEvent>
-		void Subscribe(void(*func)())
-		{
-			type_index eventType = typeid(TEvent);
-
-			events[eventType];
-
-			Subscriber sub;
-
-			sub.instance = nullptr;
-			sub.method = reinterpret_cast<void*>(func);
-
-			sub.invoke =
-				[](void*, void* m, const void*)
-				{
-					void(*funcPtr)() = reinterpret_cast<void(*)()>(m);
-
-					funcPtr();
-				};
-
-			subscribers[eventType].push_back(sub);
+			static_cast<Action<const TEvent&>*>(subscribers[eventType])->Subscribe(func);
 		}
 
 		template<AvailableEvent TEvent, typename TObject>
@@ -97,123 +66,41 @@ namespace WaveEngine
 
 			events[eventType];
 
-			Subscriber sub;
+			if (!subscribers.contains(eventType))
+				subscribers[eventType] = new Action<const TEvent&>();
 
-			sub.instance = instance;
-			sub.method = *(void**)&method;
-
-			sub.invoke =
-				[](void* obj, void* m, const void* event)
-				{
-					TObject* o = static_cast<TObject*>(obj);
-
-					void(TObject:: * methodPtr)(const TEvent&) = *(void(TObject::**)(const TEvent&)) & m;
-
-					const TEvent* e = static_cast<const TEvent*>(event);
-
-					(o->*methodPtr)(*e);
-				};
-
-			subscribers[eventType].push_back(sub);
-		}
-
-		template<AvailableEvent TEvent, typename TObject>
-		void Subscribe(TObject* instance, void(TObject::* method)())
-		{
-			type_index eventType = typeid(TEvent);
-
-			events[eventType];
-
-			Subscriber sub;
-
-			sub.instance = instance;
-			sub.method = *(void**)&method;
-
-			sub.invoke =
-				[](void* obj, void* m, const void*)
-				{
-					TObject* o = static_cast<TObject*>(obj);
-
-					void(TObject:: * methodPtr)() = *(void(TObject::**)()) & m;
-
-					(o->*methodPtr)();
-				};
-
-			subscribers[eventType].push_back(sub);
-		}
-
-		template<AvailableEvent TEvent, typename TObject>
-		void Unsubscribe(void(*func)(const TEvent&))
-		{
-			vector<Subscriber>& vec = subscribers[typeid(TEvent)];
-
-			void* m = *(void**)&func;
-
-			vec.erase(
-				remove_if(vec.begin(), vec.end(),
-					[&](const Subscriber& s)
-					{
-						return s.instance == nullptr && s.method == m;
-					}),
-				vec.end()
-			);
+			static_cast<Action<const TEvent&>*>(subscribers[eventType])->Subscribe(instance, method);
 		}
 
 		template<AvailableEvent TEvent>
-		void Unsubscribe(void(*func)())
+		void Unsubscribe(void(*func)(const TEvent&))
 		{
-			vector<Subscriber>& vec = subscribers[typeid(TEvent)];
+			type_index eventType = typeid(TEvent);
 
-			void* m = *(void**)&func;
+			if (!subscribers.contains(eventType))
+				return;
 
-			vec.erase(
-				remove_if(vec.begin(), vec.end(),
-					[&](const Subscriber& s)
-					{
-						return s.instance == nullptr && s.method == m;
-					}),
-				vec.end()
-			);
+			static_cast<Action<const TEvent&>*>(subscribers[eventType])->Unsubscribe(func);
 		}
 
 		template<AvailableEvent TEvent, typename TObject>
 		void Unsubscribe(TObject* instance, void(TObject::* method)(const TEvent&))
 		{
-			vector<Subscriber>& vec = subscribers[typeid(TEvent)];
+			type_index eventType = typeid(TEvent);
 
-			void* m = *(void**)&method;
+			if (!subscribers.contains(eventType))
+				return;
 
-			vec.erase(
-				remove_if(vec.begin(), vec.end(),
-					[&](const Subscriber& s)
-					{
-						return s.instance == instance && s.method == m;
-					}),
-				vec.end()
-			);
-		}
-
-		template<AvailableEvent TEvent, typename TObject>
-		void Unsubscribe(TObject* instance, void(TObject::* method)())
-		{
-			vector<Subscriber>& vec = subscribers[typeid(TEvent)];
-
-			void* m = *(void**)&method;
-
-			vec.erase(
-				remove_if(vec.begin(), vec.end(),
-					[&](const Subscriber& s)
-					{
-						return s.instance == instance && s.method == m;
-					}),
-				vec.end()
-			);
+			static_cast<Action<const TEvent&>*>(subscribers[eventType])->Unsubscribe(instance, method);
 		}
 
 		template<AvailableEvent TEvent, typename... T>
 		void Invoke(T... data)
 		{
 			type_index eventType = typeid(TEvent);
+
+			if (!subscribers.contains(eventType))
+				return;
 
 			queue<Event*>& queue = events[eventType];
 
@@ -231,8 +118,7 @@ namespace WaveEngine
 
 			*event = TEvent{ data... };
 
-			for (Subscriber& s : subscribers[eventType])
-				s.invoke(s.instance, s.method, event);
+			static_cast<Action<const TEvent&>*>(subscribers[eventType])->Invoke(*event);
 
 			event->Reset();
 
