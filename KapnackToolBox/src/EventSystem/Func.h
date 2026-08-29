@@ -1,17 +1,21 @@
 #pragma once
 
-#include <vector>
+#include <tuple>
+#include <utility>
+
 #include "Subscriber.h"
 #include "Export.h"
 
 using namespace std;
 
 template<typename TReturnType, typename... TParameters>
-class WAVEEXPORT Func
+class Func
 {
 private:
 
-	Subscriber subscriber;
+	Subscriber<TReturnType> subscriber;
+
+	using ArgsTuple = tuple<TParameters...>;
 
 public:
 
@@ -22,18 +26,26 @@ public:
 		subscriber.method = *(void**)&method;
 
 		subscriber.invoke =
-			[](void* obj, void* m, const void*)
+			[](void* obj, void* m, const void* event) -> TReturnType
 			{
 				TObject* o = static_cast<TObject*>(obj);
 
-				TReturnType(TObject:: * methodPtr)() = *(TReturnType(TObject::**)(TParameters...)) & m;
+				TReturnType(TObject:: * methodPtr)(TParameters...) = *(TReturnType(TObject::**)(TParameters...)) & m;
 
-				return (o->*methodPtr)();
+				const ArgsTuple* argsTuple = static_cast<const ArgsTuple*>(event);
+
+				return apply(
+					[o, methodPtr](TParameters... params) -> TReturnType
+					{
+						return (o->*methodPtr)(params...);
+					},
+					*argsTuple
+				);
 			};
 	}
 
 	template<typename TObject>
-	void Subscribe(TObject* instance, TReturnType(TObject::* method)())
+	void SubscribeNoArgs(TObject* instance, TReturnType(TObject::* method)())
 	{
 		subscriber.instance = instance;
 		subscriber.method = *(void**)&method;
@@ -55,17 +67,17 @@ public:
 		subscriber.method = reinterpret_cast<void*>(func);
 
 		subscriber.invoke =
-			[](void*, void* m, const void* event)
+			[](void*, void* m, const void* event) -> TReturnType
 			{
-				TReturnType(*funcPtr)(TParameters...) = reinterpret_cast<TReturnType(*)(TParameters...)>(m);
+				TReturnType(*funcPtr)(TParameters...) = reinterpret_cast<TReturnType(*)(TParameters...)> (m);
 
-				const TParameters* e = static_cast<const TParameters*>(event);
+				const ArgsTuple* argsTuple = static_cast<const ArgsTuple*>(event);
 
-				return funcPtr(*e);
+				return apply(funcPtr, *argsTuple);
 			};
 	}
 
-	void Subscribe(TReturnType(*func)())
+	void SubscribeNoArgs(TReturnType(*func)())
 	{
 		subscriber.instance = nullptr;
 		subscriber.method = reinterpret_cast<void*>(func);
@@ -88,6 +100,8 @@ public:
 
 	TReturnType Invoke(TParameters... args) const
 	{
-		return subscriber.invoke(args...);
+		ArgsTuple packedArgs(args...);
+
+		return subscriber.invoke(subscriber.instance, subscriber.method, static_cast<const void*>(&packedArgs));
 	}
 };
