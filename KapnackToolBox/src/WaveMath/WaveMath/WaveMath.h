@@ -20,8 +20,10 @@ public:
 	template<SignableObject T>
 	static int Sign(T number)
 	{
-		return number >= 0 ? 1 : -1;//static_cast<int>((number > 0) - (number < 0));
+		return static_cast<int>((number > 0) - (number < 0));
 	}
+
+	static int Min(int a, int b);
 
 	static int Opposite(int number);
 	static float Opposite(float number);
