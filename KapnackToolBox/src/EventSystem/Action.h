@@ -1,18 +1,12 @@
 #pragma once
 
+#include "Delegate.h"
+
 #include <vector>
-#include <algorithm>
-#include <tuple>
 #include "Subscriber.h"
-#include "Export.h"
 #include <utility>
 
 using namespace std;
-
-class Delegate
-{
-
-};
 
 template<typename... TParameters>
 class Action : public Delegate
