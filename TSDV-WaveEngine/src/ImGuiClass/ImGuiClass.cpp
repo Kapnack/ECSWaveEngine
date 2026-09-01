@@ -1,14 +1,15 @@
 #include "ImGuiClass.h"
 
+#include <string>
+#include <unordered_map>
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_impl_opengl3.h>
 #include <ImGui/imgui_impl_glfw.h>
 
 #include "ServiceProvider/ServiceProvider.h"
-#include <string>
-#include <Renderer/Renderer.h>
-#include <ECS/WaveObject/WaveObjectRegistry.h>
-#include <Material/Material.h>
+#include "Renderer/Renderer.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "Material/Material.h"
 
 namespace WaveEngine
 {
@@ -126,9 +127,9 @@ namespace WaveEngine
 			ImGui::Separator();
 		}
 
-		map<unsigned int, WaveObject*> waveObjects = GetWaveObjectRegistry()->GetWaveObjects();
+		unordered_map<unsigned int, WaveObject*> waveObjects = GetWaveObjectRegistry()->GetWaveObjects();
 
-		for (map<unsigned int, WaveObject*>::iterator it = waveObjects.begin(); it != waveObjects.end(); ++it)
+		for (unordered_map<unsigned int, WaveObject*>::iterator it = waveObjects.begin(); it != waveObjects.end(); ++it)
 		{
 			text = it->second->GetName();
 
