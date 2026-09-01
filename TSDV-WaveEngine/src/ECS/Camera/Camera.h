@@ -3,6 +3,7 @@
 #include <glm/fwd.hpp>
 
 #include "Export.h"
+#include "ECS/Transform/ECSTransform.h"
 #include "ECS/Component/Component.h"
 #include "BoundingBox/BoundingBox.h"
 #include "Window/Window.h"
