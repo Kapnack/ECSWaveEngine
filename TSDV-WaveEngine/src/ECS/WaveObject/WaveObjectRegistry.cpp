@@ -1,8 +1,8 @@
 #include "WaveObjectRegistry.h"
 
-#include <map>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "EventSystem/EventSystem.h"
 #include "WaveMath/WaveMath/WaveMath.h"
@@ -75,7 +75,7 @@ namespace WaveEngine
 		return waveObjectsNamesByID[ID];
 	}
 
-	map<unsigned int, WaveObject*>& WaveObjectRegistry::GetWaveObjects()
+	unordered_map<unsigned int, WaveObject*>& WaveObjectRegistry::GetWaveObjects()
 	{
 		return waveObjects;
 	}
@@ -94,7 +94,7 @@ namespace WaveEngine
 	{
 		vector<WaveObject*> waveObjectsToReturn;
 
-		for (map<string, unsigned int>::iterator iterator = waveObjectsIDByName.begin(); iterator != waveObjectsIDByName.end(); ++iterator)
+		for (unordered_map<string, unsigned int>::iterator iterator = waveObjectsIDByName.begin(); iterator != waveObjectsIDByName.end(); ++iterator)
 			if (objectNameSearchStrategy[objectNameSearch].Invoke(name, iterator->first))
 				waveObjectsToReturn.push_back(waveObjects[iterator->second]);
 
@@ -130,7 +130,7 @@ namespace WaveEngine
 
 	WaveObjectRegistry::~WaveObjectRegistry()
 	{
-		for (map<unsigned int, WaveObject*>::iterator iterator = waveObjects.begin(); iterator != waveObjects.end(); ++iterator)
+		for (unordered_map<unsigned int, WaveObject*>::iterator iterator = waveObjects.begin(); iterator != waveObjects.end(); ++iterator)
 			delete iterator->second;
 	}
 }
