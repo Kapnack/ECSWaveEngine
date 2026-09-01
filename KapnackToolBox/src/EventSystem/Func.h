@@ -1,15 +1,16 @@
 #pragma once
 
+#include "Delegate.h"
+
 #include <tuple>
 #include <utility>
 
 #include "Subscriber.h"
-#include "Export.h"
 
 using namespace std;
 
 template<typename TReturnType, typename... TParameters>
-class Func
+class Func : Delegate
 {
 private:
 
