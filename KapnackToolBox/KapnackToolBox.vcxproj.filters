@@ -92,6 +92,9 @@
     <ClInclude Include="src\EventSystem\Func.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\EventSystem\Delegate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ServiceProvider\ServiceProvider.tpp" />
