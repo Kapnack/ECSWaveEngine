@@ -158,6 +158,7 @@
     <ClInclude Include="src\CollisionSystem\Octree\Octree.h" />
     <ClInclude Include="src\CollisionSystem\Octree\OctreeNode\OctreeNode.h" />
     <ClInclude Include="src\EventSystem\Action.h" />
+    <ClInclude Include="src\EventSystem\Delegate.h" />
     <ClInclude Include="src\EventSystem\Event.h" />
     <ClInclude Include="src\EventSystem\EventSystem.h" />
     <ClInclude Include="src\EventSystem\Func.h" />
