@@ -13,16 +13,15 @@ namespace WaveEngine
 	{
 	}
 
-	bool BinarySpacePartition::ObjectsShareSpace(const WaveObject& objectA, const WaveObject& objectB)
+	bool BinarySpacePartition::ObjectsShareSpace(Vector3 vectorA, Vector3 vectorB)
 	{
 		for (const Plane& plane : planes)
-			if (WaveMath::Sign(plane.SignedDistance(objectA.GetTransform().GetPosition())) !=
-				WaveMath::Sign(plane.SignedDistance(objectB.GetTransform().GetPosition())))
+			if (WaveMath::Sign(plane.SignedDistance(vectorA)) !=
+				WaveMath::Sign(plane.SignedDistance(vectorB)))
 				return false;
 
 		return true;
 	}
-
 
 	void BinarySpacePartition::AddPlane(Plane newPlane)
 	{
