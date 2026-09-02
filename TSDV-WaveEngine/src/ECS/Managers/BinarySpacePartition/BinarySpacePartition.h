@@ -2,10 +2,10 @@
 
 #include <list>
 
-#include "ServiceProvider/Service.h"
 
 #include "Plane/Plane.h"
-#include "ECS/WaveObject/WaveObject.h"
+#include "ServiceProvider/Service.h"
+#include "WaveMath/Vector3/Vector3.h"
 
 using namespace std;
 
@@ -21,7 +21,7 @@ namespace WaveEngine
 
 		BinarySpacePartition();
 
-		bool ObjectsShareSpace(const WaveObject& objectA, const WaveObject& objectB);
+		bool ObjectsShareSpace(Vector3 objectA, Vector3 objectB);
 
 		void AddPlane(Plane plane);
 		void RemovePlane(Plane plane);
