@@ -1,91 +1,80 @@
 #pragma once
 
-#include <tuple>
-#include <utility>
+
+#include "Delegate.h"
 
 #include "Subscriber.h"
 #include "Export.h"
 
 using namespace std;
 
-template<typename TReturnType, typename... TParameters>
-class Func
+
+template<typename TReturn, typename... TParams>
+class Func : Delegate
 {
 private:
 
-	Subscriber<TReturnType> subscriber;
-
-	using ArgsTuple = tuple<TParameters...>;
+	Subscriber<TReturn, TParams...> subscriber;
 
 public:
 
 	template<typename TObject>
-	void Subscribe(TObject* instance, TReturnType(TObject::* method)(TParameters...))
+	void Subscribe(TObject* instance, TReturn(TObject::* method)(TParams...))
 	{
 		subscriber.instance = instance;
 		subscriber.method = *(void**)&method;
 
 		subscriber.invoke =
-			[](void* obj, void* m, const void* event) -> TReturnType
+			[](void* obj, void* m, TParams... params) -> TReturn
 			{
 				TObject* o = static_cast<TObject*>(obj);
 
-				TReturnType(TObject:: * methodPtr)(TParameters...) = *(TReturnType(TObject::**)(TParameters...)) & m;
+				TReturn(TObject:: * methodPtr)(TParams...) = *(TReturn(TObject::**)(TParams...)) & m;
 
-				const ArgsTuple* argsTuple = static_cast<const ArgsTuple*>(event);
-
-				return apply(
-					[o, methodPtr](TParameters... params) -> TReturnType
-					{
-						return (o->*methodPtr)(params...);
-					},
-					*argsTuple
-				);
+				return (o->*methodPtr)(params...);
 			};
 	}
 
 	template<typename TObject>
-	void SubscribeNoArgs(TObject* instance, TReturnType(TObject::* method)())
+	void SubscribeNoArgs(TObject* instance, TReturn(TObject::* method)())
 	{
 		subscriber.instance = instance;
 		subscriber.method = *(void**)&method;
 
 		subscriber.invoke =
-			[](void* obj, void* m, const void*)
+			[](void* obj, void* m, TParams...)
 			{
 				TObject* o = static_cast<TObject*>(obj);
 
-				TReturnType(TObject:: * methodPtr)() = *(TReturnType(TObject::**)()) & m;
+				TReturn(TObject:: * methodPtr)() = *(TReturn(TObject::**)()) & m;
 
 				return (o->*methodPtr)();
 			};
 	}
 
-	void Subscribe(TReturnType(*func)(TParameters...))
+	void Subscribe(TReturn(*func)(TParams...))
 	{
 		subscriber.instance = nullptr;
 		subscriber.method = reinterpret_cast<void*>(func);
 
 		subscriber.invoke =
-			[](void*, void* m, const void* event) -> TReturnType
+			[](void*, void* m, TParams... params) -> TReturn
 			{
-				TReturnType(*funcPtr)(TParameters...) = reinterpret_cast<TReturnType(*)(TParameters...)> (m);
+				TReturn(*funcPtr)(TParams...) = reinterpret_cast<TReturn(*)(TParams...)> (m);
 
-				const ArgsTuple* argsTuple = static_cast<const ArgsTuple*>(event);
-
-				return apply(funcPtr, *argsTuple);
+				return funcPtr(params...);
 			};
 	}
 
-	void SubscribeNoArgs(TReturnType(*func)())
+	void SubscribeNoArgs(TReturn(*func)())
 	{
 		subscriber.instance = nullptr;
 		subscriber.method = reinterpret_cast<void*>(func);
 
 		subscriber.invoke =
-			[](void*, void* m, const void*)
+			[](void*, void* m, TParams...)
 			{
-				TReturnType(*funcPtr)() = reinterpret_cast<TReturnType(*)()>(m);
+				TReturn(*funcPtr)() = reinterpret_cast<TReturn(*)()>(m);
 
 				return funcPtr();
 			};
@@ -98,10 +87,8 @@ public:
 		subscriber.invoke = nullptr;
 	}
 
-	TReturnType Invoke(TParameters... args) const
+	TReturn Invoke(TParams... args) const
 	{
-		ArgsTuple packedArgs(args...);
-
-		return subscriber.invoke(subscriber.instance, subscriber.method, static_cast<const void*>(&packedArgs));
+		return subscriber.invoke(subscriber.instance, subscriber.method, args...);
 	}
 };
