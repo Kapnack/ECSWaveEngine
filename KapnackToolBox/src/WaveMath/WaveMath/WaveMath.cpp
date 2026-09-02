@@ -65,6 +65,11 @@ float WaveMath::Sqrt(float number)
 	return betterGuess;
 }
 
+int WaveMath::Min(int a, int b)
+{
+	return b + ((a - b) & ((a - b) >> 31));
+}
+
 int WaveMath::Opposite(int number)
 {
 	const int mask = -1;

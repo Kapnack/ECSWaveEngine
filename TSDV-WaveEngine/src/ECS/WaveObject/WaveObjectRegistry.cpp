@@ -2,9 +2,10 @@
 
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 #include "EventSystem/EventSystem.h"
+#include "WaveMath/WaveMath/WaveMath.h"
 #include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
@@ -19,7 +20,9 @@ namespace WaveEngine
 		GetEventSystem()->Subscribe<ObjectBecameChildEvent>(this, &WaveObjectRegistry::OnObjectBecameChild);
 		GetEventSystem()->Subscribe<ObjectChangeName>(this, &WaveObjectRegistry::OnObjectChangesName);
 
-		//objectNameSearchStrategy[ObjectNameSearch::Exact].Subscribe(this, &WaveObjectRegistry::CheckObjecNameExact);
+		objectNameSearchStrategy[ObjectNameSearch::Exact].Subscribe(this, &WaveObjectRegistry::HasExactName);
+		objectNameSearchStrategy[ObjectNameSearch::Contains].Subscribe(this, &WaveObjectRegistry::ContainsInName);
+		objectNameSearchStrategy[ObjectNameSearch::Starts].Subscribe(this, &WaveObjectRegistry::StartsWithName);
 	}
 
 	void WaveObjectRegistry::OnObjectBecameParent(const ObjectBecameParentEvent& objectBecameParentEvent)
@@ -55,11 +58,6 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<EventSystem>();
 	}
 
-	bool WaveObjectRegistry::CheckObjecNameExact(const string_view name, const string_view lookingFor)
-	{
-		return (name.data() == lookingFor.data());
-	}
-
 	void WaveObjectRegistry::AddObject(WaveObject*& newWaveObject, const string_view name)
 	{
 		const int entityID = newWaveObject->GetID();
@@ -77,7 +75,7 @@ namespace WaveEngine
 		return waveObjectsNamesByID[ID];
 	}
 
-	map<unsigned int, WaveObject*>& WaveObjectRegistry::GetWaveObjects()
+	unordered_map<unsigned int, WaveObject*>& WaveObjectRegistry::GetWaveObjects()
 	{
 		return waveObjects;
 	}
@@ -92,15 +90,37 @@ namespace WaveEngine
 		return waveObjects;
 	}
 
-	const vector<WaveObject*>& WaveObjectRegistry::GetWaveObject(const string_view name, ObjectNameSearch objectNameSearch)
+	const vector<WaveObject*> WaveObjectRegistry::GetWaveObject(const char* name, ObjectNameSearch objectNameSearch)
 	{
 		vector<WaveObject*> waveObjectsToReturn;
 
-		for (map<string, unsigned int>::iterator iterator = waveObjectsIDByName.begin(); iterator != waveObjectsIDByName.end(); ++iterator)
-			//if (objectNameSearchStrategy[objectNameSearch].Invoke(iterator->first, name))
+		for (unordered_map<string, unsigned int>::iterator iterator = waveObjectsIDByName.begin(); iterator != waveObjectsIDByName.end(); ++iterator)
+			if (objectNameSearchStrategy[objectNameSearch].Invoke(name, iterator->first))
 				waveObjectsToReturn.push_back(waveObjects[iterator->second]);
 
 		return waveObjectsToReturn;
+	}
+
+	//TODO: This should be moved to its own static or service class.
+	bool WaveObjectRegistry::HasExactName(const string& name, const string& objectName)
+	{
+		return name == objectName;
+	}
+
+	bool WaveObjectRegistry::ContainsInName(const string& name, const string& objectName)
+	{
+		return objectName.find(name);
+	}
+
+	bool WaveObjectRegistry::StartsWithName(const string& name, const string& objectName)
+	{
+		for (int i = 0; i < WaveMath::Min(name.size(), objectName.size()); ++i)
+		{
+			if (name[i] != objectName[i])
+				return false;
+		}
+
+		return true;
 	}
 
 	WaveObject& WaveObjectRegistry::GetWaveObject(unsigned int ID)
@@ -110,7 +130,7 @@ namespace WaveEngine
 
 	WaveObjectRegistry::~WaveObjectRegistry()
 	{
-		for (map<unsigned int, WaveObject*>::iterator iterator = waveObjects.begin(); iterator != waveObjects.end(); ++iterator)
+		for (unordered_map<unsigned int, WaveObject*>::iterator iterator = waveObjects.begin(); iterator != waveObjects.end(); ++iterator)
 			delete iterator->second;
 	}
 }

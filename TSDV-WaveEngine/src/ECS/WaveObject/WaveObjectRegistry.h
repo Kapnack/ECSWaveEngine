@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 #include "ServiceProvider/Service.h"
 #include "WaveObject.h"
@@ -90,11 +90,11 @@ namespace WaveEngine
 
 		vector<unsigned int> parentsWaveObjects;
 
-		map<unsigned int, WaveObject*> waveObjects;
-		map<string, unsigned int> waveObjectsIDByName;
-		map<unsigned int, string> waveObjectsNamesByID;
+		unordered_map<unsigned int, WaveObject*> waveObjects;
+		unordered_map<string, unsigned int> waveObjectsIDByName;
+		unordered_map<unsigned int, string> waveObjectsNamesByID;
 
-		map<ObjectNameSearch, Func<bool, const string_view, const string_view>> objectNameSearchStrategy;
+		unordered_map<ObjectNameSearch, Func<bool, const string&, const string&>> objectNameSearchStrategy;
 
 		friend class BaseGame;
 		friend class ServiceProvider;
@@ -105,7 +105,9 @@ namespace WaveEngine
 
 		EventSystem* GetEventSystem();
 
-		bool CheckObjecNameExact(const string_view name, const string_view lookingFor);
+		bool HasExactName(const string& name, const string& objectName);
+		bool ContainsInName(const string& name, const string& objectName);
+		bool StartsWithName(const string& name, const string& objectName);
 
 	public:
 
@@ -118,11 +120,11 @@ namespace WaveEngine
 
 		string GetObjectName(unsigned int ID);
 
-		map<unsigned int, WaveObject*>& GetWaveObjects();
+		unordered_map<unsigned int, WaveObject*>& GetWaveObjects();
 
 		vector<WaveObject*> GetParentWaveObjects();
 
-		const vector<WaveObject*>& GetWaveObject(const string_view name, ObjectNameSearch objectNameSearch = ObjectNameSearch::Exact);
+		const vector<WaveObject*> GetWaveObject(const char* name, ObjectNameSearch objectNameSearch = ObjectNameSearch::Exact);
 
 		WaveObject& GetWaveObject(unsigned int ID);
 	};
