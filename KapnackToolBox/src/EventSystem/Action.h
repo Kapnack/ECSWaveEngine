@@ -1,54 +1,38 @@
 #pragma once
 
+#include "Delegate.h"
+
 #include <vector>
-#include <algorithm>
-#include <tuple>
+
 #include "Subscriber.h"
-#include "Export.h"
-#include <utility>
 
 using namespace std;
 
-class Delegate
-{
-
-};
-
-template<typename... TParameters>
+template<typename... TParams>
 class Action : public Delegate
 {
 private:
 
-	vector<Subscriber<void>> subscribers;
-
-	using ArgsTuple = tuple<TParameters...>;
+	vector<Subscriber<void, TParams...>> subscribers;
 
 public:
 
 	template<typename TObject>
-	void Subscribe(TObject* instance, void(TObject::* method)(TParameters...))
+	void Subscribe(TObject* instance, void(TObject::* method)(TParams...))
 	{
-		Subscriber<void> sub;
+		Subscriber<void, TParams...> sub;
 
 		sub.instance = instance;
 		sub.method = *(void**)&method;
-
+		   
 		sub.invoke =
-			[](void* obj, void* m, const void* event)
+			[](void* obj, void* m, TParams... params)
 			{
 				TObject* o = static_cast<TObject*>(obj);
 
-				void(TObject:: * methodPtr)(TParameters...) = *(void(TObject::**)(TParameters...)) & m;
+				void(TObject:: * methodPtr)(TParams...) = *(void(TObject::**)(TParams...)) & m;
 
-				const ArgsTuple* argsTuple = static_cast<const ArgsTuple*>(event);
-
-				apply(
-					[o, methodPtr](TParameters... params)
-					{
-						(o->*methodPtr)(params...);
-					},
-					*argsTuple
-				);
+				(o->*methodPtr)(params...);
 			};
 
 		subscribers.push_back(sub);
@@ -58,68 +42,66 @@ public:
 	void SubscribeNoArgs(TObject* instance, void(TObject::* method)())
 	{
 		Subscriber<void> sub;
-
+	
 		sub.instance = instance;
 		sub.method = *(void**)&method;
-
+	
 		sub.invoke =
-			[](void* obj, void* m, const void*)
+			[](void* obj, void* m, TParams...)
 			{
 				TObject* o = static_cast<TObject*>(obj);
-
+	
 				void(TObject:: * methodPtr)() = *(void(TObject::**)()) & m;
-
+	
 				(o->*methodPtr)();
 			};
-
+	
 		subscribers.push_back(sub);
 	}
 
-	void Subscribe(void(*func)(TParameters...))
+	void Subscribe(void(*func)(TParams...))
 	{
-		Subscriber<void> sub;
-
+		Subscriber<void, TParams...> sub;
+	
 		sub.instance = nullptr;
 		sub.method = reinterpret_cast<void*>(func);
-
+	
 		sub.invoke =
-			[](void*, void* m, const void* event)
+			[](void*, void* m, TParams... parms)
 			{
-				void(*funcPtr)(TParameters...) = reinterpret_cast<void(*)(TParameters...)>(m);
-
-				const ArgsTuple* argsTuple = static_cast<const ArgsTuple*>(event);
-
-				apply(funcPtr, *argsTuple);
+				void(*funcPtr)(TParams...) = static_cast<void(*)(TParams...)>(m);
+	
+				funcPtr(parms...);
 			};
-
+	
 		subscribers.push_back(sub);
 	}
 
 	void SubscribeNoArgs(void(*func)())
 	{
-		Subscriber<void> sub;
-
+		Subscriber<void, TParams...> sub;
+	
 		sub.instance = nullptr;
 		sub.method = reinterpret_cast<void*>(func);
-
+	
 		sub.invoke =
-			[](void*, void* m, const void*)
+			[](void*, void* m, TParams...)
 			{
 				void(*funcPtr)() = reinterpret_cast<void(*)()>(m);
-
+	
 				funcPtr();
 			};
-
+	
 		subscribers.push_back(sub);
 	}
 
 	void UnsubscribeNoArgs(void(*func)())
 	{
 		void* m = *(void**)&func;
-
+	
 		subscribers.erase(
 			remove_if(subscribers.begin(), subscribers.end(),
-				[&](const Subscriber<void>& s)
+				[&](const Subscriber<void, TParams...>& s)
 				{
 					return s.instance == nullptr && s.method == m;
 				}),
@@ -127,13 +109,13 @@ public:
 		);
 	}
 
-	void Unsubscribe(void(*func)(TParameters...))
+	void Unsubscribe(void(*func)(TParams...))
 	{
 		void* m = *(void**)&func;
-
+	
 		subscribers.erase(
 			remove_if(subscribers.begin(), subscribers.end(),
-				[&](const Subscriber<void>& s)
+				[&](const Subscriber<void, TParams...>& s)
 				{
 					return s.instance == nullptr && s.method == m;
 				}),
@@ -142,13 +124,13 @@ public:
 	}
 
 	template<typename TObject>
-	void Unsubscribe(TObject* instance, void(TObject::* method)(TParameters...))
+	void Unsubscribe(TObject* instance, void(TObject::* method)(TParams...))
 	{
 		void* m = *(void**)&method;
 
 		subscribers.erase(
 			remove_if(subscribers.begin(), subscribers.end(),
-				[&](const Subscriber<void>& s)
+				[&](const Subscriber<void, TParams...>& s)
 				{
 					return s.instance == instance && s.method == m;
 				}),
@@ -160,10 +142,10 @@ public:
 	void UnsubscribeNoArgs(TObject* instance, void(TObject::* method)())
 	{
 		void* m = *(void**)&method;
-
+	
 		subscribers.erase(
 			remove_if(subscribers.begin(), subscribers.end(),
-				[&](const Subscriber<void>& s)
+				[&](const Subscriber<void, TParams...>& s)
 				{
 					return s.instance == instance && s.method == m;
 				}),
@@ -171,11 +153,9 @@ public:
 		);
 	}
 
-	void Invoke(TParameters... args) const
+	void Invoke(TParams... args) const
 	{
-		ArgsTuple packedArgs(args...);
-
-		for (const Subscriber<void>& sub : subscribers)
-			sub.invoke(sub.instance, sub.method, static_cast<const void*>(&packedArgs));
+		for (const Subscriber<void, TParams...>& sub : subscribers)
+			sub.invoke(sub.instance, sub.method, args...);
 	}
 };
