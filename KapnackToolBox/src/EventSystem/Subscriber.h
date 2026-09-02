@@ -1,9 +1,9 @@
 #pragma once
 
-template<typename TReturnType>
+template<typename TReturn, typename... TParams>
 struct Subscriber
 {
 	void* instance = nullptr;
 	void* method = nullptr;
-	TReturnType(*invoke)(void*, void*, const void*);
+	TReturn(*invoke)(void*, void*, TParams...);
 };
