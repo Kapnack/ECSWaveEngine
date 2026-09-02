@@ -34,7 +34,7 @@ namespace WaveEngine
 	{
 		for (Camera* camera : GetCameraManager()->GetActiveCameras())
 			for (WaveObject* waveObject : ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetParentWaveObjects())
-				if (GetBinarySpacePartition()->ObjectsShareSpace(camera->GetWaveObject(), *waveObject))
+				if (GetBinarySpacePartition()->ObjectsShareSpace(camera->GetTransform().GetPosition(), waveObject->GetTransform().GetPosition()))
 					CheckChildsAreInFrustum(*waveObject, *camera);
 	}
 
