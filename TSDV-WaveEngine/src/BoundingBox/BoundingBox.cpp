@@ -60,6 +60,12 @@ namespace WaveEngine
 		this->max = max;
 	}
 
+	void BoundingBox::SetSize(Vector3 size)
+	{
+		Vector3 center = GetCenter();
+		SetMinMax(center - size * 0.5f, center + size * 0.5f);
+	}
+
 	void BoundingBox::SetCenter(Vector3 center)
 	{
 		Vector3 half = GetExtents();
