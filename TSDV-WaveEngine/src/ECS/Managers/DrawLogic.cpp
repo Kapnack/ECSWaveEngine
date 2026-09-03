@@ -1,20 +1,17 @@
 #include "DrawLogic.h"
 
-#include "ServiceProvider/ServiceProvider.h"
-
-#include "ECS/Transform/ECSTransform.h"
-#include "ECS/Mesh/MeshID.h"
 #include "ECS/MaterialID.h"
-#include "ECS/ComponentContainer/ComponentContainer.h"
-
-#include <vector>
+#include "ECS/Mesh/MeshID.h"
+#include "Renderer/Renderer.h"
 #include "ECS/Camera/Camera.h"
-#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/Component/Component.h"
 #include "ECS/WaveObject/WaveObject.h"
-#include <Renderer/Renderer.h>
-#include <ECS/CompontRegistry/ComponentRegistry.h>
-#include "Plane/Plane.h"
-#include "WaveMath/WaveMath/WaveMath.h"
+#include "ECS/Transform/ECSTransform.h"
+#include "CameraManager/CameraManager.h"
+#include "ServiceProvider/ServiceProvider.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
+#include "BinarySpacePartition/BinarySpacePartition.h"
 
 namespace WaveEngine
 {
