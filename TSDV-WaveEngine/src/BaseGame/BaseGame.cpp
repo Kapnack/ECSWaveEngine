@@ -1,14 +1,28 @@
 ﻿#include "BaseGame.h"
 
+#include <ctime>
+#include <cstdlib>
+
+#include "Time/Time.h"
 #include "Input/Input.h"
-#include "ServiceProvider/ServiceProvider.h"
-#include "Material/MaterialFactory.h"
-#include "TextureImporter/TextureImporter.h"
-#include "TextureImporter/TextureManager.h"
+#include "Window/Window.h"
+#include "Renderer/Renderer.h"
 #include "ECS/Camera/Camera.h"
+#include "FileReader/FileReader.h"
+#include "EventSystem/EventSystem.h"
+#include "Material/MaterialFactory.h"
+#include "Material/MaterialManager.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "ModelImporter/ModelImporter.h"
 #include "CameraManager/CameraManager.h"
+#include "Mesh/MeshManager/MeshManager.h"
+#include "Mesh/MeshFactory/MeshFactory.h"
+#include "TextureImporter/TextureManager.h"
+#include "ServiceProvider/ServiceProvider.h"
+#include "TextureImporter/TextureImporter.h"
+#include "ECS/WaveObject/WaveObjectFactory.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "ECS/Managers/BinarySpacePartition/BinarySpacePartition.h"
 
 namespace WaveEngine
@@ -95,6 +109,9 @@ namespace WaveEngine
 
 		waveObject->GetTransform().SetPosition((camera.GetTransform().GetPosition() + tank->GetTransform().GetPosition()) * 0.5f);
 		waveObject->GetTransform().SetScale(Vector3::One() * 0.2f);
+
+		for (WaveObject* binaryObj : GetWaveObjectRegistry()->GetWaveObject("Tank", ObjectNameSearch::Contains))
+			GetBinarySpacePartition()->TurnObjectIntoPlane(*binaryObj);
 
 #pragma endregion
 
@@ -328,6 +345,8 @@ namespace WaveEngine
 
 		transformLogic.Update();
 
+		GetBinarySpacePartition()->Update();
+
 		GetCameraManager()->Update();
 
 		meshLogic.Update();
@@ -360,6 +379,11 @@ namespace WaveEngine
 	CameraManager* BaseGame::GetCameraManager() const
 	{
 		return ServiceProvider::Instance().Get<CameraManager>();
+	}
+
+	BinarySpacePartition* BaseGame::GetBinarySpacePartition() const
+	{
+		return ServiceProvider::Instance().Get<BinarySpacePartition>();
 	}
 
 	float BaseGame::GetDeltaTime() const
