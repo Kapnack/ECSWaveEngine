@@ -43,6 +43,21 @@ namespace WaveEngine
 		originDistance = Vector3::Dot(normal, position);
 	}
 
+	Vector3 Plane::GetNormal() const
+	{
+		return normal;
+	}
+
+	float Plane::GetOriginDistance() const
+	{
+		return originDistance;
+	}
+
+	Vector3 Plane::GetPosition() const
+	{
+		return normal * originDistance;
+	}
+
 	bool Plane::operator==(Plane other) const
 	{
 		return normal == other.normal && originDistance == other.originDistance;
