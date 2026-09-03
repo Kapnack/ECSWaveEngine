@@ -23,6 +23,10 @@ namespace WaveEngine
 		void SetNormal(Vector3 normal);
 		void SetPosition(Vector3 position);
 
+		Vector3 GetNormal() const;
+		float GetOriginDistance() const;
+		Vector3 GetPosition() const;
+
 		bool operator==(Plane other) const;
 	};
 }
