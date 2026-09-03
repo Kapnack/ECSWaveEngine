@@ -13,6 +13,7 @@
 #include "Material/MaterialManager.h"
 #include "Material/MaterialFactory.h"
 #include "ECS/WaveObject/WaveObject.h"
+#include "CameraManager/CameraManager.h"
 #include "Mesh/MeshFactory/MeshFactory.h"
 #include "Mesh/MeshManager/MeshManager.h"
 #include "ECS/RigidBody/RigidBodyLogic.h"
@@ -21,7 +22,7 @@
 #include "ECS/WaveObject/WaveObjectFactory.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/Managers/TransformLogic/TransformLogic.h"
-#include <CameraManager/CameraManager.h>
+#include "ECS/Managers/BinarySpacePartition/BinarySpacePartition.h"
 
 
 namespace WaveEngine
@@ -51,12 +52,13 @@ namespace WaveEngine
 
 	protected:
 
-		WAVEEXPORT virtual void Init(const int& width, const int& height) = 0;
+		WAVEEXPORT virtual void Init(int width, int height) = 0;
 		WAVEEXPORT virtual void Unload() = 0;
 
 		WAVEEXPORT float GetDeltaTime() const;
 
 		WAVEEXPORT Renderer* GetRenderer() const;
+		WAVEEXPORT BinarySpacePartition* GetBinarySpacePartition() const;
 		WAVEEXPORT CameraManager* GetCameraManager() const;
 		WAVEEXPORT MaterialManager* GetMaterialManager() const;
 		WAVEEXPORT MaterialFactory* GetMaterialFactory() const;
