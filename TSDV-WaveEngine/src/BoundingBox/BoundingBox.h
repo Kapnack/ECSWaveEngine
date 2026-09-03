@@ -24,6 +24,7 @@ namespace WaveEngine
 
 		void SetMin(Vector3 min);
 		void SetMax(Vector3 max);
+		void SetSize(Vector3 size);
 		void SetCenter(Vector3 center);
 
 		bool IsEmpty() const;
