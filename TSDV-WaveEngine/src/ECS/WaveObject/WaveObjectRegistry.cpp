@@ -109,7 +109,20 @@ namespace WaveEngine
 
 	bool WaveObjectRegistry::ContainsInName(const string& name, const string& objectName)
 	{
-		return objectName.find(name);
+		int correctInARow = 0;
+
+		for (int i = 0; i < objectName.size(); ++i)
+		{
+			if (correctInARow == name.size())
+				return true;
+
+			if (objectName[i] == name[correctInARow])
+				++correctInARow;
+			else
+				correctInARow = 0;
+		}
+
+		return false;
 	}
 
 	bool WaveObjectRegistry::StartsWithName(const string& name, const string& objectName)
