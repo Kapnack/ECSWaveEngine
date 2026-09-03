@@ -10,7 +10,7 @@ Game::~Game()
 	Unload();
 }
 
-void Game::Init(const int& width, const int& height)
+void Game::Init(int width, int height)
 {
 
 }
