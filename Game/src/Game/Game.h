@@ -10,7 +10,7 @@ private:
 
 protected:
 
-	void Init(const int& width, const int& height) override;
+	void Init(int width, int height) override;
 	void Unload() override;
 
 public:
