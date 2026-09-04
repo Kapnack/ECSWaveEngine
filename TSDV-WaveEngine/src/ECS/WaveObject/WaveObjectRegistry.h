@@ -126,7 +126,9 @@ namespace WaveEngine
 
 		const vector<WaveObject*> GetWaveObject(const char* name, ObjectNameSearch objectNameSearch = ObjectNameSearch::Exact);
 
-		WaveObject& GetWaveObject(unsigned int ID);
+		WaveObject& GetWaveObject(unsigned int ID) const;
+
+		WaveObject& operator[](unsigned int ID) const;
 	};
 
 }
