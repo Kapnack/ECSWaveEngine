@@ -1,7 +1,12 @@
 #ifndef SERVICEPROVIDER
 #define SERVICEPROVIDER
 
+#include "Service.h"
+
 #include "ServiceProvider.h"
+
+#include <typeindex>
+#include <unordered_map>
 
 namespace WaveEngine
 {
