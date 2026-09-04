@@ -136,9 +136,14 @@ namespace WaveEngine
 		return true;
 	}
 
-	WaveObject& WaveObjectRegistry::GetWaveObject(unsigned int ID)
+	WaveObject& WaveObjectRegistry::GetWaveObject(unsigned int ID) const
 	{
-		return *waveObjects.at(ID);
+		return *(waveObjects.at(ID));
+	}
+
+	WaveObject& WaveObjectRegistry::operator[](unsigned int ID) const
+	{
+		return GetWaveObject(ID);
 	}
 
 	WaveObjectRegistry::~WaveObjectRegistry()
