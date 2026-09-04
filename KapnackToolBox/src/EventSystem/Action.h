@@ -23,7 +23,7 @@ public:
 		Subscriber<void, TParams...> sub;
 
 		sub.instance = instance;
-		sub.method = *(void**)&method;
+		sub.method = *reinterpret_cast<void**>(&method);
 		   
 		sub.invoke =
 			[](void* obj, void* m, TParams... params)
@@ -44,7 +44,7 @@ public:
 		Subscriber<void> sub;
 	
 		sub.instance = instance;
-		sub.method = *(void**)&method;
+		sub.method = *reinterpret_cast<void**>(&method);
 	
 		sub.invoke =
 			[](void* obj, void* m, TParams...)
@@ -97,7 +97,7 @@ public:
 
 	void UnsubscribeNoArgs(void(*func)())
 	{
-		void* m = *(void**)&func;
+		void* m = *reinterpret_cast<void**>(&func);
 	
 		subscribers.erase(
 			remove_if(subscribers.begin(), subscribers.end(),
@@ -111,7 +111,7 @@ public:
 
 	void Unsubscribe(void(*func)(TParams...))
 	{
-		void* m = *(void**)&func;
+		void* m = *reinterpret_cast<void**>(&func);
 	
 		subscribers.erase(
 			remove_if(subscribers.begin(), subscribers.end(),
@@ -126,7 +126,7 @@ public:
 	template<typename TObject>
 	void Unsubscribe(TObject* instance, void(TObject::* method)(TParams...))
 	{
-		void* m = *(void**)&method;
+		void* m = *reinterpret_cast<void**>(&method);
 
 		subscribers.erase(
 			remove_if(subscribers.begin(), subscribers.end(),
@@ -141,7 +141,7 @@ public:
 	template<typename TObject>
 	void UnsubscribeNoArgs(TObject* instance, void(TObject::* method)())
 	{
-		void* m = *(void**)&method;
+		void* m = *reinterpret_cast<void**>(&method);
 	
 		subscribers.erase(
 			remove_if(subscribers.begin(), subscribers.end(),
