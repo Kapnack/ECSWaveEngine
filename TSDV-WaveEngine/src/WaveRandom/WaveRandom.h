@@ -4,9 +4,6 @@
 
 #include "Material/Color/Color.h"
 
-template<typename T>
-concept WaveRandomAllow = RandomAllowed<T> || is_same_v<T, Color>;
-
 namespace WaveEngine
 {
 	class WaveRandom : public Random
