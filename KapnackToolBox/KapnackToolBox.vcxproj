@@ -164,6 +164,7 @@
     <ClInclude Include="src\EventSystem\Func.h" />
     <ClInclude Include="src\EventSystem\Subscriber.h" />
     <ClInclude Include="src\Export.h" />
+    <ClInclude Include="src\Random\Random.h" />
     <ClInclude Include="src\ServiceProvider\Service.h" />
     <ClInclude Include="src\ServiceProvider\ServiceProvider.h" />
     <ClInclude Include="src\Singleton\Singleton.h" />
