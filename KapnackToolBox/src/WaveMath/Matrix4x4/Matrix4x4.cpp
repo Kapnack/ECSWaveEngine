@@ -10,7 +10,7 @@ Matrix4x4::Matrix4x4()
 	*this = Identity();
 }
 
-Matrix4x4::Matrix4x4(const float& m00, const float& m01, const float& m02, const float& m03, const float& m10, const float& m11, const float& m12, const float& m13, const float& m20, const float& m21, const float& m22, const float& m23, const float& m30, const float& m31, const float& m32, const float& m33)
+Matrix4x4::Matrix4x4( float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33)
 {
 	this->m00 = m00; this->m01 = m01; this->m02 = m02; this->m03 = m03;
 	this->m10 = m10; this->m11 = m11; this->m12 = m12; this->m13 = m13;
@@ -18,7 +18,7 @@ Matrix4x4::Matrix4x4(const float& m00, const float& m01, const float& m02, const
 	this->m30 = m30; this->m31 = m31; this->m32 = m32; this->m33 = m33;
 }
 
-Matrix4x4::Matrix4x4(const Quaternion& q0, const Quaternion& q1, const Quaternion& q2, const Quaternion& q3)
+Matrix4x4::Matrix4x4(Quaternion q0, Quaternion q1, Quaternion q2, Quaternion q3)
 {
 	m00 = q0.x; m01 = q0.y; m02 = q0.z; m03 = q0.w;
 	m10 = q1.x; m11 = q1.y; m12 = q1.z; m13 = q1.w;
@@ -30,14 +30,14 @@ Matrix4x4::~Matrix4x4()
 {
 }
 
-void Matrix4x4::SetTranslate(const Vector3& vector)
+void Matrix4x4::SetTranslate(Vector3 vector)
 {
 	m03 = vector.x;
 	m13 = vector.y;
 	m23 = vector.z;
 }
 
-void Matrix4x4::AddTranslate(const Vector3& vector)
+void Matrix4x4::AddTranslate(Vector3 vector)
 {
 	m03 += vector.x;
 	m13 += vector.y;
@@ -54,14 +54,14 @@ Matrix4x4 Matrix4x4::GetRotationMatrix() const
 	return CreateRotation(*this);
 }
 
-void Matrix4x4::SetScale(const Vector3& vector)
+void Matrix4x4::SetScale(Vector3 vector)
 {
 	m00 = vector.x;
 	m11 = vector.y;
 	m22 = vector.z;
 }
 
-void Matrix4x4::AddScale(const Vector3& vector)
+void Matrix4x4::AddScale(Vector3 vector)
 {
 	m00 *= vector.x;
 	m11 *= vector.y;
@@ -115,7 +115,7 @@ Matrix4x4 Matrix4x4::Identity()
 	);
 }
 
-Matrix4x4 Matrix4x4::CreateScale(const float& x, const float& y, const float& z)
+Matrix4x4 Matrix4x4::CreateScale(float x, float y, float z)
 {
 	Matrix4x4 scale;
 
@@ -126,7 +126,7 @@ Matrix4x4 Matrix4x4::CreateScale(const float& x, const float& y, const float& z)
 	return scale;
 }
 
-Matrix4x4 Matrix4x4::CreateScale(const Vector3& vector)
+Matrix4x4 Matrix4x4::CreateScale(Vector3 vector)
 {
 	return CreateScale(vector.x, vector.y, vector.z);
 }
@@ -191,7 +191,12 @@ Quaternion Matrix4x4::GetRotation(const Matrix4x4& m)
 	return q;
 }
 
-Matrix4x4 Matrix4x4::CreateRotation(const float& x, const float& y, const float& z, const float& w)
+Matrix4x4 Matrix4x4::CreateRotation(Quaternion q)
+{
+	return CreateRotation(q.x, q.y, q.z, q.w);
+}
+
+Matrix4x4 Matrix4x4::CreateRotation(float x, float y, float z, float w)
 {
 	float xx = x * x;
 	float yy = y * y;
@@ -219,12 +224,12 @@ Matrix4x4 Matrix4x4::CreateRotation(const float& x, const float& y, const float&
 	return m;
 }
 
-Matrix4x4 Matrix4x4::CreateRotation(const Quaternion& q)
+Matrix4x4 Matrix4x4::CreateTranslate(Vector3 vector)
 {
-	return CreateRotation(q.x, q.y, q.z, q.w);
+	return CreateTranslate(vector.x, vector.y, vector.z);
 }
 
-Matrix4x4 Matrix4x4::CreateTranslate(const float& x, const float& y, const float& z)
+Matrix4x4 Matrix4x4::CreateTranslate(float x, float y, float z)
 {
 	Matrix4x4 translate;
 
@@ -235,12 +240,7 @@ Matrix4x4 Matrix4x4::CreateTranslate(const float& x, const float& y, const float
 	return translate;
 }
 
-Matrix4x4 Matrix4x4::CreateTranslate(const Vector3& vector)
-{
-	return CreateTranslate(vector.x, vector.y, vector.z);
-}
-
-Matrix4x4 Matrix4x4::TRS(const Vector3& t, const Quaternion& r, const Vector3& s)
+Matrix4x4 Matrix4x4::TRS(Vector3 t, Quaternion r, Vector3 s)
 {
 	const Matrix4x4 translate = CreateTranslate(t);
 	const Matrix4x4 rotate = CreateRotation(r);
