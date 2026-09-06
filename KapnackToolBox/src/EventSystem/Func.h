@@ -10,7 +10,7 @@ using namespace std;
 
 
 template<typename TReturn, typename... TParams>
-class Func : Delegate
+class Func : public Delegate
 {
 private:
 
