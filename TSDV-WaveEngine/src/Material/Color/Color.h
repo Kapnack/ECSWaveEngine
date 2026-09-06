@@ -81,4 +81,9 @@ struct Color
 	{
 		return Color(1.0f, 1.0f, 0.0f);
 	}
+
+	static Color Clear()
+	{
+		return Color(0.0f, 0.0f, 0.0f, 0.0f);
+	}
 };
