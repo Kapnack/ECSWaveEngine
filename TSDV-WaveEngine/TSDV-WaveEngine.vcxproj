@@ -252,6 +252,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\Material\Material.h" />
     <ClInclude Include="src\ECS\Transform\ECSTransform.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
+    <ClInclude Include="src\WaveRandom\WaveRandom.h" />
     <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="src\Time\Time.h" />
     <ClInclude Include="src\TextureImporter\TextureImporter.h" />

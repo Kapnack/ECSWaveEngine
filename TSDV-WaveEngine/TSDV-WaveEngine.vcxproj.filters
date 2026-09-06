@@ -308,6 +308,9 @@
     <ClInclude Include="src\ECS\Managers\BinarySpacePartition\BinarySpacePartition.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="src\WaveRandom\WaveRandom.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
