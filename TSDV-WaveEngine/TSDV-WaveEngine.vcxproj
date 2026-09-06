@@ -206,6 +206,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\CameraManager\CameraManager.h" />
     <ClInclude Include="src\CollisionSystem\CollisionLogic\CollisionLogic.h" />
     <ClInclude Include="src\ECS\Managers\BinarySpacePartition\BinarySpacePartition.h" />
+    <ClInclude Include="src\ECS\WaveBehaviour\WaveBehaviour.h" />
     <ClInclude Include="src\Plane\Plane.h" />
     <ClInclude Include="src\Square\Square.h" />
     <ClInclude Include="src\ECS\Events\RequestAddComponent.h" />

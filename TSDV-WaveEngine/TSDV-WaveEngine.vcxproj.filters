@@ -311,6 +311,9 @@
     <ClInclude Include="src\WaveRandom\WaveRandom.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="src\ECS\WaveBehaviour\WaveBehaviour.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
