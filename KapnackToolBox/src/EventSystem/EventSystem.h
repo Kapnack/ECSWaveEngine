@@ -2,14 +2,13 @@
 
 #include "ServiceProvider/Service.h"
 
-#include <unordered_map>
-#include <vector>
 #include <queue>
 #include <typeindex>
+#include <unordered_map>
 
 #include "Event.h"
-#include "Subscriber.h"
 #include "Action.h"
+#include "Delegate.h"
 
 using namespace std;
 
