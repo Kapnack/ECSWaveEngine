@@ -2,13 +2,14 @@
 
 #include <ctime>
 #include <cstdlib>
+#include <GLFW/glfw3.h>
 
 #include "Time/Time.h"
 #include "Input/Input.h"
 #include "Window/Window.h"
-#include "Random/Random.h"
 #include "Renderer/Renderer.h"
 #include "ECS/Camera/Camera.h"
+#include "WaveRandom/WaveRandom.h"
 #include "FileReader/FileReader.h"
 #include "EventSystem/EventSystem.h"
 #include "Material/MaterialFactory.h"
