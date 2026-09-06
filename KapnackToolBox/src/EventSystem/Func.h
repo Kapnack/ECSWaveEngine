@@ -4,7 +4,6 @@
 #include "Delegate.h"
 
 #include "Subscriber.h"
-#include "Export.h"
 
 using namespace std;
 
@@ -18,11 +17,11 @@ private:
 
 public:
 
-	template<typename TObject>
-	void Subscribe(TObject* instance, TReturn(TObject::* method)(TParams...))
+	template<typename TPointer, typename TObject>
+	void Subscribe(TPointer* instance, TReturn(TObject::* method)(TParams...))
 	{
 		subscriber.instance = instance;
-		subscriber.method = *(void**)&method;
+		subscriber.method = *reinterpret_cast<void**>(&method);
 
 		subscriber.invoke =
 			[](void* obj, void* m, TParams... params) -> TReturn
@@ -35,11 +34,11 @@ public:
 			};
 	}
 
-	template<typename TObject>
-	void SubscribeNoArgs(TObject* instance, TReturn(TObject::* method)())
+	template<typename TPointer, typename TObject>
+	void SubscribeNoArgs(TPointer* instance, TReturn(TObject::* method)())
 	{
 		subscriber.instance = instance;
-		subscriber.method = *(void**)&method;
+		subscriber.method = *reinterpret_cast<void**>(& method);
 
 		subscriber.invoke =
 			[](void* obj, void* m, TParams...)
