@@ -6,6 +6,7 @@
 #include "Time/Time.h"
 #include "Input/Input.h"
 #include "Window/Window.h"
+#include "Random/Random.h"
 #include "Renderer/Renderer.h"
 #include "ECS/Camera/Camera.h"
 #include "FileReader/FileReader.h"
@@ -62,8 +63,10 @@ namespace WaveEngine
 		ServiceProvider::Instance().Register(new Time());
 		ServiceProvider::Instance().Register(new CameraManager());
 		ServiceProvider::Instance().Register(new BinarySpacePartition());
+		ServiceProvider::Instance().Register(new WaveRandom());
 #pragma endregion
 
+		GetWaveRandom()->Init();
 		GetWaveObjectRegistry()->Init();
 		GetCameraManager()->Init();
 
@@ -449,5 +452,10 @@ namespace WaveEngine
 	WaveObjectFactory* BaseGame::GetWaveObjectFactory() const
 	{
 		return ServiceProvider::Instance().Get<WaveObjectFactory>();
+	}
+
+	WaveRandom* BaseGame::GetWaveRandom() const
+	{
+		return ServiceProvider::Instance().Get<WaveRandom>();
 	}
 }

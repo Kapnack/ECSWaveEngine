@@ -7,6 +7,7 @@
 #include "Renderer/Renderer.h"
 #include "MeshLogic/MeshLogic.h"
 #include "FileReader/FileReader.h"
+#include "WaveRandom/WaveRandom.h"
 #include "ImGuiClass/ImGuiClass.h"
 #include "ECS/Managers/DrawLogic.h"
 #include "EventSystem/EventSystem.h"
@@ -73,6 +74,7 @@ namespace WaveEngine
 		WAVEEXPORT MeshManager* GetMeshManager() const;
 		WAVEEXPORT WaveObjectRegistry* GetWaveObjectRegistry() const;
 		WAVEEXPORT WaveObjectFactory* GetWaveObjectFactory() const;
+		WAVEEXPORT WaveRandom* GetWaveRandom() const;
 
 	public:
 
