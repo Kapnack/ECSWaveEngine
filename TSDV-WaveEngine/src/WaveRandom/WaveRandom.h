@@ -1,7 +1,5 @@
 #include "Random/Random.h"
 
-#include <type_traits>
-
 #include "Material/Color/Color.h"
 
 namespace WaveEngine
