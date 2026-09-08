@@ -24,6 +24,11 @@ namespace WaveEngine
 		lastTime = actualTime;
 	}
 
+	Time& Time::Get()
+	{
+		return *ServiceProvider::Instance().Get<Time>();
+	}
+
 	float Time::GetDeltaTime() const
 	{
 		return deltaTime;
