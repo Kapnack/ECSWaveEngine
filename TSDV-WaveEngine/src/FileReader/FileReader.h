@@ -35,7 +35,7 @@ namespace WaveEngine
 			inStream.read(reinterpret_cast<char*>(&data), sizeof(data));
 		}
 
-		friend class BaseGame;
+		friend class Engine;
 		friend class ServiceProvider;
 
 	public:
