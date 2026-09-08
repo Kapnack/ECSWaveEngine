@@ -1,10 +1,10 @@
 #pragma once
 
-#include "BaseGame/BaseGame.h"
+#include "Engine/Engine.h"
 
 using namespace WaveEngine;
 
-class Game : public WaveEngine::BaseGame
+class Game : public Engine
 {
 private:
 
