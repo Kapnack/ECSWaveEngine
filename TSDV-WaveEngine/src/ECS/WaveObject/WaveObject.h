@@ -2,18 +2,20 @@
 
 #include <string>
 
-#include "ECS/CompontRegistry/ComponentRegistry.h"
-#include "ECS/Transform/ECSTransform.h"
+#include "WObject.h"
 #include "EventSystem/EventSystem.h"
+#include "ECS/Component/TypeComponent.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
 
 using namespace std;
 
 namespace WaveEngine
 {
+	class ECSTransform;
 	class WaveObjectFactory;
 	class WaveObjectRegistry;
 
-	class WaveObject
+	class WaveObject : public WObject
 	{
 	private:
 
@@ -40,29 +42,18 @@ namespace WaveEngine
 
 		ECSTransform& GetTransform() const;
 
-		template<typename T>
-		T& AddComponent()
-		{
-			return GetComponentRegistry()->AddComponent<T>(ID);
-		}
+		template<TypeComponent T>
+		T& AddComponent();
 
-		template<typename T>
-		T& GetComponent() const
-		{
-			return GetComponentRegistry()->GetComponent<T>(ID);
-		}
+		template<TypeComponent T>
+		T& GetComponent() const;
 
-		template<typename T>
-		T* TryGetComponent()
-		{
-			return GetComponentRegistry()->TryGet<T>(ID);
-		}
+		template<TypeComponent T>
+		T* TryGetComponent();
 
-
-		template<typename T>
-		void RemoveComponent()
-		{
-			GetComponentRegistry()->RemoveComponent<T>(ID);
-		}
+		template<TypeComponent T>
+		void RemoveComponent();
 	};
 }
+
+#include "WaveObject.tpp"

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <vector>
-
-#include "ECS/Component/Component.h"
 #include <type_traits>
+
+#include "ECS/Component/TypeComponent.h"
 
 using namespace std;
 
@@ -23,9 +23,6 @@ namespace WaveEngine
 
 		virtual WaveBehaviour* GetAsWaveBehaviour(unsigned int entity) { return nullptr; }
 	};
-
-	template<typename T>
-	concept TypeComponent = std::derived_from<T, Component>;
 
 	template <TypeComponent T>
 	class ComponentContainer : public IStorage

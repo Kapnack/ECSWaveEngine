@@ -1,8 +1,12 @@
+#ifndef WAVEOBJECT
+#define WAVEOBJECT
+
 #include "WaveObject.h"
 
 #include "WaveObjectRegistry.h"
 #include "EventSystem/EventSystem.h"
 #include "ECS/Transform/ECSTransform.h"
+#include "ECS/Component/TypeComponent.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 
@@ -51,4 +55,29 @@ namespace WaveEngine
 	{
 		return GetComponentRegistry()->GetComponent<ECSTransform>(ID);
 	}
+
+	template<TypeComponent T>
+	T& WaveObject::AddComponent()
+	{
+		return GetComponentRegistry()->AddComponent<T>(ID);
+	}
+
+	template<TypeComponent T>
+	T& WaveObject::GetComponent() const
+	{
+		return GetComponentRegistry()->GetComponent<T>(ID);
+	}
+
+	template<TypeComponent T>
+	T* WaveObject::TryGetComponent()
+	{
+		return GetComponentRegistry()->TryGet<T>(ID);
+	}
+
+	template<TypeComponent T>
+	void WaveObject::RemoveComponent()
+	{
+		GetComponentRegistry()->RemoveComponent<T>(ID);
+	}
 }
+#endif

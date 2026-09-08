@@ -1,12 +1,13 @@
 #pragma once
 
 #include "ECS/Component/Component.h"
-#include "ECS/WaveObject/WaveObject.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/WaveObject/WaveObjectFactory.h"
 
 namespace WaveEngine
 {
+	class WaveObject;
+
 	class WaveBehaviour : public Component
 	{
 	private:
@@ -34,9 +35,6 @@ namespace WaveEngine
 		{
 		}
 
-		WaveObject& Instantiate() const
-		{
-			return GetWaveObjectFactory()->Instantiate();
-		}
+		WaveObject& Instantiate() const;
 	};
 }

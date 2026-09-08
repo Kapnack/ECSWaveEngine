@@ -5,13 +5,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/fwd.hpp>
-
-#include "ServiceProvider/ServiceProvider.h"
-#include "ECS/CompontRegistry/ComponentRegistry.h"
-#include "ECS/WaveObject/WaveObject.h"
-#include <ECS/WaveObject/WaveObjectRegistry.h>
-#include "ObjectTransformDirtifyEvent.h"
 #include <vector>
+
+#include "ECS/WaveObject/WaveObject.h"
+#include "ObjectTransformDirtifyEvent.h"
+#include "ServiceProvider/ServiceProvider.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
 
 namespace WaveEngine
 {

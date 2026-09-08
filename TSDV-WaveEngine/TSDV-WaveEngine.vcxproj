@@ -163,14 +163,15 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\Managers\DrawLogic.cpp" />
     <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.cpp" />
     <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.cpp" />
-    <ClCompile Include="src\ECS\Component\Component.cpp" />
+    <ClCompile Include="src\ECS\Component\Component.tpp" />
     <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.cpp" />
     <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.h" />
     <ClCompile Include="src\ECS\RigidBody\RigidBody.cpp" />
     <ClCompile Include="src\ECS\RigidBody\RigidBodyLogic.cpp" />
-    <ClCompile Include="src\ECS\WaveObject\WaveObject.cpp" />
-    <ClCompile Include="src\ECS\WaveObject\WaveObjectFactory.cpp" />
+    <ClCompile Include="src\ECS\WaveBehaviour\WaveBehaviour.cpp" />
+    <ClCompile Include="src\ECS\WaveObject\WaveObjectFactory.tpp" />
     <ClCompile Include="src\ECS\WaveObject\WaveObjectRegistry.cpp" />
+    <ClCompile Include="src\ECS\WaveObject\WObject.tpp" />
     <ClCompile Include="src\ImGuiClass\ImGuiClass.cpp" />
     <ClCompile Include="src\MeshLogic\MeshLogic.cpp" />
     <ClCompile Include="src\Mesh\MeshManager\MeshManager.cpp" />
@@ -204,6 +205,8 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\Managers\TransformLogic\TransformLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\Component\TypeComponent.h" />
+    <ClInclude Include="src\ECS\WaveObject\WObject.h" />
     <ClInclude Include="src\Engine\TestingBehaviour.h" />
     <ClInclude Include="src\BoundingBox\BoundingBox.h" />
     <ClInclude Include="src\CameraManager\CameraManager.h" />
@@ -264,6 +267,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="src\ECS\WaveObject\WaveObject.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

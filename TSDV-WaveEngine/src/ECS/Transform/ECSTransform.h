@@ -1,12 +1,13 @@
 #pragma once
 
-#include "Export.h"
-#include <glm/glm.hpp>
 #include <vector>
+#include <glm/glm.hpp>
+
+#include "Export.h"
+#include "EventSystem/EventSystem.h"
 #include "ECS/Component/Component.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Vector2/Vector2.h"
-#include "EventSystem/EventSystem.h"
 
 using namespace std;
 
@@ -15,6 +16,8 @@ namespace WaveEngine
 	class Renderer;
 	class TransformLogic;
 	class ImGuiClass;
+
+	class WaveObject;
 
 	WAVEEXPORT class ECSTransform : public Component
 	{

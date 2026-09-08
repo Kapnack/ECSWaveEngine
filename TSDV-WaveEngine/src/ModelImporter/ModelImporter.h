@@ -4,6 +4,7 @@
 
 #include <filesystem>
 
+#include <string>
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 
@@ -13,14 +14,17 @@
 #include "Material/MaterialManager.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "Mesh/MeshFactory/MeshFactory.h"
+#include "TextureImporter/TextureManager.h"
 #include "TextureImporter/TextureImporter.h"
-#include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/WaveObject/WaveObjectFactory.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
 
 using namespace std;
 
 namespace WaveEngine
 {
+	class WaveObject;
+
 	WAVEEXPORT class ModelImporter final : public Service
 	{
 	private:

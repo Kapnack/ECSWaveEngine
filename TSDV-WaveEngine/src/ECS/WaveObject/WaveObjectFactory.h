@@ -1,17 +1,20 @@
 #pragma once
 
-#include "WaveObject.h"
-#include <ServiceProvider/Service.h>
-#include "WaveObjectRegistry.h"
-#include <ECS/CompontRegistry/ComponentRegistry.h>
-#include <ECS/ComponentContainer/ComponentContainer.h>
+#include "ServiceProvider/Service.h"
 
-class ServiceProvider;
+#include "WaveObject.h"
+#include "ECS/Component/TypeComponent.h"
+#include "ModelImporter/ModelImporter.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
+
 class BaseGame;
+class ServiceProvider;
 
 namespace WaveEngine
 {
-	class WaveObjectFactory : Service
+	class WaveObjectRegistry;
+
+	class WaveObjectFactory : public Service
 	{
 	private:
 
@@ -20,8 +23,9 @@ namespace WaveEngine
 		WaveObjectFactory();
 		~WaveObjectFactory();
 
-		ComponentRegistry* GetComponenetRegistry();
-		WaveObjectRegistry* GetWaveObjectRegistry();
+		ComponentRegistry* GetComponenetRegistry() const;
+		WaveObjectRegistry* GetWaveObjectRegistry() const;
+		ModelImporter* GetModelImporter() const;
 
 		friend class ServiceProvider;
 		friend class Engine;
@@ -31,10 +35,11 @@ namespace WaveEngine
 		WaveObject& Instantiate();
 
 		template<TypeComponent T>
-		T& Instantiate()
-		{
-			WaveObject& waveObject = Instantiate();
-			return waveObject.AddComponent<T>();
-		}
+		T& Instantiate();
+
+		WaveObject& Instantiate(const char* modelDir, bool useAbsolutePath = true);
+
+		template<TypeComponent T>
+		T& Instantiate(const char* modelDir, bool useAbsolutePath = true);
 	};
 }

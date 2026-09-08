@@ -4,7 +4,9 @@
 #include <vector>
 #include <unordered_map>
 
+#include "ServiceProvider/Service.h"
 #include "EventSystem/EventSystem.h"
+#include "ECS/WaveObject/WaveObject.h"
 #include "WaveMath/WaveMath/WaveMath.h"
 #include "ServiceProvider/ServiceProvider.h"
 

@@ -93,7 +93,7 @@
     <ClCompile Include="src\Mesh\MeshManager\MeshManager.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\ECS\Component\Component.cpp">
+    <ClCompile Include="src\ECS\Component\Component.tpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.cpp">
@@ -111,10 +111,7 @@
     <ClCompile Include="src\ECS\Managers\TransformLogic\TransformLogic.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\ECS\WaveObject\WaveObject.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\WaveObject\WaveObjectFactory.cpp">
+    <ClCompile Include="src\ECS\WaveObject\WaveObjectFactory.tpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\WaveObject\WaveObjectRegistry.cpp">
@@ -148,6 +145,12 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\WaveObject\WObject.tpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\WaveBehaviour\WaveBehaviour.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
@@ -323,8 +326,15 @@
     <ClInclude Include="src\Engine\TestingBehaviour.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="src\ECS\WaveObject\WObject.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Component\TypeComponent.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="src\ECS\WaveObject\WaveObject.tpp" />
   </ItemGroup>
 </Project>

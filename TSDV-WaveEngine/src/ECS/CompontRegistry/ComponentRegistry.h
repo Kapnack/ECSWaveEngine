@@ -3,11 +3,12 @@
 #include "ServiceProvider/Service.h"
 
 #include <vector>
+#include <utility>
 #include <typeindex>
 #include <unordered_map>
 
+#include "ECS/Component/TypeComponent.h"
 #include "ECS/ComponentContainer/ComponentContainer.h"
-#include <utility>
 
 using namespace std;
 

@@ -13,18 +13,16 @@
 #include <assimp/texture.h>
 #include <glm/gtc/quaternion.hpp>
 
-#include "ServiceProvider/ServiceProvider.h"
 #include "VertexData.h"
-#include "Mesh/Mesh.h"
-#include "WaveMath/Vector3/Vector3.h"
-#include "WaveMath/Vector2/Vector2.h"
-#include "Material/Material.h"
 #include "ECS/MaterialID.h"
 #include "ECS/Mesh/MeshID.h"
-#include "ECS/Transform/ECSTransform.h"
-#include "ECS/WaveObject/WaveObject.h"
+#include "Material/Material.h"
 #include "TextureImporter/Texture.h"
-#include <EventSystem/Func.h>
+#include "WaveMath/Vector2/Vector2.h"
+#include "WaveMath/Vector3/Vector3.h"
+#include "ECS/WaveObject/WaveObject.h"
+#include "ECS/Transform/ECSTransform.h"
+#include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
 {

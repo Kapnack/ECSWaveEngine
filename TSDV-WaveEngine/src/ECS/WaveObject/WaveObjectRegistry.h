@@ -3,12 +3,11 @@
 #include <vector>
 #include <unordered_map>
 
-#include "ServiceProvider/Service.h"
-#include "ServiceProvider/ServiceProvider.h"
-#include "WaveObject.h"
 #include "EventSystem/Func.h"
 #include "EventSystem/Event.h"
-#include <EventSystem/EventSystem.h>
+#include "EventSystem/EventSystem.h"
+#include "ServiceProvider/Service.h"
+#include "ECS/WaveObject/WaveObject.h"
 
 using namespace std;
 
@@ -57,7 +56,7 @@ namespace WaveEngine
 
 	struct ObjectChangeName : Event
 	{
-		unsigned int entityID = WaveObject::NULL_OBJECT;
+		unsigned int entityID = 0;
 		string newName = "";
 
 		ObjectChangeName()
@@ -72,7 +71,7 @@ namespace WaveEngine
 
 		void Reset() override
 		{
-			entityID = WaveObject::NULL_OBJECT;
+			entityID = 0;
 			newName = "";
 		}
 	};
