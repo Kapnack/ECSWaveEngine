@@ -27,7 +27,7 @@
     <ClCompile Include="src\Material\Material.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\BaseGame\BaseGame.cpp">
+    <ClCompile Include="src\Engine\Engine.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\VertexData.cpp">
@@ -144,6 +144,12 @@
     <ClCompile Include="src\ECS\Managers\BinarySpacePartition\BinarySpacePartition.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.h">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Window\Window.h">
@@ -161,7 +167,7 @@
     <ClInclude Include="src\VertexData.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\BaseGame\BaseGame.h">
+    <ClInclude Include="src\Engine\Engine.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\Time\Time.h">
@@ -312,6 +318,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\ECS\WaveBehaviour\WaveBehaviour.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\TestingBehaviour.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

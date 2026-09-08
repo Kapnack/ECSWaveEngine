@@ -164,6 +164,8 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.cpp" />
     <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.cpp" />
     <ClCompile Include="src\ECS\Component\Component.cpp" />
+    <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.cpp" />
+    <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.h" />
     <ClCompile Include="src\ECS\RigidBody\RigidBody.cpp" />
     <ClCompile Include="src\ECS\RigidBody\RigidBodyLogic.cpp" />
     <ClCompile Include="src\ECS\WaveObject\WaveObject.cpp" />
@@ -187,7 +189,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\Material\MaterialManager.cpp" />
     <ClCompile Include="src\FileReader\FileReader.cpp" />
     <ClCompile Include="src\Input\Input.cpp" />
-    <ClCompile Include="src\BaseGame\BaseGame.cpp" />
+    <ClCompile Include="src\Engine\Engine.cpp" />
     <ClCompile Include="src\Material\Material.cpp" />
     <ClCompile Include="src\ECS\Transform\ECSTransform.cpp" />
     <ClCompile Include="src\Plane\Plane.cpp" />
@@ -202,6 +204,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\Managers\TransformLogic\TransformLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Engine\TestingBehaviour.h" />
     <ClInclude Include="src\BoundingBox\BoundingBox.h" />
     <ClInclude Include="src\CameraManager\CameraManager.h" />
     <ClInclude Include="src\CollisionSystem\CollisionLogic\CollisionLogic.h" />
@@ -246,7 +249,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\Material\MaterialManager.h" />
     <ClInclude Include="src\FileReader\FileReader.h" />
     <ClInclude Include="src\Input\Input.h" />
-    <ClInclude Include="src\BaseGame\BaseGame.h" />
+    <ClInclude Include="src\Engine\Engine.h" />
     <ClInclude Include="src\TextureImporter\Texture.h" />
     <ClInclude Include="src\TextureImporter\TextureManager.h" />
     <ClInclude Include="src\VertexData.h" />
