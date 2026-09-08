@@ -1,8 +1,10 @@
 #include "WaveObject.h"
 
-#include "ServiceProvider/ServiceProvider.h"
-#include "ECS/Transform/ECSTransform.h"
 #include "WaveObjectRegistry.h"
+#include "EventSystem/EventSystem.h"
+#include "ECS/Transform/ECSTransform.h"
+#include "ServiceProvider/ServiceProvider.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
 
 namespace WaveEngine
 {
