@@ -14,6 +14,7 @@
 #include "EventSystem/EventSystem.h"
 #include "Material/MaterialFactory.h"
 #include "Material/MaterialManager.h"
+#include "ModelImporter/ModelImporter.h"
 #include "CameraManager/CameraManager.h"
 #include "Mesh/MeshManager/MeshManager.h"
 #include "Mesh/MeshFactory/MeshFactory.h"
@@ -61,6 +62,7 @@ namespace WaveEngine
 		ServiceProvider::Instance().Register(new CameraManager());
 		ServiceProvider::Instance().Register(new BinarySpacePartition());
 		ServiceProvider::Instance().Register(new WaveRandom());
+		ServiceProvider::Instance().Register(new ModelImporter());
 #pragma endregion
 
 		GetWaveRandom()->Init();
