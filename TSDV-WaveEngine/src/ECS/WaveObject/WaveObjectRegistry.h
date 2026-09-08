@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "ServiceProvider/Service.h"
+#include "ServiceProvider/ServiceProvider.h"
 #include "WaveObject.h"
 #include "EventSystem/Func.h"
 #include "EventSystem/Event.h"
@@ -96,7 +97,7 @@ namespace WaveEngine
 
 		unordered_map<ObjectNameSearch, Func<bool, const string&, const string&>> objectNameSearchStrategy;
 
-		friend class BaseGame;
+		friend class Engine;
 		friend class ServiceProvider;
 
 		void OnObjectBecameParent(const ObjectBecameParentEvent& objectBecameParentEvent);
@@ -115,6 +116,11 @@ namespace WaveEngine
 		~WaveObjectRegistry();
 
 		void Init();
+
+		static WaveObjectRegistry* Get()
+		{
+			return ServiceProvider::Instance().Get<WaveObjectRegistry>();
+		}
 
 		void AddObject(WaveObject*& newWaveObject, const string_view name);
 
