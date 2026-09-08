@@ -22,7 +22,7 @@ namespace WaveEngine
 		TextureImporter();
 		~TextureImporter();
 
-		friend class BaseGame;
+		friend class Engine;
 		friend class ServiceProvider;
 
 	public:

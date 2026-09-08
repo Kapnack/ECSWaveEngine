@@ -26,12 +26,14 @@ namespace WaveEngine
 
 		void UpdateDeltaTime();
 
-		friend class BaseGame;
+		friend class Engine;
 		friend class ServiceProvider;
 
 	public:
 
-		WAVEEXPORT float GetDeltaTime() const;
+		static float GetDeltaTime();
+
+		WAVEEXPORT float GetDeltaTimeA() const;
 		WAVEEXPORT void SetTimeScale(const float& timeScale);
 	};
 }

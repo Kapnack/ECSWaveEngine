@@ -15,7 +15,7 @@ namespace WaveEngine
 	class Renderer;
 	class MaterialFactory;
 	class EntityManager;
-	class BaseGame;
+	class Engine;
 	class ImGuiClass;
 
 	WAVEEXPORT class MaterialManager final : public Service
@@ -34,7 +34,7 @@ namespace WaveEngine
 		friend class Renderer;
 		friend class MaterialFactory;
 		friend class EntityManager;
-		friend class BaseGame;
+		friend class Engine;
 		friend class ServiceProvider;
 		friend class ImGuiClass;
 

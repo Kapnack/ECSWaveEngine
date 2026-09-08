@@ -10,7 +10,7 @@ using namespace std;
 
 namespace WaveEngine
 {
-	class BaseGame;
+	class Engine;
 
 	class MaterialFactory final : public Service
 	{
@@ -25,7 +25,7 @@ namespace WaveEngine
 		MaterialFactory();
 		~MaterialFactory();
 
-		friend class BaseGame;
+		friend class Engine;
 		friend class ServiceProvider;
 
 	public:

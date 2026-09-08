@@ -10,7 +10,7 @@
 namespace WaveEngine
 {
 	class TextureImporter;
-	class BaseGame;
+	class Engine;
 	class EntitiesImGui;
 	class TexturesImGui;
 	class TileMap;
@@ -32,7 +32,7 @@ namespace WaveEngine
 
 		map<unsigned int, Texture*>& GetTextures();
 
-		friend class BaseGame;
+		friend class Engine;
 		friend class TextureImporter;
 		friend class ServiceProvider;
 		friend class EntitiesImGui;

@@ -11,7 +11,7 @@
 
 namespace WaveEngine
 {
-	class BaseGame;
+	class Engine;
 	class ServiceProvider;
 
 	WAVEEXPORT class Window final : public Service
@@ -38,7 +38,7 @@ namespace WaveEngine
 		Window(int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
 		~Window();
 
-		friend class BaseGame;
+		friend class Engine;
 		friend class ServiceProvider;
 
 	public:
