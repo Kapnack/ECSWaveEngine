@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <list>
 
 #include "Plane/Plane.h"
 #include "Renderer/Renderer.h"
@@ -9,6 +8,7 @@
 #include "WaveMath/Vector3/Vector3.h"
 #include "ECS/WaveObject/WaveObject.h"
 #include "ECS/Transform/ECSTransform.h"
+#include "ServiceProvider/ServiceProvider.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/ComponentContainer/ComponentContainer.h"
 
@@ -31,6 +31,11 @@ namespace WaveEngine
 	public:
 
 		BinarySpacePartition();
+
+		static BinarySpacePartition* Get()
+		{
+			return ServiceProvider::Instance().Get<BinarySpacePartition>();
+		}
 
 		bool ObjectsShareSpace(Vector3 objectA, Vector3 objectB);
 
