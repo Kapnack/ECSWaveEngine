@@ -1,6 +1,9 @@
+#pragma once
+
 #include "Random/Random.h"
 
 #include "Material/Color/Color.h"
+#include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
 {
@@ -10,12 +13,17 @@ namespace WaveEngine
 
 		WaveRandom() : Random()
 		{
-			
+
 		}
 
 		~WaveRandom()
 		{
 
+		}
+
+		static WaveRandom* Get()
+		{
+			return ServiceProvider::Instance().Get<WaveRandom>();
 		}
 
 		void Init() override
