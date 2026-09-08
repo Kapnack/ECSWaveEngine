@@ -32,10 +32,7 @@ namespace WaveEngine
 
 		BinarySpacePartition();
 
-		static BinarySpacePartition* Get()
-		{
-			return ServiceProvider::Instance().Get<BinarySpacePartition>();
-		}
+		static BinarySpacePartition& Get();
 
 		bool ObjectsShareSpace(Vector3 objectA, Vector3 objectB);
 

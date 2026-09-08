@@ -117,10 +117,7 @@ namespace WaveEngine
 
 		void Init();
 
-		static WaveObjectRegistry* Get()
-		{
-			return ServiceProvider::Instance().Get<WaveObjectRegistry>();
-		}
+		static WaveObjectRegistry& Get();
 
 		void AddObject(WaveObject*& newWaveObject, const string_view name);
 

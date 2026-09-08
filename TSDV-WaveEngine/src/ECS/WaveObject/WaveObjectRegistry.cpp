@@ -25,6 +25,11 @@ namespace WaveEngine
 		objectNameSearchStrategy[ObjectNameSearch::Starts].Subscribe(this, &WaveObjectRegistry::StartsWithName);
 	}
 
+	WaveObjectRegistry& WaveObjectRegistry::Get()
+	{
+		return *ServiceProvider::Instance().Get<WaveObjectRegistry>();
+	}
+
 	void WaveObjectRegistry::OnObjectBecameParent(const ObjectBecameParentEvent& objectBecameParentEvent)
 	{
 		for (unsigned int objectsID : parentsWaveObjects)

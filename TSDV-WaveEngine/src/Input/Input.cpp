@@ -1,5 +1,6 @@
 #include "Input.h"
 
+#include "Window/Window.h"
 #include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
@@ -12,7 +13,12 @@ namespace WaveEngine
 	{
 	}
 
-	int Input::GetGlfwKeyFromKey(Keys key)
+	Input& Input::Get()
+	{
+		return *ServiceProvider::Instance().Get<Input>();
+	}
+
+	int Input::GetGlfwKeyFromKey(Keys key) const
 	{
 		switch (key)
 		{
@@ -136,12 +142,12 @@ namespace WaveEngine
 		}
 	}
 
-	Window* Input::GetWindow()
+	Window* Input::GetWindow() const
 	{
 		return ServiceProvider::Instance().Get<Window>();
 	}
 
-	bool Input::IsKeyPressed(Keys key)
+	bool Input::IsKeyPressed(Keys key) const
 	{
 		int keyToUse = GetGlfwKeyFromKey(key);
 

@@ -130,15 +130,17 @@ namespace WaveEngine
 	{
 	private:
 
-		int GetGlfwKeyFromKey(Keys key);
+		int GetGlfwKeyFromKey(Keys key) const;
 
-		Window* GetWindow();
+		Window* GetWindow() const;
 
 	public:
 
-		WAVEEXPORT Input();
-		WAVEEXPORT ~Input();
+		static Input& Get();
 
-		WAVEEXPORT bool IsKeyPressed(Keys key);
+		Input();
+		~Input();
+
+		WAVEEXPORT bool IsKeyPressed(Keys key) const;
 	};
 }

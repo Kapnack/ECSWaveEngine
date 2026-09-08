@@ -38,6 +38,11 @@ namespace WaveEngine
 	{
 	}
 
+	BinarySpacePartition& BinarySpacePartition::Get()
+	{
+		return *ServiceProvider::Instance().Get<BinarySpacePartition>();
+	}
+
 	bool BinarySpacePartition::ObjectsShareSpace(Vector3 vectorA, Vector3 vectorB)
 	{
 		for (const Plane& plane : planes)
