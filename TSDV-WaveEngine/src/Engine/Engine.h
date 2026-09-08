@@ -23,12 +23,13 @@
 #include "ECS/WaveObject/WaveObjectFactory.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/Managers/TransformLogic/TransformLogic.h"
+#include "ECS/Managers/WaveBehaviourLogic/WaveBehaviourLogic.h"
 #include "ECS/Managers/BinarySpacePartition/BinarySpacePartition.h"
 
 
 namespace WaveEngine
 {
-	WAVEEXPORT class BaseGame
+	WAVEEXPORT class Engine
 	{
 	private:
 
@@ -46,6 +47,7 @@ namespace WaveEngine
 		TransformLogic transformLogic;
 		MeshLogic meshLogic;
 		RigidBodyLogic rigidBodyLogic;
+		WaveBehaviourLogic waveBehaviourLogic;
 
 		ImGuiClass imGui;
 
@@ -78,8 +80,8 @@ namespace WaveEngine
 
 	public:
 
-		WAVEEXPORT BaseGame(int width, int height);
-		WAVEEXPORT virtual ~BaseGame();
+		WAVEEXPORT Engine(int width, int height);
+		WAVEEXPORT virtual ~Engine();
 
 		WAVEEXPORT void Run();
 	};
