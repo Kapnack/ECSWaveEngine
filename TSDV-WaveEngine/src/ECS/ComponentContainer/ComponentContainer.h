@@ -1,15 +1,27 @@
 #pragma once
 
 #include <vector>
-#include <ECS/Component/Component.h>
+
+#include "ECS/Component/Component.h"
+#include <type_traits>
 
 using namespace std;
 
 namespace WaveEngine
 {
+	class WaveBehaviour;
+
 	class IStorage
 	{
+	public:
 
+		IStorage()
+		{ }
+
+		~IStorage()
+		{ }
+
+		virtual WaveBehaviour* GetAsWaveBehaviour(unsigned int entity) { return nullptr; }
 	};
 
 	template<typename T>
@@ -26,7 +38,7 @@ namespace WaveEngine
 
 	public:
 
-		void Add(unsigned int entity, const T& component = T())
+		void Add(unsigned int entity)
 		{
 			if (entity >= componentByEntity.size())
 			{
@@ -38,10 +50,16 @@ namespace WaveEngine
 
 			int index = components.size();
 
-			components.push_back(component);
+			components.emplace_back(entity);
 			entities.push_back(entity);
 
 			componentByEntity[entity] = index;
+
+			T& component = Get(entity);
+
+			component.SetIsActive(true);
+			component.Init();
+			component.LateInit();
 		}
 
 		bool Has(unsigned int entity) const
@@ -106,6 +124,17 @@ namespace WaveEngine
 		const vector<unsigned int>& GetEntities() const
 		{
 			return entities;
+		}
+
+		WaveBehaviour* GetAsWaveBehaviour(unsigned int entity) override
+		{
+			if constexpr (std::is_base_of_v<WaveBehaviour, T>)
+			{
+				if (Has(entity))
+					return &Get(entity);
+			}
+
+			return nullptr;
 		}
 
 		T& operator[](unsigned int entityID)

@@ -2,22 +2,25 @@
 
 #include "ServiceProvider/Service.h"
 
-#include <unordered_map>
+#include <vector>
 #include <typeindex>
-#include <concepts>
+#include <unordered_map>
 
 #include "ECS/ComponentContainer/ComponentContainer.h"
-#include "ECS/Component/Component.h"
+#include <utility>
 
 using namespace std;
 
 namespace WaveEngine
 {
+	class WaveBehaviour;
+
 	class ComponentRegistry : public Service
 	{
 	private:
 
 		unordered_map<type_index, IStorage*> storages;
+		unordered_map<unsigned int, vector<type_index>> waveBehavioursByEntityID;
 
 	public:
 
@@ -36,16 +39,13 @@ namespace WaveEngine
 		{
 			type_index typeIndex = typeid(T);
 
-			T component = T(entity);
+			if constexpr (std::is_base_of_v<WaveBehaviour, T>)
+				waveBehavioursByEntityID[entity].push_back(typeIndex);
 
 			if (!storages.contains(typeIndex))
 				storages[typeIndex] = new ComponentContainer<T>();
 
-			static_cast<ComponentContainer<T>*>(storages.at(typeIndex))->Add(entity, component);
-
-			component.SetIsActive(true);
-			component.Init();
-			component.LateInit();
+			static_cast<ComponentContainer<T>*>(storages.at(typeIndex))->Add(entity);
 
 			return static_cast<ComponentContainer<T>*>(storages.at(typeIndex))->Get(entity);
 		}
@@ -66,6 +66,29 @@ namespace WaveEngine
 		T& Get(unsigned int entity)
 		{
 			return GetComponentStorage<T>().Get(entity);
+		}
+
+		vector<WaveBehaviour*> GetBehaviours()
+		{
+			vector<WaveBehaviour*> waveBehaviours;
+
+			for (const pair<const unsigned int, vector<type_index>>& entry : waveBehavioursByEntityID)
+			{
+				unsigned int entity = entry.first;
+				const vector<type_index>& typeIndices = entry.second;
+
+				for (const type_index& typeIndex : typeIndices)
+				{
+					auto storageIt = storages.find(typeIndex);
+					if (storageIt == storages.end())
+						continue;
+
+					if (WaveBehaviour* behaviour = storageIt->second->GetAsWaveBehaviour(entity))
+						waveBehaviours.push_back(behaviour);
+				}
+			}
+
+			return waveBehaviours;
 		}
 
 		template<TypeComponent T>
