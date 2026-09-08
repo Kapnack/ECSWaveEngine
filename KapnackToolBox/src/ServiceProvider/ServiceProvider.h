@@ -2,8 +2,9 @@
 
 #include "Singleton/Singleton.h"
 
-#include <unordered_map>
 #include <typeindex>
+#include <type_traits>
+#include <unordered_map>
 
 #include "Service.h"
 
@@ -26,10 +27,10 @@ namespace WaveEngine
 		void Register(T* service);
 
 		template<ServiceStandard T>
-		T* Get();
+		T* Get() const;
 
 		template<ServiceStandard T>
-		T* TryGet();
+		T* TryGet() const;
 
 		template<ServiceStandard T>
 		void UnRegister();

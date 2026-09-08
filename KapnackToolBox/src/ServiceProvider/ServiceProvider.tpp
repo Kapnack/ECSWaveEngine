@@ -23,13 +23,13 @@ namespace WaveEngine
 	}
 
 	template<ServiceStandard T>
-	T* ServiceProvider::Get()
+	T* ServiceProvider::Get() const
 	{
 		return static_cast<T*>(services.at(typeid(T)));
 	}
 
 	template<ServiceStandard T>
-	T* ServiceProvider::TryGet()
+	T* ServiceProvider::TryGet() const
 	{
 		unordered_map<type_index, Service*>::iterator it = services.find(typeid(T));
 
