@@ -7,21 +7,21 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 
-#include "Mesh/MeshFactory/MeshFactory.h"
-#include "TextureImporter/Texture.h"
-#include "TextureImporter/TextureImporter.h"
+#include "FileReader/FileReader.h"
+#include "ServiceProvider/Service.h"
 #include "Material/MaterialFactory.h"
 #include "Material/MaterialManager.h"
-#include "FileReader/FileReader.h"
+#include "ECS/Transform/ECSTransform.h"
+#include "Mesh/MeshFactory/MeshFactory.h"
+#include "TextureImporter/TextureImporter.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/WaveObject/WaveObjectFactory.h"
-#include <ECS/Transform/ECSTransform.h>
 
 using namespace std;
 
 namespace WaveEngine
 {
-	WAVEEXPORT class ModelImporter
+	WAVEEXPORT class ModelImporter final : public Service
 	{
 	private:
 
@@ -40,7 +40,7 @@ namespace WaveEngine
 		WaveObjectFactory* GetWaveObjectFactory();
 
 		unsigned int LoadMaterialTextures(aiMaterial* mat, aiTextureType type);
-	
+
 		void ProcessNode(aiNode* node, WaveObject& waveObject);
 		void ProcessMesh(aiMesh* meshRenderer, WaveObject& meshWaveObject);
 		unsigned int ProcessMaterial(aiMaterial* aiMaterial);

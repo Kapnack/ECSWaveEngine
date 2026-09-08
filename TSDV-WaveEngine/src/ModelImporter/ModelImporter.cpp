@@ -24,6 +24,7 @@
 #include "ECS/Transform/ECSTransform.h"
 #include "ECS/WaveObject/WaveObject.h"
 #include "TextureImporter/Texture.h"
+#include <EventSystem/Func.h>
 
 namespace WaveEngine
 {
