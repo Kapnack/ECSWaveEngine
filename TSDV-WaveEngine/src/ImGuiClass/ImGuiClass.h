@@ -33,7 +33,7 @@ namespace WaveEngine
 		WaveObjectRegistry* GetWaveObjectRegistry();
 		MaterialManager* GetMaterialManager();
 
-		friend class BaseGame;
+		friend class Engine;
 		friend class ServiceProvider;
 
 	public:
