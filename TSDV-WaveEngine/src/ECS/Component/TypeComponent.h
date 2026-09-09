@@ -1,11 +1,10 @@
 #pragma once
 
 #include <concepts>
+#include "ECS/Component/Component.h"
 
 namespace WaveEngine
 {
-	class Component;
-
 	template<typename T>
 	concept TypeComponent = std::derived_from<T, Component>;
 }

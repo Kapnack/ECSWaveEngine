@@ -96,7 +96,7 @@
     <ClCompile Include="src\ECS\Component\Component.tpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.cpp">
+    <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.tpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.cpp">
@@ -151,6 +151,9 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\WaveBehaviour\WaveBehaviour.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\ComponentContainer\IStorage.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
@@ -281,9 +284,6 @@
     <ClInclude Include="src\Material\Color\Color.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\ECS\WaveObject\WaveObjectFactory.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="src\ECS\WaveObject\WaveObjectRegistry.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -330,6 +330,12 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\ECS\Component\TypeComponent.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\ComponentContainer\IStorage.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\WaveObject\WaveObjectFactory.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

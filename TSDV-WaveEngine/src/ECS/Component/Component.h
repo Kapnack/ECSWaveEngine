@@ -1,12 +1,10 @@
 #pragma once
 
-#include "TypeComponent.h"
-#include "ECS/WaveObject/WObject.h"
-
 namespace WaveEngine
 {
 	class WaveObject;
 	class ECSTransform;
+	class WObject;
 
 	class Component : public WObject
 	{
@@ -34,16 +32,16 @@ namespace WaveEngine
 		virtual void SetIsActive(bool isActive);
 		bool GetIsActive() const;
 
-		template<TypeComponent T>
+		template<typename T>
 		T& AddComponent();
 
-		template<TypeComponent T>
+		template<typename T>
 		T& GetComponent() const;
 
-		template<TypeComponent T>
+		template<typename T>
 		T* TryGetComponent();
 
-		template<TypeComponent T>
+		template<typename T>
 		void RemoveComponent();
 	};
 }

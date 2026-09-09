@@ -159,10 +159,11 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
   <ItemGroup>
     <ClCompile Include="src\BoundingBox\BoundingBox.cpp" />
     <ClCompile Include="src\CameraManager\CameraManager.cpp" />
+    <ClCompile Include="src\ECS\ComponentContainer\IStorage.cpp" />
     <ClCompile Include="src\ECS\Managers\BinarySpacePartition\BinarySpacePartition.cpp" />
     <ClCompile Include="src\ECS\Managers\DrawLogic.cpp" />
     <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.cpp" />
-    <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.cpp" />
+    <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.tpp" />
     <ClCompile Include="src\ECS\Component\Component.tpp" />
     <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.cpp" />
     <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.h" />
@@ -205,7 +206,9 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\Managers\TransformLogic\TransformLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\ComponentContainer\IStorage.h" />
     <ClInclude Include="src\ECS\Component\TypeComponent.h" />
+    <ClInclude Include="src\ECS\WaveObject\WaveObjectFactory.h" />
     <ClInclude Include="src\ECS\WaveObject\WObject.h" />
     <ClInclude Include="src\Engine\TestingBehaviour.h" />
     <ClInclude Include="src\BoundingBox\BoundingBox.h" />
@@ -227,7 +230,6 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\ECS\Texture\TextureID.h" />
     <ClInclude Include="src\ECS\Transform\ObjectTransformDirtifyEvent.h" />
     <ClInclude Include="src\ECS\WaveObject\WaveObject.h" />
-    <ClInclude Include="src\ECS\WaveObject\WaveObjectFactory.h" />
     <ClInclude Include="src\ECS\WaveObject\WaveObjectRegistry.h" />
     <ClInclude Include="src\ImGuiClass\ImGuiClass.h" />
     <ClInclude Include="src\Material\Color\Color.h" />

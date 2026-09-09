@@ -19,12 +19,12 @@ namespace WaveEngine
 		static WaveObject& Instantiate();
 
 		template<TypeComponent T>
-		static WaveObject& Instantiate();
+		static T& Instantiate();
 
 		static WaveObject& Instantiate(const char* modelDir, bool useAbsolutePath = true);
 
 		template<TypeComponent T>
-		static WaveObject& Instantiate(const char* modelDir, bool useAbsolutePath = true);
+		static T& Instantiate(const char* modelDir, bool useAbsolutePath = true);
 	};
 }
 

@@ -2,7 +2,6 @@
 #define WOBJECT
 
 #include "WObject.h"
-
 #include "WaveObject.h"
 #include "WaveObjectFactory.h"
 #include "ECS/Component/TypeComponent.h"
@@ -21,7 +20,7 @@ namespace WaveEngine
 	}
 
 	template<TypeComponent T>
-	WaveObject& WObject::Instantiate()
+	T& WObject::Instantiate()
 	{
 		return GetWaveFactory()->Instantiate<T>();
 	}
@@ -32,7 +31,7 @@ namespace WaveEngine
 	}
 
 	template<TypeComponent T>
-	WaveObject& WObject::Instantiate(const char* modelDir, bool useAbsolutePath)
+	T& WObject::Instantiate(const char* modelDir, bool useAbsolutePath)
 	{
 		return GetWaveFactory()->Instantiate<T>(modelDir, useAbsolutePath);
 	}

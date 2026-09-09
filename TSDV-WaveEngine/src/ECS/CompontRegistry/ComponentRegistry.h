@@ -143,7 +143,7 @@ namespace WaveEngine
 		}
 
 		template<TypeComponent T>
-		T& GetComponent(const unsigned int& entity)
+		T& GetComponent(unsigned int entity)
 		{
 			return GetComponentStorage<T>().Get(entity);
 		}

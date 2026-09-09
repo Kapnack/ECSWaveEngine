@@ -54,28 +54,28 @@ namespace WaveEngine
 		return isActive;
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T& Component::AddComponent()
 	{
-		return GetWaveObject().AddComponent<T>(ownerID);
+		return GetWaveObject().AddComponent<T>();
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T& Component::GetComponent() const
 	{
-		return GetWaveObject().GetComponent<T>(ownerID);
+		return GetWaveObject().GetComponent<T>();
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T* Component::TryGetComponent()
 	{
-		return GetWaveObject().TryGetComponent<T>(ownerID);
+		return GetWaveObject().TryGetComponent<T>();
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	void Component::RemoveComponent()
 	{
-		GetWaveObject().RemoveComponent<T>(ownerID);
+		GetWaveObject().RemoveComponent<T>();
 	}
 }
 #endif

@@ -18,7 +18,7 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int currentObjectID = WaveObject::NULL_OBJECT;
+		unsigned int currentObjectID = 0;
 
 		WaveObjectFactory();
 		~WaveObjectFactory();
@@ -43,3 +43,5 @@ namespace WaveEngine
 		T& Instantiate(const char* modelDir, bool useAbsolutePath = true);
 	};
 }
+
+#include "WaveObjectFactory.tpp"
