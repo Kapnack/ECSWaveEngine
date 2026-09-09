@@ -23,7 +23,7 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
 	}
 
-	WaveObject::WaveObject(unsigned int ID)
+	WaveObject::WaveObject(unsigned int ID) : WObject()
 	{
 		this->ID = ID;
 	}

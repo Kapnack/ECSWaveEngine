@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "ECS/WObject/WObject.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "EventSystem/EventSystem.h"
@@ -13,7 +14,7 @@ namespace WaveEngine
 	class WaveObjectFactory;
 	class WaveObjectRegistry;
 
-	class WaveObject
+	class WaveObject : public WObject
 	{
 	private:
 
