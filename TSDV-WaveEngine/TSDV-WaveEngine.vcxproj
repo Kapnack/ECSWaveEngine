@@ -162,7 +162,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\ComponentContainer\IStorage.cpp" />
     <ClCompile Include="src\ECS\Managers\BinarySpacePartition\BinarySpacePartition.cpp" />
     <ClCompile Include="src\ECS\Managers\DrawLogic.cpp" />
-    <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.cpp" />
+    <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.tpp" />
     <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.tpp" />
     <ClCompile Include="src\ECS\Component\Component.tpp" />
     <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.cpp" />

@@ -99,7 +99,7 @@
     <ClCompile Include="src\ECS\ComponentContainer\ComponentContainer.tpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.cpp">
+    <ClCompile Include="src\ECS\CompontRegistry\ComponentRegistry.tpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\Managers\DrawLogic.cpp">
@@ -329,13 +329,13 @@
     <ClInclude Include="src\ECS\WaveObject\WObject.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\ECS\Component\TypeComponent.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="src\ECS\ComponentContainer\IStorage.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\ECS\WaveObject\WaveObjectFactory.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Component\TypeComponent.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
