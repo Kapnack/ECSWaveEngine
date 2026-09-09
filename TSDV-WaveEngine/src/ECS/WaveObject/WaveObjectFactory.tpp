@@ -8,8 +8,9 @@
 #include "WaveObject.h"
 #include "ECS/Mesh/MeshID.h"
 #include "WaveObjectRegistry.h"
+#include "ServiceProvider/Service.h"
+#include "ECS/Transform/ECSTransform.h"
 #include "ModelImporter/ModelImporter.h"
-#include "ECS/Component/TypeComponent.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 
@@ -43,14 +44,14 @@ namespace WaveEngine
 		return *GetModelImporter()->IntantiateModel();
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T& WaveObjectFactory::Instantiate()
 	{
 		WaveObject& waveObject = Instantiate();
 		return waveObject.AddComponent<T>();
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T& WaveObjectFactory::Instantiate(const char* modelDir, bool useAbsolutePath)
 	{
 		WaveObject& instance = Instantiate(modelDir, useAbsolutePath);
@@ -58,8 +59,7 @@ namespace WaveEngine
 		return GetModelImporter()->IntantiateModel()->AddComponent<T>();
 	}
 
-
-	ComponentRegistry* WaveObjectFactory::GetComponenetRegistry() const
+	ComponentRegistry* WaveObjectFactory::GetComponentRegistry() const
 	{
 		return ServiceProvider::Instance().Get<ComponentRegistry>();
 	}

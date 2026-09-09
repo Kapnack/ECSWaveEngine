@@ -8,7 +8,7 @@
 
 namespace WaveEngine
 {
-	template<TypeComponent T>
+	template<typename T>
 	void ComponentContainer<T>::Add(unsigned int entity)
 	{
 		if (entity >= componentByEntity.size())
@@ -33,7 +33,7 @@ namespace WaveEngine
 		component.LateInit();
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	bool ComponentContainer<T>::Has(unsigned int entity) const
 	{
 		if (entity >= componentByEntity.size())
@@ -42,7 +42,7 @@ namespace WaveEngine
 		return componentByEntity[entity] != -1;
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	void ComponentContainer<T>::Remove(unsigned int entity)
 	{
 		if (!Has(entity))
@@ -65,20 +65,20 @@ namespace WaveEngine
 		componentByEntity[entity] = -1;
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T& ComponentContainer<T>::Get(unsigned int entity)
 	{
 		return components.at(componentByEntity.at(entity));
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T& ComponentContainer<T>::GetFirst()
 	{
 		typename std::vector<T>::iterator it = components.begin();
 		return *it;
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T* ComponentContainer<T>::TryGet(unsigned int entity)
 	{
 		if (entity >= componentByEntity.size())
@@ -92,19 +92,19 @@ namespace WaveEngine
 		return &components[index];
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	vector<T>& ComponentContainer<T>::GetComponents()
 	{
 		return components;
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	const vector<unsigned int>& ComponentContainer<T>::GetEntities() const
 	{
 		return entities;
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	WaveBehaviour* ComponentContainer<T>::GetAsWaveBehaviour(unsigned int entity)
 	{
 		if constexpr (std::is_base_of_v<WaveBehaviour, T>)
@@ -116,7 +116,7 @@ namespace WaveEngine
 		return nullptr;
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T& ComponentContainer<T>::operator[](unsigned int entityID)
 	{
 		return Get(entityID);

@@ -7,7 +7,7 @@
 #include <typeindex>
 #include <unordered_map>
 
-#include "ECS/Component/TypeComponent.h"
+#include "ECS/ComponentContainer/IStorage.h"
 #include "ECS/ComponentContainer/ComponentContainer.h"
 
 using namespace std;
@@ -28,32 +28,36 @@ namespace WaveEngine
 		ComponentRegistry();
 		~ComponentRegistry();
 
-		template<TypeComponent T>
+		template<typename T>
 		T& AddComponent(unsigned int entity);
 
-		template<TypeComponent T>
+		template<typename T>
 		bool HasStorage();
-		template<TypeComponent T>
+
+		template<typename T>
 		bool Has(unsigned int entity);
-		template<TypeComponent T>
+
+		template<typename T>
 		T& Get(unsigned int entity);
 
-		vector<WaveBehaviour*> GetBehaviours();
+		inline vector<WaveBehaviour*> GetBehaviours();
 
-		template<TypeComponent T>
+		template<typename T>
 		T* TryGet(unsigned int entity);
-		template<TypeComponent T>
+
+		template<typename T>
 		void RemoveComponent(unsigned int entity);
 
-		template<TypeComponent T>
+		template<typename T>
 		ComponentContainer<T>& GetComponentStorage();
-		template<TypeComponent T>
+
+		template<typename T>
 		ComponentContainer<T>& CreateOrGetComponentStorage();
 
-		template<TypeComponent T>
+		template<typename T>
 		ComponentContainer<T>* TryGetComponentStorage();
 
-		template<TypeComponent T>
+		template<typename T>
 		T& GetComponent(unsigned int entity);
 	};
 }

@@ -4,7 +4,6 @@
 #include "WObject.h"
 #include "WaveObject.h"
 #include "WaveObjectFactory.h"
-#include "ECS/Component/TypeComponent.h"
 #include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
@@ -19,7 +18,7 @@ namespace WaveEngine
 		return GetWaveFactory()->Instantiate();
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T& WObject::Instantiate()
 	{
 		return GetWaveFactory()->Instantiate<T>();
@@ -30,7 +29,7 @@ namespace WaveEngine
 		return GetWaveFactory()->Instantiate(modelDir, useAbsolutePath);
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T& WObject::Instantiate(const char* modelDir, bool useAbsolutePath)
 	{
 		return GetWaveFactory()->Instantiate<T>(modelDir, useAbsolutePath);

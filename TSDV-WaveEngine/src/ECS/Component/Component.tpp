@@ -1,9 +1,8 @@
-#ifndef COMPONENT
-#define COMPONENT
+#ifndef WAVEENGINE_COMPONENT_TPP
+#define WAVEENGINE_COMPONENT_TPP
 
 #include "Component.h"
 
-#include "TypeComponent.h"
 #include "ECS/WaveObject/WObject.h"
 #include "ECS/WaveObject/WaveObject.h"
 #include "ECS/Transform/ECSTransform.h"

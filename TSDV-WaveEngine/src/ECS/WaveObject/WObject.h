@@ -1,14 +1,13 @@
 #pragma once
 
 #include "Export.h"
-#include "ECS/Component/TypeComponent.h"
 
 namespace WaveEngine
 {
 	class WaveObject;
 	class WaveObjectFactory;
 
-	class WAVEEXPORT WObject
+	class WObject
 	{
 	private:
 
@@ -18,12 +17,12 @@ namespace WaveEngine
 
 		static WaveObject& Instantiate();
 
-		template<TypeComponent T>
+		template<typename T>
 		static T& Instantiate();
 
 		static WaveObject& Instantiate(const char* modelDir, bool useAbsolutePath = true);
 
-		template<TypeComponent T>
+		template<typename T>
 		static T& Instantiate(const char* modelDir, bool useAbsolutePath = true);
 	};
 }

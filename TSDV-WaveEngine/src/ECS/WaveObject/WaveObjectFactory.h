@@ -23,23 +23,23 @@ namespace WaveEngine
 		WaveObjectFactory();
 		~WaveObjectFactory();
 
-		ComponentRegistry* GetComponenetRegistry() const;
-		WaveObjectRegistry* GetWaveObjectRegistry() const;
-		ModelImporter* GetModelImporter() const;
+		inline ComponentRegistry* GetComponentRegistry() const;
+		inline WaveObjectRegistry* GetWaveObjectRegistry() const;
+		inline ModelImporter* GetModelImporter() const;
 
 		friend class ServiceProvider;
 		friend class Engine;
 
 	public:
 
-		WaveObject& Instantiate();
+		inline WaveObject& Instantiate();
 
-		template<TypeComponent T>
+		template<typename T>
 		T& Instantiate();
 
-		WaveObject& Instantiate(const char* modelDir, bool useAbsolutePath = true);
+		inline WaveObject& Instantiate(const char* modelDir, bool useAbsolutePath = true);
 
-		template<TypeComponent T>
+		template<typename T>
 		T& Instantiate(const char* modelDir, bool useAbsolutePath = true);
 	};
 }

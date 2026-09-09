@@ -16,7 +16,7 @@ namespace WaveEngine
 			delete storage->second;
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T& ComponentRegistry::AddComponent(unsigned int entity)
 	{
 		type_index typeIndex = typeid(T);
@@ -32,19 +32,19 @@ namespace WaveEngine
 		return static_cast<ComponentContainer<T>*>(storages.at(typeIndex))->Get(entity);
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	bool ComponentRegistry::HasStorage()
 	{
 		return storages.find(typeid(T)) != storages.end();
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	bool ComponentRegistry::Has(unsigned int entity)
 	{
 		return GetComponentStorage<T>().Has(entity);
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T& ComponentRegistry::Get(unsigned int entity)
 	{
 		return GetComponentStorage<T>().Get(entity);
@@ -73,13 +73,13 @@ namespace WaveEngine
 		return waveBehaviours;
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	T* ComponentRegistry::TryGet(unsigned int entity)
 	{
 		return GetComponentStorage<T>().TryGet(entity);
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	void ComponentRegistry::RemoveComponent(unsigned int entity)
 	{
 		type_index typeIndex = typeid(T);
@@ -90,13 +90,13 @@ namespace WaveEngine
 		static_cast<ComponentContainer<T>*>(storages.at(typeIndex))->Remove(entity);
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	ComponentContainer<T>& ComponentRegistry::GetComponentStorage()
 	{
 		return *static_cast<ComponentContainer<T>*>(storages.at(typeid(T)));
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	ComponentContainer<T>& ComponentRegistry::CreateOrGetComponentStorage()
 	{
 		type_index typeIndex = typeid(T);
@@ -112,7 +112,7 @@ namespace WaveEngine
 		return *static_cast<ComponentContainer<T>*>(storages.at(typeid(T)));
 	}
 
-	template<TypeComponent T>
+	template<typename T>
 	ComponentContainer<T>* ComponentRegistry::TryGetComponentStorage()
 	{
 		type_index typeIndex = typeid(T);
@@ -123,11 +123,10 @@ namespace WaveEngine
 		return static_cast<ComponentContainer<T>*>(storages.at(typeIndex));
 	}
 
-	template<TypeComponent T>
-	T& GetComponent(unsigned int entity)
+	template<typename T>
+	T& ComponentRegistry::GetComponent(unsigned int entity)
 	{
 		return GetComponentStorage<T>().Get(entity);
 	}
 }
-
 #endif

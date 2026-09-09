@@ -1,10 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <type_traits>
 
 #include "IStorage.h"
-#include "ECS/Component/TypeComponent.h"
 
 using namespace std;
 
@@ -12,7 +10,7 @@ namespace WaveEngine
 {
 	class WaveBehaviour;
 
-	template <TypeComponent T>
+	template <typename T>
 	class ComponentContainer : public IStorage
 	{
 	private:

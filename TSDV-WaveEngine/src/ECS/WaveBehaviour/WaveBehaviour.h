@@ -1,8 +1,6 @@
 #pragma once
 
 #include "ECS/Component/Component.h"
-#include "ServiceProvider/ServiceProvider.h"
-#include "ECS/WaveObject/WaveObjectFactory.h"
 
 namespace WaveEngine
 {
@@ -10,18 +8,9 @@ namespace WaveEngine
 
 	class WaveBehaviour : public Component
 	{
-	private:
-
-		WaveObjectFactory* GetWaveObjectFactory() const
-		{
-			return ServiceProvider::Instance().Get<WaveObjectFactory>();
-		}
-
 	public:
 
-		WaveBehaviour(unsigned int ID) : Component(ID)
-		{
-		}
+		WaveBehaviour(unsigned int ID);
 
 		virtual void Update()
 		{
@@ -34,7 +23,5 @@ namespace WaveEngine
 		virtual void Destroy()
 		{
 		}
-
-		WaveObject& Instantiate() const;
 	};
 }

@@ -4,7 +4,6 @@
 
 #include "WObject.h"
 #include "EventSystem/EventSystem.h"
-#include "ECS/Component/TypeComponent.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 
 using namespace std;
@@ -35,23 +34,23 @@ namespace WaveEngine
 		WaveObject(unsigned int ID);
 		~WaveObject();
 
-		void SetName(const string& name);
-		string GetName() const;
+		inline void SetName(const string& name);
+		inline string GetName() const;
 
-		unsigned int GetID() const;
+		inline unsigned int GetID() const;
 
-		ECSTransform& GetTransform() const;
+		inline ECSTransform& GetTransform() const;
 
-		template<TypeComponent T>
+		template<typename T>
 		T& AddComponent();
 
-		template<TypeComponent T>
+		template<typename T>
 		T& GetComponent() const;
 
-		template<TypeComponent T>
+		template<typename T>
 		T* TryGetComponent();
 
-		template<TypeComponent T>
+		template<typename T>
 		void RemoveComponent();
 	};
 }

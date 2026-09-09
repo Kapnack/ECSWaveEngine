@@ -1,11 +1,11 @@
 #include "WaveBehaviour.h"
 
-#include "ECS/WaveObject/WaveObject.h"
+#include "ECS/Component/Component.h"
 
 namespace WaveEngine
 {
-	WaveObject& WaveBehaviour::Instantiate() const
+	WaveBehaviour::WaveBehaviour(unsigned int ID) : Component(ID)
 	{
-		return GetWaveObjectFactory()->Instantiate();
+
 	}
 }
