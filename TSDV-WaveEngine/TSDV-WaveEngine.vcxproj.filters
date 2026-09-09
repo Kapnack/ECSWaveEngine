@@ -323,8 +323,12 @@
     <ClInclude Include="src\Engine\TestingBehaviour.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="src\ECS\WObject\WObject.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="src\ECS\WObject\WObject.tpp" />
   </ItemGroup>
 </Project>

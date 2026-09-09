@@ -204,6 +204,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\Managers\TransformLogic\TransformLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\WObject\WObject.h" />
     <ClInclude Include="src\Engine\TestingBehaviour.h" />
     <ClInclude Include="src\BoundingBox\BoundingBox.h" />
     <ClInclude Include="src\CameraManager\CameraManager.h" />
@@ -264,6 +265,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="src\ECS\WObject\WObject.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
