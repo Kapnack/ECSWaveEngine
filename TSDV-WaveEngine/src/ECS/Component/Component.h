@@ -1,11 +1,12 @@
 #pragma once
+#include <ECS/WObject/WObject.h>
 
 namespace WaveEngine
 {
 	class WaveObject;
 	class ECSTransform;
 
-	class Component
+	class Component : public WObject
 	{
 	private:
 
@@ -30,5 +31,7 @@ namespace WaveEngine
 
 		virtual void SetIsActive(bool isActive);
 		bool GetIsActive() const;
+
+		Component() = default;
 	};
 }

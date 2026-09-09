@@ -3,10 +3,11 @@
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/WaveObject/WaveObject.h"
+#include "ECS/WObject/WObject.h"
 
 namespace WaveEngine
 {
-	Component::Component(unsigned int ID)
+	Component::Component(unsigned int ID) : WObject()
 	{
 		ownerID = ID;
 	}
