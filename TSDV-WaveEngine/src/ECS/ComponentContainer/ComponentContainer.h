@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "ECS/Component/Component.h"
+//#include "ECS/Component/Component.h"
 #include <type_traits>
 
 using namespace std;
@@ -23,6 +23,8 @@ namespace WaveEngine
 
 		virtual WaveBehaviour* GetAsWaveBehaviour(unsigned int entity) { return nullptr; }
 	};
+
+	class Component;
 
 	template<typename T>
 	concept TypeComponent = std::derived_from<T, Component>;
