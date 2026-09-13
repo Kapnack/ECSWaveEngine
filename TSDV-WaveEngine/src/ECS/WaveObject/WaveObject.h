@@ -3,9 +3,10 @@
 #include <string>
 
 #include "ECS/WObject/WObject.h"
-#include "ECS/CompontRegistry/ComponentRegistry.h"
-#include "ECS/Transform/ECSTransform.h"
 #include "EventSystem/EventSystem.h"
+#include "ECS/Transform/ECSTransform.h"
+#include "ECS/Component/TypeComponent.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
 
 using namespace std;
 
@@ -41,26 +42,25 @@ namespace WaveEngine
 
 		ECSTransform& GetTransform() const;
 
-		template<typename T>
+		template<TypeComponent T>
 		T& AddComponent()
 		{
 			return GetComponentRegistry()->AddComponent<T>(ID);
 		}
 
-		template<typename T>
+		template<TypeComponent T>
 		T& GetComponent() const
 		{
 			return GetComponentRegistry()->GetComponent<T>(ID);
 		}
 
-		template<typename T>
+		template<TypeComponent T>
 		T* TryGetComponent()
 		{
 			return GetComponentRegistry()->TryGet<T>(ID);
 		}
 
-
-		template<typename T>
+		template<TypeComponent T>
 		void RemoveComponent()
 		{
 			GetComponentRegistry()->RemoveComponent<T>(ID);
