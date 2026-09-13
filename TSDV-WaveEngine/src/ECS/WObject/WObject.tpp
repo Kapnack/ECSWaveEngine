@@ -6,7 +6,6 @@
 #include "ECS/WaveObject/WaveObject.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/WaveObject/WaveObjectFactory.h"
-#include "ECS/ComponentContainer/ComponentContainer.h"
 
 namespace WaveEngine
 {
@@ -20,13 +19,13 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<WaveObjectFactory>()->Instantiate();
 	}
 
-	template<typename T>
+	template<TypeComponent T>
 	T& WObject::Instantiate()
 	{
 		return ServiceProvider::Instance().Get<WaveObjectFactory>()->Instantiate<T>();
 	}
 
-	template<typename T>
+	template<TypeComponent T>
 	T& WObject::Instantiate(const char* modelDir, bool useAbsolutePath)
 	{
 		return ServiceProvider::Instance().Get<WaveObjectFactory>()->Instantiate<T>();

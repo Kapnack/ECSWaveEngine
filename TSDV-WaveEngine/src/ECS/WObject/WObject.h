@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ECS/Component/TypeComponent.h"
+
 namespace WaveEngine
 {
 	class WaveObject;
@@ -10,12 +12,12 @@ namespace WaveEngine
 
 		static WaveObject& Instantiate();
 
-		template<typename T>
+		template<TypeComponent T>
 		static T& Instantiate();
 
 		static WaveObject& Instantiate(const char* modelDir, bool useAbsolutePath = true);
 
-		template<typename T>
+		template<TypeComponent T>
 		static T& Instantiate(const char* modelDir, bool useAbsolutePath = true);
 
 	};
