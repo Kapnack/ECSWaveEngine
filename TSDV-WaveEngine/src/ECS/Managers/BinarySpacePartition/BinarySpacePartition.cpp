@@ -2,6 +2,7 @@
 #include "ServiceProvider/Service.h"
 
 #include <vector>
+#include <algorithm>
 
 #include "Plane/Plane.h"
 #include "Renderer/Renderer.h"
@@ -15,7 +16,6 @@
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "ECS/ComponentContainer/ComponentContainer.h"
-#include <algorithm>
 
 namespace WaveEngine
 {
