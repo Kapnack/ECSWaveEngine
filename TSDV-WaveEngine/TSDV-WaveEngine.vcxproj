@@ -265,6 +265,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="src\ECS\Component\TypeComponent.h" />
     <None Include="src\ECS\WObject\WObject.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

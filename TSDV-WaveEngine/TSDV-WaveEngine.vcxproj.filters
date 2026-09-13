@@ -330,5 +330,6 @@
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="src\ECS\WObject\WObject.tpp" />
+    <None Include="src\ECS\Component\TypeComponent.h" />
   </ItemGroup>
 </Project>
