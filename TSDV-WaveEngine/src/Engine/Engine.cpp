@@ -48,7 +48,7 @@ namespace WaveEngine
 		ServiceProvider::Instance().Register(new ComponentRegistry());
 		ServiceProvider::Instance().Register(new WaveObjectRegistry());
 		ServiceProvider::Instance().Register(new WaveObjectFactory());
-		ServiceProvider::Instance().Register(new Window(width, height, "WaveEngine", nullptr, nullptr));
+		ServiceProvider::Instance().Register(new Window(width, height, "WaveEngine"));
 		ServiceProvider::Instance().Register(new FileReader());
 		ServiceProvider::Instance().Register(new MeshFactory());
 		ServiceProvider::Instance().Register(new MeshManager());
