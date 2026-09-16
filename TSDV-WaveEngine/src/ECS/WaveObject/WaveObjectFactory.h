@@ -1,10 +1,10 @@
 #pragma once
 
 #include "WaveObject.h"
-#include <ServiceProvider/Service.h>
 #include "WaveObjectRegistry.h"
-#include <ECS/CompontRegistry/ComponentRegistry.h>
-#include <ECS/ComponentContainer/ComponentContainer.h>
+#include "ServiceProvider/Service.h"
+#include "ECS/Component/TypeComponent.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
 
 class ServiceProvider;
 class BaseGame;
