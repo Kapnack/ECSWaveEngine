@@ -31,8 +31,7 @@ namespace WaveEngine
 	{
 		for (Camera* camera : GetCameraManager()->GetActiveCameras())
 			for (WaveObject* waveObject : ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetParentWaveObjects())
-				if (GetBinarySpacePartition()->ObjectsShareSpace(camera->GetTransform().GetPosition(), waveObject->GetTransform().GetPosition()))
-					CheckChildsAreInFrustum(*waveObject, *camera);
+				CheckChildsAreInFrustum(*waveObject, *camera);
 	}
 
 	Renderer* DrawLogic::GetRenderer() const
@@ -52,7 +51,7 @@ namespace WaveEngine
 
 		const MeshRenderer* meshRenderer = waveObject.TryGetComponent<MeshRenderer>();
 
-		if (meshRenderer)
+		if (meshRenderer && GetBinarySpacePartition()->ObjectsShareSpace(camera.GetTransform().GetWorldPosition(), transform.GetWorldPosition()))
 			GetRenderer()->Submit(transform, meshComp, *meshRenderer, camera.GetID());
 
 		for (WaveObject* childWaveObject : waveObject.GetTransform().GetChilds())
