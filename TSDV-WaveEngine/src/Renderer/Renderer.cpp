@@ -80,6 +80,7 @@ namespace WaveEngine
 		glDisable(GL_CULL_FACE);
 
 		debugMaterialID = GetMaterialFactory()->CreateMaterial("WireFrame", GetFileReader()->ReadFile("Shaders/WireFrame/WireFrame.vert"), GetFileReader()->ReadFile("Shaders/WireFrame/WireFrame.frag"));
+		infinitePlaneMaterialID = GetMaterialFactory()->CreateMaterial("InfinitePlane", GetFileReader()->ReadFile("Shaders/Planes/InfinitePlane.vert"), GetFileReader()->ReadFile("Shaders/Planes/InfinitePlane.frag"));
 	}
 
 	const unsigned int Renderer::ReturnWorkingMaterial(const unsigned int& materialIDToTry, const unsigned int& materialIDfallBack)
@@ -223,6 +224,72 @@ namespace WaveEngine
 		glDeleteVertexArrays(1, &VAO);
 		glDeleteBuffers(1, &VBO);
 		glDeleteBuffers(1, &EBO);
+	}
+
+	void Renderer::SubmitPlane(Plane plane, Color color)
+	{
+		debugPlanes.push_back({ plane, color });
+	}
+
+	void Renderer::DrawInfinitePlaneImmediate(Plane plane, Color color, float fadeDistance)
+	{
+		static const float quadVerts[] = {
+			-1.0f, -1.0f,
+			 1.0f, -1.0f,
+			 1.0f,  1.0f,
+			-1.0f, -1.0f,
+			 1.0f,  1.0f,
+			-1.0f,  1.0f
+		};
+
+		GLuint VAO, VBO;
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
+
+		glBindVertexArray(VAO);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVerts), quadVerts, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		Camera& camera = GetComponentRegistry()->GetComponentStorage<Camera>().GetFirst();
+		Material* mat = GetMaterialManager()->GetMaterial(infinitePlaneMaterialID);
+
+		if (!mat)
+		{
+			glBindVertexArray(0);
+			glDeleteVertexArrays(1, &VAO);
+			glDeleteBuffers(1, &VBO);
+			return;
+		}
+
+		glm::mat4 view = camera.GetView();
+		glm::mat4 proj = camera.GetProjection();
+		glm::mat4 invViewProj = glm::inverse(proj * view);
+
+		mat->Bind();
+		mat->SetMat4("uView", view);
+		mat->SetMat4("uProj", proj);
+		mat->SetMat4("uInvViewProj", invViewProj);
+		mat->SetVec3("uCameraPos", camera.GetTransform().GetPosition());
+		mat->SetVec3("uPlaneNormal", plane.GetNormal());
+		mat->SetFloat("uPlaneOriginDistance", plane.GetOriginDistance());
+		mat->SetFloat("uFadeDistance", fadeDistance);
+		mat->SetColor(color);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		glDisable(GL_BLEND);
+		mat->UnBind();
+
+		glBindVertexArray(0);
+		glDeleteVertexArrays(1, &VAO);
+		glDeleteBuffers(1, &VBO);
 	}
 
 	void Renderer::DeleteBuffers(unsigned int& VAO, unsigned int& VBO, unsigned int& EBO)
@@ -413,11 +480,15 @@ namespace WaveEngine
 	{
 		//glDisable(GL_DEPTH_TEST);
 
-		for (std::pair<BoundingBox, Color> pair : debugBoxes)
+		for (std::pair<BoundingBox, Color>& pair : debugBoxes)
 			DrawWireBoxImmediate(pair.first, pair.second);
+
+		for (std::pair<Plane, Color>& pair : debugPlanes)
+			DrawInfinitePlaneImmediate(pair.first, pair.second);
 
 		//glEnable(GL_DEPTH_TEST);
 		debugBoxes.clear();
+		debugPlanes.clear();
 	}
 
 	void Renderer::Unload()

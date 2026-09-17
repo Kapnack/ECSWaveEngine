@@ -22,6 +22,7 @@
 #include "Material/MaterialFactory.h"
 #include "Material/Color/Color.h"
 #include "TextureImporter/TextureManager.h"
+#include <Plane/Plane.h>
 
 using namespace std;
 
@@ -96,11 +97,13 @@ namespace WaveEngine
 		unordered_map<unsigned int, list<unsigned int>> entityCameras;
 
 		vector<pair<BoundingBox, Color>> debugBoxes;
+		vector<pair<Plane, Color>> debugPlanes;
 
 		unsigned int drawCalls = 0;
 		unsigned int batchCalls = 0;
 
 		unsigned int debugMaterialID = Material::NULL_MATERIAL;
+		unsigned int infinitePlaneMaterialID = Material::NULL_MATERIAL;
 
 		void Init();
 		void Unload();
@@ -151,6 +154,9 @@ namespace WaveEngine
 
 		void SubmitWireBox(const BoundingBox& box, Color color = Color::Red());
 		void DrawWireBoxImmediate(const BoundingBox& box, Color color);
+
+		void SubmitPlane(Plane plane, Color color = Color(1.0f, 0.0f, 0.0f, 0.1f));
+		void DrawInfinitePlaneImmediate(Plane plane, Color color, float fadeDistance = 0.0f);
 
 		void Clear();
 
