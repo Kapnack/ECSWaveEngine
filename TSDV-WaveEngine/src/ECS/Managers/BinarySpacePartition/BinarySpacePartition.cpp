@@ -92,16 +92,12 @@ namespace WaveEngine
 		{
 			ECSTransform& waveObject = GetTransformContainer().Get(waveObjectID);
 
-			planes.push_back(Plane(waveObject.GetForward(), waveObject.GetPosition()));
+			planes.push_back(Plane(waveObject.GetForward(), waveObject.GetWorldPosition()));
 		}
 
 		objectsToMadePlane.clear();
 
 		for (const Plane& plane : planes)
-		{
-			BoundingBox newBoundingBox(plane.GetPosition(), Vector3(10, 10, 10));
-
-			GetRenderer()->SubmitWireBox(newBoundingBox, Color::Red());
-		}
+			GetRenderer()->SubmitPlane(plane);
 	}
 }
