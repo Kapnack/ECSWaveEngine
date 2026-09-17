@@ -9,6 +9,9 @@
 #include "EventSystem/Func.h"
 #include "EventSystem/Event.h"
 #include <EventSystem/EventSystem.h>
+#include "Events/ObjectBecameParentEvent.h"
+#include "Events/ObjectChangeName.h"
+#include "Events/ObjectBecameChildEvent.h"
 
 using namespace std;
 
@@ -17,66 +20,6 @@ class ServiceProvider;
 
 namespace WaveEngine
 {
-	struct ObjectBecameParentEvent : Event
-	{
-		unsigned int waveObjectID = 0;
-
-		ObjectBecameParentEvent()
-		{
-		}
-
-		ObjectBecameParentEvent(unsigned int waveObjectID)
-		{
-			this->waveObjectID = waveObjectID;
-		}
-
-		void Reset() override
-		{
-			waveObjectID = 0;
-		}
-	};
-
-	struct ObjectBecameChildEvent : Event
-	{
-		unsigned int waveObjectID = 0;
-
-		ObjectBecameChildEvent()
-		{
-		}
-
-		ObjectBecameChildEvent(unsigned int waveObjectID)
-		{
-			this->waveObjectID = waveObjectID;
-		}
-
-		void Reset() override
-		{
-			waveObjectID = 0;
-		}
-	};
-
-	struct ObjectChangeName : Event
-	{
-		unsigned int entityID = WaveObject::NULL_OBJECT;
-		string newName = "";
-
-		ObjectChangeName()
-		{
-		}
-
-		ObjectChangeName(unsigned int entityID, string newName)
-		{
-			this->entityID = entityID;
-			this->newName = newName;
-		}
-
-		void Reset() override
-		{
-			entityID = WaveObject::NULL_OBJECT;
-			newName = "";
-		}
-	};
-
 	enum class ObjectNameSearch
 	{
 		Exact,
