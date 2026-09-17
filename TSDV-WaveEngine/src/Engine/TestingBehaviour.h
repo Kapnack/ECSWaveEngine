@@ -18,7 +18,7 @@ namespace WaveEngine
 {
 	class TestingBehaviour : public WaveBehaviour
 	{
-		WaveObject* tank;
+		WaveObject* tank = nullptr;
 
 	public:
 
@@ -32,14 +32,16 @@ namespace WaveEngine
 			const vector<string> modelsPaths
 			{
 				"Models/Tank.fbx",
+				"Models/Binary/TestSpacePartition.fbx",
 				"Models/Cube.fbx"
 			};
 
 			const unsigned int defaultSize = 32;
 
 			ModelImporter modelImporter;
+			
+			modelImporter.LoadScene(modelsPaths[0]);
 
-			modelImporter.LoadScene(modelsPaths.at(0));
 			tank = modelImporter.IntantiateModel();
 
 			tank->GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f));
@@ -49,22 +51,15 @@ namespace WaveEngine
 			camera.SetFarPlane(1000000.0f);
 			camera.SetNearPlane(0.1f);
 			camera.SetOrthographic(false);
-			GetTransform().SetPosition(Vector3::Right() * (modelsPaths.size() * 0.5f * defaultSize) + Vector3::Foward() * 300);
+			GetTransform().SetPosition(Vector3::Zero());
 
-			modelImporter.LoadScene(modelsPaths.at(modelsPaths.size() - 1));
+			modelImporter.LoadScene(modelsPaths.at(1));
 
-			WaveObject* waveObject = modelImporter.IntantiateModel();
+			WaveObject& waveObject = *modelImporter.IntantiateModel();
+			waveObject.GetTransform().SetScale(Vector3::One() * 0.1f);
 
-			waveObject->GetTransform().SetPosition(Vector3::Down() * 150.000f);
-			waveObject->GetTransform().Scale((Vector3::X() + Vector3::Z()) * 100.0f);
-
-			waveObject = modelImporter.IntantiateModel();
-
-			waveObject->GetTransform().SetPosition((camera.GetTransform().GetPosition() + tank->GetTransform().GetPosition()) * 0.5f);
-			waveObject->GetTransform().SetScale(Vector3::One() * 0.2f);
-
-			for (WaveObject* binaryObj : WaveObjectRegistry::Get().GetWaveObject("Tank", ObjectNameSearch::Contains))
-				BinarySpacePartition::Get().TurnObjectIntoPlane(*binaryObj);
+			for (WaveObject* obj : WaveObjectRegistry::Get().GetWaveObject("Binary", ObjectNameSearch::Contains))
+				BinarySpacePartition::Get().TurnObjectIntoPlane(obj->GetID());
 		}
 
 		void Update() override
