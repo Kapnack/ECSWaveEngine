@@ -168,6 +168,9 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.h" />
     <ClCompile Include="src\ECS\RigidBody\RigidBody.cpp" />
     <ClCompile Include="src\ECS\RigidBody\RigidBodyLogic.cpp" />
+    <ClCompile Include="src\ECS\WaveObject\Events\ObjectBecameChildEvent.cpp" />
+    <ClCompile Include="src\ECS\WaveObject\Events\ObjectBecameParentEvent.cpp" />
+    <ClCompile Include="src\ECS\WaveObject\Events\ObjectChangeName.cpp" />
     <ClCompile Include="src\ECS\WaveObject\WaveObject.cpp" />
     <ClCompile Include="src\ECS\WaveObject\WaveObjectFactory.cpp" />
     <ClCompile Include="src\ECS\WaveObject\WaveObjectRegistry.cpp" />
@@ -204,6 +207,9 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\Managers\TransformLogic\TransformLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameChildEvent.h" />
+    <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameParentEvent.h" />
+    <ClInclude Include="src\ECS\WaveObject\Events\ObjectChangeName.h" />
     <ClInclude Include="src\ECS\WObject\WObject.h" />
     <ClInclude Include="src\Engine\TestingBehaviour.h" />
     <ClInclude Include="src\BoundingBox\BoundingBox.h" />

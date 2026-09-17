@@ -114,9 +114,6 @@
     <ClCompile Include="src\ECS\WaveObject\WaveObject.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\ECS\WaveObject\WaveObjectFactory.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="src\ECS\WaveObject\WaveObjectRegistry.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
@@ -148,6 +145,18 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\WaveObject\Events\ObjectBecameParentEvent.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\WaveObject\Events\ObjectBecameChildEvent.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\WaveObject\Events\ObjectChangeName.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\WaveObject\WaveObjectFactory.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
@@ -324,6 +333,15 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\ECS\WObject\WObject.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameParentEvent.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameChildEvent.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\WaveObject\Events\ObjectChangeName.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
