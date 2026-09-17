@@ -1,7 +1,8 @@
 ﻿#include "ModelImporter.h"
 
-#include <iostream>
 #include <vector>
+#include <iostream>
+#include <filesystem>
 
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -15,7 +16,6 @@
 
 #include "ServiceProvider/ServiceProvider.h"
 #include "VertexData.h"
-#include "Mesh/Mesh.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Vector2/Vector2.h"
 #include "Material/Material.h"
@@ -24,7 +24,6 @@
 #include "ECS/Transform/ECSTransform.h"
 #include "ECS/WaveObject/WaveObject.h"
 #include "TextureImporter/Texture.h"
-#include <EventSystem/Func.h>
 
 namespace WaveEngine
 {
@@ -70,7 +69,7 @@ namespace WaveEngine
 		{
 			aiMesh* mesh = pScene->mMeshes[node->mMeshes[i]];
 
-			waveObject.SetName(mesh->mName.C_Str());
+			waveObject.SetName(node->mName.C_Str());
 
 			ProcessMesh(mesh, waveObject);
 		}
