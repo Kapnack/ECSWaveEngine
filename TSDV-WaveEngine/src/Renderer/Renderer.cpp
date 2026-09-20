@@ -331,7 +331,7 @@ namespace WaveEngine
 		RenderData& batch =
 			batching[matComp.materialID][meshComp.meshID];
 
-		batch.instances.push_back({ transform.GetID(), transform.GetGlobalModel().Transposed() });
+		batch.instances.push_back({ transform.GetID(), transform.GetGlobalModel().Transposed()});
 	}
 
 	void Renderer::Flush()
