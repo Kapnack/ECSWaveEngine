@@ -10,7 +10,7 @@ Matrix4x4::Matrix4x4()
 	*this = Identity();
 }
 
-Matrix4x4::Matrix4x4( float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33)
+Matrix4x4::Matrix4x4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33)
 {
 	this->m00 = m00; this->m01 = m01; this->m02 = m02; this->m03 = m03;
 	this->m10 = m10; this->m11 = m11; this->m12 = m12; this->m13 = m13;
@@ -54,6 +54,21 @@ Matrix4x4 Matrix4x4::GetRotationMatrix() const
 	return CreateRotation(*this);
 }
 
+Vector3 Matrix4x4::GetTranslate() const
+{
+	return GetTranslate(*this);
+}
+
+Quaternion Matrix4x4::GetRotation() const
+{
+	return GetRotation(*this);
+}
+
+Vector3 Matrix4x4::GetScale() const
+{
+	return GetScale(*this);
+}
+
 void Matrix4x4::SetScale(Vector3 vector)
 {
 	m00 = vector.x;
@@ -71,6 +86,56 @@ void Matrix4x4::AddScale(Vector3 vector)
 Matrix4x4 Matrix4x4::GetScaleMatrix() const
 {
 	return CreateScale(m00, m11, m22);
+}
+
+void Matrix4x4::Decomposed(Vector3& translation, Quaternion& rotation, Vector3& scale)
+{
+	Decompose(*this, translation, rotation, scale);
+}
+
+void Matrix4x4::Decomposed(Vector3& translation, Vector3& rotation, Vector3& scale)
+{
+	Decompose(*this, translation, rotation, scale);
+}
+
+void Matrix4x4::Transpose()
+{
+	*this = Transposed();
+}
+
+Matrix4x4 Matrix4x4::Transposed() const
+{
+	return Transposed(*this);
+}
+
+Vector3 Matrix4x4::GetFoward() const
+{
+	return GetFoward(*this);
+}
+
+Vector3 Matrix4x4::GetBack() const
+{
+	return GetBack(*this);
+}
+
+Vector3 Matrix4x4::GetRight() const
+{
+	return GetRight(*this);
+}
+
+Vector3 Matrix4x4::GetLeft() const
+{
+	return GetLeft(*this);
+}
+
+Vector3 Matrix4x4::GetUP() const
+{
+	return GetUP(*this);
+}
+
+Vector3 Matrix4x4::GetDown() const
+{
+	return GetDown(*this);
 }
 
 void Matrix4x4::UpdateMaxtrix()
@@ -191,6 +256,16 @@ Quaternion Matrix4x4::GetRotation(const Matrix4x4& m)
 	return q;
 }
 
+Vector3 Matrix4x4::GetTranslate(const Matrix4x4& matrix)
+{
+	return Vector3(matrix.m03, matrix.m13, matrix.m23);
+}
+
+Vector3 Matrix4x4::GetScale(const Matrix4x4& matrix)
+{
+	return Vector3(matrix.m00, matrix.m11, matrix.m22);
+}
+
 Matrix4x4 Matrix4x4::CreateRotation(Quaternion q)
 {
 	return CreateRotation(q.x, q.y, q.z, q.w);
@@ -240,6 +315,36 @@ Matrix4x4 Matrix4x4::CreateTranslate(float x, float y, float z)
 	return translate;
 }
 
+Vector3 Matrix4x4::GetFoward(const Matrix4x4& matrix)
+{
+	return Vector3(matrix.m02, matrix.m12, matrix.m22).Normalized();
+}
+
+Vector3 Matrix4x4::GetBack(const Matrix4x4& matrix)
+{
+	return -GetFoward(matrix);
+}
+
+Vector3 Matrix4x4::GetRight(const Matrix4x4& matrix)
+{
+	return -Vector3(matrix.m00, matrix.m10, matrix.m20).Normalized();
+}
+
+Vector3 Matrix4x4::GetLeft(const Matrix4x4& matrix)
+{
+	return -GetRight(matrix);
+}
+
+Vector3 Matrix4x4::GetUP(const Matrix4x4& matrix)
+{
+	return Vector3(matrix.m01, matrix.m11, matrix.m21).Normalized();
+}
+
+Vector3 Matrix4x4::GetDown(const Matrix4x4& matrix)
+{
+	return -GetUP(matrix);
+}
+
 Matrix4x4 Matrix4x4::TRS(Vector3 t, Quaternion r, Vector3 s)
 {
 	const Matrix4x4 translate = CreateTranslate(t);
@@ -249,7 +354,80 @@ Matrix4x4 Matrix4x4::TRS(Vector3 t, Quaternion r, Vector3 s)
 	return TRS(translate, rotate, scale);
 }
 
+Matrix4x4 Matrix4x4::Inversed(const Matrix4x4& matrix)
+{
+	const float s0 = matrix.m00 * matrix.m11 - matrix.m10 * matrix.m01;
+	const float s1 = matrix.m00 * matrix.m12 - matrix.m10 * matrix.m02;
+	const float s2 = matrix.m00 * matrix.m13 - matrix.m10 * matrix.m03;
+	const float s3 = matrix.m01 * matrix.m12 - matrix.m11 * matrix.m02;
+	const float s4 = matrix.m01 * matrix.m13 - matrix.m11 * matrix.m03;
+	const float s5 = matrix.m02 * matrix.m13 - matrix.m12 * matrix.m03;
+
+	const float c0 = matrix.m20 * matrix.m31 - matrix.m30 * matrix.m21;
+	const float c1 = matrix.m20 * matrix.m32 - matrix.m30 * matrix.m22;
+	const float c2 = matrix.m20 * matrix.m33 - matrix.m30 * matrix.m23;
+	const float c3 = matrix.m21 * matrix.m32 - matrix.m31 * matrix.m22;
+	const float c4 = matrix.m21 * matrix.m33 - matrix.m31 * matrix.m23;
+	const float c5 = matrix.m22 * matrix.m33 - matrix.m32 * matrix.m23;
+
+	const float det = s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0;
+
+	if (WaveMath::Abs(det) < 1e-8f)
+		throw std::runtime_error("Matrix4x4::Inverse - matrix is singular and cannot be inverted");
+
+	const float invDet = 1.0f / det;
+
+	Matrix4x4 result;
+
+	result.m00 = (matrix.m11 * c5 - matrix.m12 * c4 + matrix.m13 * c3) * invDet;
+	result.m01 = (-matrix.m01 * c5 + matrix.m02 * c4 - matrix.m03 * c3) * invDet;
+	result.m02 = (matrix.m31 * s5 - matrix.m32 * s4 + matrix.m33 * s3) * invDet;
+	result.m03 = (-matrix.m21 * s5 + matrix.m22 * s4 - matrix.m23 * s3) * invDet;
+
+	result.m10 = (-matrix.m10 * c5 + matrix.m12 * c2 - matrix.m13 * c1) * invDet;
+	result.m11 = (matrix.m00 * c5 - matrix.m02 * c2 + matrix.m03 * c1) * invDet;
+	result.m12 = (-matrix.m30 * s5 + matrix.m32 * s2 - matrix.m33 * s1) * invDet;
+	result.m13 = (matrix.m20 * s5 - matrix.m22 * s2 + matrix.m23 * s1) * invDet;
+
+	result.m20 = (matrix.m10 * c4 - matrix.m11 * c2 + matrix.m13 * c0) * invDet;
+	result.m21 = (-matrix.m00 * c4 + matrix.m01 * c2 - matrix.m03 * c0) * invDet;
+	result.m22 = (matrix.m30 * s4 - matrix.m31 * s2 + matrix.m33 * s0) * invDet;
+	result.m23 = (-matrix.m20 * s4 + matrix.m21 * s2 - matrix.m23 * s0) * invDet;
+
+	result.m30 = (-matrix.m10 * c3 + matrix.m11 * c1 - matrix.m12 * c0) * invDet;
+	result.m31 = (matrix.m00 * c3 - matrix.m01 * c1 + matrix.m02 * c0) * invDet;
+	result.m32 = (-matrix.m30 * s3 + matrix.m31 * s1 - matrix.m32 * s0) * invDet;
+	result.m33 = (matrix.m20 * s3 - matrix.m21 * s1 + matrix.m22 * s0) * invDet;
+
+	return result;
+}
+
+Matrix4x4 Matrix4x4::Transposed(const Matrix4x4& matrix)
+{
+	return Matrix4x4
+	(
+		matrix.m00, matrix.m10, matrix.m20, matrix.m30,
+		matrix.m01, matrix.m11, matrix.m21, matrix.m31,
+		matrix.m02, matrix.m12, matrix.m22, matrix.m32,
+		matrix.m03, matrix.m13, matrix.m23, matrix.m33
+	);
+}
+
 Matrix4x4 Matrix4x4::TRS(const Matrix4x4& t, const Matrix4x4& r, const Matrix4x4& s)
 {
 	return t * r * s;
+}
+
+void Matrix4x4::Decompose(const Matrix4x4& matrix, Vector3& translation, Quaternion& rotation, Vector3& scale)
+{
+	translation = matrix.GetTranslate();
+	rotation = matrix.GetRotation();
+	scale = matrix.GetScale();
+}
+
+void Matrix4x4::Decompose(const Matrix4x4& matrix, Vector3& translation, Vector3& rotation, Vector3& scale)
+{
+	Quaternion temRotation;
+	Decompose(matrix, translation, temRotation, scale);
+	rotation = temRotation.ToEuler();
 }
