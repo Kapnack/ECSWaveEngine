@@ -141,6 +141,15 @@ namespace WaveEngine
 		SetGLMVec4(name, glm::vec4(x, y, z, w));
 	}
 
+	void Material::SetMat4(const std::string& name, const Matrix4x4& value)
+	{
+		unordered_map<string, Uniform>::iterator it = uniforms.find(name);
+		if (it == uniforms.end())
+			return;
+
+		glUniformMatrix4fv(it->second.location, it->second.size, GL_FALSE, &value.m00);
+	}
+
 	void Material::SetMat4(const std::string& name, const glm::mat4& value)
 	{
 		unordered_map<string, Uniform>::iterator it = uniforms.find(name);
