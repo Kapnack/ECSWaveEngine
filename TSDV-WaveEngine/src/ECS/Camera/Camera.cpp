@@ -140,12 +140,12 @@ namespace WaveEngine
 
 		glm::mat4 rotationMatrix = glm::yawPitchRoll
 		(
-			glm::radians(transform.GetRotation().y),
-			glm::radians(transform.GetRotation().x),
-			glm::radians(transform.GetRotation().z)
+			glm::radians(transform.GetEulerRotation().y),
+			glm::radians(transform.GetEulerRotation().x),
+			glm::radians(transform.GetEulerRotation().z)
 		);
 
-		glm::vec3 forward = glm::vec3(rotationMatrix * glm::vec4(0, 0, -1, 0));
+		glm::vec3 forward = glm::vec3(rotationMatrix * glm::vec4(0, 0, 1, 0));
 		glm::vec3 up = glm::vec3(rotationMatrix * glm::vec4(0, 1, 0, 0));
 
 		float halfHeight = orthoSize;

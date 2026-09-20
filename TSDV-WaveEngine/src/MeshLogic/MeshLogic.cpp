@@ -53,14 +53,9 @@ namespace WaveEngine
 
 		for (int i = 0; i < mesh.GetVertexSize(); ++i)
 		{
-			glm::vec4 worldPos = transform.GetGlobalModel() * glm::vec4(
-				mesh.GetVertexBuffer()[i].position.x,
-				mesh.GetVertexBuffer()[i].position.y,
-				mesh.GetVertexBuffer()[i].position.z,
-				1.0f
-			);
+			Vector3 worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetVertexBuffer()[i].position)).GetTranslate();
 
-			box.Encapsulate(Vector3(worldPos.x, worldPos.y, worldPos.z));
+			box.Encapsulate(worldPos);
 		}
 
 		return box;

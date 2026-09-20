@@ -51,7 +51,7 @@ namespace WaveEngine
 
 		const MeshRenderer* meshRenderer = waveObject.TryGetComponent<MeshRenderer>();
 
-		if (meshRenderer && GetBinarySpacePartition()->ObjectsShareSpace(camera.GetTransform().GetWorldPosition(), transform.GetWorldPosition()))
+		if (meshRenderer && GetBinarySpacePartition()->ObjectsShareSpace(camera.GetTransform().GetPosition(), transform.GetPosition()))
 			GetRenderer()->Submit(transform, meshComp, *meshRenderer, camera.GetID());
 
 		for (WaveObject* childWaveObject : waveObject.GetTransform().GetChilds())

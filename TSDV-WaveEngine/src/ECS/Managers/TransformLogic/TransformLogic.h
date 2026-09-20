@@ -14,7 +14,7 @@ namespace WaveEngine
 
 		WaveObjectRegistry* GetWaveObjectRegistry();
 
-		void UpdateHierarchy(ECSTransform& transform, const glm::mat4& parentMatrix = glm::mat4(1.0f));
+		void UpdateHierarchy(ECSTransform& transform, const Matrix4x4& parentMatrix = Matrix4x4::Identity());
 
 	public:
 

@@ -23,7 +23,7 @@ namespace WaveEngine
 			if (rigidBody.IsGravityAffected())
 				rigidBody.AddVelocity(Vector3::Down() * (Gravity * deltaTime));
 
-			rigidBody.GetTransform().TranslateWorld(rigidBody.GetVelocity() * deltaTime);
+			rigidBody.GetTransform().Translate(rigidBody.GetVelocity() * deltaTime);
 		}
 	}
 }

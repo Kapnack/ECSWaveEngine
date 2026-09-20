@@ -92,7 +92,7 @@ namespace WaveEngine
 		{
 			ECSTransform& waveObject = GetTransformContainer().Get(waveObjectID);
 
-			planes.push_back(Plane(waveObject.GetForward(), waveObject.GetWorldPosition()));
+			planes.push_back(Plane(waveObject.GetForward(), waveObject.GetPosition()));
 		}
 
 		objectsToMadePlane.clear();

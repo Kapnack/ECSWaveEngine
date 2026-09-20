@@ -45,9 +45,9 @@ namespace WaveEngine
 			UpdateHierarchy(waveObject->GetTransform());
 	}
 
-	void TransformLogic::UpdateHierarchy(ECSTransform& transform,const glm::mat4& parentMatrix)
+	void TransformLogic::UpdateHierarchy(ECSTransform& transform,const Matrix4x4& parentMatrix)
 	{
-		glm::mat4 global = parentMatrix * transform.GetLocalModel();
+		Matrix4x4 global = parentMatrix * transform.GetLocalModel();
 
 		transform.SetGlobalModel(global);
 
