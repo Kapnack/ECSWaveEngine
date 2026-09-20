@@ -232,7 +232,6 @@ namespace WaveEngine
 	void ECSTransform::LookAt(const Vector3& target)
 	{
 		rotation = Quaternion::LookAt(target).ToEuler();
-
 		MarkDirty();
 	}
 
@@ -388,7 +387,7 @@ namespace WaveEngine
 			ECSTransform* parent = ServiceProvider::Instance().Get<ComponentRegistry>()->TryGet<ECSTransform>(parentID);
 
 			if (parent)
-				parent->HasChildDirty();
+				parent->MarkHasChildDirty();
 		}
 	}
 
