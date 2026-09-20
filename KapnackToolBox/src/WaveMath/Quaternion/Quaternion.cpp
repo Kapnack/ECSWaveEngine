@@ -1,7 +1,7 @@
 #include "Quaternion.h"
 
 #include <cmath>
-#include <WaveMath/WaveMath/WaveMath.h>
+#include "WaveMath/WaveMath/WaveMath.h"
 
 Quaternion::Quaternion()
 {
