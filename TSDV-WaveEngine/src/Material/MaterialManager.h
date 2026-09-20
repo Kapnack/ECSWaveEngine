@@ -25,6 +25,7 @@ namespace WaveEngine
 		unsigned int currentMaterialID = Material::NULL_MATERIAL;
 
 		unordered_map<unsigned int, Material*> materials;
+		unordered_map<string, unsigned int> materialsIDByName;
 
 		void SaveMaterial(Material*& material);
 

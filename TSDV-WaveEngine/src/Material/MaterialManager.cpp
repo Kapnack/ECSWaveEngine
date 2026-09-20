@@ -22,22 +22,16 @@ namespace WaveEngine
 
 	unsigned int MaterialManager::GetMaterial(const string_view name)
 	{
-		unordered_map<unsigned int, Material*>::iterator it = find_if(materials.begin(), materials.end(),
-			[&name](const pair<const unsigned int, Material*>& entry)
-			{
-				return entry.second &&
-					entry.second->GetName() == name;
-			});
+		if (!materialsIDByName.contains(name.data()))
+			return Material::NULL_MATERIAL;
 
-		if (it == materials.end())
-			return 0;
-
-		return it->first;
+		return materialsIDByName[name.data()];
 	}
 
 	void MaterialManager::SaveMaterial(Material*& material)
 	{
 		materials[material->GetID()] = material;
+		materialsIDByName[material->GetName()] = material->GetID();
 	}
 
 	Material* MaterialManager::GetMaterial(const unsigned int id)
