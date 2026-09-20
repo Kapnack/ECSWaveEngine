@@ -20,6 +20,7 @@ WAVEEXPORT struct Quaternion final
 	WAVEEXPORT float SqrMagnitude() const;
 	WAVEEXPORT void Normalize();
 	WAVEEXPORT Quaternion Normalized() const;
+	WAVEEXPORT Vector3 ToEuler() const;
 
 	WAVEEXPORT Quaternion operator+(Quaternion other) const;
 	WAVEEXPORT void operator+=(Quaternion other);
@@ -48,7 +49,9 @@ WAVEEXPORT struct Quaternion final
 	WAVEEXPORT static Quaternion Euler(float x, float y, float z = 0.0f);
 	WAVEEXPORT static Quaternion Euler(Vector3 eulerAngles);
 	WAVEEXPORT static Quaternion Euler(Vector2 eulerAngles);
+	WAVEEXPORT static Vector3 ToEuler(Quaternion quaternion);
 	WAVEEXPORT static Quaternion Conjugate(Quaternion a);
 	WAVEEXPORT static Quaternion Inverse(Quaternion a);
+	WAVEEXPORT static Quaternion LookAt(Vector3 target);
 };
 

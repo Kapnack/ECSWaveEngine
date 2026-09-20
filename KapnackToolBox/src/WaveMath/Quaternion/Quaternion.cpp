@@ -53,6 +53,11 @@ Quaternion Quaternion::Normalized() const
 	return Normalized(*this);
 }
 
+Vector3 Quaternion::ToEuler() const
+{
+	return ToEuler(*this);
+}
+
 Quaternion Quaternion::operator+(Quaternion other) const
 {
 	return Quaternion(x + other.x, y + other.y, z + other.z, w + other.w);
@@ -159,8 +164,7 @@ Quaternion Quaternion::Normalized(Quaternion a)
 
 Quaternion Quaternion::AngleAxis(float angle, Vector3 axis)
 {
-	const float PI = 3.14159274f;
-	const float Deg2Rad = PI / 180.0f;
+	const float Deg2Rad = WaveMath::PI() / 180.0f;
 
 	const float rad = angle * Deg2Rad;
 	const float halfAngle = rad * 0.5f;
@@ -220,6 +224,27 @@ Quaternion Quaternion::Euler(Vector2 eulerAngles)
 	return Euler(eulerAngles.x, eulerAngles.y);
 }
 
+Vector3 Quaternion::ToEuler(Quaternion q)
+{
+	Vector3 euler;
+
+	euler.x = atan2(
+		2.0f * (q.w * q.x + q.y * q.z),
+		1.0f - 2.0f * (q.x * q.x + q.y * q.y)
+	);
+
+	euler.y = asin(
+		2.0f * (q.w * q.y - q.z * q.x)
+	);
+
+	euler.z = atan2(
+		2.0f * (q.w * q.z + q.x * q.y),
+		1.0f - 2.0f * (q.y * q.y + q.z * q.z)
+	);
+
+	return euler;
+}
+
 Quaternion Quaternion::Conjugate(Quaternion a)
 {
 	return Quaternion(-a.x, -a.y, -a.z, a.w);
@@ -233,4 +258,26 @@ Quaternion Quaternion::Inverse(Quaternion a)
 		return Quaternion::Identity();
 
 	return Conjugate(a) / sqrMag;
+}
+
+Quaternion Quaternion::LookAt(Vector3 target)
+{
+	Vector3 forward = target.Normalized();
+	Vector3 defaultForward = Vector3::Foward();
+
+	float dot = Vector3::Dot(defaultForward, forward);
+
+	if (dot > 0.9999f)
+		return Identity();
+
+	if (dot < -0.9999f)
+		return AngleAxis(180.0f, Vector3::Up());
+
+	Vector3 axis = Vector3::Cross(defaultForward, forward).Normalized();
+
+	float clampedDot = dot < -1.0f ? -1.0f : dot > 1.0f ? 1.0f : dot;
+	float angleRad = std::acos(clampedDot);
+	float angleDeg = angleRad * (180.0f / WaveMath::PI());
+
+	return AngleAxis(angleDeg, axis);
 }
