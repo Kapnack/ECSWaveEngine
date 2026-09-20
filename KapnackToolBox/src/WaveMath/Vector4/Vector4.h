@@ -20,4 +20,6 @@ struct WAVEEXPORT Vector4
 	static Vector4 NMax();
 
 	Vector4 operator-() const;
+	Vector4 operator/(float scalar) const;
+	void operator/=(float scalar);
 };
