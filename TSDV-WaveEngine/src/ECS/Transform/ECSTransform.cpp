@@ -12,6 +12,7 @@
 #include <ECS/WaveObject/WaveObjectRegistry.h>
 #include "ObjectTransformDirtifyEvent.h"
 #include <vector>
+#include <memory>
 
 namespace WaveEngine
 {
@@ -296,6 +297,16 @@ namespace WaveEngine
 		globalModel = m;
 	}
 
+	unsigned int ECSTransform::GetParentID() const
+	{
+		return parentID;
+	}
+
+	const vector<int>& ECSTransform::GetChildsIDs() const
+	{
+		return children;
+	}
+
 	WaveObject& ECSTransform::GetChild(const unsigned int index)
 	{
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(children[index]);
@@ -336,6 +347,11 @@ namespace WaveEngine
 				return;
 
 		children.push_back(id);
+	}
+
+	void ECSTransform::RemoveChild(unsigned int id)
+	{
+		children.erase(remove(children.begin(), children.end(), id), children.end());
 	}
 
 	void ECSTransform::CalculateTRS()

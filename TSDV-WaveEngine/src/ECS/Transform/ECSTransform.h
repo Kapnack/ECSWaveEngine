@@ -125,8 +125,8 @@ namespace WaveEngine
 
 		WAVEEXPORT void SetGlobalModel(const Matrix4x4& m);
 
-		unsigned int GetParentID() const { return parentID; }
-		const vector<int>& GetChildsIDs() const { return children; }
+		unsigned int GetParentID() const;
+		const vector<int>& GetChildsIDs() const;
 
 		WaveObject& GetChild(const unsigned int index);
 		vector<WaveObject*> GetChilds();
@@ -135,9 +135,6 @@ namespace WaveEngine
 
 		void SetParent(unsigned int id);
 		void AddChild(unsigned int id);
-		void RemoveChild(unsigned int id)
-		{
-			children.erase(remove(children.begin(), children.end(), id), children.end());
-		}
+		void RemoveChild(unsigned int id);
 	};
 }
