@@ -23,6 +23,7 @@
 #include "Material/Color/Color.h"
 #include "TextureImporter/TextureManager.h"
 #include <Plane/Plane.h>
+#include <WaveMath/Matrix4x4/Matrix4x4.h>
 
 using namespace std;
 
@@ -74,7 +75,7 @@ namespace WaveEngine
 		struct InstanceData
 		{
 			unsigned int entityID;
-			glm::mat4 model;
+			Matrix4x4 model;
 		};
 
 		struct RenderData

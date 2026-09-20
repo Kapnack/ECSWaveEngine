@@ -136,12 +136,13 @@ namespace WaveEngine
 				GL_FLOAT,
 				GL_FALSE,
 				sizeof(InstanceData),
-				(void*)(offsetof(InstanceData, model) + i * sizeof(glm::vec4))
+				(void*)(offsetof(InstanceData, model) + i * sizeof(float) * 4)
 			);
 
 			glVertexAttribDivisor(4 + i, 1);
 		}
 
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glVertexAttribPointer(8, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (void*)offsetof(VertexData, tangent));
 		glEnableVertexAttribArray(8);
 
@@ -161,10 +162,10 @@ namespace WaveEngine
 
 	void Renderer::DrawWireBoxImmediate(const BoundingBox& box, Color color)
 	{
-		glm::vec3 min(box.GetMin().x, box.GetMin().y, box.GetMin().z);
-		glm::vec3 max(box.GetMax().x, box.GetMax().y, box.GetMax().z);
+		Vector3 min = box.GetMin();
+		Vector3 max = box.GetMax();
 
-		std::vector<glm::vec3> vertices =
+		std::vector<Vector3> vertices =
 		{
 			{ min.x, min.y, min.z },
 			{ max.x, min.y, min.z },
@@ -190,7 +191,7 @@ namespace WaveEngine
 		glBindVertexArray(VAO);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector3), &vertices[0], GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -330,7 +331,7 @@ namespace WaveEngine
 		RenderData& batch =
 			batching[matComp.materialID][meshComp.meshID];
 
-		batch.instances.push_back({ transform.GetID(), transform.GetGlobalModel() });
+		batch.instances.push_back({ transform.GetID(), transform.GetGlobalModel().Transposed() });
 	}
 
 	void Renderer::Flush()
@@ -354,8 +355,7 @@ namespace WaveEngine
 				->GetComponentStorage<Camera>()
 				.GetFirst();
 
-			glViewport(camera.viewPortRes.GetCenter().x, camera.viewPortRes.GetCenter().y,
-				camera.viewPortRes.GetSize().x * GetWindow()->GetWidth(), camera.viewPortRes.GetSize().y * GetWindow()->GetHeight());
+			glViewport(camera.viewPortRes.GetCenter().x, camera.viewPortRes.GetCenter().y, camera.viewPortRes.GetSize().x * GetWindow()->GetWidth(), camera.viewPortRes.GetSize().y * GetWindow()->GetHeight());
 
 			ECSTransform& cameraTransform = camera.GetWaveObject().GetTransform();
 
