@@ -174,7 +174,7 @@ Quaternion Quaternion::AngleAxis(float angle, Vector3 axis)
 
 Quaternion Quaternion::Lerp(Quaternion a, Quaternion b, float t)
 {
-	t = t < -1.0f ? -1.0f : t > 1.0f ? 1.0f : t;
+	t = t < 0.0f ? 0.0f : t > 1.0f ? 1.0f : t;
 
 	return UnclampLerp(a, b, t);
 }
