@@ -7,6 +7,7 @@
 #include "WaveMath/Vector4/Vector4.h"
 #include "WaveMath/Vector2/Vector2.h"
 #include "WaveMath/Vector3/Vector3.h"
+#include "WaveMath/Matrix4x4/Matrix4x4.h"
 #include <glm/fwd.hpp>
 #include "Color/Color.h"
 
@@ -85,6 +86,7 @@ namespace WaveEngine
 		void SetVec4(const std::string& name, const Vector4& value);
 		void SetVec4(const std::string& name, const Color& value);
 		void SetVec4(const std::string& name, const float& x, const float& y, const float& z, const float& w);
+		void SetMat4(const std::string& name, const Matrix4x4& value);
 		void SetMat4(const std::string& name, const glm::mat4& value);
 		void SetGLMVec4(const std::string& name, const glm::vec4& value);
 		void SetGLMVec3(const std::string& name, const glm::vec3& value);
