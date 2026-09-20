@@ -12,6 +12,8 @@ public:
 
 	static float Epsilon();
 
+	static float PI();
+
 	static bool Approximately(float a, float b);
 
 	static float Abs(float number);

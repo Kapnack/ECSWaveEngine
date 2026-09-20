@@ -6,6 +6,11 @@ float WaveMath::Epsilon()
 	return 1e-05f;
 }
 
+float WaveMath::PI()
+{
+	return 3.14159274f;
+}
+
 bool WaveMath::Approximately(float a, float b)
 {
 	return Abs(b - a) < Epsilon();
