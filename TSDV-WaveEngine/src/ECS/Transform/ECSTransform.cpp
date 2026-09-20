@@ -12,7 +12,6 @@
 #include <ECS/WaveObject/WaveObjectRegistry.h>
 #include "ObjectTransformDirtifyEvent.h"
 #include <vector>
-#include <memory>
 
 namespace WaveEngine
 {
