@@ -7,6 +7,7 @@
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Vector2/Vector2.h"
 #include "EventSystem/EventSystem.h"
+#include "WaveMath/Matrix4x4/Matrix4x4.h"
 
 using namespace std;
 
@@ -22,27 +23,21 @@ namespace WaveEngine
 
 		Vector3 previousPosition;
 		Vector3 position;
+		Vector3 scale = Vector3(1, 1, 1);
+		Vector3 rotation;
 
 		bool dirty = false;
 		bool hasChildDirty = false;
 
-		friend class Renderer;
-		friend class TransformLogic;
-		friend class MeshLogic;
-		friend class ImGuiClass;
-
-		Vector3 scale = Vector3(1, 1, 1);
-		Vector3 rotation;
-
 		unsigned int parentID = 0;
 		vector<int> children;
 
-		glm::mat4 localModel;
-		glm::mat4 globalModel;
+		Matrix4x4 localModel;
+		Matrix4x4 globalModel;
 
 		virtual void CalculateTRS();
 
-		const glm::mat4& GetModel() const;
+		const Matrix4x4& GetModel() const;
 
 		void MarkDirty();
 		void MarkHasChildDirty();
@@ -56,20 +51,10 @@ namespace WaveEngine
 
 		EventSystem* GetEventSystem();
 
-		glm::vec3 GetForwardGLM(const glm::mat4& transformMatrix) const
-		{
-			return glm::vec3(transformMatrix[2]);
-		}
-
-		glm::vec3 GetRightGLM(const glm::mat4& transformMatrix) const
-		{
-			return glm::vec3(transformMatrix[0]);
-		}
-
-		glm::vec3 GetUpGLM(const glm::mat4& transformMatrix) const
-		{
-			return glm::vec3(transformMatrix[1]);
-		}
+		friend class Renderer;
+		friend class TransformLogic;
+		friend class MeshLogic;
+		friend class ImGuiClass;
 
 	public:
 
@@ -77,21 +62,15 @@ namespace WaveEngine
 
 		virtual ~ECSTransform();
 
-		WAVEEXPORT  Vector3 GetPosition() const;
-		WAVEEXPORT  Vector3 GetScale() const;
-		WAVEEXPORT  Vector3 GetRotation() const;
+		WAVEEXPORT Vector3 GetPosition() const;
+		WAVEEXPORT Vector3 GetScale() const;
+		WAVEEXPORT Quaternion GetRotation() const;
+		WAVEEXPORT Vector3 GetEulerRotation() const;
 
-		WAVEEXPORT Vector3 GetWorldPosition() const;
-		WAVEEXPORT Vector3 GetWorldRotation() const;
-		WAVEEXPORT Vector3 GetWorldScale() const;
-
-		WAVEEXPORT void SetWorldPosition(const Vector3& worldPosition);
-		WAVEEXPORT void SetWorldRotation(const Vector3& worldRotation);
-		WAVEEXPORT void SetWorldScale(const Vector3& worldScale);
-
-		WAVEEXPORT void TranslateWorld(const Vector3& worldScale);
-		WAVEEXPORT void RotateWorld(const Vector3& worldScale);
-		WAVEEXPORT void ScaleWorld(const Vector3& worldScale);
+		WAVEEXPORT Vector3 GetLocalPosition() const;
+		WAVEEXPORT Vector3 GetLocalScale() const;
+		WAVEEXPORT Quaternion GetLocalRotation() const;
+		WAVEEXPORT Vector3 GetLocalEulerRotation() const;
 
 		WAVEEXPORT const Vector3& GetPreviousPos() const;
 		WAVEEXPORT void GoToPreviousPos();
@@ -141,10 +120,10 @@ namespace WaveEngine
 		WAVEEXPORT Vector3 GetUp() const;
 		WAVEEXPORT Vector3 GetDown() const;
 
-		const glm::mat4& GetLocalModel() const;
-		const glm::mat4& GetGlobalModel() const;
+		const Matrix4x4& GetLocalModel() const;
+		const Matrix4x4& GetGlobalModel() const;
 
-		WAVEEXPORT void SetGlobalModel(const glm::mat4& m);
+		WAVEEXPORT void SetGlobalModel(const Matrix4x4& m);
 
 		unsigned int GetParentID() const { return parentID; }
 		const vector<int>& GetChildsIDs() const { return children; }

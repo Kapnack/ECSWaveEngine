@@ -27,134 +27,42 @@ namespace WaveEngine
 
 	Vector3 ECSTransform::GetPosition() const
 	{
-		return position;
+		return globalModel.GetTranslate();
 	}
 
 	Vector3 ECSTransform::GetScale() const
 	{
-		return scale;
+		return globalModel.GetScale();
 	}
 
-	Vector3 ECSTransform::GetRotation() const
+	Quaternion ECSTransform::GetRotation() const
+	{
+		return globalModel.GetRotation();
+	}
+
+	Vector3 ECSTransform::GetEulerRotation() const
 	{
 		return rotation;
 	}
 
-	Vector3 ECSTransform::GetWorldPosition() const
+	Vector3 ECSTransform::GetLocalPosition() const
 	{
-		glm::vec3 worldPos = glm::vec3(globalModel[3]);
-		return Vector3(worldPos.x, worldPos.y, worldPos.z);
+		return localModel.GetTranslate();
 	}
 
-	Vector3 ECSTransform::GetWorldRotation() const
+	Vector3 ECSTransform::GetLocalScale() const
 	{
-		glm::vec3 scaleOut, translationOut, skewOut;
-		glm::vec4 perspectiveOut;
-		glm::quat rotationOut;
-
-		glm::decompose(globalModel, scaleOut, rotationOut, translationOut, skewOut, perspectiveOut);
-
-		glm::vec3 euler = glm::degrees(glm::eulerAngles(rotationOut));
-		return Vector3(euler.x, euler.y, euler.z);
+		return localModel.GetScale();
 	}
 
-	Vector3 ECSTransform::GetWorldScale() const
+	Quaternion ECSTransform::GetLocalRotation() const
 	{
-		glm::vec3 scaleOut, translationOut, skewOut;
-		glm::vec4 perspectiveOut;
-		glm::quat rotationOut;
-
-		glm::decompose(globalModel, scaleOut, rotationOut, translationOut, skewOut, perspectiveOut);
-
-		return Vector3(scaleOut.x, scaleOut.y, scaleOut.z);
+		return localModel.GetRotation();
 	}
 
-	void ECSTransform::SetWorldPosition(const Vector3& worldPosition)
+	Vector3 ECSTransform::GetLocalEulerRotation() const
 	{
-		if (parentID == WaveObject::NULL_OBJECT)
-		{
-			SetPosition(worldPosition);
-			return;
-		}
-
-		const glm::mat4& parentGlobal = GetParent().GetTransform().GetGlobalModel();
-		glm::vec4 localPos = glm::inverse(parentGlobal) *
-			glm::vec4(worldPosition.x, worldPosition.y, worldPosition.z, 1.0f);
-
-		SetPosition(localPos.x, localPos.y, localPos.z);
-	}
-
-	void ECSTransform::SetWorldRotation(const Vector3& worldRotation)
-	{
-		if (parentID == WaveObject::NULL_OBJECT)
-		{
-			SetRotation(worldRotation);
-			return;
-		}
-
-		ECSTransform& parentTransform = GetParent().GetTransform();
-
-		glm::quat worldQuat = glm::quat(glm::radians(
-			glm::vec3(worldRotation.x, worldRotation.y, worldRotation.z)));
-
-		Vector3 parentWorldRot = parentTransform.GetWorldRotation();
-		glm::quat parentQuat = glm::quat(glm::radians(
-			glm::vec3(parentWorldRot.x, parentWorldRot.y, parentWorldRot.z)));
-
-		glm::quat localQuat = glm::inverse(parentQuat) * worldQuat;
-		glm::vec3 localEuler = glm::degrees(glm::eulerAngles(localQuat));
-
-		SetRotation(localEuler.x, localEuler.y, localEuler.z);
-	}
-
-	void ECSTransform::SetWorldScale(const Vector3& worldScale)
-	{
-		if (parentID == WaveObject::NULL_OBJECT)
-		{
-			SetScale(worldScale);
-			return;
-		}
-
-		Vector3 parentWorldScale = GetParent().GetTransform().GetWorldScale();
-
-		SetScale(
-			worldScale.x / parentWorldScale.x,
-			worldScale.y / parentWorldScale.y,
-			worldScale.z / parentWorldScale.z
-		);
-	}
-
-	void ECSTransform::TranslateWorld(const Vector3& worldDelta)
-	{
-		Vector3 currentWorldPos = GetWorldPosition();
-
-		SetWorldPosition(Vector3(
-			currentWorldPos.x + worldDelta.x,
-			currentWorldPos.y + worldDelta.y,
-			currentWorldPos.z + worldDelta.z
-		));
-	}
-
-	void ECSTransform::RotateWorld(const Vector3& worldScale)
-	{
-		Vector3 currentWorldRotate = GetWorldRotation();
-
-		SetWorldRotation(Vector3(
-			currentWorldRotate.x + worldScale.x,
-			currentWorldRotate.y + worldScale.y,
-			currentWorldRotate.z + worldScale.z
-		));
-	}
-
-	void ECSTransform::ScaleWorld(const Vector3& worldDelta)
-	{
-		Vector3 currentWorldScale = GetWorldScale();
-
-		SetWorldPosition(Vector3(
-			currentWorldScale.x + worldDelta.x,
-			currentWorldScale.y + worldDelta.y,
-			currentWorldScale.z + worldDelta.z
-		));
+		return GetLocalRotation().ToEuler();
 	}
 
 	const Vector3& ECSTransform::GetPreviousPos() const
@@ -317,24 +225,13 @@ namespace WaveEngine
 
 	Vector3 ECSTransform::WorldToLocal(const Vector3& worldPoint) const
 	{
-		glm::vec4 local = glm::inverse(globalModel) * glm::vec4(worldPoint.x, worldPoint.y, worldPoint.z, 1.0f);
-		return Vector3(local.x, local.y, local.z);
+		Vector3 local = (Matrix4x4::Inversed(globalModel) * Matrix4x4::CreateTranslate(worldPoint)).GetTranslate();
+		return local;
 	}
 
 	void ECSTransform::LookAt(const Vector3& target)
 	{
-		glm::vec3 pos(position.x, position.y, position.z);
-		glm::vec3 tgt(target.x, target.y, target.z);
-
-		glm::vec3 forward = glm::normalize(tgt - pos);
-
-		glm::quat rot = glm::quatLookAt(forward, glm::vec3(0, 1, 0));
-
-		glm::vec3 euler = glm::degrees(glm::eulerAngles(rot));
-
-		rotation.x = euler.x;
-		rotation.y = euler.y;
-		rotation.z = euler.z;
+		rotation = Quaternion::LookAt(target).ToEuler();
 
 		MarkDirty();
 	}
@@ -356,48 +253,45 @@ namespace WaveEngine
 
 	Vector3 ECSTransform::GetForward() const
 	{
-		glm::vec3 forward = normalize(glm::vec3(-globalModel[2]));
-		return Vector3(forward.x, forward.y, forward.z);
+		return globalModel.GetFoward();
 	}
 
 	Vector3 ECSTransform::GetBack() const
 	{
-		return -GetForward();
+		return globalModel.GetBack();
 	}
 
 	Vector3 ECSTransform::GetRight() const
 	{
-		glm::vec3 right = glm::normalize(glm::vec3(globalModel[0]));
-		return Vector3(right.x, right.y, right.z);
+		return globalModel.GetRight();
 	}
 
 	Vector3 ECSTransform::GetLeft() const
 	{
-		return -GetRight();
+		return globalModel.GetLeft();
 	}
 
 	Vector3 ECSTransform::GetUp() const
 	{
-		glm::vec3 up = glm::normalize(glm::vec3(globalModel[1]));
-		return Vector3(up.x, up.y, up.z);
+		return globalModel.GetUP();
 	}
 
 	Vector3 ECSTransform::GetDown() const
 	{
-		return -GetUp();
+		return globalModel.GetDown();
 	}
 
-	const glm::mat4& ECSTransform::GetLocalModel() const
+	const Matrix4x4& ECSTransform::GetLocalModel() const
 	{
 		return localModel;
 	}
 
-	const glm::mat4& ECSTransform::GetGlobalModel() const
+	const Matrix4x4& ECSTransform::GetGlobalModel() const
 	{
 		return globalModel;
 	}
 
-	void ECSTransform::SetGlobalModel(const glm::mat4& m)
+	void ECSTransform::SetGlobalModel(const Matrix4x4& m)
 	{
 		globalModel = m;
 	}
@@ -446,17 +340,12 @@ namespace WaveEngine
 
 	void ECSTransform::CalculateTRS()
 	{
-		localModel = glm::mat4(1.0f);
-		localModel = glm::translate(localModel, glm::vec3(position.x, position.y, position.z));
-		localModel = glm::rotate(localModel, glm::radians(rotation.x), glm::vec3(1, 0, 0));
-		localModel = glm::rotate(localModel, glm::radians(rotation.y), glm::vec3(0, 1, 0));
-		localModel = glm::rotate(localModel, glm::radians(rotation.z), glm::vec3(0, 0, 1));
-		localModel = glm::scale(localModel, glm::vec3(scale.x, scale.y, scale.z));
+		localModel = Matrix4x4::TRS(Matrix4x4::CreateTranslate(position), Matrix4x4::CreateRotation(Quaternion::Euler(rotation)), Matrix4x4::CreateScale(scale));
 
 		UnDirty();
 	}
 
-	const glm::mat4& ECSTransform::GetModel() const
+	const Matrix4x4& ECSTransform::GetModel() const
 	{
 		return globalModel;
 	}
