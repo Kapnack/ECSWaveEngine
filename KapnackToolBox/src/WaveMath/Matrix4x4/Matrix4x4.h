@@ -74,7 +74,7 @@ struct WAVEEXPORT Matrix4x4 final
 	static Matrix4x4 TRS(Vector3 t, Quaternion r, Vector3 s);
 	static Matrix4x4 TRS(const Matrix4x4& t, const Matrix4x4& r, const Matrix4x4& s);
 
-	void Decompose(const Matrix4x4& matrix, Vector3& translation, Quaternion& rotation, Vector3& scale);
+	static void Decompose(const Matrix4x4& matrix, Vector3& translation, Quaternion& rotation, Vector3& scale);
+	static void Decompose(const Matrix4x4& matrix, Vector3& translation, Vector3& rotation, Vector3& scale);
 
-	void Decompose(const Matrix4x4& matrix, Vector3& translation, Vector3& rotation, Vector3& scale);
 };
