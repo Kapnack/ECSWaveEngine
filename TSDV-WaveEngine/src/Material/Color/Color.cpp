@@ -2,6 +2,11 @@
 
 namespace WaveEngine
 {
+	float Color::GetColor32MaxValue()
+	{
+		return 255.0f;
+	}
+
 	Color::Color()
 	{
 		r = 0.0f;

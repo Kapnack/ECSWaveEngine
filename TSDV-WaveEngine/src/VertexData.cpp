@@ -6,6 +6,15 @@ namespace WaveEngine
 	{
 	}
 
+	VertexData::VertexData(const VertexData& vertexData)
+	{
+		position = vertexData.position;
+		color = vertexData.color;
+		textureCordinates = vertexData.textureCordinates;
+		normal = vertexData.normal;
+		tangent = vertexData.tangent;
+	}
+
 	VertexData::VertexData(float x, float y, float z, float r, float g, float b, float a)
 	{
 		position.x = x;
@@ -42,5 +51,14 @@ namespace WaveEngine
 	void VertexData::SetColor(Color color)
 	{
 		this->color = color;
+	}
+
+	void VertexData::operator=(VertexData vertexData)
+	{
+		position = vertexData.position;
+		color = vertexData.color;
+		textureCordinates = vertexData.textureCordinates;
+		normal = vertexData.normal;
+		tangent = vertexData.tangent;
 	}
 }

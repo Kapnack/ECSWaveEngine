@@ -1,15 +1,14 @@
 #pragma once
 
+#include "Export.h"
+
 namespace WaveEngine
 {
-	struct Color
+	struct WAVEEXPORT Color
 	{
 	private:
 
-		static float GetColor32MaxValue()
-		{
-			return 255.0f;
-		}
+		static float GetColor32MaxValue();
 
 	public:
 
