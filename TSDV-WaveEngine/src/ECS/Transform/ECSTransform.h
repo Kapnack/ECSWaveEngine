@@ -72,42 +72,42 @@ namespace WaveEngine
 		WAVEEXPORT Quaternion GetLocalRotation() const;
 		WAVEEXPORT Vector3 GetLocalEulerRotation() const;
 
-		WAVEEXPORT const Vector3& GetPreviousPos() const;
+		WAVEEXPORT Vector3 GetPreviousPos() const;
 		WAVEEXPORT void GoToPreviousPos();
 
-		WAVEEXPORT void SetPosition(const Vector3& vector);
-		WAVEEXPORT void SetPosition(const Vector2& translation);
-		WAVEEXPORT void SetPosition(const float& x, const float& y);
-		WAVEEXPORT virtual void SetPosition(const float& x, const float& y, const float& z);
+		WAVEEXPORT void SetPosition(Vector3 vector);
+		WAVEEXPORT void SetPosition(Vector2 translation);
+		WAVEEXPORT void SetPosition(float x, float y);
+		WAVEEXPORT virtual void SetPosition( float x,  float y,  float z);
 
-		WAVEEXPORT void Translate(const Vector3& translation);
-		WAVEEXPORT void Translate(const Vector2& translation);
-		WAVEEXPORT void Translate(const float& x, const float& y);
-		WAVEEXPORT virtual void Translate(const float& x, const float& y, const float& z);
+		WAVEEXPORT void Translate(Vector3 translation);
+		WAVEEXPORT void Translate(Vector2 translation);
+		WAVEEXPORT void Translate(float x, float y);
+		WAVEEXPORT virtual void Translate( float x,  float y,  float z);
 
-		WAVEEXPORT void SetScale(const Vector3& vector);
-		WAVEEXPORT void SetScale(const Vector2& translation);
-		WAVEEXPORT void SetScale(const float& x, const float& y);
-		WAVEEXPORT virtual void SetScale(const float& x, const float& y, const float& z);
+		WAVEEXPORT void SetScale(Vector3 vector);
+		WAVEEXPORT void SetScale(Vector2 translation);
+		WAVEEXPORT void SetScale(float x, float y);
+		WAVEEXPORT virtual void SetScale(float x, float y, float z);
 
-		WAVEEXPORT void Scale(const Vector3& vector);
-		WAVEEXPORT void Scale(const Vector2& translation);
-		WAVEEXPORT void Scale(const float& x, const float& y);
-		WAVEEXPORT virtual void Scale(const float& x, const float& y, const float& z);
+		WAVEEXPORT void Scale(Vector3 vector);
+		WAVEEXPORT void Scale(Vector2 translation);
+		WAVEEXPORT void Scale(float x, float y);
+		WAVEEXPORT virtual void Scale(float x, float y, float z);
 
-		WAVEEXPORT void SetRotation(const Vector3& vector);
-		WAVEEXPORT void SetRotation(const Vector2& vector);
-		WAVEEXPORT void SetRotation(const float& x, const float& y);
-		WAVEEXPORT virtual void SetRotation(const float& x, const float& y, const float& z);
+		WAVEEXPORT void SetRotation(Vector3 vector);
+		WAVEEXPORT void SetRotation(Vector2 vector);
+		WAVEEXPORT void SetRotation(float x, float y);
+		WAVEEXPORT virtual void SetRotation(float x, float y, float z);
 
-		WAVEEXPORT void Rotate(const Vector3& vector);
-		WAVEEXPORT void Rotate(const Vector2& vector);
-		WAVEEXPORT void Rotate(const float& x, const float& y);
-		WAVEEXPORT virtual void Rotate(const float& x, const float& y, const float& z);
+		WAVEEXPORT void Rotate(Vector3 vector);
+		WAVEEXPORT void Rotate(Vector2 vector);
+		WAVEEXPORT void Rotate(float x, float y);
+		WAVEEXPORT virtual void Rotate(float x, float y, float z);
 
-		WAVEEXPORT Vector3 WorldToLocal(const Vector3& worldPoint) const;
+		WAVEEXPORT Vector3 WorldToLocal(Vector3 worldPoint) const;
 
-		WAVEEXPORT void LookAt(const Vector3& vector);
+		WAVEEXPORT void LookAt(Vector3 vector);
 
 		WAVEEXPORT void FlipX();
 		WAVEEXPORT void FlipY();

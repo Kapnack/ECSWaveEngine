@@ -34,7 +34,7 @@ namespace WaveEngine
 		return deltaTime;
 	}
 
-	void Time::SetTimeScale(const float& timeScale)
+	void Time::SetTimeScale(float timeScale)
 	{
 		this->timeScale = timeScale;
 	}

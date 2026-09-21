@@ -68,30 +68,30 @@ namespace WaveEngine
 
 		const unsigned int& GetID() const;
 		const unsigned int& GetGPUID() const;
-		const Color& GetColor() const;
-		const float& GetMetallic() const;
-		const float& GetRoughness() const;
+		Color GetColor() const;
+		float GetMetallic() const;
+		float GetRoughness() const;
 
 		void SetTexture(const std::string& uniformName, unsigned int textureGPUID);
 		void AddAlbedoTexture(const unsigned int& textureGPUID);
 		void AddNormalMap(const unsigned int& textureGPUID);
-		void SetColor(const Color& color);
-		void SetMetallic(const float& metallic);
-		void SetRoughness(const float& roughtness);
+		void SetColor(Color color);
+		void SetMetallic(float metallic);
+		void SetRoughness(float roughtness);
 
-		void SetVec2(const std::string& name, const Vector2& value);
-		void SetVec2(const std::string& name, const float& x, const float& y);
-		void SetVec3(const std::string& name, const Vector3& value);
-		void SetVec3(const std::string& name, const float& x, const float& y, const float& z);
+		void SetVec2(const std::string& name, Vector2 value);
+		void SetVec2(const std::string& name, float x, float y);
+		void SetVec3(const std::string& name, Vector3 value);
+		void SetVec3(const std::string& name, float x, float y, float z);
 		void SetVec4(const std::string& name, const Vector4& value);
-		void SetVec4(const std::string& name, const Color& value);
-		void SetVec4(const std::string& name, const float& x, const float& y, const float& z, const float& w);
+		void SetVec4(const std::string& name, Color value);
+		void SetVec4(const std::string& name, float x, float y, float z, float w);
 		void SetMat4(const std::string& name, const Matrix4x4& value);
 		void SetMat4(const std::string& name, const glm::mat4& value);
 		void SetGLMVec4(const std::string& name, const glm::vec4& value);
 		void SetGLMVec3(const std::string& name, const glm::vec3& value);
 		void SetGLMVec2(const std::string& name, const glm::vec2& value);
-		void SetFloat(const std::string& name, const float& value);
+		void SetFloat(const std::string& name, float value);
 		void SetInt(const std::string& name, const int& value);
 		void SetBool(const std::string& name, const bool& value);
 

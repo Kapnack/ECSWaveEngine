@@ -34,7 +34,7 @@ namespace WaveEngine
 		static Time& Get();
 
 		WAVEEXPORT float GetDeltaTime() const;
-		WAVEEXPORT void SetTimeScale(const float& timeScale);
+		WAVEEXPORT void SetTimeScale(float timeScale);
 	};
 }
 

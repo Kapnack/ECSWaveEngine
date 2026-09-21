@@ -175,6 +175,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\WaveObject\WaveObjectFactory.cpp" />
     <ClCompile Include="src\ECS\WaveObject\WaveObjectRegistry.cpp" />
     <ClCompile Include="src\ImGuiClass\ImGuiClass.cpp" />
+    <ClCompile Include="src\Material\Color\Color.cpp" />
     <ClCompile Include="src\MeshLogic\MeshLogic.cpp" />
     <ClCompile Include="src\Mesh\MeshManager\MeshManager.cpp" />
     <ClCompile Include="src\Mesh\MeshFactory\MeshFactory.cpp" />

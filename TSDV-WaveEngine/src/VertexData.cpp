@@ -1,43 +1,46 @@
 #include "VertexData.h"
 
-VertexData::VertexData()
+namespace WaveEngine
 {
-}
+	VertexData::VertexData()
+	{
+	}
 
-VertexData::VertexData(const float& x, const float& y, const float& z, const float& r, const float& g, const float& b, const float& a)
-{
-	position.x = x;
-	position.y = y;
-	position.z = z;
+	VertexData::VertexData(float x, float y, float z, float r, float g, float b, float a)
+	{
+		position.x = x;
+		position.y = y;
+		position.z = z;
 
-	color.r = r;
-	color.g = g;
-	color.b = b;
-	color.a = a;
-}
+		color.r = r;
+		color.g = g;
+		color.b = b;
+		color.a = a;
+	}
 
-VertexData::VertexData(const Vector3& position, const Color& color)
-{
-	this->position = position;
-	this->color = color;
-}
+	VertexData::VertexData(Vector3 position, Color color)
+	{
+		this->position = position;
+		this->color = color;
+	}
 
-VertexData::VertexData(const Vector3& position, const Color& color, const Vector2& textureCordinates)
-{
-	this->position = position;
-	this->color = color;
-	this->textureCordinates = textureCordinates;
-}
+	VertexData::VertexData(Vector3 position, Color color, Vector2 textureCordinates)
+	{
+		this->position = position;
+		this->color = color;
+		this->textureCordinates = textureCordinates;
+	}
 
-VertexData::VertexData(const Vector3& position, const Color& color, const Vector2& textureCordinates, const Vector3& normal)
-{
-	this->position = position;
-	this->color = color;
-	this->textureCordinates = textureCordinates;
-	this->normal = normal;
-}
+	VertexData::VertexData(Vector3 position, Color color, Vector2 textureCordinates, Vector3 normal)
+	{
+		this->position = position;
+		this->color = color;
+		this->textureCordinates = textureCordinates;
+		this->normal = normal;
+	}
 
-void VertexData::SetColor(const Color& color)
-{
-	this->color = color;
+	void VertexData::SetColor(Color color)
+	{
+		this->color = color;
+	}
 }

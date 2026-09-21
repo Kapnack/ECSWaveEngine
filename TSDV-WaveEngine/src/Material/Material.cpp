@@ -31,17 +31,17 @@ namespace WaveEngine
 		return name;
 	}
 
-	const Color& Material::GetColor() const
+	Color Material::GetColor() const
 	{
 		return color;
 	}
 
-	const float& Material::GetMetallic() const
+	float Material::GetMetallic() const
 	{
 		return metalic;
 	}
 
-	const float& Material::GetRoughness() const
+	float Material::GetRoughness() const
 	{
 		return roughness;
 	}
@@ -91,37 +91,37 @@ namespace WaveEngine
 			samplerUniforms.push_back(&uniforms[name]);
 	}
 
-	void Material::SetColor(const Color& color)
+	void Material::SetColor(Color color)
 	{
 		this->color = color;
 	}
 
-	void Material::SetMetallic(const float& metallic)
+	void Material::SetMetallic(float metallic)
 	{
 		this->metalic = metallic;
 	}
 
-	void Material::SetRoughness(const float& roughtness)
+	void Material::SetRoughness(float roughtness)
 	{
 		this->roughness = roughtness;
 	}
 
-	void Material::SetVec2(const std::string& name, const Vector2& value)
+	void Material::SetVec2(const std::string& name, Vector2 value)
 	{
 		SetVec2(name, value.x, value.y);
 	}
 
-	void Material::SetVec2(const std::string& name, const float& x, const float& y)
+	void Material::SetVec2(const std::string& name, float x, float y)
 	{
 		SetGLMVec2(name, glm::vec2(x, y));
 	}
 
-	void Material::SetVec3(const std::string& name, const Vector3& value)
+	void Material::SetVec3(const std::string& name, Vector3 value)
 	{
 		SetGLMVec3(name, glm::vec3(value.x, value.y, value.z));
 	}
 
-	void Material::SetVec3(const std::string& name, const float& x, const float& y, const float& z)
+	void Material::SetVec3(const std::string& name, float x, float y, float z)
 	{
 		SetGLMVec3(name, glm::vec3(x, y, z));
 	}
@@ -131,12 +131,12 @@ namespace WaveEngine
 		SetGLMVec4(name, glm::vec4(value.x, value.y, value.z, value.w));
 	}
 
-	void Material::SetVec4(const std::string& name, const Color& value)
+	void Material::SetVec4(const std::string& name, Color value)
 	{
 		SetGLMVec4(name, glm::vec4(value.r, value.g, value.b, value.a));
 	}
 
-	void Material::SetVec4(const std::string& name, const float& x, const float& y, const float& z, const float& w)
+	void Material::SetVec4(const std::string& name, float x, float y, float z, float w)
 	{
 		SetGLMVec4(name, glm::vec4(x, y, z, w));
 	}
@@ -186,7 +186,7 @@ namespace WaveEngine
 		glUniform2fv(it->second.location, it->second.size, glm::value_ptr(value));
 	}
 
-	void Material::SetFloat(const std::string& name, const float& value)
+	void Material::SetFloat(const std::string& name, float value)
 	{
 		unordered_map<string, Uniform>::iterator it = uniforms.find(name);
 		if (it == uniforms.end())

@@ -8,23 +8,26 @@
 
 using namespace std;
 
-WAVEEXPORT struct VertexData
+namespace WaveEngine
 {
-	Vector3 position;
+	WAVEEXPORT struct VertexData
+	{
+		Vector3 position;
 
-	Color color;
+		Color color;
 
-	Vector2 textureCordinates;
+		Vector2 textureCordinates;
 
-	Vector3 normal;
+		Vector3 normal;
 
-	Vector3 tangent;
+		Vector3 tangent;
 
-	WAVEEXPORT VertexData();
-	WAVEEXPORT VertexData(const float& v1, const float& v2, const float& v3, const float& r, const float& g, const float& b, const float& a);
-	WAVEEXPORT VertexData(const Vector3& position, const Color& color);
-	WAVEEXPORT VertexData(const Vector3& position, const Color& color, const Vector2& textureCordinates);
-	WAVEEXPORT VertexData(const Vector3& position, const Color& color, const Vector2& textureCordinates, const Vector3& normal);
+		WAVEEXPORT VertexData();
+		WAVEEXPORT VertexData(float v1, float v2, float v3, float r, float g, float b, float a);
+		WAVEEXPORT VertexData(Vector3 position, Color color);
+		WAVEEXPORT VertexData(Vector3 position, Color color, Vector2 textureCordinates);
+		WAVEEXPORT VertexData(Vector3 position, Color color, Vector2 textureCordinates, Vector3 normal);
 
-	WAVEEXPORT void SetColor(const Color& color);
-};
+		WAVEEXPORT void SetColor(Color color);
+	};
+}

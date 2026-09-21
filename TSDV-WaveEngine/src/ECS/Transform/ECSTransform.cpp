@@ -65,7 +65,7 @@ namespace WaveEngine
 		return GetLocalRotation().ToEuler();
 	}
 
-	const Vector3& ECSTransform::GetPreviousPos() const
+	Vector3 ECSTransform::GetPreviousPos() const
 	{
 		return previousPosition;
 	}
@@ -75,22 +75,22 @@ namespace WaveEngine
 		SetPosition(previousPosition);
 	}
 
-	void ECSTransform::SetPosition(const Vector3& vector)
+	void ECSTransform::SetPosition(Vector3 vector)
 	{
 		SetPosition(vector.x, vector.y, vector.z);
 	}
 
-	void ECSTransform::SetPosition(const Vector2& translation)
+	void ECSTransform::SetPosition(Vector2 translation)
 	{
 		SetPosition(translation.x, translation.y);
 	}
 
-	void ECSTransform::SetPosition(const float& x, const float& y)
+	void ECSTransform::SetPosition(float x, float y)
 	{
 		SetPosition(x, y, position.z);
 	}
 
-	void ECSTransform::SetPosition(const float& x, const float& y, const float& z)
+	void ECSTransform::SetPosition(float x, float y, float z)
 	{
 		previousPosition = position;
 
@@ -101,22 +101,22 @@ namespace WaveEngine
 		MarkDirty();
 	}
 
-	void ECSTransform::Translate(const Vector3& translation)
+	void ECSTransform::Translate(Vector3 translation)
 	{
 		Translate(translation.x, translation.y, translation.z);
 	}
 
-	void ECSTransform::Translate(const Vector2& translation)
+	void ECSTransform::Translate(Vector2 translation)
 	{
 		Translate(translation.x, translation.y);
 	}
 
-	void ECSTransform::Translate(const float& x, const float& y)
+	void ECSTransform::Translate(float x, float y)
 	{
 		Translate(x, y, 0);
 	}
 
-	void ECSTransform::Translate(const float& x, const float& y, const float& z)
+	void ECSTransform::Translate(float x, float y, float z)
 	{
 		previousPosition = position;
 
@@ -127,22 +127,22 @@ namespace WaveEngine
 		MarkDirty();
 	}
 
-	void ECSTransform::SetScale(const Vector3& vector)
+	void ECSTransform::SetScale(Vector3 vector)
 	{
 		SetScale(vector.x, vector.y, vector.z);
 	}
 
-	void ECSTransform::SetScale(const Vector2& translation)
+	void ECSTransform::SetScale(Vector2 translation)
 	{
 		SetScale(translation.x, translation.y);
 	}
 
-	void ECSTransform::SetScale(const float& x, const float& y)
+	void ECSTransform::SetScale(float x, float y)
 	{
 		SetScale(x, y, scale.z);
 	}
 
-	void ECSTransform::SetScale(const float& x, const float& y, const float& z)
+	void ECSTransform::SetScale(float x, float y, float z)
 	{
 		scale.x = x;
 		scale.y = y;
@@ -151,22 +151,22 @@ namespace WaveEngine
 		MarkDirty();
 	}
 
-	void ECSTransform::Scale(const Vector3& vector)
+	void ECSTransform::Scale(Vector3 vector)
 	{
 		Scale(vector.x, vector.y, vector.z);
 	}
 
-	void ECSTransform::Scale(const Vector2& translation)
+	void ECSTransform::Scale(Vector2 translation)
 	{
 		Scale(translation.x, translation.y);
 	}
 
-	void ECSTransform::Scale(const float& x, const float& y)
+	void ECSTransform::Scale(float x, float y)
 	{
 		Scale(x, y, 0.0f);
 	}
 
-	void ECSTransform::Scale(const float& x, const float& y, const float& z)
+	void ECSTransform::Scale(float x, float y, float z)
 	{
 		scale.x += x;
 		scale.y += y;
@@ -175,22 +175,22 @@ namespace WaveEngine
 		MarkDirty();
 	}
 
-	void ECSTransform::SetRotation(const Vector3& vector)
+	void ECSTransform::SetRotation(Vector3 vector)
 	{
 		SetRotation(vector.x, vector.y, vector.z);
 	}
 
-	void ECSTransform::SetRotation(const Vector2& vector)
+	void ECSTransform::SetRotation(Vector2 vector)
 	{
 		SetRotation(vector.x, vector.y);
 	}
 
-	void ECSTransform::SetRotation(const float& x, const float& y)
+	void ECSTransform::SetRotation(float x, float y)
 	{
 		SetRotation(x, y, rotation.z);
 	}
 
-	void ECSTransform::SetRotation(const float& x, const float& y, const float& z)
+	void ECSTransform::SetRotation(float x, float y, float z)
 	{
 		rotation.x = x;
 		rotation.y = y;
@@ -199,22 +199,22 @@ namespace WaveEngine
 		MarkDirty();
 	}
 
-	void ECSTransform::Rotate(const Vector3& vector)
+	void ECSTransform::Rotate(Vector3 vector)
 	{
 		Rotate(vector.x, vector.y, vector.z);
 	}
 
-	void ECSTransform::Rotate(const Vector2& vector)
+	void ECSTransform::Rotate(Vector2 vector)
 	{
 		Rotate(vector.x, vector.y);
 	}
 
-	void ECSTransform::Rotate(const float& x, const float& y)
+	void ECSTransform::Rotate(float x, float y)
 	{
 		Rotate(x, y, 0);
 	}
 
-	void ECSTransform::Rotate(const float& x, const float& y, const float& z)
+	void ECSTransform::Rotate(float x, float y, float z)
 	{
 		rotation.x += x;
 		rotation.y += y;
@@ -223,13 +223,13 @@ namespace WaveEngine
 		MarkDirty();
 	}
 
-	Vector3 ECSTransform::WorldToLocal(const Vector3& worldPoint) const
+	Vector3 ECSTransform::WorldToLocal(Vector3 worldPoint) const
 	{
 		Vector3 local = (Matrix4x4::Inversed(globalModel) * Matrix4x4::CreateTranslate(worldPoint)).GetTranslate();
 		return local;
 	}
 
-	void ECSTransform::LookAt(const Vector3& target)
+	void ECSTransform::LookAt(Vector3 target)
 	{
 		rotation = Quaternion::LookAt(target).ToEuler();
 		MarkDirty();
