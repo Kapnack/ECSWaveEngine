@@ -347,10 +347,18 @@
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectChangeName.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="src\2DAnimations\Frame.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\2DAnimations\Animation.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="src\ECS\WObject\WObject.tpp" />
     <None Include="src\ECS\Component\TypeComponent.h" />
+    <None Include="src\2DAnimations\Animation.tpp" />
+    <None Include="src\2DAnimations\Frame.tpp" />
   </ItemGroup>
 </Project>

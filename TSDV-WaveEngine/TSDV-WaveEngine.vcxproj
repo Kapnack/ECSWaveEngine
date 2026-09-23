@@ -208,6 +208,8 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\Managers\TransformLogic\TransformLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\2DAnimations\Animation.h" />
+    <ClInclude Include="src\2DAnimations\Frame.h" />
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameChildEvent.h" />
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameParentEvent.h" />
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectChangeName.h" />
@@ -272,6 +274,8 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="src\2DAnimations\Animation.tpp" />
+    <None Include="src\2DAnimations\Frame.tpp" />
     <None Include="src\ECS\Component\TypeComponent.h" />
     <None Include="src\ECS\WObject\WObject.tpp" />
   </ItemGroup>
