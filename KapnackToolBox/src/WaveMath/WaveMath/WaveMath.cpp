@@ -82,7 +82,7 @@ double WaveMath::ClampD(double value, double min, double max)
 
 float WaveMath::SqrF(float number)
 {
-	if (number < 0 || number == 0)
+	if (number <= 0)
 		return 0;
 
 	float guess = number * 0.5f;
@@ -100,7 +100,7 @@ float WaveMath::SqrF(float number)
 
 double WaveMath::SqrT(double number)
 {
-	if (number < 0 || number == 0)
+	if (number <= 0)
 		return 0;
 
 	double guess = number * 0.5f;
