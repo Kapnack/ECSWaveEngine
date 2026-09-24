@@ -34,7 +34,7 @@ namespace WaveEngine
 
 		static BinarySpacePartition& Get();
 
-		bool ObjectsShareSpace(Vector3 objectA, Vector3 objectB);
+		bool ObjectsShareSpace(Vector3 objectA, Vector3 objectB, Vector3 vectorBextends = Vector3::Zero());
 
 		void AddPlane(Plane plane);
 		void TurnObjectIntoPlane(const WaveObject& waveObject);

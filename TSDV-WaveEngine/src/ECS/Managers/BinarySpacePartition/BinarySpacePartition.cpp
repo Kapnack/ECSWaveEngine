@@ -43,15 +43,29 @@ namespace WaveEngine
 		return *ServiceProvider::Instance().Get<BinarySpacePartition>();
 	}
 
-	bool BinarySpacePartition::ObjectsShareSpace(Vector3 vectorA, Vector3 vectorB)
+	bool BinarySpacePartition::ObjectsShareSpace(Vector3 vectorA, Vector3 vectorB, Vector3 vectorBextends)
 	{
 		for (const Plane& plane : planes)
 		{
 			const int signOfA = WaveMath::Sign(plane.SignedDistance(vectorA));
-			const int signOfB = WaveMath::Sign(plane.SignedDistance(vectorB));
 
-			if (signOfA != 0 && signOfB != 0 && signOfA != signOfB)
-				return false;
+			if (signOfA == 0)
+				continue;
+
+			const float distB = plane.SignedDistance(vectorB);
+
+			const float radius = Vector3::Dot(plane.GetNormal(), vectorBextends);
+
+			if (signOfA > 0)
+			{
+				if ((distB + radius) < 0.0f)
+					return false;
+			}
+			else
+			{
+				if ((distB - radius) > 0.0f)
+					return false;
+			}
 		}
 
 		return true;
