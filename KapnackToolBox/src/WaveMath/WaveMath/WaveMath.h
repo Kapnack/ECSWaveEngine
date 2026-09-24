@@ -42,7 +42,7 @@ public:
 	static int Opposite(int number);
 	static float Opposite(float number);
 
-	static float Sqrt(float number);
+	static float Sqr(float number);
 
 	static float Deg2Rad(float number);
 	static float Rad2Deg(float number);

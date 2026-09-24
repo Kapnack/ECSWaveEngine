@@ -80,7 +80,7 @@ Vector2 Vector2::Reflected(Vector2 normal) const
 
 float Vector2::Magnitude(Vector2 vector)
 {
-	return WaveMath::Sqrt(SqrMagnitude(vector));
+	return WaveMath::Sqr(SqrMagnitude(vector));
 }
 
 float Vector2::SqrMagnitude(Vector2 vector)
@@ -132,7 +132,7 @@ Vector2 Vector2::MoveToWards(Vector2 from, Vector2 to, float distance)
 	if (sqDist <= distance * distance)
 		return to;
 
-	float dist = WaveMath::Sqrt(sqDist);
+	float dist = WaveMath::Sqr(sqDist);
 
 	return from + toVector / dist * distance;
 }
@@ -267,7 +267,7 @@ Vector2 Vector2::ClampMagnitude(Vector2 vector, float maxMagnitud)
 
 	if (sqrMag > maxMagnitud * maxMagnitud)
 	{
-		float mag = WaveMath::Sqrt(sqrMag);
+		float mag = WaveMath::Sqr(sqrMag);
 		float scale = maxMagnitud / mag;
 
 		return Vector2(vector.x * scale, vector.y * scale);

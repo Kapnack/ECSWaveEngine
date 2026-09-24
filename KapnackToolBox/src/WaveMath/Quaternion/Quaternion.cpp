@@ -139,7 +139,7 @@ Quaternion Quaternion::Identity()
 
 float Quaternion::Magnitude(Quaternion a)
 {
-	return WaveMath::Sqrt(SqrMagnitude(a));
+	return WaveMath::Sqr(SqrMagnitude(a));
 }
 
 float Quaternion::SqrMagnitude(Quaternion a)
@@ -159,7 +159,7 @@ Quaternion Quaternion::Normalized(Quaternion a)
 	if (sqrMag < WaveMath::Epsilon() * WaveMath::Epsilon())
 		return Identity();
 
-	return a / WaveMath::Sqrt(sqrMag);
+	return a / WaveMath::Sqr(sqrMag);
 }
 
 Quaternion Quaternion::AngleAxis(float angle, Vector3 axis)

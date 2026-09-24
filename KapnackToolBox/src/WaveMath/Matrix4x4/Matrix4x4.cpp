@@ -222,7 +222,7 @@ Quaternion Matrix4x4::GetRotation(const Matrix4x4& m)
 
 	if (trace > 0.0f)
 	{
-		float s = WaveMath::Sqrt(trace + 1.0f) * 2.0f;
+		float s = WaveMath::Sqr(trace + 1.0f) * 2.0f;
 		q.w = 0.25f * s;
 		q.x = (m.m21 - m.m12) / s;
 		q.y = (m.m02 - m.m20) / s;
@@ -230,7 +230,7 @@ Quaternion Matrix4x4::GetRotation(const Matrix4x4& m)
 	}
 	else if (m.m00 > m.m11 && m.m00 > m.m22)
 	{
-		float s = WaveMath::Sqrt(1.0f + m.m00 - m.m11 - m.m22) * 2.0f;
+		float s = WaveMath::Sqr(1.0f + m.m00 - m.m11 - m.m22) * 2.0f;
 		q.w = (m.m21 - m.m12) / s;
 		q.x = 0.25f * s;
 		q.y = (m.m01 + m.m10) / s;
@@ -238,7 +238,7 @@ Quaternion Matrix4x4::GetRotation(const Matrix4x4& m)
 	}
 	else if (m.m11 > m.m22)
 	{
-		float s = WaveMath::Sqrt(1.0f + m.m11 - m.m00 - m.m22) * 2.0f;
+		float s = WaveMath::Sqr(1.0f + m.m11 - m.m00 - m.m22) * 2.0f;
 		q.w = (m.m02 - m.m20) / s;
 		q.x = (m.m01 + m.m10) / s;
 		q.y = 0.25f * s;
@@ -246,7 +246,7 @@ Quaternion Matrix4x4::GetRotation(const Matrix4x4& m)
 	}
 	else
 	{
-		float s = WaveMath::Sqrt(1.0f + m.m22 - m.m00 - m.m11) * 2.0f;
+		float s = WaveMath::Sqr(1.0f + m.m22 - m.m00 - m.m11) * 2.0f;
 		q.w = (m.m10 - m.m01) / s;
 		q.x = (m.m02 + m.m20) / s;
 		q.y = (m.m12 + m.m21) / s;

@@ -49,7 +49,7 @@ float WaveMath::Opposite(float number)
 	return std::bit_cast<float>(bits);
 }
 
-float WaveMath::Sqrt(float number)
+float WaveMath::Sqr(float number)
 {
 	if (number < 0)
 		return 0;

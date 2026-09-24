@@ -108,7 +108,7 @@ Vector4 Vector4::Normalized(Vector4 vector4)
 
 float Vector4::Magnitude(Vector4 vector4)
 {
-	return WaveMath::Sqrt(SqrMagnitude(vector4));
+	return WaveMath::Sqr(SqrMagnitude(vector4));
 }
 
 float Vector4::SqrMagnitude(Vector4 vector4)
