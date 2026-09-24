@@ -212,9 +212,9 @@ namespace WaveEngine
 		}
 
 		mat->Bind();
-		mat->SetMat4("uView", camera.GetView());
-		mat->SetMat4("uProj", camera.GetProjection());
-		mat->SetMat4("uModel", glm::mat4(1.0f));
+		mat->SetMat4("uView", camera.GetView().Transposed());
+		mat->SetMat4("uProj", camera.GetProjection().Transposed());
+		mat->SetMat4("uModel", Matrix4x4::Identity());
 		mat->SetColor(color);
 
 		glDrawElements(GL_LINES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
@@ -266,14 +266,14 @@ namespace WaveEngine
 			return;
 		}
 
-		glm::mat4 view = camera.GetView();
-		glm::mat4 proj = camera.GetProjection();
-		glm::mat4 invViewProj = glm::inverse(proj * view);
+		Matrix4x4 view = camera.GetView();
+		Matrix4x4 proj = camera.GetProjection();
+		Matrix4x4 invViewProj = Matrix4x4::Inversed(proj * view);
 
 		mat->Bind();
-		mat->SetMat4("uView", view);
-		mat->SetMat4("uProj", proj);
-		mat->SetMat4("uInvViewProj", invViewProj);
+		mat->SetMat4("uView", view.Transposed());
+		mat->SetMat4("uProj", proj.Transposed());
+		mat->SetMat4("uInvViewProj", invViewProj.Transposed());
 		mat->SetVec3("uCameraPos", camera.GetTransform().GetPosition());
 		mat->SetVec3("uPlaneNormal", plane.GetNormal());
 		mat->SetFloat("uPlaneOriginDistance", plane.GetOriginDistance());
@@ -359,12 +359,12 @@ namespace WaveEngine
 
 			ECSTransform& cameraTransform = camera.GetWaveObject().GetTransform();
 
-			glm::mat4 view = camera.GetView();
-			glm::mat4 proj = camera.GetProjection();
+			Matrix4x4 view = camera.GetView();
+			Matrix4x4 proj = camera.GetProjection();
 
 			materialToUse->SetVec4("uColor", materialToUse->GetColor());
-			materialToUse->SetMat4("uView", view);
-			materialToUse->SetMat4("uProj", proj);
+			materialToUse->SetMat4("uView", view.Transposed());
+			materialToUse->SetMat4("uProj", proj.Transposed());
 
 			materialToUse->SetVec3("dirLight.direction", dirLight.direction);
 			materialToUse->SetVec3("dirLight.ambient", dirLight.ambient);
