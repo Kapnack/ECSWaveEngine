@@ -176,6 +176,11 @@ bool Vector3::operator==(Vector3 other) const
 	return x == other.x && y == other.y == z == other.z;
 }
 
+bool Vector3::operator!=(Vector3 other) const
+{
+	return !(*this == other);
+}
+
 Vector3 Vector3::X()
 {
 	return Vector3(1.0f, 0.0f, 0.0f);
@@ -323,7 +328,7 @@ Vector3 Vector3::LerpUnclamp(Vector3 a, Vector3 b, float t)
 
 float Vector3::Distance(Vector3 a, Vector3 b)
 {
-	return (a - b).Magnitude();
+	return Magnitude(a - b);
 }
 
 Vector3 Vector3::Max(Vector3 a, Vector3 b)

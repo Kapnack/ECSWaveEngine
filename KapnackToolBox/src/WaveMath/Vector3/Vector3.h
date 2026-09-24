@@ -45,6 +45,7 @@ struct WAVEEXPORT Vector3 final
 	bool operator>(Vector3 other) const;
 	bool operator<(Vector3 other) const;
 	bool operator==(Vector3 other) const;
+	bool operator!=(Vector3 other) const;
 
 	static Vector3 X();
 	static Vector3 Y();
