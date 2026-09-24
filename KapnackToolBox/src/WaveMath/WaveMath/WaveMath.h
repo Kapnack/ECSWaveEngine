@@ -20,6 +20,18 @@ public:
 	static int Abs(int number);
 
 	template<SignableObject T>
+	static T Clamp(T value, T min, T max)
+	{
+		return value < min ? min : value > max ? max : value;
+	}
+
+	template<SignableObject T>
+	static T Clamp01(T value)
+	{
+		return Clamp(value, 0.0f, 1.0f);
+	}
+
+	template<SignableObject T>
 	static int Sign(T number)
 	{
 		return static_cast<int>((number > 0) - (number < 0));
@@ -31,5 +43,8 @@ public:
 	static float Opposite(float number);
 
 	static float Sqrt(float number);
+
+	static float Deg2Rad(float number);
+	static float Rad2Deg(float number);
 };
 

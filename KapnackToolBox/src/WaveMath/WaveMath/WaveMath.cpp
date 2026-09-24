@@ -70,6 +70,16 @@ float WaveMath::Sqrt(float number)
 	return betterGuess;
 }
 
+float WaveMath::Deg2Rad(float number)
+{
+	return number * (PI() / 180.0f);
+}
+
+float WaveMath::Rad2Deg(float number)
+{
+	return number * (180.0f / PI());
+}
+
 int WaveMath::Min(int a, int b)
 {
 	return b + ((a - b) & ((a - b) >> 31));

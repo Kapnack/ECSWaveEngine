@@ -233,16 +233,18 @@ Vector3 Quaternion::ToEuler(Quaternion q)
 		1.0f - 2.0f * (q.x * q.x + q.y * q.y)
 	);
 
-	euler.y = asin(
-		2.0f * (q.w * q.y - q.z * q.x)
-	);
+	float sinPitch = 2.0f * (q.w * q.y - q.z * q.x);
+
+	sinPitch = WaveMath::Clamp01(sinPitch);
+
+	euler.y = asin(sinPitch);
 
 	euler.z = atan2(
 		2.0f * (q.w * q.z + q.x * q.y),
 		1.0f - 2.0f * (q.y * q.y + q.z * q.z)
 	);
 
-	return euler;
+	return Vector3::Rad2Deg(euler);
 }
 
 Quaternion Quaternion::Conjugate(Quaternion a)
