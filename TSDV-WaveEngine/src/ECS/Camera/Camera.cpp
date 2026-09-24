@@ -8,6 +8,7 @@
 #include "ServiceProvider/ServiceProvider.h"
 #include "../Transform/ECSTransform.h"
 #include <CameraManager/CameraManager.h>
+#include <WaveMath/WaveMath/WaveMath.h>
 
 namespace WaveEngine
 {
@@ -88,12 +89,12 @@ namespace WaveEngine
 		orthoSize += value;
 	}
 
-	glm::mat4 Camera::GetView() const
+	Matrix4x4 Camera::GetView() const
 	{
 		return view;
 	}
 
-	glm::mat4 Camera::GetProjection() const
+	Matrix4x4 Camera::GetProjection() const
 	{
 		return projection;
 	}
@@ -136,27 +137,22 @@ namespace WaveEngine
 
 		ECSTransform& transform = GetTransform();
 
-		glm::vec3 pos = glm::vec3(transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z);
+		Vector3 pos = transform.GetPosition();
 
-		glm::mat4 rotationMatrix = glm::yawPitchRoll
-		(
-			glm::radians(transform.GetEulerRotation().y),
-			glm::radians(transform.GetEulerRotation().x),
-			glm::radians(transform.GetEulerRotation().z)
-		);
+		Matrix4x4 rotationMatrix = transform.GetGlobalModel().GetRotationMatrix();
 
-		glm::vec3 forward = glm::vec3(rotationMatrix * glm::vec4(0, 0, 1, 0));
-		glm::vec3 up = glm::vec3(rotationMatrix * glm::vec4(0, 1, 0, 0));
+		Vector3 forward = transform.GetForward();
+		Vector3 up = transform.GetUp();
 
 		float halfHeight = orthoSize;
 		float halfWidth = orthoSize * aspect;
 
-		view = glm::lookAt(pos, pos + forward, up);
+		view = Matrix4x4::CreateLookAt(pos, pos + forward, up);
 
 		projection = orthografic ?
-			glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, nearPlane, farPlane)
+			Matrix4x4::CreateOrthographic(-halfWidth, halfWidth, -halfHeight, halfHeight, nearPlane, farPlane)
 			:
-			glm::perspective(glm::radians(fovDeg), aspect, nearPlane, farPlane);
+			Matrix4x4::CreatePerspective(WaveMath::Deg2Rad(fovDeg), aspect, nearPlane, farPlane);
 
 		ExtractFrustumPlanes();
 		shouldUpdateMatrix = false;
@@ -169,24 +165,24 @@ namespace WaveEngine
 
 	void Camera::ExtractFrustumPlanes()
 	{
-		glm::mat4 vp = projection * view;
+		Matrix4x4 vp = projection * view;
 
-		frustum.planes[0] = glm::vec4(vp[0][3] + vp[0][0], vp[1][3] + vp[1][0], vp[2][3] + vp[2][0], vp[3][3] + vp[3][0]); // Left
-		frustum.planes[1] = glm::vec4(vp[0][3] - vp[0][0], vp[1][3] - vp[1][0], vp[2][3] - vp[2][0], vp[3][3] - vp[3][0]); // Right
-		frustum.planes[2] = glm::vec4(vp[0][3] + vp[0][1], vp[1][3] + vp[1][1], vp[2][3] + vp[2][1], vp[3][3] + vp[3][1]); // Bottom
-		frustum.planes[3] = glm::vec4(vp[0][3] - vp[0][1], vp[1][3] - vp[1][1], vp[2][3] - vp[2][1], vp[3][3] - vp[3][1]); // Top
-		frustum.planes[4] = glm::vec4(vp[0][3] + vp[0][2], vp[1][3] + vp[1][2], vp[2][3] + vp[2][2], vp[3][3] + vp[3][2]); // Near
-		frustum.planes[5] = glm::vec4(vp[0][3] - vp[0][2], vp[1][3] - vp[1][2], vp[2][3] - vp[2][2], vp[3][3] - vp[3][2]); // Far
+		frustum.planes[0] = Vector4(vp.m30 + vp.m00, vp.m31 + vp.m01, vp.m32 + vp.m02, vp.m33 + vp.m03); // Left
+		frustum.planes[1] = Vector4(vp.m30 - vp.m00, vp.m31 - vp.m01, vp.m32 - vp.m02, vp.m33 - vp.m03); // Right
+		frustum.planes[2] = Vector4(vp.m30 + vp.m10, vp.m31 + vp.m11, vp.m32 + vp.m12, vp.m33 + vp.m13); // Bottom
+		frustum.planes[3] = Vector4(vp.m30 - vp.m10, vp.m31 - vp.m11, vp.m32 - vp.m12, vp.m33 - vp.m13); // Top
+		frustum.planes[4] = Vector4(vp.m30 + vp.m20, vp.m31 + vp.m21, vp.m32 + vp.m22, vp.m33 + vp.m23); // Near
+		frustum.planes[5] = Vector4(vp.m30 - vp.m20, vp.m31 - vp.m21, vp.m32 - vp.m22, vp.m33 - vp.m23); // Far
 
-		for (glm::vec4& plane : frustum.planes)
-			plane /= glm::length(glm::vec3(plane));
+		for (Vector4& plane : frustum.planes)
+			plane.Normalized();
 	}
 
 	bool Camera::IsInsideFrustum(const BoundingBox& box) const
 	{
-		glm::vec3 positive;
+		Vector3 positive;
 
-		for (const glm::vec4& plane : frustum.planes)
+		for (const Vector4& plane : frustum.planes)
 		{
 			positive =
 			{
@@ -195,7 +191,7 @@ namespace WaveEngine
 				plane.z >= 0 ? box.GetMax().z : box.GetMin().z
 			};
 
-			if (glm::dot(glm::vec3(plane), positive) + plane.w < 0)
+			if (Vector3::Dot(plane, positive) + plane.w < 0)
 				return false;
 		}
 

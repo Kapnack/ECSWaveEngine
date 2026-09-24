@@ -9,13 +9,15 @@
 #include "Window/Window.h"
 #include "EventSystem/EventSystem.h"
 #include "Square/Square.h"
+#include <WaveMath/Matrix4x4/Matrix4x4.h>
+#include <WaveMath/Vector4/Vector4.h>
 
 namespace WaveEngine
 {
 
 	struct Frustum
 	{
-		glm::vec4 planes[6];
+		Vector4 planes[6];
 	};
 
 	class EntityManager;
@@ -45,8 +47,8 @@ namespace WaveEngine
 
 		Frustum frustum;
 
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
+		Matrix4x4 view;
+		Matrix4x4 projection;
 
 		Window* GetWindow() const;
 
@@ -65,8 +67,8 @@ namespace WaveEngine
 		Camera(unsigned int ID);
 		~Camera();
 
-		glm::mat4 GetView() const;
-		glm::mat4 GetProjection() const;
+		Matrix4x4 GetView() const;
+		Matrix4x4 GetProjection() const;
 
 		void CalculateMatrixes();
 
