@@ -24,6 +24,7 @@ struct WAVEEXPORT Vector2 final
 	Vector2 MovedToWards(Vector2 to, float distance) const;
 	void Reflect(Vector2 normal);
 	Vector2 Reflected(Vector2 normal) const;
+	bool Approximately(Vector2 other) const;
 
 	static float Magnitude(Vector2 vector);
 	static float SqrMagnitude(Vector2 vector);
@@ -64,6 +65,7 @@ struct WAVEEXPORT Vector2 final
 	static Vector2 Max(Vector2 a, Vector2 b);
 	static float Distance(Vector2 a, Vector2 b);
 	static Vector2 Reflect(Vector2 vector, Vector2 normal);
+	static bool Approximately(Vector2 a, Vector2 b);
 
 	static Vector2 Zero();
 	static Vector2 One();

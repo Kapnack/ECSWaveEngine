@@ -188,7 +188,7 @@ Vector4 Vector4::Normalized(Vector4 vector)
 
 float Vector4::Distance(Vector4 a, Vector4 b)
 {
-	return Magnitude(b - a);
+	return Magnitude(a - b);
 }
 
 float Vector4::Magnitude(Vector4 vector)

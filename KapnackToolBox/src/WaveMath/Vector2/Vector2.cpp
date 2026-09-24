@@ -78,6 +78,11 @@ Vector2 Vector2::Reflected(Vector2 normal) const
 	return Reflect(*this, normal);
 }
 
+bool Vector2::Approximately(Vector2 other) const
+{
+	return Approximately(*this, other);
+}
+
 float Vector2::Magnitude(Vector2 vector)
 {
 	return WaveMath::SqrF(SqrMagnitude(vector));
@@ -316,13 +321,18 @@ Vector2 Vector2::Max(Vector2 vectorA, Vector2 vectorB)
 
 float Vector2::Distance(Vector2 a, Vector2 b)
 {
-	return (a - b).Magnitude();
+	return Magnitude(a - b);
 }
 
 Vector2 Vector2::Reflect(Vector2 vector, Vector2 normal)
 {
 	float dot = Dot(vector, normal);
 	return vector - normal * (2.0f * dot);
+}
+
+bool Vector2::Approximately(Vector2 a, Vector2 b)
+{
+	return WaveMath::Approximately(a.x, b.x) && WaveMath::Approximately(a.y, b.y);
 }
 
 Vector2 Vector2::Zero()
