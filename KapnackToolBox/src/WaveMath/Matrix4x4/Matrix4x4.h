@@ -77,4 +77,8 @@ struct WAVEEXPORT Matrix4x4 final
 	static void Decompose(const Matrix4x4& matrix, Vector3& translation, Quaternion& rotation, Vector3& scale);
 	static void Decompose(const Matrix4x4& matrix, Vector3& translation, Vector3& rotation, Vector3& scale);
 
+	static Matrix4x4 CreateLookAt(Vector3 eye, Vector3 center, Vector3 up);
+
+	static Matrix4x4 CreatePerspective(float fovYRadians, float aspectRatio, float zNear, float zFar);
+	static Matrix4x4 CreateOrthographic(float left, float right, float bottom, float top, float zNear, float zFar);
 };

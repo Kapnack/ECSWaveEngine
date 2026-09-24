@@ -431,3 +431,64 @@ void Matrix4x4::Decompose(const Matrix4x4& matrix, Vector3& translation, Vector3
 	Decompose(matrix, translation, temRotation, scale);
 	rotation = temRotation.ToEuler();
 }
+
+Matrix4x4 Matrix4x4::CreateLookAt(Vector3 eye, Vector3 center, Vector3 up)
+{
+	Vector3 f = (center - eye).Normalized();
+	Vector3 r = Vector3::Cross(f, up);
+
+	if (r.SqrMagnitude() < WaveMath::Epsilon())
+		r = Vector3::Cross(f, WaveMath::Abs(f.y) < 0.999f ? Vector3::Up() : Vector3::Right());
+
+	r = r.Normalized();
+	Vector3 u = Vector3::Cross(r, f);
+
+	return Matrix4x4
+	(
+		r.x, r.y, r.z, -Vector3::Dot(r, eye),
+		u.x, u.y, u.z, -Vector3::Dot(u, eye),
+		-f.x, -f.y, -f.z, Vector3::Dot(f, eye),
+		0.0f, 0.0f, 0.0f, 1.0f
+	);
+}
+
+Matrix4x4 Matrix4x4::CreatePerspective(float fovYRadians, float aspectRatio, float zNear, float zFar)
+{
+	if (WaveMath::Abs(zFar - zNear) < WaveMath::Epsilon())
+		throw std::runtime_error("Matrix4x4::CreatePerspective - zNear and zFar too close");
+
+	const float tanHalfFovY = std::tan(fovYRadians * 0.5f);
+
+	const float sx = 1.0f / (aspectRatio * tanHalfFovY);
+	const float sy = 1.0f / tanHalfFovY;
+
+	const float A = (zFar + zNear) / (zNear - zFar);
+	const float B = (2.0f * zFar * zNear) / (zNear - zFar);
+
+	return Matrix4x4
+	(
+		sx, 0.0f, 0.0f, 0.0f,
+		0.0f, sy, 0.0f, 0.0f,
+		0.0f, 0.0f, A, B,
+		0.0f, 0.0f, -1.0f, 0.0f
+	);
+}
+
+Matrix4x4 Matrix4x4::CreateOrthographic(float left, float right, float bottom, float top, float zNear, float zFar)
+{
+	const float sx = 2.0f / (right - left);
+	const float sy = 2.0f / (top - bottom);
+	const float sz = -2.0f / (zFar - zNear);
+
+	const float tx = -(right + left) / (right - left);
+	const float ty = -(top + bottom) / (top - bottom);
+	const float tz = -(zFar + zNear) / (zFar - zNear);
+
+	return Matrix4x4
+	(
+		sx, 0.0f, 0.0f, tx,
+		0.0f, sy, 0.0f, ty,
+		0.0f, 0.0f, sz, tz,
+		0.0f, 0.0f, 0.0f, 1.0f
+	);
+}
