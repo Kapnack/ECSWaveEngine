@@ -9,19 +9,19 @@ Vector4::Vector4()
 {
 }
 
-Vector4::Vector4(const Vector4& other)
+Vector4::Vector4(const Vector4& vector)
 {
-	x = other.x;
-	y = other.y;
-	z = other.z;
-	w = other.w;
+	x = vector.x;
+	y = vector.y;
+	z = vector.z;
+	w = vector.w;
 }
 
-Vector4::Vector4(Vector3 vector3)
+Vector4::Vector4(Vector3 vector)
 {
-	x = vector3.x;
-	y = vector3.y;
-	z = vector3.z;
+	x = vector.x;
+	y = vector.y;
+	z = vector.z;
 	w = 1.0f;
 }
 
@@ -33,12 +33,12 @@ Vector4::Vector4(float x, float y, float z, float w)
 	this->w = w;
 }
 
-float Vector4::Magnitude()
+float Vector4::Magnitude() const
 {
 	return Magnitude(*this);
 }
 
-Vector4 Vector4::Normalized()
+Vector4 Vector4::Normalized() const
 {
 	return Normalized(*this);
 }
@@ -46,6 +46,16 @@ Vector4 Vector4::Normalized()
 void Vector4::Normalize()
 {
 	*this = Normalized();
+}
+
+float Vector4::Dot(Vector4 other) const
+{
+	return Dot(*this, other);
+}
+
+bool Vector4::Approximately(Vector4 other) const
+{
+	return Approximately(*this, other);
 }
 
 Vector4 Vector4::Zero()
@@ -78,9 +88,49 @@ Vector4 Vector4::NMax()
 	return -Max();
 }
 
+Vector4 Vector4::operator+(Vector4 other) const
+{
+	return Vector4(x + other.x, y + other.y, z + other.z, w + other.w);
+}
+
+void Vector4::operator+=(Vector4 other)
+{
+	*this = *this + other;
+}
+
 Vector4 Vector4::operator-() const
 {
 	return Vector4(-x, -y, -z, -w);
+}
+
+Vector4 Vector4::operator-(Vector4 other) const
+{
+	return Vector4(x - other.x, y - other.y, z - other.z, w - other.w);
+}
+
+void Vector4::operator-=(Vector4 other)
+{
+	*this = *this - other;
+}
+
+Vector4 Vector4::operator*(Vector4 other) const
+{
+	return Vector4(x * other.x, y * other.y, z * other.z, w * other.w);
+}
+
+Vector4 Vector4::operator*(float scalar) const
+{
+	return Vector4(x * scalar, y * scalar, z * scalar, w * scalar);
+}
+
+void Vector4::operator*=(Vector4 other)
+{
+	*this = *this * other;
+}
+
+void Vector4::operator*=(float scalar)
+{
+	*this = *this * scalar;
 }
 
 Vector4 Vector4::operator/(float scalar) const
@@ -93,30 +143,80 @@ void Vector4::operator/=(float scalar)
 	*this = *this / scalar;
 }
 
-Vector4 Vector4::Normalized(Vector4 vector4)
+bool Vector4::operator>(Vector4 other) const
 {
-	float mag = vector4.Magnitude();
+	return x > other.x && y > other.y && z > other.z && w > other.w;
+}
+
+bool Vector4::operator<(Vector4 other) const
+{
+	return other > *this;
+}
+
+bool Vector4::operator==(Vector4 other) const
+{
+	return x == other.x && y == other.y && z == other.z && w == other.w;
+}
+
+bool Vector4::operator!=(Vector4 other) const
+{
+	return !(*this == other);
+}
+
+bool Vector4::operator>=(Vector4 other) const
+{
+	return *this > other || *this == other;
+}
+
+bool Vector4::operator<=(Vector4 other) const
+{
+	return *this < other || *this == other;
+}
+
+Vector4 Vector4::Normalized(Vector4 vector)
+{
+	float mag = vector.Magnitude();
 
 	if (mag < WaveMath::Epsilon())
 		return Vector4::Zero();
 
 	if (WaveMath::Abs(mag - 1.0f) < WaveMath::Epsilon())
-		return vector4;
+		return vector;
 
-	return vector4 / mag;
+	return vector / mag;
 }
 
-float Vector4::Magnitude(Vector4 vector4)
+float Vector4::Distance(Vector4 a, Vector4 b)
 {
-	return WaveMath::SqrF(SqrMagnitude(vector4));
+	return Magnitude(b - a);
 }
 
-float Vector4::SqrMagnitude(Vector4 vector4)
+float Vector4::Magnitude(Vector4 vector)
 {
-	return Dot(vector4, vector4);
+	return WaveMath::SqrF(SqrMagnitude(vector));
 }
 
-float Vector4::Dot(Vector4 vector4A, Vector4 vector4B)
+float Vector4::SqrMagnitude(Vector4 vector)
 {
-	return vector4A.x * vector4B.x + vector4A.y * vector4B.y + vector4A.z * vector4B.z + vector4A.w * vector4B.w;
+	return Dot(vector, vector);
+}
+
+float Vector4::Dot(Vector4 a, Vector4 b)
+{
+	return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+
+bool Vector4::Approximately(Vector4 a, Vector4 b)
+{
+	return WaveMath::Approximately(a.x, b.x) && WaveMath::Approximately(a.y, b.y) && WaveMath::Approximately(a.z, b.z) && WaveMath::Approximately(a.w, b.w);
+}
+
+Vector4 operator*(float scalar, Vector4 vector)
+{
+	return vector * scalar;
+}
+
+Vector4 operator/(float scalar, Vector4 vector)
+{
+	return vector / scalar;
 }

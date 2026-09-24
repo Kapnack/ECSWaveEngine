@@ -12,13 +12,14 @@ struct WAVEEXPORT Vector3 final
 	float z;
 
 	Vector3();
-	Vector3(Vector4 vector4);
-	Vector3(const Vector3& vector3);
-	Vector3(Vector2 vector2);
+	Vector3(Vector4 vector);
+	Vector3(const Vector3& vector);
+	Vector3(Vector2 vector);
 	Vector3(float x, float y, float z = 0.0f);
 
 	float Magnitude() const;
 	float SqrMagnitude() const;
+	float Dot(Vector3 other) const;
 	void ClampMagnitude(float maxMagnitude);
 	Vector3 ClampedMagnitude(float maxMagnitude) const;
 	void Normalize();
@@ -46,6 +47,8 @@ struct WAVEEXPORT Vector3 final
 	bool operator<(Vector3 other) const;
 	bool operator==(Vector3 other) const;
 	bool operator!=(Vector3 other) const;
+	bool operator>=(Vector3 other) const;
+	bool operator<=(Vector3 other) const;
 
 	static Vector3 X();
 	static Vector3 Y();

@@ -31,6 +31,7 @@ namespace WaveEngine
 		Color Normalized() const;
 		float Magnitude() const;
 		float SqrMagnitude() const;
+		float Dot(Color other) const;
 		bool Approximately(Color other) const;
 
 		static Color ColorFromColor255(Color color);
@@ -68,6 +69,8 @@ namespace WaveEngine
 		bool operator<(Color other) const;
 		bool operator==(Color other) const;
 		bool operator!=(Color other) const;
+		bool operator>=(Color other) const;
+		bool operator<=(Color other) const;
 
 		operator Vector4() const;
 

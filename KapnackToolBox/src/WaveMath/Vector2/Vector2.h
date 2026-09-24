@@ -52,6 +52,7 @@ struct WAVEEXPORT Vector2 final
 	bool operator<(Vector2 other) const;
 	bool operator>(Vector2 other) const;
 	bool operator==(Vector2 other) const;
+	bool operator!=(Vector2 other) const;
 	bool operator>=(Vector2 other) const;
 	bool operator<=(Vector2 other) const;
 

@@ -78,6 +78,11 @@ namespace WaveEngine
 		return SqrMagnitude(*this);
 	}
 
+	float Color::Dot(Color other) const
+	{
+		return Dot(*this, other);
+	}
+
 	bool Color::Approximately(Color other) const
 	{
 		return Approximately(*this, other);
@@ -231,6 +236,16 @@ namespace WaveEngine
 	bool Color::operator!=(Color other) const
 	{
 		return !(*this == other);
+	}
+
+	bool Color::operator>=(Color other) const
+	{
+		return *this > other || *this == other;
+	}
+
+	bool Color::operator<=(Color other) const
+	{
+		return *this < other || *this == other;
 	}
 
 	Color::operator Vector4() const

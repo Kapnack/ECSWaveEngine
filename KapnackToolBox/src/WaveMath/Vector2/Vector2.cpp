@@ -234,6 +234,11 @@ bool Vector2::operator==(Vector2 other) const
 	return x == other.x && y == other.y;
 }
 
+bool Vector2::operator!=(Vector2 other) const
+{
+	return !(*this == other);
+}
+
 bool Vector2::operator>=(Vector2 other) const
 {
 	return *this > other || *this == other;

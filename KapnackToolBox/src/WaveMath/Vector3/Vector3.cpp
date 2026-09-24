@@ -12,24 +12,24 @@ Vector3::Vector3()
 	*this = Zero();
 }
 
-Vector3::Vector3(Vector4 vector4)
+Vector3::Vector3(Vector4 vector)
 {
-	x = vector4.x;
-	y = vector4.y;
-	z = vector4.z;
+	x = vector.x;
+	y = vector.y;
+	z = vector.z;
 }
 
-Vector3::Vector3(const Vector3& vector3)
+Vector3::Vector3(const Vector3& vector)
 {
-	x = vector3.x;
-	y = vector3.y;
-	z = vector3.z;
+	x = vector.x;
+	y = vector.y;
+	z = vector.z;
 }
 
-Vector3::Vector3(Vector2 vector2)
+Vector3::Vector3(Vector2 vector)
 {
-	x = vector2.x;
-	y = vector2.y;
+	x = vector.x;
+	y = vector.y;
 	z = 0.0f;
 }
 
@@ -58,6 +58,11 @@ float Vector3::Magnitude() const
 float Vector3::SqrMagnitude() const
 {
 	return SqrMagnitude(*this);
+}
+
+float Vector3::Dot(Vector3 other) const
+{
+	return Dot(*this, other);
 }
 
 void Vector3::Normalize()
@@ -179,6 +184,16 @@ bool Vector3::operator==(Vector3 other) const
 bool Vector3::operator!=(Vector3 other) const
 {
 	return !(*this == other);
+}
+
+bool Vector3::operator>=(Vector3 other) const
+{
+	return *this > other || *this == other;
+}
+
+bool Vector3::operator<=(Vector3 other) const
+{
+	return *this < other || *this == other;
 }
 
 Vector3 Vector3::X()
