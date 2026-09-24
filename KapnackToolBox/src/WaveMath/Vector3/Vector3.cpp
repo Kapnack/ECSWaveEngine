@@ -3,12 +3,20 @@
 #include <cmath>
 #include <cfloat>
 
+#include "Wavemath/Vector4/Vector4.h"
 #include "Wavemath/Vector2/Vector2.h"
 #include "WaveMath/WaveMath/WaveMath.h"
 
 Vector3::Vector3()
 {
 	*this = Zero();
+}
+
+Vector3::Vector3(Vector4 vector4)
+{
+	x = vector4.x;
+	y = vector4.y;
+	z = vector4.z;
 }
 
 Vector3::Vector3(const Vector3& vector3)
@@ -80,6 +88,11 @@ void Vector3::Reflect(Vector3 normal)
 Vector3 Vector3::Reflected(Vector3 normal) const
 {
 	return Reflect(*this, normal);
+}
+
+bool Vector3::Approximately(Vector3 other) const
+{
+	return Approximately(*this, other);
 }
 
 Vector3 Vector3::operator/(Vector3 other) const
@@ -374,4 +387,19 @@ Vector3 Vector3::Reflect(Vector3 vector, Vector3 normal)
 {
 	float dot = Dot(vector, normal);
 	return vector - normal * (2.0f * dot);
+}
+
+bool Vector3::Approximately(Vector3 a, Vector3 b)
+{
+	return WaveMath::Approximately(a.x, b.x) && WaveMath::Approximately(a.y, b.y) && WaveMath::Approximately(a.z, b.z);
+}
+
+Vector3 Vector3::Deg2Rad(Vector3 vector)
+{
+	return Vector3(WaveMath::Deg2Rad(vector.x), WaveMath::Deg2Rad(vector.y), WaveMath::Deg2Rad(vector.z));
+}
+
+Vector3 Vector3::Rad2Deg(Vector3 vector)
+{
+	return Vector3(WaveMath::Rad2Deg(vector.x), WaveMath::Rad2Deg(vector.y), WaveMath::Rad2Deg(vector.z));
 }

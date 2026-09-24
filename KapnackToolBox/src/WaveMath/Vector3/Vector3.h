@@ -3,6 +3,7 @@
 #include "Export.h"
 
 struct Vector2;
+struct Vector4;
 
 struct WAVEEXPORT Vector3 final
 {
@@ -11,6 +12,7 @@ struct WAVEEXPORT Vector3 final
 	float z;
 
 	Vector3();
+	Vector3(Vector4 vector4);
 	Vector3(const Vector3& vector3);
 	Vector3(Vector2 vector2);
 	Vector3(float x, float y, float z = 0.0f);
@@ -25,6 +27,7 @@ struct WAVEEXPORT Vector3 final
 	Vector3 MovedToWards(Vector3 to, float distance) const;
 	void Reflect(Vector3 normal);
 	Vector3 Reflected(Vector3 normal) const;
+	bool Approximately(Vector3 other) const;
 
 	Vector3 operator/(Vector3 other) const;
 	Vector3 operator/(float scalar) const;
@@ -74,4 +77,7 @@ struct WAVEEXPORT Vector3 final
 	static Vector3 Normalized(Vector3 a);
 	static Vector3 MoveToWards(Vector3 from, Vector3 to, float distance);
 	static Vector3 Reflect(Vector3 direction, Vector3 normal);
+	static bool Approximately(Vector3 a, Vector3 b);
+	static Vector3 Deg2Rad(Vector3 vector);
+	static Vector3 Rad2Deg(Vector3 vector);
 };
