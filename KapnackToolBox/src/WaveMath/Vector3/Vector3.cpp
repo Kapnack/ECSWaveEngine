@@ -274,7 +274,7 @@ Vector3 Vector3::ClampMagnitude(Vector3 vector, float maxMagnitud)
 
 	if (sqrMag > maxMagnitud * maxMagnitud)
 	{
-		float mag = WaveMath::Sqr(sqrMag);
+		float mag = WaveMath::SqrF(sqrMag);
 		float scale = maxMagnitud / mag;
 
 		return Vector3(vector.x * scale, vector.y * scale, vector.z * scale);
@@ -296,7 +296,7 @@ Vector3 Vector3::Cross(Vector3 a, Vector3 b)
 
 float Vector3::Magnitude(Vector3 vector)
 {
-	return WaveMath::Sqr(SqrMagnitude(vector));
+	return WaveMath::SqrF(SqrMagnitude(vector));
 }
 
 float Vector3::SqrMagnitude(Vector3 vector)
@@ -378,7 +378,7 @@ Vector3 Vector3::MoveToWards(Vector3 from, Vector3 to, float distance)
 	if (sqDist <= distance * distance)
 		return to;
 
-	float dist = WaveMath::Sqr(sqDist);
+	float dist = WaveMath::SqrF(sqDist);
 
 	return from + toVector / dist * distance;
 }

@@ -132,7 +132,7 @@ namespace WaveEngine
 
 	bool WaveObjectRegistry::StartsWithName(const string& name, const string& objectName)
 	{
-		for (int i = 0; i < WaveMath::Min(name.size(), objectName.size()); ++i)
+		for (int i = 0; i < WaveMath::MinS(name.size(), objectName.size()); ++i)
 		{
 			if (name[i] != objectName[i])
 				return false;

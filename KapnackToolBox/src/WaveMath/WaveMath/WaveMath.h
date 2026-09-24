@@ -21,12 +21,12 @@ public:
 	static float Abs(float number);
 	static double Abs(double number);
 
-	static short Clamp(short value, short min, short max);
-	static int Clamp(int value, int min, int max);
-	static float Clamp01(float value);
-	static float Clamp(float value, float min, float max);
-	static double Clamp01(double value);
-	static double Clamp(double value, double min, double max);
+	static short ClampS(short value, short min, short max);
+	static int ClampI(int value, int min, int max);
+	static float ClampF01(float value);
+	static float ClampF(float value, float min, float max);
+	static double ClampD01(double value);
+	static double ClampD(double value, double min, double max);
 
 	template<SignableObject T>
 	static int Sign(T number)
@@ -34,22 +34,22 @@ public:
 		return static_cast<int>((number > 0) - (number < 0));
 	}
 
-	static short Max(short a, short b);
-	static short Min(short a, short b);
-	static int Max(int a, int b);
-	static int Min(int a, int b);
-	static float Max(float a, float b);
-	static float Min(float a, float b);
-	static double Max(double a, double b);
-	static double Min(double a, double b);
+	static short MaxS(short a, short b);
+	static short MinS(short a, short b);
+	static int MaxI(int a, int b);
+	static int MinI(int a, int b);
+	static float MaxF(float a, float b);
+	static float MinF(float a, float b);
+	static double MaxD(double a, double b);
+	static double MinD(double a, double b);
 
-	static short Opposite(short number);
-	static int Opposite(int number);
-	static float Opposite(float number);
-	static double Opposite(double number);
+	static short OppositeS(short number);
+	static int OppositeI(int number);
+	static float OppositeF(float number);
+	static double OppositeD(double number);
 
-	static float Sqr(float number);
-	static double Sqr(double number);
+	static float SqrF(float number);
+	static double SqrT(double number);
 
 	static float Deg2Rad(float number);
 	static float Rad2Deg(float number);

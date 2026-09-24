@@ -50,37 +50,37 @@ double WaveMath::Abs(double number)
 	return std::bit_cast<double>(bits);
 }
 
-short WaveMath::Clamp(short value, short min, short max)
+short WaveMath::ClampS(short value, short min, short max)
 {
-	return Min(Max(value, min), max);
+	return MinS(MaxS(value, min), max);
 }
 
-int WaveMath::Clamp(int value, int min, int max)
+int WaveMath::ClampI(int value, int min, int max)
 {
-	return Min(Max(value, min), max);
+	return MinI(MaxI(value, min), max);
 }
 
-float WaveMath::Clamp01(float value)
+float WaveMath::ClampF01(float value)
 {
-	return Clamp(value, 0.0f, 1.0f);
+	return ClampF(value, 0.0f, 1.0f);
 }
 
-float WaveMath::Clamp(float value, float min, float max)
+float WaveMath::ClampF(float value, float min, float max)
 {
-	return Min(Max(value, min), max);
+	return MinF(MaxF(value, min), max);
 }
 
-double WaveMath::Clamp01(double value)
+double WaveMath::ClampD01(double value)
 {
-	return Clamp(value, 0.0, 1.0);
+	return ClampD(value, 0.0, 1.0);
 }
 
-double WaveMath::Clamp(double value, double min, double max)
+double WaveMath::ClampD(double value, double min, double max)
 {
-	return Min(Max(value, min), max);
+	return MinD(MaxD(value, min), max);
 }
 
-float WaveMath::Sqr(float number)
+float WaveMath::SqrF(float number)
 {
 	if (number < 0 || number == 0)
 		return 0;
@@ -98,7 +98,7 @@ float WaveMath::Sqr(float number)
 	return betterGuess;
 }
 
-double WaveMath::Sqr(double number)
+double WaveMath::SqrT(double number)
 {
 	if (number < 0 || number == 0)
 		return 0;
@@ -126,27 +126,27 @@ float WaveMath::Rad2Deg(float number)
 	return number * (180.0f / PI());
 }
 
-short WaveMath::Max(short a, short b)
+short WaveMath::MaxS(short a, short b)
 {
 	return a - ((a - b) & ((a - b) >> 15));
 }
 
-short WaveMath::Min(short a, short b)
+short WaveMath::MinS(short a, short b)
 {
 	return b + ((a - b) & ((a - b) >> 15));
 }
 
-int WaveMath::Max(int a, int b)
+int WaveMath::MaxI(int a, int b)
 {
 	return a - ((a - b) & ((a - b) >> 31));
 }
 
-int WaveMath::Min(int a, int b)
+int WaveMath::MinI(int a, int b)
 {
 	return b + ((a - b) & ((a - b) >> 31));
 }
 
-float WaveMath::Max(float a, float b)
+float WaveMath::MaxF(float a, float b)
 {
 	uint32_t bits = std::bit_cast<uint32_t>(a - b);
 
@@ -155,7 +155,7 @@ float WaveMath::Max(float a, float b)
 	return a - (bits & (sign));
 }
 
-float WaveMath::Min(float a, float b)
+float WaveMath::MinF(float a, float b)
 {
 	uint32_t bits = std::bit_cast<uint32_t>(a - b);
 
@@ -164,7 +164,7 @@ float WaveMath::Min(float a, float b)
 	return b + (bits & (sign));
 }
 
-double WaveMath::Max(double a, double b)
+double WaveMath::MaxD(double a, double b)
 {
 	uint64_t bits = std::bit_cast<uint64_t>(a - b);
 
@@ -173,7 +173,7 @@ double WaveMath::Max(double a, double b)
 	return a - (bits & (sign));
 }
 
-double WaveMath::Min(double a, double b)
+double WaveMath::MinD(double a, double b)
 {
 	uint64_t bits = std::bit_cast<uint64_t>(a - b);
 
@@ -182,19 +182,19 @@ double WaveMath::Min(double a, double b)
 	return b + (bits & (sign));
 }
 
-short WaveMath::Opposite(short number)
+short WaveMath::OppositeS(short number)
 {
 	const short mask = -1;
 	return (number + mask) ^ mask;
 }
 
-int WaveMath::Opposite(int number)
+int WaveMath::OppositeI(int number)
 {
 	const int mask = -1;
 	return (number + mask) ^ mask;
 }
 
-float WaveMath::Opposite(float number)
+float WaveMath::OppositeF(float number)
 {
 	uint32_t bits = std::bit_cast<uint32_t>(number);
 
@@ -203,7 +203,7 @@ float WaveMath::Opposite(float number)
 	return std::bit_cast<float>(bits);
 }
 
-double WaveMath::Opposite(double number)
+double WaveMath::OppositeD(double number)
 {
 	uint64_t bits = std::bit_cast<uint64_t>(number);
 
