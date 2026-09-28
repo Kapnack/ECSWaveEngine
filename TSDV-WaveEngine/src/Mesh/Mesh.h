@@ -20,14 +20,8 @@ namespace WaveEngine
 		unsigned int* indexes = nullptr;
 		unsigned int indexAmount = 0;
 
-		int minXVertexIndex;
-		int maxXVertexIndex;
-
-		int minYVertexIndex;
-		int maxYVertexIndex;
-
-		int minZVertexIndex;
-		int maxZVertexIndex;
+		Vector3 min;
+		Vector3 max;
 
 		bool isDirty = false;
 
@@ -51,14 +45,8 @@ namespace WaveEngine
 
 		void SetVertexColor(Color color);
 
-		VertexData GetXMinVertex() const;
-		VertexData GetXMaxVertex() const;
-
-		VertexData GetYMinVertex() const;
-		VertexData GetYMaxVertex() const;
-
-		VertexData GetZMinVertex() const;
-		VertexData GetZMaxVertex() const;
+		Vector3 GetMin() const;
+		Vector3 GetMax() const;
 
 		const unsigned int* GetIndexes() const;
 		unsigned int GetIndexesSize() const;

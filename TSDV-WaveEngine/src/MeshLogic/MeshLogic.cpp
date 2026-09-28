@@ -53,22 +53,10 @@ namespace WaveEngine
 		Mesh& mesh = GetMeshManager()->Get(meshID->meshID);
 
 
-		Vector3 worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetXMinVertex().position)).GetTranslate();
+		Vector3 worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetMin())).GetTranslate();
 		box.Encapsulate(worldPos);
 
-		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetXMaxVertex().position)).GetTranslate();
-		box.Encapsulate(worldPos);
-
-		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetYMinVertex().position)).GetTranslate();
-		box.Encapsulate(worldPos);
-
-		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetYMaxVertex().position)).GetTranslate();
-		box.Encapsulate(worldPos);
-
-		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetZMinVertex().position)).GetTranslate();
-		box.Encapsulate(worldPos);
-
-		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetZMaxVertex().position)).GetTranslate();
+		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetMax())).GetTranslate();
 		box.Encapsulate(worldPos);
 
 		return box;

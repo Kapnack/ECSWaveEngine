@@ -1,5 +1,7 @@
 #include "Mesh.h"
 
+#include "WaveMath/Vector3/Vector3.h"
+
 namespace WaveEngine
 {
 	const unsigned int Mesh::NULL_MESH = 0;
@@ -51,34 +53,14 @@ namespace WaveEngine
 		isDirty = true;
 	}
 
-	VertexData Mesh::GetXMinVertex() const
+	Vector3 Mesh::GetMin() const
 	{
-		return vertexBuffer[minXVertexIndex];
+		return min;
 	}
 
-	VertexData Mesh::GetXMaxVertex() const
+	Vector3 Mesh::GetMax() const
 	{
-		return vertexBuffer[maxXVertexIndex];
-	}
-
-	VertexData Mesh::GetYMinVertex() const
-	{
-		return vertexBuffer[minYVertexIndex];
-	}
-
-	VertexData Mesh::GetYMaxVertex() const
-	{
-		return vertexBuffer[maxYVertexIndex];
-	}
-
-	VertexData Mesh::GetZMinVertex() const
-	{
-		return vertexBuffer[minZVertexIndex];
-	}
-
-	VertexData Mesh::GetZMaxVertex() const
-	{
-		return vertexBuffer[maxZVertexIndex];
+		return max;
 	}
 
 	void Mesh::UnDirt()

@@ -91,14 +91,8 @@ namespace WaveEngine
 			}
 		}
 
-		newMesh.minXVertexIndex = minXIndex;
-		newMesh.maxXVertexIndex = maxXIndex;
-
-		newMesh.minYVertexIndex = minYIndex;
-		newMesh.maxYVertexIndex = maxYIndex;
-
-		newMesh.minZVertexIndex = minZIndex;
-		newMesh.maxZVertexIndex = maxZIndex;
+		newMesh.min = Vector3(minX, minY, minZ);
+		newMesh.max = Vector3(maxX, maxY, maxZ);
 	}
 
 	MeshManager* MeshFactory::GetMeshManager()
