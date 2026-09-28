@@ -98,6 +98,19 @@ namespace WaveEngine
 
 				if (Input::Get().IsKeyPressed(Keys::X))
 					GetTransform().Rotate(Vector3::Right() * camereSpeed);
+
+
+				if (Input::Get().IsKeyPressed(Keys::UP))
+					tank->GetTransform().Translate(GetTransform().GetForward() * camereSpeed);
+
+				if (Input::Get().IsKeyPressed(Keys::DOWN))
+					tank->GetTransform().Translate(GetTransform().GetBack() * camereSpeed);
+
+				if (Input::Get().IsKeyPressed(Keys::LEFT))
+					tank->GetTransform().Translate(GetTransform().GetLeft() * camereSpeed);
+
+				if (Input::Get().IsKeyPressed(Keys::RIGHT))
+					tank->GetTransform().Translate(GetTransform().GetRight() * camereSpeed);
 			}
 			else
 			{
@@ -198,7 +211,7 @@ namespace WaveEngine
 					childsTransform.Scale(Vector3::Right() / dived);
 				}
 
-				GetTransform().LookAt(transform.GetPosition());
+				//GetTransform().LookAt(transform.GetPosition());
 			}
 		}
 	};

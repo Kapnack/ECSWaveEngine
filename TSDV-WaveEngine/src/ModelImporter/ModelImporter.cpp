@@ -155,7 +155,12 @@ namespace WaveEngine
 
 		unsigned int meshID = GetMeshFactory()->CreateMesh(filename, vertices, mesh->mNumVertices, indexBuffer, indices.size());
 
-		meshWaveObject.GetComponent<MeshID>().meshID = meshID;
+		MeshID* meshIDComp = nullptr;
+
+		if (!(meshIDComp = meshWaveObject.TryGetComponent<MeshID>()))
+			meshIDComp = &meshWaveObject.AddComponent<MeshID>();
+
+		meshIDComp->meshID = meshID;
 
 		aiMaterial* material = pScene->mMaterials[mesh->mMaterialIndex];
 

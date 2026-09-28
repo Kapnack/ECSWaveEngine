@@ -208,6 +208,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\Managers\TransformLogic\TransformLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\BoundingBoxComp\BoundingBoxComp.h" />
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameChildEvent.h" />
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameParentEvent.h" />
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectChangeName.h" />

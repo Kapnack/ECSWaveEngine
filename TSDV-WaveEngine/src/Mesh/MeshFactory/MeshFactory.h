@@ -17,6 +17,8 @@ namespace WaveEngine
 		unsigned int currentMeshID = Mesh::NULL_MESH;
 		MeshManager* GetMeshManager();
 
+		void CalculateMinMaxVertex(Mesh& newMesh) const;
+
 	public:
 
 		MeshFactory();

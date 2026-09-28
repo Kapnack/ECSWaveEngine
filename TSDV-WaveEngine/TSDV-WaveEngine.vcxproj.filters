@@ -347,6 +347,9 @@
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectChangeName.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="src\ECS\BoundingBoxComp\BoundingBoxComp.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

@@ -12,6 +12,7 @@
 #include "ECS/Mesh/MeshID.h"
 #include "VertexData.h"
 #include "Mesh/Mesh.h"
+#include <ECS/BoundingBoxComp/BoundingBoxComp.h>
 
 namespace WaveEngine
 {
@@ -51,12 +52,24 @@ namespace WaveEngine
 		ECSTransform& transform = waveObject.GetTransform();
 		Mesh& mesh = GetMeshManager()->Get(meshID->meshID);
 
-		for (int i = 0; i < mesh.GetVertexSize(); ++i)
-		{
-			Vector3 worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetVertexBuffer()[i].position)).GetTranslate();
 
-			box.Encapsulate(worldPos);
-		}
+		Vector3 worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetXMinVertex().position)).GetTranslate();
+		box.Encapsulate(worldPos);
+
+		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetXMaxVertex().position)).GetTranslate();
+		box.Encapsulate(worldPos);
+
+		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetYMinVertex().position)).GetTranslate();
+		box.Encapsulate(worldPos);
+
+		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetYMaxVertex().position)).GetTranslate();
+		box.Encapsulate(worldPos);
+
+		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetZMinVertex().position)).GetTranslate();
+		box.Encapsulate(worldPos);
+
+		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetZMaxVertex().position)).GetTranslate();
+		box.Encapsulate(worldPos);
 
 		return box;
 	}
@@ -76,8 +89,7 @@ namespace WaveEngine
 
 		transform.ClearDirtFlags();
 
-		if (meshID)
-			meshID->boundingBox = box;
+		waveObject.GetComponent<BoundingBoxComp>().bounds = box;
 
 		return box;
 	}

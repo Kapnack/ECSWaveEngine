@@ -2,8 +2,8 @@
 
 #include <string>
 
+#include "ECS/BoundingBoxComp/BoundingBoxComp.h"
 #include "ServiceProvider/ServiceProvider.h"
-#include "ECS/Mesh/MeshID.h"
 
 namespace WaveEngine
 {
@@ -21,7 +21,7 @@ namespace WaveEngine
 		WaveObject* newWaveObject = new WaveObject(++currentObjectID);
 
 		newWaveObject->AddComponent<ECSTransform>();
-		newWaveObject->AddComponent<MeshID>();
+		newWaveObject->AddComponent<BoundingBoxComp>();
 
 		GetWaveObjectRegistry()->AddObject(newWaveObject, "WaveObject: " + to_string(currentObjectID) + ".");
 

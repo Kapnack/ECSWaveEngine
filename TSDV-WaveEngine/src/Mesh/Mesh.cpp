@@ -51,6 +51,36 @@ namespace WaveEngine
 		isDirty = true;
 	}
 
+	VertexData Mesh::GetXMinVertex() const
+	{
+		return vertexBuffer[minXVertexIndex];
+	}
+
+	VertexData Mesh::GetXMaxVertex() const
+	{
+		return vertexBuffer[maxXVertexIndex];
+	}
+
+	VertexData Mesh::GetYMinVertex() const
+	{
+		return vertexBuffer[minYVertexIndex];
+	}
+
+	VertexData Mesh::GetYMaxVertex() const
+	{
+		return vertexBuffer[maxYVertexIndex];
+	}
+
+	VertexData Mesh::GetZMinVertex() const
+	{
+		return vertexBuffer[minZVertexIndex];
+	}
+
+	VertexData Mesh::GetZMaxVertex() const
+	{
+		return vertexBuffer[maxZVertexIndex];
+	}
+
 	void Mesh::UnDirt()
 	{
 		isDirty = false;

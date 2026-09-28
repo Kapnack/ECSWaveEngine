@@ -11,8 +11,6 @@ namespace WaveEngine
 	{
 		unsigned int meshID = Mesh::NULL_MESH;
 
-		BoundingBox boundingBox;
-
 		MeshID(const unsigned int& ID) : Component(ID)
 		{ }
 	};

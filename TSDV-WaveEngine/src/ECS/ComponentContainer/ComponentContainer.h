@@ -21,6 +21,12 @@ namespace WaveEngine
 		~IStorage()
 		{ }
 
+		virtual void Add(unsigned int entitiy) = 0;
+
+		virtual bool Has(unsigned int entity) const = 0;
+
+		virtual void Remove(unsigned int entity) = 0;
+
 		virtual WaveBehaviour* GetAsWaveBehaviour(unsigned int entity) { return nullptr; }
 	};
 
@@ -35,7 +41,7 @@ namespace WaveEngine
 
 	public:
 
-		void Add(unsigned int entity)
+		void Add(unsigned int entity) override
 		{
 			if (entity >= componentByEntity.size())
 			{
@@ -59,7 +65,7 @@ namespace WaveEngine
 			component.LateInit();
 		}
 
-		bool Has(unsigned int entity) const
+		bool Has(unsigned int entity) const override
 		{
 			if (entity >= componentByEntity.size())
 				return false;
@@ -67,7 +73,7 @@ namespace WaveEngine
 			return componentByEntity[entity] != -1;
 		}
 
-		void Remove(unsigned int entity)
+		void Remove(unsigned int entity) override
 		{
 			if (!Has(entity))
 				return;

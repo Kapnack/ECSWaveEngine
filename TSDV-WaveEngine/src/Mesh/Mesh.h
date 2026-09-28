@@ -7,6 +7,7 @@
 namespace WaveEngine
 {
 	class Renderer;
+	class MeshFactory;
 
 	class Mesh
 	{
@@ -19,12 +20,22 @@ namespace WaveEngine
 		unsigned int* indexes = nullptr;
 		unsigned int indexAmount = 0;
 
+		int minXVertexIndex;
+		int maxXVertexIndex;
+
+		int minYVertexIndex;
+		int maxYVertexIndex;
+
+		int minZVertexIndex;
+		int maxZVertexIndex;
+
 		bool isDirty = false;
 
 		bool GetDirty() const;
 		void UnDirt();
 
 		friend class Renderer;
+		friend class MeshFactory;
 
 	public:
 
@@ -39,6 +50,15 @@ namespace WaveEngine
 		string GetName();
 
 		void SetVertexColor(Color color);
+
+		VertexData GetXMinVertex() const;
+		VertexData GetXMaxVertex() const;
+
+		VertexData GetYMinVertex() const;
+		VertexData GetYMaxVertex() const;
+
+		VertexData GetZMinVertex() const;
+		VertexData GetZMaxVertex() const;
 
 		const unsigned int* GetIndexes() const;
 		unsigned int GetIndexesSize() const;

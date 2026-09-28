@@ -12,6 +12,7 @@
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "BinarySpacePartition/BinarySpacePartition.h"
+#include <ECS/BoundingBoxComp/BoundingBoxComp.h>
 
 namespace WaveEngine
 {
@@ -41,18 +42,19 @@ namespace WaveEngine
 
 	void DrawLogic::CheckChildsAreInFrustum(WaveObject& waveObject, Camera& camera)
 	{
-		const MeshID& meshComp = waveObject.GetComponent<MeshID>();
+		const BoundingBoxComp& objectBounds = waveObject.GetComponent<BoundingBoxComp>();
 		const ECSTransform& transform = waveObject.GetTransform();
 
-		GetRenderer()->SubmitWireBox(meshComp.boundingBox, Color::Yellow());
+		GetRenderer()->SubmitWireBox(objectBounds.bounds, Color::Yellow());
 
-		if (!camera.IsInsideFrustum(meshComp.boundingBox))
+		if (!camera.IsInsideFrustum(objectBounds.bounds))
 			return;
 
 		const MeshRenderer* meshRenderer = waveObject.TryGetComponent<MeshRenderer>();
 
-		if (meshRenderer && GetBinarySpacePartition()->ObjectsShareSpace(camera.GetTransform().GetPosition(), meshComp.boundingBox.GetCenter(), meshComp.boundingBox.GetExtents()))
-			GetRenderer()->Submit(transform, meshComp, *meshRenderer, camera.GetID());
+		if (MeshID* meshComp = waveObject.TryGetComponent<MeshID>())
+			if (meshRenderer && GetBinarySpacePartition()->ObjectsShareSpace(camera.GetTransform().GetPosition(), objectBounds.bounds.GetCenter(), objectBounds.bounds.GetExtents()))
+				GetRenderer()->Submit(transform, *meshComp, *meshRenderer, camera.GetID());
 
 		for (WaveObject* childWaveObject : waveObject.GetTransform().GetChilds())
 			CheckChildsAreInFrustum(*childWaveObject, camera);

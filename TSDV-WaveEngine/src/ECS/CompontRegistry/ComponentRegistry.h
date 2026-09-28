@@ -79,13 +79,30 @@ namespace WaveEngine
 
 				for (const type_index& typeIndex : typeIndices)
 				{
-					auto storageIt = storages.find(typeIndex);
+					unordered_map<type_index, IStorage*>::iterator storageIt = storages.find(typeIndex);
 					if (storageIt == storages.end())
 						continue;
 
 					if (WaveBehaviour* behaviour = storageIt->second->GetAsWaveBehaviour(entity))
 						waveBehaviours.push_back(behaviour);
 				}
+			}
+
+			return waveBehaviours;
+		}
+
+		vector<WaveBehaviour*> GetWaveBehaviours(unsigned int entity)
+		{
+			vector<WaveBehaviour*> waveBehaviours;
+
+			for (type_index& waveObjectType : waveBehavioursByEntityID[entity])
+			{
+				unordered_map<type_index, IStorage*>::iterator storageIt = storages.find(waveObjectType);
+				if (storageIt == storages.end())
+					continue;
+
+				if (WaveBehaviour* behaviour = storageIt->second->GetAsWaveBehaviour(entity))
+					waveBehaviours.push_back(behaviour);
 			}
 
 			return waveBehaviours;

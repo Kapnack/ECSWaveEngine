@@ -20,6 +20,11 @@ namespace WaveEngine
 		{
 		}
 
+		virtual void OnCollition()
+		{
+
+		}
+
 		virtual void Destroy()
 		{
 		}
