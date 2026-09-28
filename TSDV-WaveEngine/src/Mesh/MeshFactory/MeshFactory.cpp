@@ -5,7 +5,6 @@
 #include "WaveMath/Vector3/Vector3.h"
 #include "Mesh/MeshManager/MeshManager.h"
 #include "ServiceProvider/ServiceProvider.h"
-#include <cfloat>
 
 namespace WaveEngine
 {
@@ -32,67 +31,34 @@ namespace WaveEngine
 	{
 		VertexData currentVertex;
 
-		int minXIndex = 0;
-		float minX = FLT_MAX;
-
-		int maxXIndex = 0;
-		float maxX = -FLT_MAX;
-
-		int minYIndex = 0;
-		float minY = FLT_MAX;
-
-		int maxYIndex = 0;
-		float maxY = -FLT_MAX;
-
-		int minZIndex = 0;
-		float minZ = FLT_MAX;
-
-		int maxZIndex = 0;
-		float maxZ = -FLT_MAX;
+		Vector3 min = Vector3::Max();
+		Vector3 max = Vector3::NMax();
 
 		for (int i = 0; i < newMesh.GetVertexSize(); i++)
 		{
 			currentVertex = newMesh.GetVertexBuffer()[i];
 
-			if (minX > currentVertex.position.x)
-			{
-				minXIndex = i;
-				minX = currentVertex.position.x;
-			}
+			if (min.x > currentVertex.position.x)
+				min.x = currentVertex.position.x;
 
-			if (maxX < currentVertex.position.x)
-			{
-				maxXIndex = i;
-				maxX = currentVertex.position.x;
-			}
+			if (max.x < currentVertex.position.x)
+				max.x = currentVertex.position.x;
 
-			if (minY > currentVertex.position.y)
-			{
-				minYIndex = i;
-				minY = currentVertex.position.y;
-			}
+			if (min.y > currentVertex.position.y)
+				min.y = currentVertex.position.y;
 
-			if (maxY < currentVertex.position.y)
-			{
-				maxYIndex = i;
-				maxY = currentVertex.position.y;
-			}
+			if (max.y < currentVertex.position.y)
+				max.y = currentVertex.position.y;
 
-			if (minZ > currentVertex.position.z)
-			{
-				minZIndex = i;
-				minZ = currentVertex.position.z;
-			}
+			if (min.z > currentVertex.position.z)
+				min.z = currentVertex.position.z;
 
-			if (maxZ < currentVertex.position.z)
-			{
-				maxZIndex = i;
-				maxZ = currentVertex.position.z;
-			}
+			if (max.z < currentVertex.position.z)
+				max.z = currentVertex.position.z;
 		}
 
-		newMesh.min = Vector3(minX, minY, minZ);
-		newMesh.max = Vector3(maxX, maxY, maxZ);
+		newMesh.min = min;
+		newMesh.max = max;
 	}
 
 	MeshManager* MeshFactory::GetMeshManager()
