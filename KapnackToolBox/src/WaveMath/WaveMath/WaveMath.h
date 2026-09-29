@@ -16,6 +16,8 @@ public:
 
 	static bool Approximately(float a, float b);
 
+	static float Pow(float number, float exponencial = 2.0f);
+
 	static short Abs(short number);
 	static int Abs(int number);
 	static float Abs(float number);

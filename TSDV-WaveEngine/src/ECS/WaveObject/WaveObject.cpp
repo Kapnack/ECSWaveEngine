@@ -2,8 +2,10 @@
 
 #include "WaveObjectRegistry.h"
 #include "EventSystem/EventSystem.h"
+#include "ECS/Component/Component.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "ServiceProvider/ServiceProvider.h"
+#include "ECS/BoundingBoxComp/BoundingBoxComp.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 
 namespace WaveEngine
@@ -42,6 +44,16 @@ namespace WaveEngine
 		return GetWaveObjectRegistry()->GetObjectName(ID);
 	}
 
+	void WaveObject::SetStatic(bool isStatic)
+	{
+		this->isStatic = isStatic;
+	}
+
+	bool WaveObject::IsStatic() const
+	{
+		return isStatic;
+	}
+
 	unsigned int WaveObject::GetID() const
 	{
 		return ID;
@@ -50,5 +62,10 @@ namespace WaveEngine
 	ECSTransform& WaveObject::GetTransform() const
 	{
 		return GetComponentRegistry()->GetComponent<ECSTransform>(ID);
+	}
+
+	BoundingBoxComp& WaveObject::GetBounds() const
+	{
+		return GetComponentRegistry()->GetComponent<BoundingBoxComp>(ID);
 	}
 }

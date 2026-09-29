@@ -48,6 +48,7 @@ struct WAVEEXPORT Matrix4x4 final
 	void UpdateMaxtrix();
 
 	Matrix4x4 operator*(const Matrix4x4& other) const;
+	Vector3 operator*(Vector3 other) const;
 
 	static Matrix4x4 Identity();
 	static Matrix4x4 CreateScale(float x, float y, float z);

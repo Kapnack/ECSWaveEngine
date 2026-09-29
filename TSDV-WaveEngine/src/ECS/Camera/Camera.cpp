@@ -1,10 +1,5 @@
 #include "Camera.h"
 
-#include <glm/glm.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/euler_angles.hpp>
-
 #include "ServiceProvider/ServiceProvider.h"
 #include "../Transform/ECSTransform.h"
 #include <CameraManager/CameraManager.h>

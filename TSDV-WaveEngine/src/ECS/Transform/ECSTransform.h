@@ -8,6 +8,7 @@
 #include "WaveMath/Vector2/Vector2.h"
 #include "EventSystem/EventSystem.h"
 #include "WaveMath/Matrix4x4/Matrix4x4.h"
+#include "WaveMath/Quaternion/Quaternion.h"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ namespace WaveEngine
 		Vector3 previousPosition;
 		Vector3 position;
 		Vector3 scale = Vector3(1, 1, 1);
-		Vector3 rotation;
+		Quaternion rotation;
 
 		bool dirty = false;
 		bool hasChildDirty = false;
@@ -99,11 +100,13 @@ namespace WaveEngine
 		WAVEEXPORT void SetRotation(Vector2 vector);
 		WAVEEXPORT void SetRotation(float x, float y);
 		WAVEEXPORT virtual void SetRotation(float x, float y, float z);
+		WAVEEXPORT void SetRotation(Quaternion quaternion);
 
 		WAVEEXPORT void Rotate(Vector3 vector);
 		WAVEEXPORT void Rotate(Vector2 vector);
 		WAVEEXPORT void Rotate(float x, float y);
 		WAVEEXPORT virtual void Rotate(float x, float y, float z);
+		WAVEEXPORT void Rotate(Quaternion quaternion);
 
 		WAVEEXPORT Vector3 WorldToLocal(Vector3 worldPoint) const;
 

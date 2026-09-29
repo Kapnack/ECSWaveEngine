@@ -13,6 +13,30 @@ float WaveMath::PI()
 	return 3.14159274f;
 }
 
+float WaveMath::Pow(float number, float exponencial)
+{
+	if (exponencial == 0)
+		return 1.0f;
+
+	long long n = exponencial;
+	bool negative = n < 0;
+
+	if (negative) 
+		n = -n;
+
+	float result = 1.0f;
+	while (n > 0)
+	{
+		if (n & 1)
+			result *= number;
+
+		number *= number;
+		n >>= 1;
+	}
+
+	return negative ? 1.0f / result : result;
+}
+
 bool WaveMath::Approximately(float a, float b)
 {
 	return Abs(b - a) < Epsilon();

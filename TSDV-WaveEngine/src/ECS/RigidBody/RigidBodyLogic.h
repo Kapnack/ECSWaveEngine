@@ -1,7 +1,10 @@
 #pragma once
 
-#include "ECS/ComponentContainer/ComponentContainer.h"
+#include <list>
+
 #include "RigidBody.h"
+#include "Physics/Contact.h"
+#include "ECS/ComponentContainer/ComponentContainer.h"
 
 namespace WaveEngine
 {
@@ -10,6 +13,8 @@ namespace WaveEngine
 	private:
 
 		const float Gravity = 9.81f;
+
+		list<Contact> contacts;
 
 		ComponentContainer<RigidBody>& GetRigidBodyContainer();
 

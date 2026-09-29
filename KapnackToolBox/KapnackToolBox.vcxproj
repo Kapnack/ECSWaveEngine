@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="src\EventSystem\EventSystem.cpp" />
     <ClCompile Include="src\ServiceProvider\Service.cpp" />
+    <ClCompile Include="src\WaveMath\Matrix3x3\Matrix3x3.cpp" />
     <ClCompile Include="src\WaveMath\Matrix4x4\Matrix4x4.cpp" />
     <ClCompile Include="src\WaveMath\Quaternion\Quaternion.cpp" />
     <ClCompile Include="src\WaveMath\Vector2\Vector2.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="src\ServiceProvider\Service.h" />
     <ClInclude Include="src\ServiceProvider\ServiceProvider.h" />
     <ClInclude Include="src\Singleton\Singleton.h" />
+    <ClInclude Include="src\WaveMath\Matrix3x3\Matrix3x3.h" />
     <ClInclude Include="src\WaveMath\Matrix4x4\Matrix4x4.h" />
     <ClInclude Include="src\WaveMath\Quaternion\Quaternion.h" />
     <ClInclude Include="src\WaveMath\Vector2\Vector2.h" />

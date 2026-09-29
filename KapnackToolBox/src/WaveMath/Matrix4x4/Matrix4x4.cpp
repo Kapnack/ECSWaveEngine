@@ -169,6 +169,16 @@ Matrix4x4 Matrix4x4::operator*(const Matrix4x4& other) const
 	);
 }
 
+Vector3 Matrix4x4::operator*(Vector3 vector3) const
+{
+    return Vector3
+	(
+        vector3.x * m00 + vector3.y * m01 + vector3.z * m02 + m03,
+		vector3.x * m10 + vector3.y * m11 + vector3.z * m12 + m13,
+		vector3.x * m20 + vector3.y * m21 + vector3.z * m22 + m23
+    );
+}
+
 Matrix4x4 Matrix4x4::Identity()
 {
 	return Matrix4x4

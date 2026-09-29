@@ -14,12 +14,15 @@ namespace WaveEngine
 {
 	class WaveObjectFactory;
 	class WaveObjectRegistry;
+	class BoundingBoxComp;
 
 	class WaveObject : public WObject
 	{
 	private:
 
 		unsigned int ID = NULL_OBJECT;
+
+		bool isStatic = false;
 
 		ComponentRegistry* GetComponentRegistry() const;
 		EventSystem* GetEventSystem() const;
@@ -38,9 +41,13 @@ namespace WaveEngine
 		void SetName(const string& name);
 		string GetName() const;
 
+		void SetStatic(bool isStatic);
+		bool IsStatic() const;
+
 		unsigned int GetID() const;
 
 		ECSTransform& GetTransform() const;
+		BoundingBoxComp& GetBounds() const;
 
 		template<TypeComponent T>
 		T& AddComponent()

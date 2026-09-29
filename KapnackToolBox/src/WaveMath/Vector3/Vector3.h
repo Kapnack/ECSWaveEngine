@@ -40,6 +40,7 @@ struct WAVEEXPORT Vector3 final
 	Vector3 operator-() const;
 	void operator-=(Vector3 other);
 	void operator=(Vector2 vector2);
+	Vector3 operator*(Vector3 other) const;
 	Vector3 operator*(float scalar) const;
 	friend Vector3 operator*(float scalar, Vector3 vector3);
 	void operator*=(float scalar);

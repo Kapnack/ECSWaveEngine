@@ -42,7 +42,7 @@ namespace WaveEngine
 
 	Vector3 ECSTransform::GetEulerRotation() const
 	{
-		return rotation;
+		return globalModel.GetRotation().ToEuler();
 	}
 
 	Vector3 ECSTransform::GetLocalPosition() const
@@ -187,15 +187,18 @@ namespace WaveEngine
 
 	void ECSTransform::SetRotation(float x, float y)
 	{
-		SetRotation(x, y, rotation.z);
+		SetRotation(Quaternion::Euler(x, y, GetLocalEulerRotation().z));
+	}
+
+	void ECSTransform::SetRotation(Quaternion quaternion)
+	{
+		rotation = quaternion;
+		MarkDirty();
 	}
 
 	void ECSTransform::SetRotation(float x, float y, float z)
 	{
-		rotation.x = x;
-		rotation.y = y;
-		rotation.z = z;
-
+		SetRotation(Quaternion::Euler(x, y, z));
 		MarkDirty();
 	}
 
@@ -216,10 +219,12 @@ namespace WaveEngine
 
 	void ECSTransform::Rotate(float x, float y, float z)
 	{
-		rotation.x += x;
-		rotation.y += y;
-		rotation.z += z;
+		Rotate(Quaternion::Euler(x, y, z));
+	}
 
+	void ECSTransform::Rotate(Quaternion quaternion)
+	{
+		rotation *= quaternion;
 		MarkDirty();
 	}
 
@@ -231,7 +236,7 @@ namespace WaveEngine
 
 	void ECSTransform::LookAt(Vector3 target)
 	{
-		rotation = Quaternion::LookAt(target).ToEuler();
+		rotation = Quaternion::LookAt(target);;
 		MarkDirty();
 	}
 
@@ -354,7 +359,7 @@ namespace WaveEngine
 
 	void ECSTransform::CalculateTRS()
 	{
-		localModel = Matrix4x4::TRS(Matrix4x4::CreateTranslate(position), Matrix4x4::CreateRotation(Quaternion::Euler(rotation)), Matrix4x4::CreateScale(scale));
+		localModel = Matrix4x4::TRS(Matrix4x4::CreateTranslate(position), Matrix4x4::CreateRotation(rotation), Matrix4x4::CreateScale(scale));
 
 		UnDirty();
 	}

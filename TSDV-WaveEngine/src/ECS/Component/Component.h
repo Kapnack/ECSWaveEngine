@@ -6,6 +6,7 @@ namespace WaveEngine
 {
 	class WaveObject;
 	class ECSTransform;
+	class BoundingBoxComp;
 
 	class Component : public WObject
 	{
@@ -27,6 +28,8 @@ namespace WaveEngine
 		WaveObject& GetWaveObject() const;
 
 		ECSTransform& GetTransform() const;
+
+		BoundingBoxComp& GetBounds() const;
 
 		unsigned int GetID() const;
 

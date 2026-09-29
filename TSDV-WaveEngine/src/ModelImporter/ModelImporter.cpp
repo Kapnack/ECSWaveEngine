@@ -24,6 +24,7 @@
 #include "ECS/Transform/ECSTransform.h"
 #include "ECS/WaveObject/WaveObject.h"
 #include "TextureImporter/Texture.h"
+#include <WaveMath/Quaternion/Quaternion.h>
 
 namespace WaveEngine
 {
@@ -241,11 +242,7 @@ namespace WaveEngine
 
 		transform.SetPosition(pos.x, pos.y, pos.z);
 		transform.SetScale(scale.x, scale.y, scale.z);
-
-		glm::quat glmQuat = glm::quat(aiQuat.w, aiQuat.x, aiQuat.y, aiQuat.z);
-		glm::vec3 euler = glm::degrees(glm::eulerAngles(glmQuat));
-
-		transform.SetRotation(euler.x, euler.y, euler.z);
+		transform.SetRotation(Quaternion(aiQuat.x, aiQuat.y, aiQuat.z, aiQuat.w));
 	}
 
 	std::filesystem::path ModelImporter::FindTexture(const std::filesystem::path& modelDirectory, const std::string& textureName)

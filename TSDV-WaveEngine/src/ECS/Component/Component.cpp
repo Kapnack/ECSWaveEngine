@@ -1,9 +1,10 @@
 #include "Component.h"
 
+#include "ECS/WObject/WObject.h"
+#include "ECS/WaveObject/WaveObject.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
-#include "ECS/WaveObject/WaveObject.h"
-#include "ECS/WObject/WObject.h"
+#include "ECS/BoundingBoxComp/BoundingBoxComp.h"
 
 namespace WaveEngine
 {
@@ -32,6 +33,11 @@ namespace WaveEngine
 	ECSTransform& Component::GetTransform() const
 	{
 		return GetWaveObject().GetTransform();
+	}
+
+	BoundingBoxComp& Component::GetBounds() const
+	{
+		return GetWaveObject().GetBounds();
 	}
 
 	unsigned int Component::GetID() const

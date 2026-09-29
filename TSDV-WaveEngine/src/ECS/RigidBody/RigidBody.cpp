@@ -1,5 +1,9 @@
 #include "RigidBody.h"
 
+#include "ECS/Component/Component.h"
+#include "ServiceProvider/ServiceProvider.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+
 namespace WaveEngine
 {
 	WaveObjectRegistry* RigidBody::GetWaveObjectRegistry() const
@@ -7,7 +11,7 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
 	}
 
-	RigidBody::RigidBody(const unsigned int& id) : Component(id)
+	RigidBody::RigidBody(unsigned int id) : Component(id)
 	{
 
 	}
@@ -15,11 +19,6 @@ namespace WaveEngine
 	void RigidBody::SetGravityAffected(bool isGravityAffected)
 	{
 		this->isGravityAffected = isGravityAffected;
-	}
-
-	void RigidBody::SetIsStatic(bool isStatic)
-	{
-		this->isStatic = isStatic;
 	}
 
 	void RigidBody::SetRestitution(float restitution)
@@ -32,14 +31,19 @@ namespace WaveEngine
 		this->mass = mass;
 	}
 
+	bool RigidBody::IsGrounded() const
+	{
+		return isGrounded;
+	}
+
+	float RigidBody::GetMass() const
+	{
+		return mass;
+	}
+
 	float RigidBody::GetInvMass() const
 	{
 		return mass <= 0.0f ? 0.0f : 1.0f / mass;
-	}
-
-	bool RigidBody::GetIsStatic() const
-	{
-		return isStatic;
 	}
 
 	bool RigidBody::IsGravityAffected() const
