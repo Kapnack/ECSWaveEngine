@@ -193,6 +193,11 @@ namespace WaveEngine
 		return true;
 	}
 
+	bool Camera::IsOrthografic() const
+	{
+		return orthografic;
+	}
+
 	Window* Camera::GetWindow() const
 	{
 		return ServiceProvider::Instance().Get<Window>();

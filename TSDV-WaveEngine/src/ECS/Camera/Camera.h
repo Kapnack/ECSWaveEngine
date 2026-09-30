@@ -76,6 +76,7 @@ namespace WaveEngine
 
 		void ExtractFrustumPlanes();
 		bool IsInsideFrustum(const BoundingBox& box) const;
+		bool IsOrthografic() const;
 
 		WAVEEXPORT void SetIsActive(bool isActive) override;
 		WAVEEXPORT void SetOrderIndex(int orderIndex);
