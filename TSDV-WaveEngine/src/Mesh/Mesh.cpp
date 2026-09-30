@@ -63,6 +63,16 @@ namespace WaveEngine
 		return max;
 	}
 
+	Vector3 Mesh::GetCenter() const
+	{
+		return (max + min) * 0.5f;
+	}
+
+	Vector3 Mesh::GetExtends() const
+	{
+		return (max - min) * 0.5f;
+	}
+
 	void Mesh::UnDirt()
 	{
 		isDirty = false;

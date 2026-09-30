@@ -47,6 +47,8 @@ namespace WaveEngine
 
 		Vector3 GetMin() const;
 		Vector3 GetMax() const;
+		Vector3 GetCenter() const;
+		Vector3 GetExtends() const;
 
 		const unsigned int* GetIndexes() const;
 		unsigned int GetIndexesSize() const;
