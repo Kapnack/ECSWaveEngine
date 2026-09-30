@@ -29,6 +29,8 @@ struct WAVEEXPORT Vector3 final
 	void Reflect(Vector3 normal);
 	Vector3 Reflected(Vector3 normal) const;
 	bool Approximately(Vector3 other) const;
+	void Abs();
+	Vector3 Absed() const;
 
 	Vector3 operator/(Vector3 other) const;
 	Vector3 operator/(float scalar) const;
@@ -85,4 +87,5 @@ struct WAVEEXPORT Vector3 final
 	static bool Approximately(Vector3 a, Vector3 b);
 	static Vector3 Deg2Rad(Vector3 vector);
 	static Vector3 Rad2Deg(Vector3 vector);
+	static Vector3 Abs(Vector3 vector);
 };

@@ -100,6 +100,16 @@ bool Vector3::Approximately(Vector3 other) const
 	return Approximately(*this, other);
 }
 
+void Vector3::Abs()
+{
+	*this = Absed();
+}
+
+Vector3 Vector3::Absed() const
+{
+	return Abs(*this);
+}
+
 Vector3 Vector3::operator/(Vector3 other) const
 {
 	return Vector3(x / other.x, y / other.y, z / other.z);
@@ -427,4 +437,9 @@ Vector3 Vector3::Deg2Rad(Vector3 vector)
 Vector3 Vector3::Rad2Deg(Vector3 vector)
 {
 	return Vector3(WaveMath::Rad2Deg(vector.x), WaveMath::Rad2Deg(vector.y), WaveMath::Rad2Deg(vector.z));
+}
+
+Vector3 Vector3::Abs(Vector3 vector)
+{
+	return Vector3(WaveMath::Abs(vector.x), WaveMath::Abs(vector.y), WaveMath::Abs(vector.z));
 }
