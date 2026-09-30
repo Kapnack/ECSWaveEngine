@@ -13,6 +13,7 @@
 #include "VertexData.h"
 #include "Mesh/Mesh.h"
 #include <ECS/BoundingBoxComp/BoundingBoxComp.h>
+#include <WaveMath/WaveMath/WaveMath.h>
 
 namespace WaveEngine
 {
@@ -45,20 +46,21 @@ namespace WaveEngine
 	BoundingBox MeshLogic::EncapsulateMeshVerts(WaveObject& waveObject, BoundingBox box)
 	{
 		MeshID* meshID = waveObject.TryGetComponent<MeshID>();
-
 		if (!meshID || meshID->meshID == Mesh::NULL_MESH)
 			return box;
 
-		ECSTransform& transform = waveObject.GetTransform();
+		const Matrix4x4& m = waveObject.GetTransform().GetGlobalModel();
 		Mesh& mesh = GetMeshManager()->Get(meshID->meshID);
 
+		Vector3 center = mesh.GetCenter();
+		Vector3 extents = mesh.GetExtends();
 
-		Vector3 worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetMin())).GetTranslate();
-		box.Encapsulate(worldPos);
+		Vector3 worldCenter = m * center;
 
-		worldPos = (transform.GetGlobalModel() * Matrix4x4::CreateTranslate(mesh.GetMax())).GetTranslate();
-		box.Encapsulate(worldPos);
+		Vector3 worldExtents = m.ArvosMethod(extents);
 
+		box.Encapsulate(worldCenter - worldExtents);
+		box.Encapsulate(worldCenter + worldExtents);
 		return box;
 	}
 
