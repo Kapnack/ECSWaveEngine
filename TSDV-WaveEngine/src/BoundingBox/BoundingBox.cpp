@@ -85,7 +85,7 @@ namespace WaveEngine
 
 	Vector3 BoundingBox::GetExtents() const
 	{
-		return (max - min) * 0.5f;
+		return GetSize() * 0.5f;
 	}
 
 	Vector3 BoundingBox::GetMin() const
