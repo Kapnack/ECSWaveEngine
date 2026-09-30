@@ -21,7 +21,7 @@ float WaveMath::Pow(float number, float exponencial)
 	long long n = exponencial;
 	bool negative = n < 0;
 
-	if (negative) 
+	if (negative)
 		n = -n;
 
 	float result = 1.0f;
@@ -152,12 +152,12 @@ float WaveMath::Rad2Deg(float number)
 
 short WaveMath::MaxS(short a, short b)
 {
-	return a - ((a - b) & ((a - b) >> 15));
+	return (a - (a - b & (a - b >> 31)));
 }
 
 short WaveMath::MinS(short a, short b)
 {
-	return b + ((a - b) & ((a - b) >> 15));
+	return (b + (a - b & (a - b >> 31)));
 }
 
 int WaveMath::MaxI(int a, int b)
