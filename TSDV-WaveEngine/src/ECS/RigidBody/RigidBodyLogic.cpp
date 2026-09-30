@@ -20,6 +20,8 @@ namespace WaveEngine
 
 	void RigidBodyLogic::Update(float deltaTime)
 	{
+		contacts.clear();
+
 		for (RigidBody& rigidBody : GetRigidBodyContainer().GetComponents())
 		{
 			if (rigidBody.GetWaveObject().IsStatic())
