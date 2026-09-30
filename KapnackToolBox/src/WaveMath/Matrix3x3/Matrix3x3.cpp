@@ -67,6 +67,11 @@ Matrix3x3 Matrix3x3::Rotated(Vector3 rotation) const
 	return Rotated(*this, rotation);
 }
 
+Vector3 Matrix3x3::ArvosMethod(Vector3 extends) const
+{
+	return ArvosMethod(*this, extends);
+}
+
 Matrix3x3 Matrix3x3::operator+(const Matrix3x3& other)
 {
 	return Matrix3x3(
@@ -229,6 +234,16 @@ float Matrix3x3::Determinant(const Matrix3x3& matrix3x3)
 Matrix3x3 Matrix3x3::Rotated(const Matrix3x3& inertia, Vector3 rotation)
 {
 	return Rotated(inertia, Quaternion::Euler(rotation));
+}
+
+Vector3 Matrix3x3::ArvosMethod(const Matrix3x3& matrix, Vector3 extends)
+{
+	return Vector3
+	(
+		WaveMath::Abs(matrix.m00) * extends.x + WaveMath::Abs(matrix.m01) * extends.y + WaveMath::Abs(matrix.m02) * extends.z,
+		WaveMath::Abs(matrix.m10) * extends.x + WaveMath::Abs(matrix.m11) * extends.y + WaveMath::Abs(matrix.m12) * extends.z,
+		WaveMath::Abs(matrix.m20) * extends.x + WaveMath::Abs(matrix.m21) * extends.y + WaveMath::Abs(matrix.m22) * extends.z
+	);
 }
 
 Matrix3x3 Matrix3x3::Rotated(const Matrix3x3& inertia, Quaternion rotation)

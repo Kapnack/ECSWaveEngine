@@ -5,6 +5,8 @@
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Quaternion/Quaternion.h"
 
+struct Matrix3x3;
+
 struct WAVEEXPORT Matrix4x4 final
 {
 	float m00, m01, m02, m03;
@@ -31,6 +33,7 @@ struct WAVEEXPORT Matrix4x4 final
 	void SetScale(Vector3 vector);
 	void AddScale(Vector3 vector);
 	Matrix4x4 GetScaleMatrix() const;
+	Vector3 ArvosMethod(Vector3 extends) const;
 
 	void Decomposed(Vector3& translation, Quaternion& rotation, Vector3& scale);
 	void Decomposed(Vector3& translation, Vector3& rotation, Vector3& scale);
@@ -61,6 +64,7 @@ struct WAVEEXPORT Matrix4x4 final
 	static Matrix4x4 CreateRotation(Quaternion quaternian);
 	static Matrix4x4 CreateTranslate(float x, float y, float z);
 	static Matrix4x4 CreateTranslate(Vector3 vector);
+	static Matrix3x3 GetSubMatrix3x3(const Matrix4x4& matrix);
 
 	static Vector3 GetFoward(const Matrix4x4& matrix);
 	static Vector3 GetBack(const Matrix4x4& matrix);
@@ -79,7 +83,7 @@ struct WAVEEXPORT Matrix4x4 final
 	static void Decompose(const Matrix4x4& matrix, Vector3& translation, Vector3& rotation, Vector3& scale);
 
 	static Matrix4x4 CreateLookAt(Vector3 eye, Vector3 center, Vector3 up);
-
 	static Matrix4x4 CreatePerspective(float fovYRadians, float aspectRatio, float zNear, float zFar);
 	static Matrix4x4 CreateOrthographic(float left, float right, float bottom, float top, float zNear, float zFar);
+	static Vector3 ArvosMethod(const Matrix4x4& matrix, Vector3 extends);
 };

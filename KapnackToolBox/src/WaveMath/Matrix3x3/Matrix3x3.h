@@ -27,6 +27,7 @@ public:
 	Matrix3x3 Rotated(Quaternion rotation) const;
 	void Rotate(Vector3 rotation);
 	Matrix3x3 Rotated(Vector3 rotation) const;
+	Vector3 ArvosMethod(Vector3 extends) const;
 
 	Matrix3x3 operator+(const Matrix3x3& other);
 	Matrix3x3 operator-(const Matrix3x3& other);
@@ -48,4 +49,5 @@ public:
 	static float Determinant(const Matrix3x3& matrix3x3);
 	static Matrix3x3 Rotated(const Matrix3x3& inertia, Quaternion rotation);
 	static Matrix3x3 Rotated(const Matrix3x3& inertia, Vector3 rotation);
+	static Vector3 ArvosMethod(const Matrix3x3& matrix, Vector3 extends);
 };

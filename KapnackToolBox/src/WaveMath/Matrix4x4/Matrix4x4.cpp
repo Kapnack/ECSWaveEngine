@@ -4,6 +4,7 @@
 
 #include <stdexcept> 
 #include "WaveMath/WaveMath/WaveMath.h"
+#include "WaveMath/Matrix3x3/Matrix3x3.h"
 
 Matrix4x4::Matrix4x4()
 {
@@ -86,6 +87,11 @@ void Matrix4x4::AddScale(Vector3 vector)
 Matrix4x4 Matrix4x4::GetScaleMatrix() const
 {
 	return CreateScale(m00, m11, m22);
+}
+
+Vector3 Matrix4x4::ArvosMethod(Vector3 extends) const
+{
+	return ArvosMethod(*this, extends);
 }
 
 void Matrix4x4::Decomposed(Vector3& translation, Quaternion& rotation, Vector3& scale)
@@ -171,12 +177,12 @@ Matrix4x4 Matrix4x4::operator*(const Matrix4x4& other) const
 
 Vector3 Matrix4x4::operator*(Vector3 vector3) const
 {
-    return Vector3
+	return Vector3
 	(
-        vector3.x * m00 + vector3.y * m01 + vector3.z * m02 + m03,
+		vector3.x * m00 + vector3.y * m01 + vector3.z * m02 + m03,
 		vector3.x * m10 + vector3.y * m11 + vector3.z * m12 + m13,
 		vector3.x * m20 + vector3.y * m21 + vector3.z * m22 + m23
-    );
+	);
 }
 
 Matrix4x4 Matrix4x4::Identity()
@@ -314,6 +320,11 @@ Matrix4x4 Matrix4x4::CreateTranslate(Vector3 vector)
 	return CreateTranslate(vector.x, vector.y, vector.z);
 }
 
+Matrix3x3 Matrix4x4::GetSubMatrix3x3(const Matrix4x4& matrix)
+{
+	return Matrix3x3(matrix.m00, matrix.m01, matrix.m02, matrix.m10, matrix.m11, matrix.m12, matrix.m20, matrix.m21, matrix.m22);
+}
+
 Matrix4x4 Matrix4x4::CreateTranslate(float x, float y, float z)
 {
 	Matrix4x4 translate;
@@ -381,9 +392,6 @@ Matrix4x4 Matrix4x4::Inversed(const Matrix4x4& matrix)
 	const float c5 = matrix.m22 * matrix.m33 - matrix.m32 * matrix.m23;
 
 	const float det = s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0;
-
-	if (WaveMath::Abs(det) < 1e-8f)
-		throw std::runtime_error("Matrix4x4::Inverse - matrix is singular and cannot be inverted");
 
 	const float invDet = 1.0f / det;
 
@@ -464,9 +472,6 @@ Matrix4x4 Matrix4x4::CreateLookAt(Vector3 eye, Vector3 center, Vector3 up)
 
 Matrix4x4 Matrix4x4::CreatePerspective(float fovYRadians, float aspectRatio, float zNear, float zFar)
 {
-	if (WaveMath::Abs(zFar - zNear) < WaveMath::Epsilon())
-		throw std::runtime_error("Matrix4x4::CreatePerspective - zNear and zFar too close");
-
 	const float tanHalfFovY = std::tan(fovYRadians * 0.5f);
 
 	const float sx = 1.0f / (aspectRatio * tanHalfFovY);
@@ -500,5 +505,15 @@ Matrix4x4 Matrix4x4::CreateOrthographic(float left, float right, float bottom, f
 		0.0f, sy, 0.0f, ty,
 		0.0f, 0.0f, sz, tz,
 		0.0f, 0.0f, 0.0f, 1.0f
+	);
+}
+
+Vector3 Matrix4x4::ArvosMethod(const Matrix4x4& matrix, Vector3 extends)
+{
+	return Vector3
+	(
+		WaveMath::Abs(matrix.m00) * extends.x + WaveMath::Abs(matrix.m01) * extends.y + WaveMath::Abs(matrix.m02) * extends.z,
+		WaveMath::Abs(matrix.m10) * extends.x + WaveMath::Abs(matrix.m11) * extends.y + WaveMath::Abs(matrix.m12) * extends.z,
+		WaveMath::Abs(matrix.m20) * extends.x + WaveMath::Abs(matrix.m21) * extends.y + WaveMath::Abs(matrix.m22) * extends.z
 	);
 }
