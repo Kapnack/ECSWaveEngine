@@ -1,6 +1,7 @@
 #include "MeshLogic.h"
 
 #include "ECS/CompontRegistry/ComponentRegistry.h"
+#include "ECS/BoundingBoxComp/BoundingBoxComp.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "Mesh/MeshManager/MeshManager.h"
@@ -8,12 +9,8 @@
 #include "ECS/WaveObject/WaveObject.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "BoundingBox/BoundingBox.h"
-#include "Renderer/Renderer.h"
 #include "ECS/Mesh/MeshID.h"
-#include "VertexData.h"
 #include "Mesh/Mesh.h"
-#include <ECS/BoundingBoxComp/BoundingBoxComp.h>
-#include <WaveMath/WaveMath/WaveMath.h>
 
 namespace WaveEngine
 {

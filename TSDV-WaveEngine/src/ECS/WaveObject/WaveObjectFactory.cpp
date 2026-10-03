@@ -2,8 +2,10 @@
 
 #include <string>
 
-#include "ECS/BoundingBoxComp/BoundingBoxComp.h"
+#include "ECS/Transform/ECSTransform.h"
 #include "ServiceProvider/ServiceProvider.h"
+#include "ECS/BoundingBoxComp/BoundingBoxComp.h"
+#include "ECS/OrientedBoundingBoxComp/OrientedBoundingBoxComp.h"
 
 namespace WaveEngine
 {
@@ -22,6 +24,7 @@ namespace WaveEngine
 
 		newWaveObject->AddComponent<ECSTransform>();
 		newWaveObject->AddComponent<BoundingBoxComp>();
+		newWaveObject->AddComponent<OrientedBoundingBoxComp>();
 
 		GetWaveObjectRegistry()->AddObject(newWaveObject, "WaveObject: " + to_string(currentObjectID) + ".");
 

@@ -165,15 +165,15 @@ namespace WaveEngine
 
 		aiMaterial* material = pScene->mMaterials[mesh->mMaterialIndex];
 
-		unsigned int materialID = ProcessMaterial(material);
+		Material* materialID = ProcessMaterial(material);
 
-		meshWaveObject.AddComponent<MeshRenderer>().materialID = materialID;
+		meshWaveObject.AddComponent<MeshRenderer>().materialID = *materialID;
 	}
 
-	unsigned int ModelImporter::ProcessMaterial(aiMaterial* mat)
+	Material* ModelImporter::ProcessMaterial(aiMaterial* mat)
 	{
 		if (!mat)
-			return Material::NULL_MATERIAL;
+			return nullptr;
 
 		unsigned int albedoIDs = LoadMaterialTextures(mat, aiTextureType_DIFFUSE);
 		unsigned int roughnessMap = LoadMaterialTextures(mat, aiTextureType_DIFFUSE_ROUGHNESS);
@@ -183,13 +183,11 @@ namespace WaveEngine
 		unsigned int emissiveMap = LoadMaterialTextures(mat, aiTextureType_EMISSIVE);
 		unsigned int heightMap = LoadMaterialTextures(mat, aiTextureType_HEIGHT);
 
-		unsigned int materialID = GetMaterialFactory()->CreateMaterial(
+		Material* newMaterial = GetMaterialFactory()->CreateMaterial(
 			"ImportedMaterial",
 			GetFileReader()->ReadFile("Shaders/ECS/newShader.vert"),
 			GetFileReader()->ReadFile("Shaders/ECS/newShader.frag")
 		);
-
-		Material* newMaterial = GetMaterialManager()->GetMaterial(materialID);
 
 		aiColor4D diffuseColor(1, 1, 1, 1);
 
@@ -229,7 +227,7 @@ namespace WaveEngine
 		if (emissiveMap)
 			newMaterial->SetTexture("uEmissiveMap", emissiveMap);
 
-		return materialID;
+		return newMaterial;
 	}
 
 	void ModelImporter::ApplyNodeTransform(ECSTransform& transform, const aiNode* node)
@@ -266,7 +264,7 @@ namespace WaveEngine
 		unsigned int textureGPUID = 0;
 		unsigned int count = mat->GetTextureCount(type);
 		int index = 0;
-		unsigned int textureID = 0;
+		Texture* textureID = nullptr;
 		aiString str;
 		string path;
 
@@ -310,8 +308,8 @@ namespace WaveEngine
 					textureID = GetTextureImporter()->LoadTexture(fullPath.string());
 			}
 
-			if (textureID != Texture::NULL_TEXTURE)
-				textureGPUID = GetTextureManager()->GetTexture(textureID)->GetGPUID();
+			if (textureID)
+				textureGPUID = textureID->GetGPUID();
 		}
 
 		return textureGPUID;

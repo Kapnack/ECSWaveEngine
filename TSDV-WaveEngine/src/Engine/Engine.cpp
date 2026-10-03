@@ -26,6 +26,9 @@
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "ECS/Managers/BinarySpacePartition/BinarySpacePartition.h"
 #include <ECS/BoundingBoxComp/BoundingBoxComp.h>
+#include <ECS/OrientedBoundingBoxComp/OrientedBoundingBoxComp.h>
+#include <ECS/Transform/ECSTransform.h>
+#include <ECS/Mesh/MeshID.h>
 
 namespace WaveEngine
 {
@@ -66,8 +69,10 @@ namespace WaveEngine
 		ServiceProvider::Instance().Register(new ModelImporter());
 #pragma endregion
 
-		ServiceProvider::Instance().Get<ComponentRegistry>()->CreateOrGetComponentStorage<BoundingBoxComp>();
 		ServiceProvider::Instance().Get<ComponentRegistry>()->CreateOrGetComponentStorage<MeshID>();
+		ServiceProvider::Instance().Get<ComponentRegistry>()->CreateOrGetComponentStorage<ECSTransform>();
+		ServiceProvider::Instance().Get<ComponentRegistry>()->CreateOrGetComponentStorage<BoundingBoxComp>();
+		ServiceProvider::Instance().Get<ComponentRegistry>()->CreateOrGetComponentStorage<OrientedBoundingBoxComp>();
 
 		GetWaveRandom()->Init();
 		GetWaveObjectRegistry()->Init();

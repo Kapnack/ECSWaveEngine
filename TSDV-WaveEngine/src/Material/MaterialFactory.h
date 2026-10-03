@@ -30,6 +30,6 @@ namespace WaveEngine
 
 	public:
 
-		unsigned int CreateMaterial(const string_view name, const string_view vertexShader, const string_view fragmentShader);
+		Material* CreateMaterial(const string_view name, const string_view vertexShader, const string_view fragmentShader);
 	};
 }

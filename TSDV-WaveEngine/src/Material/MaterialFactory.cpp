@@ -21,16 +21,16 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<MaterialManager>();
 	}
 
-	unsigned int MaterialFactory::CreateMaterial(const string_view name, const string_view vertexShader, const string_view fragmentShader)
+	Material* MaterialFactory::CreateMaterial(const string_view name, const string_view vertexShader, const string_view fragmentShader)
 	{
 		if (name == "" || vertexShader == "" || fragmentShader == "")
-			return Material::NULL_MATERIAL;
+			return nullptr;
 
 		unsigned int vs = CompileShader(vertexShader, GL_VERTEX_SHADER);
 		unsigned int fs = CompileShader(fragmentShader, GL_FRAGMENT_SHADER);
 
 		if (vs == NULL || fs == NULL)
-			return Material::NULL_MATERIAL;
+			return nullptr;
 
 		unsigned int gpuID = glCreateProgram();
 
@@ -52,7 +52,7 @@ namespace WaveEngine
 			std::cout << "Program Link Error:\n" << infoLog << std::endl;
 
 			glDeleteProgram(gpuID);
-			return Material::NULL_MATERIAL;
+			return nullptr;
 		}
 
 		Material* newMaterial = new Material(++currentMaterialID);
@@ -104,7 +104,7 @@ namespace WaveEngine
 		newMaterial->gpuID = gpuID;
 		GetMaterialManager()->SaveMaterial(newMaterial);
 
-		return currentMaterialID;
+		return newMaterial;
 	}
 
 	unsigned int MaterialFactory::CompileShader(const string_view source, unsigned int type)

@@ -16,6 +16,7 @@
 #include "TextureImporter/TextureImporter.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/WaveObject/WaveObjectFactory.h"
+#include <Material/Material.h>
 
 using namespace std;
 
@@ -43,7 +44,7 @@ namespace WaveEngine
 
 		void ProcessNode(aiNode* node, WaveObject& waveObject);
 		void ProcessMesh(aiMesh* meshRenderer, WaveObject& meshWaveObject);
-		unsigned int ProcessMaterial(aiMaterial* aiMaterial);
+		Material* ProcessMaterial(aiMaterial* aiMaterial);
 		void ApplyNodeTransform(ECSTransform& transform, const aiNode* node);
 
 		std::filesystem::path FindTexture(

@@ -68,9 +68,14 @@ namespace WaveEngine
 		return (max + min) * 0.5f;
 	}
 
+	Vector3 Mesh::GetSize() const
+	{
+		return max - min;
+	}
+
 	Vector3 Mesh::GetExtends() const
 	{
-		return (max - min) * 0.5f;
+		return GetSize() * 0.5f;
 	}
 
 	void Mesh::UnDirt()

@@ -243,6 +243,11 @@ namespace WaveEngine
 		glUseProgram(NULL);
 	}
 
+	Material::operator unsigned int()
+	{
+		return ID;
+	}
+
 	void Material::Unload()
 	{
 		glDeleteProgram(gpuID);
