@@ -1,6 +1,7 @@
 #pragma once
 
 #include "WaveMath/Vector3/Vector3.h"
+#include "WaveMath/Matrix4x4/Matrix4x4.h"
 
 namespace WaveEngine
 {
@@ -37,6 +38,8 @@ namespace WaveEngine
 		Vector3 GetMin() const;
 		Vector3 GetMax() const;
 
-		bool Intersects(const BoundingBox& other) const;
+		bool Intersects(BoundingBox other) const;
+
+		static Matrix4x4 MakeMatrix(BoundingBox boundingBox);
 	};
 }

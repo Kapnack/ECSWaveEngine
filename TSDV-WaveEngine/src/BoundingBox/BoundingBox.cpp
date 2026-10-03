@@ -3,6 +3,7 @@
 #include <cstdlib>
 
 #include "WaveMath/Vector3/Vector3.h"
+#include <WaveMath/Matrix4x4/Matrix4x4.h>
 
 namespace WaveEngine
 {
@@ -98,10 +99,24 @@ namespace WaveEngine
 		return max;
 	}
 
-	bool BoundingBox::Intersects(const BoundingBox& other) const
+	bool BoundingBox::Intersects(BoundingBox other) const
 	{
 		return std::abs(GetCenter().x - other.GetCenter().x) <= (GetSize().x + other.GetSize().x) * 0.5f &&
 			std::abs(GetCenter().y - other.GetCenter().y) <= (GetSize().y + other.GetSize().y) * 0.5f &&
 			std::abs(GetCenter().z - other.GetCenter().z) <= (GetSize().z + other.GetSize().z) * 0.5f;
+	}
+
+	Matrix4x4 BoundingBox::MakeMatrix(BoundingBox boundingBox)
+	{
+		Vector3 center = boundingBox.GetCenter();
+		Vector3 scale = boundingBox.GetSize();
+
+		return Matrix4x4
+		(
+			scale.x, 0.0f, 0.0f, center.x,
+			0.0f, scale.y, 0.0f, center.y,
+			0.0f, 0.0f, scale.z, center.z,
+			0.0f, 0.0f, 0.0f, 1.0f
+		);
 	}
 }
