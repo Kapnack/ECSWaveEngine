@@ -171,6 +171,18 @@
     <ClCompile Include="src\Physics\Triangle.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\OrientedBoundingBox\OrientedBoundingBox.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviour.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviourFactory\WaveMaterialBehaviourFactory.h">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviourFactory\WaveMaterialBehaviourFactory.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Window\Window.h">
@@ -366,6 +378,15 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\Sphere.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OrientedBoundingBox\OrientedBoundingBox.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\OrientedBoundingBoxComp\OrientedBoundingBoxComp.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviour.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

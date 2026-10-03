@@ -176,6 +176,9 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\WaveObject\WaveObjectRegistry.cpp" />
     <ClCompile Include="src\ImGuiClass\ImGuiClass.cpp" />
     <ClCompile Include="src\Material\Color\Color.cpp" />
+    <ClCompile Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviour.cpp" />
+    <ClCompile Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviourFactory\WaveMaterialBehaviourFactory.cpp" />
+    <ClCompile Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviourFactory\WaveMaterialBehaviourFactory.h" />
     <ClCompile Include="src\MeshLogic\MeshLogic.cpp" />
     <ClCompile Include="src\Mesh\MeshManager\MeshManager.cpp" />
     <ClCompile Include="src\Mesh\MeshFactory\MeshFactory.cpp" />
@@ -196,6 +199,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\Engine\Engine.cpp" />
     <ClCompile Include="src\Material\Material.cpp" />
     <ClCompile Include="src\ECS\Transform\ECSTransform.cpp" />
+    <ClCompile Include="src\OrientedBoundingBox\OrientedBoundingBox.cpp" />
     <ClCompile Include="src\Physics\Contact.h" />
     <ClCompile Include="src\Physics\Sphere.cpp" />
     <ClCompile Include="src\Physics\Triangle.cpp" />
@@ -212,6 +216,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ECS\BoundingBoxComp\BoundingBoxComp.h" />
+    <ClInclude Include="src\ECS\OrientedBoundingBoxComp\OrientedBoundingBoxComp.h" />
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameChildEvent.h" />
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameParentEvent.h" />
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectChangeName.h" />
@@ -222,6 +227,8 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\CollisionSystem\CollisionLogic\CollisionLogic.h" />
     <ClInclude Include="src\ECS\Managers\BinarySpacePartition\BinarySpacePartition.h" />
     <ClInclude Include="src\ECS\WaveBehaviour\WaveBehaviour.h" />
+    <ClInclude Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviour.h" />
+    <ClInclude Include="src\OrientedBoundingBox\OrientedBoundingBox.h" />
     <ClInclude Include="src\Physics\InertiaTensor.h" />
     <ClInclude Include="src\Physics\Sphere.h" />
     <ClInclude Include="src\Physics\Triangle.h" />
