@@ -25,14 +25,14 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<TextureManager>();
 	}
 
-	unsigned int TextureImporter::LoadTextureAbsolutePath(const string_view filePath)
+	Texture* TextureImporter::LoadTextureAbsolutePath(const string_view filePath)
 	{
 		string absolutePath = std::filesystem::absolute(filePath).lexically_normal().string();
 
 		return LoadTexture(absolutePath);
 	}
 
-	unsigned int TextureImporter::LoadTexture(const string_view filePath)
+	Texture* TextureImporter::LoadTexture(const string_view filePath)
 	{
 		int width = 0;
 		int height = 0;
@@ -78,10 +78,10 @@ namespace WaveEngine
 
 		std::cout << "Loaded texture: " << filePath << " (" << width << "x" << height << ")" << std::endl;
 
-		return currentTextureID;
+		return newTexture;
 	}
 
-	unsigned int TextureImporter::LoadTextureFromMemory(const unsigned char* buffer, int size)
+	Texture* TextureImporter::LoadTextureFromMemory(const unsigned char* buffer, int size)
 	{
 		int width;
 		int height;
@@ -126,10 +126,10 @@ namespace WaveEngine
 
 		std::cout << "Loaded embedded texture (" << width << "x" << height << ")" << std::endl;
 
-		return currentTextureID;
+		return newTexture;
 	}
 
-	unsigned int TextureImporter::LoadTextureFromPixels(const unsigned char* buffer, const unsigned int& width, const unsigned int& height)
+	Texture* TextureImporter::LoadTextureFromPixels(const unsigned char* buffer, const unsigned int& width, const unsigned int& height)
 	{
 		unsigned int textureGPUID = 0;
 
@@ -157,6 +157,6 @@ namespace WaveEngine
 
 		std::cout << "Loaded embedded raw texture (" << width << "x" << height << ")" << std::endl;
 
-		return currentTextureID;
+		return newTexture;
 	}
 }

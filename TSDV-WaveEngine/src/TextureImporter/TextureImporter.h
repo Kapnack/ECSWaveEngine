@@ -4,6 +4,8 @@
 
 #include "ServiceProvider/Service.h"
 #include "TextureImporter/TextureManager.h"
+#include <string_view>
+#include "Texture.h"
 
 class BaseGame;
 
@@ -27,9 +29,9 @@ namespace WaveEngine
 
 	public:
 
-		WAVEEXPORT unsigned int LoadTextureAbsolutePath(const string_view filePath);
-		WAVEEXPORT unsigned int LoadTexture(const string_view filePath);
-		WAVEEXPORT unsigned int LoadTextureFromMemory(const unsigned char* buffer, int size);
-		WAVEEXPORT unsigned int LoadTextureFromPixels(const unsigned char* buffer, const unsigned int& width, const unsigned int& height);
+		WAVEEXPORT Texture* LoadTextureAbsolutePath(const string_view filePath);
+		WAVEEXPORT Texture* LoadTexture(const string_view filePath);
+		WAVEEXPORT Texture* LoadTextureFromMemory(const unsigned char* buffer, int size);
+		WAVEEXPORT Texture* LoadTextureFromPixels(const unsigned char* buffer, const unsigned int& width, const unsigned int& height);
 	};
 }
