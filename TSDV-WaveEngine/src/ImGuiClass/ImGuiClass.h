@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Window/Window.h"
 #include "Input/Input.h"
-#include "ECS/WaveObject/WaveObjectRegistry.h"
-#include "Material/MaterialManager.h"
+#include "Window/Window.h"
 #include "Material/Color/Color.h"
+#include "Material/MaterialManager.h"
+#include "WaveMath/Vector3/Vector3.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
 
 using namespace std;
 
@@ -22,10 +23,12 @@ namespace WaveEngine
 
 		Color color = Color::White();
 
+		Vector3 position;
+
 		void Init();
 		void Update();
 		void Draw();
-		void Unload();
+		void Dispose();
 
 		ImGuiClass();
 		~ImGuiClass();

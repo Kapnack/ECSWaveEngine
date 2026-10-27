@@ -6,10 +6,11 @@
 #include <ImGui/imgui_impl_opengl3.h>
 #include <ImGui/imgui_impl_glfw.h>
 
-#include "ServiceProvider/ServiceProvider.h"
 #include "Renderer/Renderer.h"
-#include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "Material/Material.h"
+#include "ECS/WaveObject/WaveObject.h"
+#include "ServiceProvider/ServiceProvider.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
 
 namespace WaveEngine
 {
@@ -53,7 +54,7 @@ namespace WaveEngine
 		ImGui::StyleColorsDark();
 	}
 
-	void ImGuiClass::Unload()
+	void ImGuiClass::Dispose()
 	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
@@ -137,8 +138,19 @@ namespace WaveEngine
 
 			text = "##xx" + text;
 
-			if (ImGui::DragFloat3(("Pos" + text).c_str(), &it->second->GetTransform().position.x))
-				it->second->GetTransform().MarkDirty();
+			if (it->second->GetTransform().GetParentID() == WaveObject::NULL_OBJECT)
+			{
+				if (ImGui::DragFloat3(("Pos" + text).c_str(), &it->second->GetTransform().position.x))
+					it->second->GetTransform().MarkDirty();
+			}
+			else
+			{
+				if (ImGui::DragFloat3(("Pos" + text).c_str(), &position.x))
+				{
+					it->second->GetTransform().Translate(position);
+				}
+
+			}
 
 			if (ImGui::DragFloat3(("Rot" + text).c_str(), &it->second->GetTransform().rotation.x))
 				it->second->GetTransform().MarkDirty();
