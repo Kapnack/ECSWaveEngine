@@ -1,18 +1,35 @@
 #include "Renderer.h"
 
+#include <string>
+#include <vector>
+#include <utility>
+#include <cstddef>
+#include <unordered_map>
+
 #include "ServiceProvider/ServiceProvider.h"
 #include "VertexData.h"
 
-#include "ECS/Camera/Camera.h"
-#include "ECS/Transform/ECSTransform.h"
-#include "ECS/Mesh/MeshID.h"
+#include "Mesh/Mesh.h"
+#include "Plane/Plane.h"
+#include "Window/Window.h"
 #include "ECS/MaterialID.h"
-#include "ECS/WaveObject/WaveObject.h"
-#include "Material/MaterialFactory.h"
+#include "ECS/Mesh/MeshID.h"
+#include "ECS/Camera/Camera.h"
 #include "Material/Material.h"
+#include "Material/Color/Color.h"
 #include "FileReader/FileReader.h"
-#include "WaveMath/Vector4/Vector4.h"
 #include "BoundingBox/BoundingBox.h"
+#include "Material/MaterialManager.h"
+#include "WaveMath/Vector3/Vector3.h"
+#include "Material/MaterialFactory.h"
+#include "ECS/WaveObject/WaveObject.h"
+#include "ECS/Transform/ECSTransform.h"
+#include "WaveMath/WaveMath/WaveMath.h"
+#include "WaveMath/Matrix4x4/Matrix4x4.h"
+#include "Mesh/MeshManager/MeshManager.h"
+#include "TextureImporter/TextureManager.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
+#include <cmath>
 
 using namespace std;
 
@@ -24,12 +41,10 @@ namespace WaveEngine
 
 	Renderer::Renderer()
 	{
-		Init();
 	}
 
 	Renderer::~Renderer()
 	{
-		Unload();
 	}
 
 	Window* Renderer::GetWindow()
@@ -404,8 +419,8 @@ namespace WaveEngine
 				materialToUse->SetFloat(base + ".linear", flashLights[i].linear);
 				materialToUse->SetFloat(base + ".quadratic", flashLights[i].quadratic);
 
-				materialToUse->SetFloat(base + ".cutOff", glm::cos(glm::radians(flashLights[i].cutOff)));
-				materialToUse->SetFloat(base + ".outerCutOff", glm::cos(glm::radians(flashLights[i].outerCutOff)));
+				materialToUse->SetFloat(base + ".cutOff", cos(WaveMath::Deg2Rad(flashLights[i].cutOff)));
+				materialToUse->SetFloat(base + ".outerCutOff", cos(WaveMath::Deg2Rad(flashLights[i].outerCutOff)));
 			}
 
 			for (unordered_map<unsigned int, RenderData>::iterator meshBatchIT = batchingIT->second.begin(); meshBatchIT != batchingIT->second.end(); ++meshBatchIT)
@@ -491,7 +506,7 @@ namespace WaveEngine
 		debugPlanes.clear();
 	}
 
-	void Renderer::Unload()
+	void Renderer::Dispose()
 	{
 		for (unordered_map<unsigned int, unordered_map<unsigned int, RenderData>>::iterator batchingIT = batching.begin(); batchingIT != batching.end(); ++batchingIT)
 			for (unordered_map<unsigned int, RenderData>::iterator meshBatching = batchingIT->second.begin(); meshBatching != batchingIT->second.end(); ++meshBatching)

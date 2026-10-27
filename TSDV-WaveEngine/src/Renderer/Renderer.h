@@ -5,6 +5,7 @@
 #include <utility>
 #include <glm/fwd.hpp>
 #include <vector>
+#include <list>
 #include <unordered_map>
 
 #include "Window/Window.h"
@@ -68,6 +69,8 @@ namespace WaveEngine
 		float outerCutOff = 15.5f;
 	};
 
+	class Engine;
+
 	class Renderer final : public Service
 	{
 	private:
@@ -93,6 +96,8 @@ namespace WaveEngine
 			unsigned int indexOffset = 0;
 		};
 
+		friend class Engine;
+
 		unordered_map<unsigned int, unordered_map<unsigned int, RenderData>> batching;
 
 		unordered_map<unsigned int, list<unsigned int>> entityCameras;
@@ -107,7 +112,7 @@ namespace WaveEngine
 		unsigned int infinitePlaneMaterialID = Material::NULL_MATERIAL;
 
 		void Init();
-		void Unload();
+		void Dispose();
 
 		const unsigned int ReturnWorkingMaterial(const unsigned int& materialIDToTry, const unsigned int& materialIDfallBack);
 
