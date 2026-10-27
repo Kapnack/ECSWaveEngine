@@ -1,10 +1,8 @@
-#include "Game/Game.h"
+#include "Engine/Engine.h"
 
 int main()
 {
-	Game game(800, 800);
-
-	game.Run();
+	WaveEngine::Engine::StartEngine();
 
 	return 0;
 }
