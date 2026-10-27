@@ -6,6 +6,8 @@
 
 #include "ServiceProvider/Service.h"
 #include "Export.h"
+#include <stdexcept>
+#include <string_view>
 
 class BaseGame;
 class ServiceProvider;
