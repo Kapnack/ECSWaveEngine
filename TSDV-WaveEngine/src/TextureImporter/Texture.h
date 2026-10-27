@@ -1,10 +1,9 @@
 #pragma once
 
-#include "WaveMath/Vector2/Vector2.h"
-#include "Export.h"
-
 #include <string>
 
+#include "Export.h"
+#include "WaveMath/Vector2/Vector2.h"
 
 using namespace std;
 
@@ -13,7 +12,7 @@ namespace WaveEngine
 	class TextureManager;
 	class TextureImporter;
 
-	class Texture final
+	class WAVEEXPORT Texture final
 	{
 	private:
 
