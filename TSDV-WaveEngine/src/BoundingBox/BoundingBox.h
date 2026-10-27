@@ -1,11 +1,12 @@
 #pragma once
 
+#include "Export.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Matrix4x4/Matrix4x4.h"
 
 namespace WaveEngine
 {
-	struct BoundingBox final
+	struct WAVEEXPORT BoundingBox final
 	{
 	private:
 
