@@ -2,21 +2,23 @@
 
 #include <string>
 
+#include "Export.h"
 #include "ECS/WObject/WObject.h"
 #include "EventSystem/EventSystem.h"
 #include "ECS/Transform/ECSTransform.h"
-#include "ECS/Component/TypeComponent.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
+#include "ECS/Component/TypeComponent.h"
 
 using namespace std;
 
 namespace WaveEngine
 {
+	class BoundingBoxComp;
 	class WaveObjectFactory;
 	class WaveObjectRegistry;
-	class BoundingBoxComp;
+	class ComponentRegistry;
 
-	class WaveObject : public WObject
+	class WAVEEXPORT WaveObject : public WObject
 	{
 	private:
 
@@ -27,14 +29,17 @@ namespace WaveEngine
 		ComponentRegistry* GetComponentRegistry() const;
 		EventSystem* GetEventSystem() const;
 		WaveObjectRegistry* GetWaveObjectRegistry() const;
+		WaveObjectFactory* GetWaveObjectFactory() const;
 
 		friend class WaveObjectFactory;
 		friend class WaveObjectRegistry;
+
 
 	public:
 
 		static const unsigned int NULL_OBJECT = 0;
 
+		WaveObject(const char* name = nullptr);
 		WaveObject(unsigned int ID);
 		~WaveObject();
 
