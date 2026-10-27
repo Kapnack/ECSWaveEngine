@@ -42,6 +42,9 @@
     <ClCompile Include="src\WaveMath\Matrix3x3\Matrix3x3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\EventSystem\Event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\WaveMath\Matrix4x4\Matrix4x4.h">
