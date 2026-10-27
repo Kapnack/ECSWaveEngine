@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "EventSystem/Action.h"
 #include "WaveMath/Vector2/Vector2.h"
 
 using namespace std;
@@ -18,13 +19,10 @@ namespace WaveEngine
 
 		baseWidth = width;
 		baseHeight = height;
-
-		Init();
 	}
 
 	Window::~Window()
 	{
-		Unload();
 	}
 
 	void Window::Init()
@@ -32,8 +30,10 @@ namespace WaveEngine
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
 		window = glfwCreateWindow(width, height, title, monitor, share);
+
 		if (!window)
 		{
 			cout << "Failed to create GLFW window" << endl;
@@ -81,6 +81,76 @@ namespace WaveEngine
 		return Vector2(static_cast<float>(width), static_cast<float>(height));
 	}
 
+	Vector2 Window::GetPosition()
+	{
+		int x = 0;
+		int y = 0;
+
+		glfwGetWindowPos(window, &x, &y);
+
+		return Vector2(x, y);
+	}
+
+	void Window::HideWindow() const
+	{
+		glfwHideWindow(window);
+	}
+
+	void Window::ShowWindow() const
+	{
+		glfwShowWindow(window);
+	}
+
+	void Window::SetTitle(const char* title)
+	{
+		glfwSetWindowTitle(window, title);
+	}
+
+	void Window::SetIcon(Texture& texture)
+	{
+		unsigned char* pixels = new unsigned char[width * height * 4];
+		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+		GLFWimage icon = { width, height, pixels };
+		glfwSetWindowIcon(window, 1, &icon);
+
+		delete[] pixels;
+	}
+
+	void Window::SetPosition(Vector2 position)
+	{
+		SetPosition(static_cast<int>(position.x), static_cast<int>(position.y));
+	}
+
+	void Window::SetPosition(int x, int y)
+	{
+		glfwSetWindowPos(window, x, y);
+	}
+
+	void Window::Translate(Vector2 position)
+	{
+		Translate(static_cast<int>(position.x), static_cast<int>(position.y));
+	}
+
+	void Window::Translate(int x, int y)
+	{
+		Vector2 currentPosition = GetPosition();
+		glfwSetWindowPos(window, static_cast<int>(currentPosition.x) + static_cast<int>(x), static_cast<int>(currentPosition.y) + static_cast<int>(y));
+	}
+
+	void Window::SetSize(Vector2 size)
+	{
+		SetSize(static_cast<int>(size.x), static_cast<int>(size.y));
+	}
+
+	void Window::SetSize(int width, int height)
+	{
+		this->width = width;
+		this->height = height;
+
+		glfwSetWindowSize(window, width, height);
+	}
+
 	void Window::SwapBuffer()
 	{
 		glfwSwapBuffers(window);
@@ -96,7 +166,7 @@ namespace WaveEngine
 		return static_cast<float>(glfwGetTime());
 	}
 
-	void Window::Unload()
+	void Window::Dispose()
 	{
 		glfwTerminate();
 	}

@@ -7,6 +7,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "EventSystem/Action.h"
+#include "TextureImporter/Texture.h"
 #include "WaveMath/Vector2/Vector2.h"
 
 namespace WaveEngine
@@ -14,7 +16,7 @@ namespace WaveEngine
 	class Engine;
 	class ServiceProvider;
 
-	WAVEEXPORT class Window final : public Service
+	class WAVEEXPORT Window final : public Service
 	{
 	private:
 
@@ -31,7 +33,7 @@ namespace WaveEngine
 		GLFWwindow* share;
 
 		void Init();
-		void Unload();
+		void Dispose();
 
 		static void FrameBufferCallBack(GLFWwindow* window, int width, int height);
 
@@ -44,15 +46,28 @@ namespace WaveEngine
 	public:
 
 		GLFWwindow* GetGLFWindow();
-		WAVEEXPORT int GetWidth();
-		WAVEEXPORT int GetHeight();
-		WAVEEXPORT int GetBaseWidth();
-		WAVEEXPORT int GetBaseHeight();
-		WAVEEXPORT Vector2 GetSize();
+		int GetWidth();
+		int GetHeight();
+		int GetBaseWidth();
+		int GetBaseHeight();
+		Vector2 GetSize();
+		Vector2 GetPosition();
 
-		WAVEEXPORT void SwapBuffer();
-		WAVEEXPORT void HandleInput();
+		void HideWindow() const;
+		void ShowWindow() const;
 
-		WAVEEXPORT float GetGLTime();
+		void SetTitle(const char* title);
+		void SetIcon(Texture& texture);
+		void SetPosition(Vector2 position);
+		void SetPosition(int x, int y);
+		void Translate(Vector2 position);
+		void Translate(int x, int y);
+		void SetSize(Vector2 size);
+		void SetSize(int width, int height);
+
+		void SwapBuffer();
+		void HandleInput();
+
+		float GetGLTime();
 	};
 }
