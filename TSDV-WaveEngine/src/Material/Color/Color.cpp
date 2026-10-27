@@ -1,5 +1,6 @@
 #include "Color.h"
 
+#include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Vector4/Vector4.h"
 #include "WaveMath/WaveMath/WaveMath.h"
 
