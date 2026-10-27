@@ -6,12 +6,12 @@ namespace WaveEngine
 {
 	class ServiceProvider;
 
-	WAVEEXPORT class Service
+	class WAVEEXPORT Service
 	{
 	protected:
 
-		WAVEEXPORT Service();
-		WAVEEXPORT virtual ~Service();
+		Service();
+		virtual ~Service();
 
 		friend class ServiceProvider;
 	};
