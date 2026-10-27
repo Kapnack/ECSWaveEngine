@@ -1,21 +1,18 @@
 #pragma once
 
-#include <glm/fwd.hpp>
 
 #include "Export.h"
-#include "ECS/Transform/ECSTransform.h"
-#include "ECS/Component/Component.h"
-#include "BoundingBox/BoundingBox.h"
 #include "Window/Window.h"
-#include "EventSystem/EventSystem.h"
 #include "Square/Square.h"
-#include <WaveMath/Matrix4x4/Matrix4x4.h>
-#include <WaveMath/Vector4/Vector4.h>
+#include "BoundingBox/BoundingBox.h"
+#include "ECS/Component/Component.h"
+#include "EventSystem/EventSystem.h"
+#include "WaveMath/Vector4/Vector4.h"
+#include "WaveMath/Matrix4x4/Matrix4x4.h"
 
 namespace WaveEngine
 {
-
-	struct Frustum
+	struct WAVEEXPORT Frustum
 	{
 		Vector4 planes[6];
 	};
@@ -24,11 +21,11 @@ namespace WaveEngine
 	class EntityFactory;
 	class Renderer;
 
-	class Camera : public Component
+	class WAVEEXPORT Camera : public Component
 	{
 	private:
 
-		int orderIndex = 0.0f;
+		int orderIndex = 0;
 
 		bool shouldUpdateMatrix = true;
 
@@ -78,24 +75,24 @@ namespace WaveEngine
 		bool IsInsideFrustum(const BoundingBox& box) const;
 		bool IsOrthografic() const;
 
-		WAVEEXPORT void SetIsActive(bool isActive) override;
-		WAVEEXPORT void SetOrderIndex(int orderIndex);
+		void SetIsActive(bool isActive) override;
+		void SetOrderIndex(int orderIndex);
 
-		WAVEEXPORT void SetOrthographic(bool value);
-		WAVEEXPORT void SetFarPlane(float value);
-		WAVEEXPORT void AddToFarPlane(float value);
-		WAVEEXPORT void SetNearPlane(float value);
-		WAVEEXPORT void AddToNearPlane(float value);
-		WAVEEXPORT void SetFovDegree(float value);
-		WAVEEXPORT void SetOrthoSize(float value);
-		WAVEEXPORT void AddToOrthoSize(float value);
+		void SetOrthographic(bool value);
+		void SetFarPlane(float value);
+		void AddToFarPlane(float value);
+		void SetNearPlane(float value);
+		void AddToNearPlane(float value);
+		void SetFovDegree(float value);
+		void SetOrthoSize(float value);
+		void AddToOrthoSize(float value);
 
-		WAVEEXPORT float GetFarPlane() const;
-		WAVEEXPORT float GetNearPlane() const;
-		WAVEEXPORT float GetFovDegree() const;
-		WAVEEXPORT float GetMovementSpeed() const;
-		WAVEEXPORT float GetOrthoSize() const;
+		float GetFarPlane() const;
+		float GetNearPlane() const;
+		float GetFovDegree() const;
+		float GetMovementSpeed() const;
+		float GetOrthoSize() const;
 
-		WAVEEXPORT bool GetShouldUpdateMatrix() const;
+		bool GetShouldUpdateMatrix() const;
 	};
 }

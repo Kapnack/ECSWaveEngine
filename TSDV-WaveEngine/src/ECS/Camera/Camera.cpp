@@ -1,9 +1,16 @@
 #include "Camera.h"
 
-#include "ServiceProvider/ServiceProvider.h"
+#include "Window/Window.h"
+#include "EventSystem/EventSystem.h"
+#include "ECS/Component/Component.h"
+#include "WaveMath/Vector3/Vector3.h"
+#include "WaveMath/Vector4/Vector4.h"
 #include "../Transform/ECSTransform.h"
-#include <CameraManager/CameraManager.h>
-#include <WaveMath/WaveMath/WaveMath.h>
+#include "WaveMath/WaveMath/WaveMath.h"
+#include "CameraManager/CameraManager.h"
+#include "WaveMath/Matrix4x4/Matrix4x4.h"
+#include "ServiceProvider/ServiceProvider.h"
+#include <BoundingBox/BoundingBox.h>
 
 namespace WaveEngine
 {
