@@ -1,37 +1,42 @@
 #pragma once
 
-#include "Export.h"
-
+#include <string>
 #include <filesystem>
-
+#include <assimp/mesh.h>
 #include <assimp/scene.h>
+#include <assimp/material.h>
 #include <assimp/Importer.hpp>
 
+#include "Material/Material.h"
 #include "FileReader/FileReader.h"
 #include "ServiceProvider/Service.h"
 #include "Material/MaterialFactory.h"
 #include "Material/MaterialManager.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "Mesh/MeshFactory/MeshFactory.h"
+#include "Mesh/MeshManager/MeshManager.h"
+#include "TextureImporter/TextureManager.h"
 #include "TextureImporter/TextureImporter.h"
-#include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/WaveObject/WaveObjectFactory.h"
-#include <Material/Material.h>
+#include "ECS/WaveObject/WaveObjectRegistry.h"
 
 using namespace std;
 
 namespace WaveEngine
 {
-	WAVEEXPORT class ModelImporter final : public Service
+	class WaveObject;
+
+	class ModelImporter final : public Service
 	{
 	private:
 
+		const aiScene* pScene = nullptr;
 		Assimp::Importer importer;
-		const aiScene* pScene;
 		filesystem::path directory;
-		string filename;
+		string filename = "";
 
 		MeshFactory* GetMeshFactory();
+		MeshManager* GetMeshManager();
 		TextureImporter* GetTextureImporter();
 		FileReader* GetFileReader();
 		MaterialFactory* GetMaterialFactory();
@@ -53,7 +58,7 @@ namespace WaveEngine
 
 	public:
 
-		WAVEEXPORT void LoadScene(filesystem::path filePath, const bool useAbsolutePath = true);
-		WAVEEXPORT WaveObject* IntantiateModel();
+		void LoadScene(filesystem::path filePath, const bool useAbsolutePath = true);
+		WaveObject* IntantiateModel(const char* rootName = nullptr);
 	};
 }
