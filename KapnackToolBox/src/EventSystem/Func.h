@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Export.h"
 
 #include "Delegate.h"
 
@@ -9,7 +10,7 @@ using namespace std;
 
 
 template<typename TReturn, typename... TParams>
-class Func : public Delegate
+class WAVEEXPORT Func : public Delegate
 {
 private:
 
@@ -38,7 +39,7 @@ public:
 	void SubscribeNoArgs(TPointer* instance, TReturn(TObject::* method)())
 	{
 		subscriber.instance = instance;
-		subscriber.method = *reinterpret_cast<void**>(& method);
+		subscriber.method = *reinterpret_cast<void**>(&method);
 
 		subscriber.invoke =
 			[](void* obj, void* m, TParams...)
