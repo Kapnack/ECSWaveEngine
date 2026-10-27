@@ -30,9 +30,9 @@ namespace WaveEngine
 		~MeshManager();
 
 		Mesh* GetMesh(const unsigned int ID);
-		Mesh* GetMesh(const string_view name);
-
-		unsigned int GetMeshID(const string_view name);
+		Mesh* GetMesh(const char* name);
+		bool Has(const char* name);
+		unsigned int GetMeshID(const const char* name);
 
 		Mesh& Get(const unsigned int meshID);
 	};

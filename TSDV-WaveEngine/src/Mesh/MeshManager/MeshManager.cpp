@@ -24,14 +24,19 @@ namespace WaveEngine
 		return meshByID.at(ID);
 	}
 
-	Mesh* MeshManager::GetMesh(const string_view name)
+	Mesh* MeshManager::GetMesh(const char* name)
 	{
-		return meshByID.at(idByName.at(string(name)));
+		return meshByID.at(GetMeshID(name));
 	}
 
-	unsigned int MeshManager::GetMeshID(const string_view name)
+	bool MeshManager::Has(const char* name)
 	{
-		return idByName.at(string(name));
+		return idByName.contains(name);
+	}
+
+	unsigned int MeshManager::GetMeshID(const char* name)
+	{
+		return idByName.at(name);
 	}
 
 	Mesh& MeshManager::Get(const unsigned int meshID)
