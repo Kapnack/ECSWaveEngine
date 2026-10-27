@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Material/Color/Color.h";
 #include "WaveMath/Vector2/Vector2.h"
 #include "WaveMath/Vector3/Vector3.h"
-#include "Material/Color/Color.h";
 
 #include "Export.h"
 
@@ -10,7 +10,7 @@ using namespace std;
 
 namespace WaveEngine
 {
-	struct WAVEEXPORT VertexData
+	struct WAVEEXPORT VertexData final
 	{
 		Vector3 position;
 
