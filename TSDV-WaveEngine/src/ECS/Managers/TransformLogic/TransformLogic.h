@@ -1,10 +1,9 @@
 #pragma once
 
-#include "ECS/CompontRegistry/ComponentRegistry.h"
-#include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/Transform/ECSTransform.h"
-
-#include <glm/fwd.hpp>
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
+#include <WaveMath/Matrix4x4/Matrix4x4.h>
 
 namespace WaveEngine
 {
