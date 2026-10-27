@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Export.h"
 #include "WaveMath/Vector3/Vector3.h"
 
 namespace WaveEngine
 {
-	struct Plane
+	struct WAVEEXPORT Plane
 	{
 	private:
 
