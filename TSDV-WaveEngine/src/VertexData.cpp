@@ -1,4 +1,7 @@
 #include "VertexData.h"
+#include "Material/Color/Color.h"
+#include <WaveMath/Vector3/Vector3.h>
+#include <WaveMath/Vector2/Vector2.h>
 
 namespace WaveEngine
 {
