@@ -24,6 +24,6 @@ namespace WaveEngine
 		MeshFactory();
 		~MeshFactory();
 
-		unsigned int CreateMesh(const string_view name, VertexData* vertexBuffer, const unsigned int& vertexSize, unsigned int* index, const unsigned int& indexSize);
+		Mesh& CreateMesh(const string_view name, VertexData* vertexBuffer, const unsigned int& vertexSize, unsigned int* index, const unsigned int& indexSize);
 	};
 }
