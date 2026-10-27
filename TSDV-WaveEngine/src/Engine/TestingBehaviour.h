@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Export.h>
+
 #include "Time/Time.h"
 #include "ImGuiClass/ImGuiClass.h"
 #include "WaveMath/Vector3/Vector3.h"
@@ -7,45 +9,34 @@
 #include "ECS/WaveBehaviour/WaveBehaviour.h"
 #include <ModelImporter/ModelImporter.h>
 #include <ECS/Camera/Camera.h>
-#include <ECS/WaveObject/WaveObjectRegistry.h>
-#include <ECS/Managers/BinarySpacePartition/BinarySpacePartition.h>
-#include <string>
-#include <vector>
 #include <ECS/Transform/ECSTransform.h>
 #include <Input/Input.h>
 
 namespace WaveEngine
 {
-	class TestingBehaviour : public WaveBehaviour
+	class WAVEEXPORT TanakaWaveBehaviour final : public WaveBehaviour
 	{
-		WaveObject* tank = nullptr;
+	private:
+
+		WaveObject* tanakaPopSoda = nullptr;
 
 	public:
 
-		TestingBehaviour(unsigned int ID) : WaveBehaviour(ID)
+		TanakaWaveBehaviour(unsigned int ID) : WaveBehaviour(ID)
 		{
 
 		}
 
 		void Init() override
 		{
-			const vector<string> modelsPaths
-			{
-				"Models/Tank.fbx",
-				"Models/Binary/TestSpacePartition.fbx",
-				"Models/Cube.fbx"
-			};
+			const float defaultSize = 32.0f;
+			const char* tanakaPopSodaAsset = "Models/Tanaka/source/Tanaka_Pop_Soda.fbx";
 
-			const unsigned int defaultSize = 32;
+			tanakaPopSoda = &InstantiateModel(tanakaPopSodaAsset);
 
-			ModelImporter modelImporter;
-			
-			modelImporter.LoadScene(modelsPaths[0]);
-
-			tank = modelImporter.IntantiateModel();
-
-			tank->GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f));
-			tank->GetTransform().SetScale(Vector3::One() * defaultSize);
+			tanakaPopSoda->GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f));
+			tanakaPopSoda->GetTransform().SetScale(Vector3::One() * defaultSize);
+			tanakaPopSoda->GetTransform().Rotate(Vector3::Y() * -90.0f);
 
 			Camera& camera = GetWaveObject().AddComponent<Camera>();
 			camera.SetFarPlane(1000000.0f);
@@ -53,24 +44,21 @@ namespace WaveEngine
 			camera.SetOrthographic(false);
 			GetTransform().SetPosition(Vector3::Zero());
 
-			modelImporter.LoadScene(modelsPaths.at(1));
+			Engine::GetWindow()->SetSize(800, 800);
 
-			WaveObject& waveObject = *modelImporter.IntantiateModel();
-			waveObject.GetTransform().SetScale(Vector3::One() * 0.1f);
-
-			for (WaveObject* obj : WaveObjectRegistry::Get().GetWaveObject("Binary", ObjectNameSearch::Contains))
-				BinarySpacePartition::Get().TurnObjectIntoPlane(obj->GetID());
+			Engine::GetWindow()->SetIcon(*Engine::GetTextureImporter()->LoadTexture("Sprites/whiteImage.png"));
 		}
 
 		void Update() override
 		{
 			const float camereSpeed = 180.0f * Time::Get().GetDeltaTime();
-			ECSTransform& transform = tank->GetTransform();
+			ECSTransform& transform = tanakaPopSoda->GetTransform();
 
 			if (!ImGuiClass::thirdPersonCamera)
 			{
 				if (Input::Get().IsKeyPressed(Keys::W))
-					GetTransform().Translate(GetTransform().GetForward() * camereSpeed);
+					//GetTransform().Translate(GetTransform().GetForward() * camereSpeed);
+					Engine::GetWindow()->Translate(Vector3::Down() * camereSpeed);
 
 				if (Input::Get().IsKeyPressed(Keys::S))
 					GetTransform().Translate(GetTransform().GetBack() * camereSpeed);
@@ -101,16 +89,16 @@ namespace WaveEngine
 
 
 				if (Input::Get().IsKeyPressed(Keys::UP))
-					tank->GetTransform().Translate(GetTransform().GetForward() * camereSpeed);
+					tanakaPopSoda->GetTransform().Translate(GetTransform().GetForward() * camereSpeed);
 
 				if (Input::Get().IsKeyPressed(Keys::DOWN))
-					tank->GetTransform().Translate(GetTransform().GetBack() * camereSpeed);
+					tanakaPopSoda->GetTransform().Translate(GetTransform().GetBack() * camereSpeed);
 
 				if (Input::Get().IsKeyPressed(Keys::LEFT))
-					tank->GetTransform().Translate(GetTransform().GetLeft() * camereSpeed);
+					tanakaPopSoda->GetTransform().Translate(GetTransform().GetLeft() * camereSpeed);
 
 				if (Input::Get().IsKeyPressed(Keys::RIGHT))
-					tank->GetTransform().Translate(GetTransform().GetRight() * camereSpeed);
+					tanakaPopSoda->GetTransform().Translate(GetTransform().GetRight() * camereSpeed);
 			}
 			else
 			{
