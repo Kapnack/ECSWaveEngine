@@ -1,8 +1,8 @@
 #include "RigidBodyLogic.h"
 
 #include "RigidBody.h"
-#include "Physics/InertiaTensor.h"
 #include "WaveMath/Vector3/Vector3.h"
+#include "ECS/WaveObject/WaveObject.h"
 #include "WaveMath/WaveMath/WaveMath.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "WaveMath/Matrix3x3/Matrix3x3.h"
