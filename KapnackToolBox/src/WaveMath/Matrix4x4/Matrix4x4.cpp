@@ -2,9 +2,10 @@
 
 #include <cmath>
 
-#include <stdexcept> 
+#include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/WaveMath/WaveMath.h"
 #include "WaveMath/Matrix3x3/Matrix3x3.h"
+#include "WaveMath/Quaternion/Quaternion.h"
 
 Matrix4x4::Matrix4x4()
 {
@@ -94,12 +95,12 @@ Vector3 Matrix4x4::ArvosMethod(Vector3 extends) const
 	return ArvosMethod(*this, extends);
 }
 
-void Matrix4x4::Decomposed(Vector3& translation, Quaternion& rotation, Vector3& scale)
+void Matrix4x4::Decomposed(Vector3& translation, Quaternion& rotation, Vector3& scale) const
 {
 	Decompose(*this, translation, rotation, scale);
 }
 
-void Matrix4x4::Decomposed(Vector3& translation, Vector3& rotation, Vector3& scale)
+void Matrix4x4::Decomposed(Vector3& translation, Vector3& rotation, Vector3& scale) const
 {
 	Decompose(*this, translation, rotation, scale);
 }
@@ -214,20 +215,11 @@ Matrix4x4 Matrix4x4::CreateScale(Vector3 vector)
 
 Matrix4x4 Matrix4x4::CreateRotation(const Matrix4x4& matrix)
 {
+	const Vector3 s = GetScale(matrix);
 	Matrix4x4 r;
-
-	r.m00 = matrix.m00;
-	r.m01 = matrix.m01;
-	r.m02 = matrix.m02;
-
-	r.m10 = matrix.m10;
-	r.m11 = matrix.m11;
-	r.m12 = matrix.m12;
-
-	r.m20 = matrix.m20;
-	r.m21 = matrix.m21;
-	r.m22 = matrix.m22;
-
+	r.m00 = matrix.m00 / s.x; r.m10 = matrix.m10 / s.x; r.m20 = matrix.m20 / s.x;
+	r.m01 = matrix.m01 / s.y; r.m11 = matrix.m11 / s.y; r.m21 = matrix.m21 / s.y;
+	r.m02 = matrix.m02 / s.z; r.m12 = matrix.m12 / s.z; r.m22 = matrix.m22 / s.z;
 	return r;
 }
 
@@ -279,7 +271,10 @@ Vector3 Matrix4x4::GetTranslate(const Matrix4x4& matrix)
 
 Vector3 Matrix4x4::GetScale(const Matrix4x4& matrix)
 {
-	return Vector3(matrix.m00, matrix.m11, matrix.m22);
+	return Vector3(
+		Vector3(matrix.m00, matrix.m10, matrix.m20).Magnitude(),
+		Vector3(matrix.m01, matrix.m11, matrix.m21).Magnitude(),
+		Vector3(matrix.m02, matrix.m12, matrix.m22).Magnitude());
 }
 
 Matrix4x4 Matrix4x4::CreateRotation(Quaternion q)
