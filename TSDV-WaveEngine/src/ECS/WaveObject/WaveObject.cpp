@@ -1,12 +1,15 @@
 #include "WaveObject.h"
 
+#include "WaveObjectFactory.h"
 #include "WaveObjectRegistry.h"
+#include "ECS/WObject/WObject.h"
 #include "EventSystem/EventSystem.h"
-#include "ECS/Component/Component.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/BoundingBoxComp/BoundingBoxComp.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
+#include <string>
+#include "Events/ObjectChangeName.h"
 
 namespace WaveEngine
 {
@@ -25,9 +28,19 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
 	}
 
+	WaveObjectFactory* WaveObject::GetWaveObjectFactory() const
+	{
+		return ServiceProvider::Instance().Get<WaveObjectFactory>();
+	}
+
 	WaveObject::WaveObject(unsigned int ID) : WObject()
 	{
 		this->ID = ID;
+	}
+
+	WaveObject::WaveObject(const char* name)
+	{
+		*this = GetWaveObjectFactory()->Instantiate(name);
 	}
 
 	WaveObject::~WaveObject()
