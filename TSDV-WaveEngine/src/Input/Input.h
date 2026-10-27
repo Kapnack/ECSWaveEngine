@@ -1,12 +1,15 @@
 #pragma once
 
-#include "ServiceProvider/Service.h"
-#include "Window/Window.h"
 #include "Export.h"
+#include "Window/Window.h"
+#include "ServiceProvider/Service.h"
+#include "WaveMath/Vector2/Vector2.h"
 
 namespace WaveEngine
 {
-	enum Keys
+	class Engine;
+
+	enum class WAVEEXPORT Keys
 	{
 		A,
 		B,
@@ -126,13 +129,23 @@ namespace WaveEngine
 		RIGHT_SUPER
 	};
 
-	WAVEEXPORT class Input : public Service
+	class WAVEEXPORT Input : public Service
 	{
 	private:
+
+		Vector2 previousMousePosition;
+		Vector2 currentMousePosition;
+		Vector2 mouseDirection;
+
+		bool lockedMouse = false;
 
 		int GetGlfwKeyFromKey(Keys key) const;
 
 		Window* GetWindow() const;
+
+		void Update();
+
+		friend class Engine;
 
 	public:
 
@@ -141,6 +154,10 @@ namespace WaveEngine
 		Input();
 		~Input();
 
-		WAVEEXPORT bool IsKeyPressed(Keys key) const;
+		Vector2 GetMousePosition() const;
+		Vector2 GetMouseDirection() const;
+		bool IsKeyPressed(Keys key) const;
+
+		void SetCursorLocked(bool locked);
 	};
 }

@@ -1,6 +1,7 @@
 #include "Input.h"
 
 #include "Window/Window.h"
+#include "WaveMath/Vector2/Vector2.h"
 #include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
@@ -147,11 +148,46 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<Window>();
 	}
 
+	void Input::Update()
+	{
+		double x;
+		double y;
+
+		glfwGetCursorPos(GetWindow()->GetGLFWindow(), &x, &y);
+
+		previousMousePosition = currentMousePosition;
+		currentMousePosition = Vector2(x, y);
+
+		mouseDirection = currentMousePosition - previousMousePosition;
+
+		if (lockedMouse)
+			currentMousePosition = previousMousePosition;
+	}
+
+	Vector2 Input::GetMousePosition() const
+	{
+		return currentMousePosition;
+	}
+
+	Vector2 Input::GetMouseDirection() const
+	{
+		return mouseDirection;
+	}
+
 	bool Input::IsKeyPressed(Keys key) const
 	{
 		int keyToUse = GetGlfwKeyFromKey(key);
 
 		return glfwGetKey(GetWindow()->GetGLFWindow(), keyToUse) == GLFW_PRESS ||
 			glfwGetKey(GetWindow()->GetGLFWindow(), keyToUse) == GLFW_REPEAT;
+	}
+
+	void Input::SetCursorLocked(bool locked)
+	{
+		GLFWwindow* w = GetWindow()->GetGLFWindow();
+		glfwSetInputMode(w, GLFW_CURSOR, locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+
+		if (locked && glfwRawMouseMotionSupported())
+			glfwSetInputMode(w, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 	}
 }
