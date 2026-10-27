@@ -1,6 +1,9 @@
 #include "TextureManager.h"
 
+#include <map>
 #include <GL/glew.h>
+
+#include "Texture.h"
 
 namespace WaveEngine
 {

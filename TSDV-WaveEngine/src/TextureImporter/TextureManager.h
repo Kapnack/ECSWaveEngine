@@ -2,10 +2,12 @@
 
 #include "ServiceProvider/Service.h"
 
-#include "TextureImporter/Texture.h"
-
 #include <map>
+#include <string>
+
 #include "Export.h"
+#include "TextureImporter/Texture.h"
+#include <string_view>
 
 namespace WaveEngine
 {
@@ -18,7 +20,7 @@ namespace WaveEngine
 
 	using namespace std;
 
-	WAVEEXPORT class TextureManager final : public Service
+	class WAVEEXPORT TextureManager final : public Service
 	{
 	private:
 
@@ -42,10 +44,10 @@ namespace WaveEngine
 
 	public:
 
-		WAVEEXPORT void DeleteTexture(const unsigned int& ID);
-		WAVEEXPORT void DeleteTexture(const string_view name);
+		void DeleteTexture(const unsigned int& ID);
+		void DeleteTexture(const string_view name);
 
-		WAVEEXPORT Texture* GetTexture(const unsigned int& ID) const;
-		WAVEEXPORT Texture* TryGetTexture(const unsigned int& ID) const;
+		Texture* GetTexture(const unsigned int& ID) const;
+		Texture* TryGetTexture(const unsigned int& ID) const;
 	};
 }
