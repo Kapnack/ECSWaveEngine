@@ -3,34 +3,23 @@
 
 #include "WObject.h"
 
-#include "ECS/WaveObject/WaveObject.h"
+#include "ECS/Component/TypeComponent.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/WaveObject/WaveObjectFactory.h"
 
 namespace WaveEngine
 {
-	WaveObject& WObject::Instantiate()
+	template<TypeComponent T>
+	T& WObject::Instantiate(const char* name)
 	{
-		return ServiceProvider::Instance().Get<WaveObjectFactory>()->Instantiate();
-	}
-
-	WaveObject& WObject::Instantiate(const char* modelDir, bool useAbsolutePath)
-	{
-		return ServiceProvider::Instance().Get<WaveObjectFactory>()->Instantiate();
+		return ServiceProvider::Instance().Get<WaveObjectFactory>()->Instantiate<T>(name);
 	}
 
 	template<TypeComponent T>
-	T& WObject::Instantiate()
+	T& WObject::InstantiateModel(const char* modelDir, bool useAbsolutePath, const char* rootName)
 	{
-		return ServiceProvider::Instance().Get<WaveObjectFactory>()->Instantiate<T>();
+		return InstantiateModel(modelDir, useAbsolutePath, rootName).AddComponent<T>();
 	}
-
-	template<TypeComponent T>
-	T& WObject::Instantiate(const char* modelDir, bool useAbsolutePath)
-	{
-		return ServiceProvider::Instance().Get<WaveObjectFactory>()->Instantiate<T>();
-	}
-
 }
 
 #endif
