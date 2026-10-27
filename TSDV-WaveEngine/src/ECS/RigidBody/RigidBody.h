@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Export.h"
 #include "ECS/Component/Component.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Matrix3x3/Matrix3x3.h"
@@ -7,7 +8,7 @@
 
 namespace WaveEngine
 {
-	class RigidBody : public Component
+	class WAVEEXPORT RigidBody : public Component
 	{
 	private:
 
@@ -58,7 +59,7 @@ namespace WaveEngine
 		Vector3 GetVelocity() const;
 	};
 
-	class Collider : public Component
+	class WAVEEXPORT Collider : public Component
 	{
 		Collider(unsigned int id): Component(id)
 		{ }

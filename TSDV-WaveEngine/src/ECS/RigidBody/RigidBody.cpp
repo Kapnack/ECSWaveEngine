@@ -1,6 +1,7 @@
 #include "RigidBody.h"
 
 #include "ECS/Component/Component.h"
+#include "WaveMath/Vector3/Vector3.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 
