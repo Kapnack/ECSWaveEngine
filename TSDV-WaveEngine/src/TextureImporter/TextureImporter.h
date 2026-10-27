@@ -1,11 +1,12 @@
 #pragma once
 
+#include <string_view>
+
 #include "Export.h"
 
+#include "Texture.h"
 #include "ServiceProvider/Service.h"
 #include "TextureImporter/TextureManager.h"
-#include <string_view>
-#include "Texture.h"
 
 class BaseGame;
 
@@ -13,7 +14,7 @@ using namespace std;
 
 namespace WaveEngine
 {
-	WAVEEXPORT class TextureImporter final : public Service
+	class WAVEEXPORT TextureImporter final : public Service
 	{
 	private:
 
@@ -29,9 +30,9 @@ namespace WaveEngine
 
 	public:
 
-		WAVEEXPORT Texture* LoadTextureAbsolutePath(const string_view filePath);
-		WAVEEXPORT Texture* LoadTexture(const string_view filePath);
-		WAVEEXPORT Texture* LoadTextureFromMemory(const unsigned char* buffer, int size);
-		WAVEEXPORT Texture* LoadTextureFromPixels(const unsigned char* buffer, const unsigned int& width, const unsigned int& height);
+		Texture* LoadTextureAbsolutePath(const string_view filePath);
+		Texture* LoadTexture(const string_view filePath);
+		Texture* LoadTextureFromMemory(const unsigned char* buffer, int size);
+		Texture* LoadTextureFromPixels(const unsigned char* buffer, const unsigned int& width, const unsigned int& height);
 	};
 }
