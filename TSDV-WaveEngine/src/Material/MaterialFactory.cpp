@@ -124,11 +124,13 @@ namespace WaveEngine
 			int length;
 			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
 
-			char* message = (char*)alloca(length * sizeof(char));
+			char* message = (char*)_malloca(length * sizeof(char));
 			glGetShaderInfoLog(id, length, &length, message);
 			cout << message << "\n\n";
 
 			glDeleteShader(id);
+
+			_freea(message);
 
 			return NULL;
 		}
