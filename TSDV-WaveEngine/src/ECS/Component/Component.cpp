@@ -5,6 +5,7 @@
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/BoundingBoxComp/BoundingBoxComp.h"
+#include <ECS/Transform/ECSTransform.h>
 
 namespace WaveEngine
 {

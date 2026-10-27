@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Export.h"
 #include "ECS/WObject/WObject.h"
 
 namespace WaveEngine
@@ -8,7 +9,7 @@ namespace WaveEngine
 	class ECSTransform;
 	class BoundingBoxComp;
 
-	class Component : public WObject
+	class WAVEEXPORT Component : public WObject
 	{
 	private:
 
