@@ -1,5 +1,7 @@
 #include "Square.h"
 
+#include "WaveMath/Vector2/Vector2.h"
+
 namespace WaveEngine
 {
 	Square::Square()
@@ -62,6 +64,16 @@ namespace WaveEngine
 	Vector2 Square::GetCenter() const
 	{
 		return (max + min) * 0.5f;
+	}
+
+	Vector2 Square::GetMin() const
+	{
+		return min;
+	}
+
+	Vector2 Square::GetMax() const
+	{
+		return max;
 	}
 
 	Vector2 Square::GetExtends() const

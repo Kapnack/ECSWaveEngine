@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Export.h"
 #include "WaveMath/Vector2/Vector2.h"
 
 namespace WaveEngine
 {
-	struct Square
+	struct WAVEEXPORT Square
 	{
 	private:
 
