@@ -2,11 +2,12 @@
 
 #include "ServiceProvider/Service.h"
 
+#include <string>
+#include <string_view>
 #include <unordered_map>
 
 #include "Export.h"
 #include "Material/Material.h"
-#include "ServiceProvider/ServiceProvider.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ namespace WaveEngine
 	class Engine;
 	class ImGuiClass;
 
-	WAVEEXPORT class MaterialManager final : public Service
+	class WAVEEXPORT MaterialManager final : public Service
 	{
 	private:
 
@@ -41,13 +42,13 @@ namespace WaveEngine
 
 	public:
 
-		WAVEEXPORT Material* GetMaterial(const unsigned int id);
+		Material* GetMaterial(const unsigned int id);
 
-		WAVEEXPORT unsigned int GetMaterial(const string_view name);
+		unsigned int GetMaterial(const string_view name);
 
-		WAVEEXPORT void DeleteMaterial(const string_view name);
+		void DeleteMaterial(const string_view name);
 
-		WAVEEXPORT void DeleteMaterial(const unsigned int& ID);
+		void DeleteMaterial(const unsigned int& ID);
 
 		unordered_map<unsigned int, Material*>& GetMaterials();
 	};

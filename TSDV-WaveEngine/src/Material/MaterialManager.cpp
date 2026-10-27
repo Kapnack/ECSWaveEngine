@@ -1,9 +1,13 @@
 #include "MaterialManager.h"
 
-#include <GL/glew.h>
+#include <utility>
 #include <algorithm>
+#include <string_view>
+#include <unordered_map>
 
+#include "Material.h"
 #include "EventSystem/EventSystem.h"
+#include "ServiceProvider/ServiceProvider.h"
 #include "Material/Event/MaterialDelition.h"
 
 namespace WaveEngine
