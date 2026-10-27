@@ -2,12 +2,12 @@
 
 #include "ECS/Component/Component.h"
 
+#include "Export.h"
 #include "Mesh/Mesh.h"
-#include "BoundingBox/BoundingBox.h"
 
 namespace WaveEngine
 {
-	struct MeshID : Component
+	struct WAVEEXPORT MeshID : Component
 	{
 		unsigned int meshID = Mesh::NULL_MESH;
 
