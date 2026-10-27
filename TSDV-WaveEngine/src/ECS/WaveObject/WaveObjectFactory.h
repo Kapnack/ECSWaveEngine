@@ -23,17 +23,20 @@ namespace WaveEngine
 		ComponentRegistry* GetComponenetRegistry();
 		WaveObjectRegistry* GetWaveObjectRegistry();
 
+		WaveObject* CreateNewWaveObject();
+		void AddDefaultComponents(WaveObject& waveObject);
+
 		friend class ServiceProvider;
 		friend class Engine;
 
 	public:
 
-		WaveObject& Instantiate();
+		WaveObject& Instantiate(const char* name = nullptr);
 
 		template<TypeComponent T>
-		T& Instantiate()
+		T& Instantiate(const char* name = nullptr)
 		{
-			WaveObject& waveObject = Instantiate();
+			WaveObject& waveObject = Instantiate(name);
 			return waveObject.AddComponent<T>();
 		}
 	};

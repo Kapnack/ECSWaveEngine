@@ -2,10 +2,14 @@
 
 #include <string>
 
+#include "WaveObject.h"
+#include "WaveObjectRegistry.h"
+#include "ServiceProvider/Service.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/BoundingBoxComp/BoundingBoxComp.h"
 #include "ECS/OrientedBoundingBoxComp/OrientedBoundingBoxComp.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
 
 namespace WaveEngine
 {
@@ -18,17 +22,29 @@ namespace WaveEngine
 	{
 	}
 
-	WaveObject& WaveObjectFactory::Instantiate()
+	WaveObject& WaveObjectFactory::Instantiate(const char* name)
+	{
+		WaveObject* newWaveObject = CreateNewWaveObject();
+
+		GetWaveObjectRegistry()->AddObject(newWaveObject, name != nullptr ? name : "WaveObject: " + to_string(currentObjectID) + ".");
+
+		return *newWaveObject;
+	}
+
+	WaveObject* WaveObjectFactory::CreateNewWaveObject()
 	{
 		WaveObject* newWaveObject = new WaveObject(++currentObjectID);
 
-		newWaveObject->AddComponent<ECSTransform>();
-		newWaveObject->AddComponent<BoundingBoxComp>();
-		newWaveObject->AddComponent<OrientedBoundingBoxComp>();
+		AddDefaultComponents(*newWaveObject);
 
-		GetWaveObjectRegistry()->AddObject(newWaveObject, "WaveObject: " + to_string(currentObjectID) + ".");
+		return newWaveObject;
+	}
 
-		return *newWaveObject;
+	void WaveObjectFactory::AddDefaultComponents(WaveObject& waveObject)
+	{
+		waveObject.AddComponent<ECSTransform>();
+		waveObject.AddComponent<BoundingBoxComp>();
+		waveObject.AddComponent<OrientedBoundingBoxComp>();
 	}
 
 	ComponentRegistry* WaveObjectFactory::GetComponenetRegistry()
