@@ -1,12 +1,14 @@
 #pragma once
 
 #include <vector>
-
-#include "ServiceProvider/Service.h"
-#include "ECS/ComponentContainer/ComponentContainer.h"
-#include "EventSystem/EventSystem.h"
-#include "ECS/Camera/Camera.h"
 #include <Window/Window.h>
+
+#include "ECS/Camera/Camera.h"
+#include "EventSystem/Event.h"
+#include "ECS/Component/Component.h"
+#include "ServiceProvider/Service.h"
+#include "EventSystem/EventSystem.h"
+#include "ECS/ComponentContainer/ComponentContainer.h"
 
 namespace WaveEngine
 {

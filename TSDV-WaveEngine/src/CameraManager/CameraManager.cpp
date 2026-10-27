@@ -1,14 +1,16 @@
 #include "CameraManager.h"
 
 #include <vector>
-
-#include "ECS/ComponentContainer/ComponentContainer.h"
-#include "ECS/CompontRegistry/ComponentRegistry.h"
-#include "ServiceProvider/ServiceProvider.h"
-#include "EventSystem/EventSystem.h"
-#include "ECS/Camera/Camera.h"
-#include <algorithm>
 #include <iterator>
+#include <algorithm>
+
+#include "Window/Window.h"
+#include "Square/Square.h"
+#include "ECS/Camera/Camera.h"
+#include "EventSystem/EventSystem.h"
+#include "ServiceProvider/ServiceProvider.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
+#include "ECS/ComponentContainer/ComponentContainer.h"
 
 namespace WaveEngine
 {
