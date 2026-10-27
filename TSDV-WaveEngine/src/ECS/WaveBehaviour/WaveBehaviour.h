@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Export.h"
 #include "ECS/Component/Component.h"
 
 namespace WaveEngine
 {
-	class WaveBehaviour : public Component
+	class WAVEEXPORT WaveBehaviour : public Component
 	{
 	public:
 
