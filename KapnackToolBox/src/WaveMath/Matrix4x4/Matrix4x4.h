@@ -35,8 +35,8 @@ struct WAVEEXPORT Matrix4x4 final
 	Matrix4x4 GetScaleMatrix() const;
 	Vector3 ArvosMethod(Vector3 extends) const;
 
-	void Decomposed(Vector3& translation, Quaternion& rotation, Vector3& scale);
-	void Decomposed(Vector3& translation, Vector3& rotation, Vector3& scale);
+	void Decomposed(Vector3& translation, Quaternion& rotation, Vector3& scale) const;
+	void Decomposed(Vector3& translation, Vector3& rotation, Vector3& scale) const;
 
 	void Transpose();
 	Matrix4x4 Transposed() const;
