@@ -3,9 +3,15 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <string_view>
 
+#include "WaveObject.h"
 #include "EventSystem/EventSystem.h"
+#include "ServiceProvider/Service.h"
+#include "Events/ObjectChangeName.h"
 #include "WaveMath/WaveMath/WaveMath.h"
+#include "Events/ObjectBecameChildEvent.h"
+#include "Events/ObjectBecameParentEvent.h"
 #include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
