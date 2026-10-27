@@ -35,7 +35,7 @@ namespace WaveEngine
 			waveBehaviour->LateUpdate();
 	}
 
-	void WaveBehaviourLogic::Destroy() const
+	void WaveBehaviourLogic::Dispose() const
 	{
 		for (WaveBehaviour* waveBehaviour : GetComponentRegistry()->GetBehaviours())
 			waveBehaviour->Destroy();

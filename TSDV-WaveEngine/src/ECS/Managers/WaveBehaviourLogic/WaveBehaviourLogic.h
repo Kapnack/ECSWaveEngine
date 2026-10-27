@@ -18,6 +18,6 @@ namespace WaveEngine
 		void Update() const;
 		void LateUpdate() const;
 
-		void Destroy() const;
+		void Dispose() const;
 	};
 }
