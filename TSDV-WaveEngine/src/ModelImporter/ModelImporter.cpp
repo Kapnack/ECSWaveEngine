@@ -3,28 +3,26 @@
 #include <vector>
 #include <iostream>
 #include <filesystem>
-
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
-#include <assimp/Importer.hpp>
-#include <assimp/color4.h>
 #include <assimp/mesh.h>
-#include <assimp/material.h>
+#include <assimp/scene.h>
 #include <assimp/types.h>
+#include <assimp/color4.h>
 #include <assimp/texture.h>
-#include <glm/gtc/quaternion.hpp>
+#include <assimp/material.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 
-#include "ServiceProvider/ServiceProvider.h"
 #include "VertexData.h"
-#include "WaveMath/Vector3/Vector3.h"
-#include "WaveMath/Vector2/Vector2.h"
-#include "Material/Material.h"
 #include "ECS/MaterialID.h"
 #include "ECS/Mesh/MeshID.h"
-#include "ECS/Transform/ECSTransform.h"
-#include "ECS/WaveObject/WaveObject.h"
+#include "Material/Material.h"
 #include "TextureImporter/Texture.h"
-#include <WaveMath/Quaternion/Quaternion.h>
+#include "WaveMath/Vector3/Vector3.h"
+#include "WaveMath/Vector2/Vector2.h"
+#include "ECS/WaveObject/WaveObject.h"
+#include "ECS/Transform/ECSTransform.h"
+#include "WaveMath/Quaternion/Quaternion.h"
+#include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
 {
@@ -44,13 +42,12 @@ namespace WaveEngine
 		filename = filePath.filename().string().c_str();
 	}
 
-	WaveObject* ModelImporter::IntantiateModel()
+	WaveObject* ModelImporter::IntantiateModel(const char* rootName)
 	{
 		if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode)
 			return nullptr;
 
-		WaveObject& root = GetWaveObjectFactory()->Instantiate();
-		root.SetName(filename);
+		WaveObject& root = GetWaveObjectFactory()->Instantiate(rootName != nullptr ? rootName : filename.c_str());
 
 		ProcessNode(pScene->mRootNode, root);
 
@@ -86,45 +83,45 @@ namespace WaveEngine
 		}
 	}
 
-	void ModelImporter::ProcessMesh(aiMesh* mesh, WaveObject& meshWaveObject)
+	void ModelImporter::ProcessMesh(aiMesh* aiMesh, WaveObject& meshWaveObject)
 	{
-		VertexData* vertices = new VertexData[mesh->mNumVertices];
+		VertexData* vertices = new VertexData[aiMesh->mNumVertices];
 		std::vector<unsigned int> indices;
 
 		VertexData vertexData;
 
-		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		for (unsigned int i = 0; i < aiMesh->mNumVertices; i++)
 		{
 			vertexData.position = Vector3(
-				mesh->mVertices[i].x,
-				mesh->mVertices[i].y,
-				mesh->mVertices[i].z
+				aiMesh->mVertices[i].x,
+				aiMesh->mVertices[i].y,
+				aiMesh->mVertices[i].z
 			);
 
-			if (mesh->HasNormals())
+			if (aiMesh->HasNormals())
 			{
 				vertexData.normal = Vector3(
-					mesh->mNormals[i].x,
-					mesh->mNormals[i].y,
-					mesh->mNormals[i].z
+					aiMesh->mNormals[i].x,
+					aiMesh->mNormals[i].y,
+					aiMesh->mNormals[i].z
 				);
 			}
 			else
 				vertexData.normal = Vector3::Up();
 
-			if (mesh->mTextureCoords[0])
+			if (aiMesh->mTextureCoords[0])
 			{
 				vertexData.textureCordinates = Vector2(
-					mesh->mTextureCoords[0][i].x,
-					mesh->mTextureCoords[0][i].y
+					aiMesh->mTextureCoords[0][i].x,
+					aiMesh->mTextureCoords[0][i].y
 				);
 			}
 			else
 				vertexData.textureCordinates = Vector2::Zero();
 
-			if (mesh->HasVertexColors(0))
+			if (aiMesh->HasVertexColors(0))
 			{
-				aiColor4D color = mesh->mColors[0][i];
+				aiColor4D color = aiMesh->mColors[0][i];
 				vertexData.color = Color(color.r, color.g, color.b, color.a);
 			}
 			else
@@ -132,17 +129,17 @@ namespace WaveEngine
 
 			vertexData.tangent =
 			{
-				mesh->mTangents[i].x,
-				mesh->mTangents[i].y,
-				mesh->mTangents[i].z
+				aiMesh->mTangents[i].x,
+				aiMesh->mTangents[i].y,
+				aiMesh->mTangents[i].z
 			};
 
 			vertices[i] = vertexData;
 		}
 
-		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+		for (unsigned int i = 0; i < aiMesh->mNumFaces; i++)
 		{
-			const aiFace& face = mesh->mFaces[i];
+			const aiFace& face = aiMesh->mFaces[i];
 
 			for (unsigned int j = 0; j < face.mNumIndices; j++)
 			{
@@ -154,16 +151,11 @@ namespace WaveEngine
 		for (unsigned int i = 0; i < indices.size(); ++i)
 			indexBuffer[i] = indices[i];
 
-		unsigned int meshID = GetMeshFactory()->CreateMesh(filename, vertices, mesh->mNumVertices, indexBuffer, indices.size());
+		Mesh& mesh = GetMeshFactory()->CreateMesh(filename, vertices, aiMesh->mNumVertices, indexBuffer, indices.size());
 
-		MeshID* meshIDComp = nullptr;
+		meshWaveObject.AddComponent<MeshID>().meshID = mesh.GetID();
 
-		if (!(meshIDComp = meshWaveObject.TryGetComponent<MeshID>()))
-			meshIDComp = &meshWaveObject.AddComponent<MeshID>();
-
-		meshIDComp->meshID = meshID;
-
-		aiMaterial* material = pScene->mMaterials[mesh->mMaterialIndex];
+		aiMaterial* material = pScene->mMaterials[aiMesh->mMaterialIndex];
 
 		Material* materialID = ProcessMaterial(material);
 

@@ -5,6 +5,7 @@
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "Mesh/MeshManager/MeshManager.h"
+#include "WaveMath/Matrix4x4/Matrix4x4.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "ECS/WaveObject/WaveObject.h"
 #include "WaveMath/Vector3/Vector3.h"
@@ -64,7 +65,6 @@ namespace WaveEngine
 	BoundingBox MeshLogic::UpdateBoundingBox(WaveObject& waveObject)
 	{
 		ECSTransform& transform = waveObject.GetTransform();
-		MeshID* meshID = waveObject.TryGetComponent<MeshID>();
 
 		BoundingBox box;
 		box.Reset();
