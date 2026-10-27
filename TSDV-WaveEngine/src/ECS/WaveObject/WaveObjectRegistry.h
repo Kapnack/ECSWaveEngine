@@ -4,10 +4,7 @@
 #include <unordered_map>
 
 #include "ServiceProvider/Service.h"
-#include "ServiceProvider/ServiceProvider.h"
-#include "WaveObject.h"
 #include "EventSystem/Func.h"
-#include "EventSystem/Event.h"
 #include <EventSystem/EventSystem.h>
 #include "Events/ObjectBecameParentEvent.h"
 #include "Events/ObjectChangeName.h"
@@ -27,6 +24,8 @@ namespace WaveEngine
 		Starts,
 		Ends
 	};
+
+	class WaveObject;
 
 	class WaveObjectRegistry : Service
 	{
