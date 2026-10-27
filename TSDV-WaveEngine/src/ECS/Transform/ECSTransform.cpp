@@ -1,17 +1,21 @@
 #include "ECSTransform.h"
 
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/matrix_decompose.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/fwd.hpp>
-
-#include "ServiceProvider/ServiceProvider.h"
-#include "ECS/CompontRegistry/ComponentRegistry.h"
-#include "ECS/WaveObject/WaveObject.h"
-#include <ECS/WaveObject/WaveObjectRegistry.h>
-#include "ObjectTransformDirtifyEvent.h"
+#include <memory>
 #include <vector>
+
+#include "EventSystem/EventSystem.h"
+#include "ECS/Component/Component.h"
+#include "WaveMath/Vector2/Vector2.h"
+#include "WaveMath/Vector3/Vector3.h"
+#include "ECS/WaveObject/WaveObject.h"
+#include "ObjectTransformDirtifyEvent.h"
+#include "WaveMath/Matrix4x4/Matrix4x4.h"
+#include "WaveMath/Quaternion/Quaternion.h"
+#include "ServiceProvider/ServiceProvider.h"
+#include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
+#include "ECS/WaveObject/Events/ObjectBecameChildEvent.h"
+#include "ECS/WaveObject/Events/ObjectBecameParentEvent.h"
 
 namespace WaveEngine
 {
@@ -27,22 +31,22 @@ namespace WaveEngine
 
 	Vector3 ECSTransform::GetPosition() const
 	{
-		return globalModel.GetTranslate();
+		return worldModel.GetTranslate();
 	}
 
 	Vector3 ECSTransform::GetScale() const
 	{
-		return globalModel.GetScale();
+		return worldModel.GetScale();
 	}
 
 	Quaternion ECSTransform::GetRotation() const
 	{
-		return globalModel.GetRotation();
+		return worldModel.GetRotation();
 	}
 
 	Vector3 ECSTransform::GetEulerRotation() const
 	{
-		return globalModel.GetRotation().ToEuler();
+		return worldModel.GetRotation().ToEuler();
 	}
 
 	Vector3 ECSTransform::GetLocalPosition() const
@@ -65,16 +69,6 @@ namespace WaveEngine
 		return GetLocalRotation().ToEuler();
 	}
 
-	Vector3 ECSTransform::GetPreviousPos() const
-	{
-		return previousPosition;
-	}
-
-	void ECSTransform::GoToPreviousPos()
-	{
-		SetPosition(previousPosition);
-	}
-
 	void ECSTransform::SetPosition(Vector3 vector)
 	{
 		SetPosition(vector.x, vector.y, vector.z);
@@ -87,18 +81,22 @@ namespace WaveEngine
 
 	void ECSTransform::SetPosition(float x, float y)
 	{
-		SetPosition(x, y, position.z);
+		SetPosition(x, y, worldModel.m32);
 	}
 
 	void ECSTransform::SetPosition(float x, float y, float z)
 	{
-		previousPosition = position;
+		if (parentID == WaveObject::NULL_OBJECT)
+		{
+			SetLocalPosition(x, y, z);
+			return;
+		}
 
-		position.x = x;
-		position.y = y;
-		position.z = z;
+		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
 
-		MarkDirty();
+		Vector3 local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateTranslate(Vector3(x, y, z))).GetTranslate();
+
+		SetLocalPosition(local);
 	}
 
 	void ECSTransform::Translate(Vector3 translation)
@@ -113,18 +111,22 @@ namespace WaveEngine
 
 	void ECSTransform::Translate(float x, float y)
 	{
-		Translate(x, y, 0);
+		Translate(x, y, 0.0f);
 	}
 
 	void ECSTransform::Translate(float x, float y, float z)
 	{
-		previousPosition = position;
+		if (parentID == WaveObject::NULL_OBJECT)
+		{
+			LocalTranslate(x, y, z);
+			return;
+		}
 
-		position.x += x;
-		position.y += y;
-		position.z += z;
+		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
 
-		MarkDirty();
+		Vector3 local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateTranslate(Vector3(x, y, z))).GetTranslate();
+
+		LocalTranslate(local);
 	}
 
 	void ECSTransform::SetScale(Vector3 vector)
@@ -139,16 +141,22 @@ namespace WaveEngine
 
 	void ECSTransform::SetScale(float x, float y)
 	{
-		SetScale(x, y, scale.z);
+		SetScale(x, y, worldModel.m22);
 	}
 
 	void ECSTransform::SetScale(float x, float y, float z)
 	{
-		scale.x = x;
-		scale.y = y;
-		scale.z = z;
+		if (parentID == WaveObject::NULL_OBJECT)
+		{
+			SetLocalScale(x, y, z);
+			return;
+		}
 
-		MarkDirty();
+		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
+
+		Vector3 local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateScale(Vector3(x, y, z))).GetScale();
+
+		SetLocalScale(local);
 	}
 
 	void ECSTransform::Scale(Vector3 vector)
@@ -168,11 +176,17 @@ namespace WaveEngine
 
 	void ECSTransform::Scale(float x, float y, float z)
 	{
-		scale.x += x;
-		scale.y += y;
-		scale.z += z;
+		if (parentID == WaveObject::NULL_OBJECT)
+		{
+			LocalScale(x, y, z);
+			return;
+		}
 
-		MarkDirty();
+		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
+
+		Vector3 local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateScale(Vector3(x, y, z))).GetScale();
+
+		LocalScale(local);
 	}
 
 	void ECSTransform::SetRotation(Vector3 vector)
@@ -187,19 +201,27 @@ namespace WaveEngine
 
 	void ECSTransform::SetRotation(float x, float y)
 	{
-		SetRotation(Quaternion::Euler(x, y, GetLocalEulerRotation().z));
-	}
-
-	void ECSTransform::SetRotation(Quaternion quaternion)
-	{
-		rotation = quaternion;
-		MarkDirty();
+		SetRotation(x, y, worldModel.GetRotation().ToEuler().z);
 	}
 
 	void ECSTransform::SetRotation(float x, float y, float z)
 	{
 		SetRotation(Quaternion::Euler(x, y, z));
-		MarkDirty();
+	}
+
+	void ECSTransform::SetRotation(Quaternion quaternion)
+	{
+		if (parentID == WaveObject::NULL_OBJECT)
+		{
+			SetLocalRotation(quaternion);
+			return;
+		}
+
+		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
+
+		Quaternion local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateRotation(quaternion)).GetRotation();
+
+		SetLocalRotation(local);
 	}
 
 	void ECSTransform::Rotate(Vector3 vector)
@@ -214,7 +236,7 @@ namespace WaveEngine
 
 	void ECSTransform::Rotate(float x, float y)
 	{
-		Rotate(x, y, 0);
+		Rotate(x, y, 0.0f);
 	}
 
 	void ECSTransform::Rotate(float x, float y, float z)
@@ -224,13 +246,170 @@ namespace WaveEngine
 
 	void ECSTransform::Rotate(Quaternion quaternion)
 	{
+		if (parentID == WaveObject::NULL_OBJECT)
+		{
+			LocalRotate(quaternion);
+			return;
+		}
+
+		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
+
+		Quaternion local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateRotation(quaternion)).GetRotation();
+
+		LocalRotate(local);
+	}
+
+	void ECSTransform::SetLocalPosition(Vector3 vector)
+	{
+		SetLocalPosition(vector.x, vector.y, vector.z);
+	}
+
+	void ECSTransform::SetLocalPosition(Vector2 translation)
+	{
+		SetLocalPosition(translation.x, translation.y);
+	}
+
+	void ECSTransform::SetLocalPosition(float x, float y)
+	{
+		SetLocalPosition(x, y, position.z);
+	}
+
+	void ECSTransform::SetLocalPosition(float x, float y, float z)
+	{
+		position.x = x;
+		position.y = y;
+		position.z = z;
+
+		MarkDirty();
+	}
+
+	void ECSTransform::LocalTranslate(Vector3 translation)
+	{
+		LocalTranslate(translation.x, translation.y, translation.z);
+	}
+
+	void ECSTransform::LocalTranslate(Vector2 translation)
+	{
+		LocalTranslate(translation.x, translation.y);
+	}
+
+	void ECSTransform::LocalTranslate(float x, float y)
+	{
+		LocalTranslate(x, y, 0);
+	}
+
+	void ECSTransform::LocalTranslate(float x, float y, float z)
+	{
+		position.x += x;
+		position.y += y;
+		position.z += z;
+
+		MarkDirty();
+	}
+
+	void ECSTransform::SetLocalScale(Vector3 vector)
+	{
+		SetLocalScale(vector.x, vector.y, vector.z);
+	}
+
+	void ECSTransform::SetLocalScale(Vector2 translation)
+	{
+		SetLocalScale(translation.x, translation.y);
+	}
+
+	void ECSTransform::SetLocalScale(float x, float y)
+	{
+		SetLocalScale(x, y, scale.z);
+	}
+
+	void ECSTransform::SetLocalScale(float x, float y, float z)
+	{
+		scale.x = x;
+		scale.y = y;
+		scale.z = z;
+
+		MarkDirty();
+	}
+
+	void ECSTransform::LocalScale(Vector3 vector)
+	{
+		LocalScale(vector.x, vector.y, vector.z);
+	}
+
+	void ECSTransform::LocalScale(Vector2 translation)
+	{
+		LocalScale(translation.x, translation.y);
+	}
+
+	void ECSTransform::LocalScale(float x, float y)
+	{
+		LocalScale(x, y, 0.0f);
+	}
+
+	void ECSTransform::LocalScale(float x, float y, float z)
+	{
+		scale.x += x;
+		scale.y += y;
+		scale.z += z;
+
+		MarkDirty();
+	}
+
+	void ECSTransform::SetLocalRotation(Vector3 vector)
+	{
+		SetLocalRotation(vector.x, vector.y, vector.z);
+	}
+
+	void ECSTransform::SetLocalRotation(Vector2 vector)
+	{
+		SetLocalRotation(vector.x, vector.y);
+	}
+
+	void ECSTransform::SetLocalRotation(float x, float y)
+	{
+		SetLocalRotation(Quaternion::Euler(x, y, GetLocalEulerRotation().z));
+	}
+
+	void ECSTransform::SetLocalRotation(Quaternion quaternion)
+	{
+		rotation = quaternion;
+		MarkDirty();
+	}
+
+	void ECSTransform::LocalRotate(Vector3 vector)
+	{
+		LocalRotate(vector.x, vector.y, vector.z);
+	}
+
+	void ECSTransform::LocalRotate(Vector2 vector)
+	{
+		LocalRotate(vector.x, vector.y);
+	}
+
+	void ECSTransform::LocalRotate(float x, float y)
+	{
+		LocalRotate(x, y, 0.0f);
+	}
+
+	void ECSTransform::LocalRotate(float x, float y, float z)
+	{
+		LocalRotate(Quaternion::Euler(x, y, z));
+	}
+
+	void ECSTransform::SetLocalRotation(float x, float y, float z)
+	{
+		SetLocalRotation(Quaternion::Euler(x, y, z));
+	}
+
+	void ECSTransform::LocalRotate(Quaternion quaternion)
+	{
 		rotation *= quaternion;
 		MarkDirty();
 	}
 
 	Vector3 ECSTransform::WorldToLocal(Vector3 worldPoint) const
 	{
-		Vector3 local = (Matrix4x4::Inversed(globalModel) * Matrix4x4::CreateTranslate(worldPoint)).GetTranslate();
+		Vector3 local = (Matrix4x4::Inversed(worldModel) * Matrix4x4::CreateTranslate(worldPoint)).GetTranslate();
 		return local;
 	}
 
@@ -257,32 +436,32 @@ namespace WaveEngine
 
 	Vector3 ECSTransform::GetForward() const
 	{
-		return globalModel.GetFoward();
+		return worldModel.GetFoward();
 	}
 
 	Vector3 ECSTransform::GetBack() const
 	{
-		return globalModel.GetBack();
+		return worldModel.GetBack();
 	}
 
 	Vector3 ECSTransform::GetRight() const
 	{
-		return globalModel.GetRight();
+		return worldModel.GetRight();
 	}
 
 	Vector3 ECSTransform::GetLeft() const
 	{
-		return globalModel.GetLeft();
+		return worldModel.GetLeft();
 	}
 
 	Vector3 ECSTransform::GetUp() const
 	{
-		return globalModel.GetUP();
+		return worldModel.GetUP();
 	}
 
 	Vector3 ECSTransform::GetDown() const
 	{
-		return globalModel.GetDown();
+		return worldModel.GetDown();
 	}
 
 	const Matrix4x4& ECSTransform::GetLocalModel() const
@@ -292,12 +471,12 @@ namespace WaveEngine
 
 	const Matrix4x4& ECSTransform::GetGlobalModel() const
 	{
-		return globalModel;
+		return worldModel;
 	}
 
 	void ECSTransform::SetGlobalModel(const Matrix4x4& m)
 	{
-		globalModel = m;
+		worldModel = m;
 	}
 
 	unsigned int ECSTransform::GetParentID() const
@@ -305,7 +484,7 @@ namespace WaveEngine
 		return parentID;
 	}
 
-	const vector<int>& ECSTransform::GetChildsIDs() const
+	const vector<unsigned int>& ECSTransform::GetChildsIDs() const
 	{
 		return children;
 	}
@@ -315,7 +494,7 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(children[index]);
 	}
 
-	vector<WaveObject*> ECSTransform::GetChilds()
+	vector<WaveObject*> ECSTransform::GetChilds() const
 	{
 		vector<WaveObject*> childsObjects;
 
@@ -325,7 +504,7 @@ namespace WaveEngine
 		return childsObjects;
 	}
 
-	WaveObject& ECSTransform::GetParent()
+	WaveObject& ECSTransform::GetParent() const
 	{
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(parentID);
 	}
@@ -364,9 +543,14 @@ namespace WaveEngine
 		UnDirty();
 	}
 
-	const Matrix4x4& ECSTransform::GetModel() const
+	const Matrix4x4& ECSTransform::GetWorldMatrix() const
 	{
-		return globalModel;
+		return worldModel;
+	}
+
+	const Matrix4x4& ECSTransform::GetLocalMatrix() const
+	{
+		return localModel;
 	}
 
 	void ECSTransform::MarkDirty()
@@ -434,7 +618,6 @@ namespace WaveEngine
 	{
 		hasChildDirty = false;
 	}
-
 
 	EventSystem* ECSTransform::GetEventSystem()
 	{
