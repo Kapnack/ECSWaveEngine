@@ -1,6 +1,5 @@
 ﻿#include "Engine.h"
 
-#include <ctime>
 #include <cstdlib>
 #include <GLFW/glfw3.h>
 
@@ -29,30 +28,31 @@
 #include <ECS/OrientedBoundingBoxComp/OrientedBoundingBoxComp.h>
 #include <ECS/Transform/ECSTransform.h>
 #include <ECS/Mesh/MeshID.h>
+#include <WaveMath/Vector3/Vector3.h>
 
 namespace WaveEngine
 {
-	Engine::Engine(int width, int height)
+	bool Engine::isRunning = true;
+
+	Engine::Engine()
 	{
-		InitEngine(width, height);
 	}
 
 	Engine::~Engine()
 	{
-		EndEngine();
 	}
 
-	void Engine::InitEngine(int width, int height)
+	void Engine::Init()
 	{
 		if (!glfwInit())
 			exit(-1);
 
 #pragma region InitServices
+		ServiceProvider::Instance().Register(new Window(10, 10, "WaveEngine"));
 		ServiceProvider::Instance().Register(new EventSystem());
 		ServiceProvider::Instance().Register(new ComponentRegistry());
 		ServiceProvider::Instance().Register(new WaveObjectRegistry());
 		ServiceProvider::Instance().Register(new WaveObjectFactory());
-		ServiceProvider::Instance().Register(new Window(width, height, "WaveEngine"));
 		ServiceProvider::Instance().Register(new FileReader());
 		ServiceProvider::Instance().Register(new MeshFactory());
 		ServiceProvider::Instance().Register(new MeshManager());
@@ -74,6 +74,8 @@ namespace WaveEngine
 		ServiceProvider::Instance().Get<ComponentRegistry>()->CreateOrGetComponentStorage<BoundingBoxComp>();
 		ServiceProvider::Instance().Get<ComponentRegistry>()->CreateOrGetComponentStorage<OrientedBoundingBoxComp>();
 
+		GetWindow()->Init();
+		GetRenderer()->Init();
 		GetWaveRandom()->Init();
 		GetWaveObjectRegistry()->Init();
 		GetCameraManager()->Init();
@@ -81,13 +83,7 @@ namespace WaveEngine
 		drawLogic.Init();
 		drawLogic.Init();
 		transformLogic.Init();
-
 		imGui.Init();
-
-		waveBehaviourLogic.Init();
-		waveBehaviourLogic.LateInit();
-
-		GetWaveObjectFactory()->Instantiate<TestingBehaviour>();
 
 #pragma region InitLights
 		Renderer::dirLight.direction = Vector3::Back();
@@ -111,7 +107,7 @@ namespace WaveEngine
 
 		Renderer::flashLights[1] =
 		{
-			.position = { 0.0f, 0.0f, 0.0f },
+			.position = { 0.0f, 52.0f, 290.0f },
 			.direction = Vector3::Down(),
 
 			.ambient = Vector3::One() * 0.1f,
@@ -154,29 +150,55 @@ namespace WaveEngine
 #pragma endregion
 	}
 
-	void Engine::EndEngine()
+	void Engine::LateInit()
 	{
-		waveBehaviourLogic.Destroy();
-		imGui.Unload();
+		waveBehaviourLogic.Init();
+		waveBehaviourLogic.LateInit();
+
+		GetWaveObjectFactory()->Instantiate<TanakaWaveBehaviour>();
+	}
+
+	void Engine::Dispose()
+	{
+		waveBehaviourLogic.Dispose();
+		imGui.Dispose();
+		GetRenderer()->Dispose();
+		GetWindow()->Dispose();
 		ServiceProvider::Instance().Clear();
 	}
 
 	void Engine::Run()
 	{
-		while (!glfwWindowShouldClose(GetWindow()->GetGLFWindow()))
+		while (!glfwWindowShouldClose(GetWindow()->GetGLFWindow()) && isRunning)
 		{
-			EngineUpdate();
+			Update();
 
-			EngineDraw();
+			Draw();
 
 			GetWindow()->SwapBuffer();
 			GetWindow()->HandleInput();
 		}
 	}
 
-	void Engine::EngineUpdate()
+	void Engine::StartEngine()
+	{
+		Engine* engine = new Engine();
+
+		engine->Init();
+		engine->LateInit();
+
+		engine->Run();
+
+		engine->Dispose();
+
+		delete engine;
+	}
+
+	void Engine::Update()
 	{
 		GetTime()->UpdateDeltaTime();
+
+		GetInput()->Update();
 
 		waveBehaviourLogic.Update();
 		transformLogic.Update();
@@ -196,7 +218,7 @@ namespace WaveEngine
 		waveBehaviourLogic.LateUpdate();
 	}
 
-	void Engine::EngineDraw()
+	void Engine::Draw()
 	{
 		GetRenderer()->Clear();
 		GetRenderer()->Flush();
@@ -229,7 +251,7 @@ namespace WaveEngine
 		return GetTime()->GetDeltaTime();
 	}
 
-	Window* Engine::GetWindow() const
+	Window* Engine::GetWindow()
 	{
 		return ServiceProvider::Instance().Get<Window>();
 	}
@@ -254,7 +276,7 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<TextureManager>();
 	}
 
-	TextureImporter* Engine::GetTextureImporter() const
+	TextureImporter* Engine::GetTextureImporter()
 	{
 		return ServiceProvider::Instance().Get<TextureImporter>();
 	}

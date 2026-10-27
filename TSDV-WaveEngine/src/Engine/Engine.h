@@ -25,21 +25,29 @@
 #include "ECS/Managers/TransformLogic/TransformLogic.h"
 #include "ECS/Managers/WaveBehaviourLogic/WaveBehaviourLogic.h"
 #include "ECS/Managers/BinarySpacePartition/BinarySpacePartition.h"
+#include <EventSystem/Action.h>
 
 
 namespace WaveEngine
 {
-	WAVEEXPORT class Engine
+	class WAVEEXPORT Engine
 	{
 	private:
 
-		void InitEngine(int width, int height);
+		Engine();
+		virtual ~Engine();
 
-		void EndEngine();
+		void Run();
 
-		void EngineUpdate();
+		void Init();
 
-		void EngineDraw();
+		void LateInit();
+
+		void Dispose();
+
+		void Update();
+
+		void Draw();
 
 		WaveObject* tank;
 
@@ -55,35 +63,31 @@ namespace WaveEngine
 
 	protected:
 
-		WAVEEXPORT virtual void Init(int width, int height) = 0;
-		WAVEEXPORT virtual void Unload() = 0;
+		float GetDeltaTime() const;
 
-		WAVEEXPORT float GetDeltaTime() const;
-
-		WAVEEXPORT Renderer* GetRenderer() const;
-		WAVEEXPORT BinarySpacePartition* GetBinarySpacePartition() const;
-		WAVEEXPORT CameraManager* GetCameraManager() const;
-		WAVEEXPORT MaterialManager* GetMaterialManager() const;
-		WAVEEXPORT MaterialFactory* GetMaterialFactory() const;
-		WAVEEXPORT Input* GetInput() const;
-		WAVEEXPORT Window* GetWindow() const;
-		WAVEEXPORT Time* GetTime() const;
-		WAVEEXPORT TextureImporter* GetTextureImporter() const;
-		WAVEEXPORT TextureManager* GetTextureManager() const;
-		WAVEEXPORT FileReader* GetFileReader() const;
-		WAVEEXPORT EventSystem* GetEventSystem() const;
-		WAVEEXPORT MeshFactory* GetMeshFactory() const;
-		WAVEEXPORT MeshManager* GetMeshManager() const;
-		WAVEEXPORT WaveObjectRegistry* GetWaveObjectRegistry() const;
-		WAVEEXPORT WaveObjectFactory* GetWaveObjectFactory() const;
-		WAVEEXPORT WaveRandom* GetWaveRandom() const;
+		Renderer* GetRenderer() const;
+		BinarySpacePartition* GetBinarySpacePartition() const;
+		CameraManager* GetCameraManager() const;
+		MaterialManager* GetMaterialManager() const;
+		MaterialFactory* GetMaterialFactory() const;
+		Input* GetInput() const;
+		Time* GetTime() const;
+		TextureManager* GetTextureManager() const;
+		FileReader* GetFileReader() const;
+		EventSystem* GetEventSystem() const;
+		MeshFactory* GetMeshFactory() const;
+		MeshManager* GetMeshManager() const;
+		WaveObjectRegistry* GetWaveObjectRegistry() const;
+		WaveObjectFactory* GetWaveObjectFactory() const;
+		WaveRandom* GetWaveRandom() const;
 
 	public:
 
-		WAVEEXPORT Engine(int width, int height);
-		WAVEEXPORT virtual ~Engine();
+		static bool isRunning;
 
-		WAVEEXPORT void Run();
+		static void StartEngine();
+		static Window* GetWindow();
+		static TextureImporter* GetTextureImporter();
 	};
 }
 
