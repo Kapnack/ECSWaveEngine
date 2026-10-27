@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ServiceProvider/Service.h"
-#include "ServiceProvider/ServiceProvider.h"
 
 #include "Export.h"
 #include "Window/Window.h"
@@ -10,7 +9,7 @@ class BaseGame;
 
 namespace WaveEngine
 {
-	WAVEEXPORT class Time : public Service
+	class WAVEEXPORT Time : public Service
 	{
 	private:
 
@@ -33,8 +32,8 @@ namespace WaveEngine
 
 		static Time& Get();
 
-		WAVEEXPORT float GetDeltaTime() const;
-		WAVEEXPORT void SetTimeScale(float timeScale);
+		float GetDeltaTime() const;
+		void SetTimeScale(float timeScale);
 	};
 }
 

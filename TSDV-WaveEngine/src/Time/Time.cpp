@@ -1,5 +1,9 @@
 #include "Time.h"
 
+#include "Window/Window.h"
+#include "ServiceProvider/Service.h"
+#include "ServiceProvider/ServiceProvider.h"
+
 namespace WaveEngine
 {
 	Time::Time() : Service()
