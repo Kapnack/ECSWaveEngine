@@ -2,8 +2,10 @@
 
 #include <unordered_map>
 #include <string>
+#include <vector>
 #include <GL/glew.h>
 
+#include "Export.h"
 #include "WaveMath/Vector4/Vector4.h"
 #include "WaveMath/Vector2/Vector2.h"
 #include "WaveMath/Vector3/Vector3.h"
@@ -28,7 +30,7 @@ namespace WaveEngine
 		GLint size;
 	};
 
-	class Material final
+	class WAVEEXPORT Material final
 	{
 	private:
 
