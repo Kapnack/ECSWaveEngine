@@ -6,8 +6,6 @@
 
 #include "Plane/Plane.h"
 #include "Renderer/Renderer.h"
-#include "Material/Color/Color.h"
-#include "BoundingBox/BoundingBox.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "ECS/WaveObject/WaveObject.h"
 #include "WaveMath/WaveMath/WaveMath.h"
