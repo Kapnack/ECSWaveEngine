@@ -20,10 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Game\Game.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Game\Game.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\ECS\newShader.frag">
