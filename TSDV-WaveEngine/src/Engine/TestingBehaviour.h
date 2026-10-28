@@ -32,7 +32,7 @@ namespace WaveEngine
 			const float defaultSize = 32.0f;
 			const char* tanakaPopSodaAsset = "Models/Tanaka/source/Tanaka_Pop_Soda.fbx";
 
-			tanakaPopSoda = &InstantiateModel(tanakaPopSodaAsset);
+			tanakaPopSoda = &Instantiate(tanakaPopSodaAsset);
 
 			tanakaPopSoda->GetTransform().SetPosition(Vector3::Right() * (defaultSize * 0.5f));
 			tanakaPopSoda->GetTransform().SetScale(Vector3::One() * defaultSize);
@@ -57,8 +57,7 @@ namespace WaveEngine
 			if (!ImGuiClass::thirdPersonCamera)
 			{
 				if (Input::Get().IsKeyPressed(Keys::W))
-					//GetTransform().Translate(GetTransform().GetForward() * camereSpeed);
-					Engine::GetWindow()->Translate(Vector3::Down() * camereSpeed);
+					GetTransform().Translate(GetTransform().GetForward() * camereSpeed);
 
 				if (Input::Get().IsKeyPressed(Keys::S))
 					GetTransform().Translate(GetTransform().GetBack() * camereSpeed);

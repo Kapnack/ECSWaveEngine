@@ -11,15 +11,13 @@ namespace WaveEngine
 	{
 	public:
 
-		static WaveObject& Instantiate(const char* name = nullptr);
-
-		static WaveObject& InstantiateModel(const char* modelDir, bool useAbsolutePath = true, const char* rootName = nullptr);
+		static WaveObject& Instantiate(const char* modelDir, bool useAbsolutePath = true, const char* rootName = nullptr);
 
 		template<TypeComponent T>
 		static T& Instantiate(const char* name = nullptr);
 
 		template<TypeComponent T>
-		static T& InstantiateModel(const char* modelDir, bool useAbsolutePath = true, const char* rootName = nullptr);
+		static T& Instantiate(const char* modelDir, bool useAbsolutePath = true, const char* rootName = nullptr);
 
 	};
 }

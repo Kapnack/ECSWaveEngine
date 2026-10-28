@@ -16,9 +16,9 @@ namespace WaveEngine
 	}
 
 	template<TypeComponent T>
-	T& WObject::InstantiateModel(const char* modelDir, bool useAbsolutePath, const char* rootName)
+	T& WObject::Instantiate(const char* modelDir, bool useAbsolutePath, const char* rootName)
 	{
-		return InstantiateModel(modelDir, useAbsolutePath, rootName).AddComponent<T>();
+		return Instantiate(modelDir, useAbsolutePath, rootName).AddComponent<T>();
 	}
 }
 
