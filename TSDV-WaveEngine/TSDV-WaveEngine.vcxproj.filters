@@ -392,10 +392,14 @@
     <ClInclude Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviour.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\WaveManager.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="src\ECS\WObject\WObject.tpp" />
     <None Include="src\ECS\Component\TypeComponent.h" />
+    <None Include="src\Engine\Engine.tpp" />
   </ItemGroup>
 </Project>

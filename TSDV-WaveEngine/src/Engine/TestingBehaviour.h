@@ -7,7 +7,6 @@
 #include "WaveMath/Vector3/Vector3.h"
 #include "ECS/WaveObject/WaveObject.h"
 #include "ECS/WaveBehaviour/WaveBehaviour.h"
-#include <ModelImporter/ModelImporter.h>
 #include <ECS/Camera/Camera.h>
 #include <ECS/Transform/ECSTransform.h>
 #include <Input/Input.h>

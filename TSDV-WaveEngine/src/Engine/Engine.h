@@ -2,6 +2,7 @@
 
 #include "Export.h"
 #include "Time/Time.h"
+#include "WaveManager.h"
 #include "Input/Input.h"
 #include "Window/Window.h"
 #include "Renderer/Renderer.h"
@@ -25,7 +26,6 @@
 #include "ECS/Managers/TransformLogic/TransformLogic.h"
 #include "ECS/Managers/WaveBehaviourLogic/WaveBehaviourLogic.h"
 #include "ECS/Managers/BinarySpacePartition/BinarySpacePartition.h"
-#include <EventSystem/Action.h>
 
 
 namespace WaveEngine
@@ -34,7 +34,7 @@ namespace WaveEngine
 	{
 	private:
 
-		Engine();
+		Engine(WaveManager* waveManager);
 		virtual ~Engine();
 
 		void Run();
@@ -48,6 +48,8 @@ namespace WaveEngine
 		void Update();
 
 		void Draw();
+
+		WaveManager* waveManager;
 
 		WaveObject* tank;
 
@@ -85,9 +87,12 @@ namespace WaveEngine
 
 		static bool isRunning;
 
+		template<typename T>
 		static void StartEngine();
+
 		static Window* GetWindow();
 		static TextureImporter* GetTextureImporter();
 	};
 }
 
+#include "Engine.tpp"

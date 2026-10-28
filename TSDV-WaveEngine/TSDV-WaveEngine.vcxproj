@@ -228,6 +228,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\CollisionSystem\CollisionLogic\CollisionLogic.h" />
     <ClInclude Include="src\ECS\Managers\BinarySpacePartition\BinarySpacePartition.h" />
     <ClInclude Include="src\ECS\WaveBehaviour\WaveBehaviour.h" />
+    <ClInclude Include="src\Engine\WaveManager.h" />
     <ClInclude Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviour.h" />
     <ClInclude Include="src\OrientedBoundingBox\OrientedBoundingBox.h" />
     <ClInclude Include="src\Physics\InertiaTensor.h" />
@@ -289,6 +290,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <None Include="cpp.hint" />
     <None Include="src\ECS\Component\TypeComponent.h" />
     <None Include="src\ECS\WObject\WObject.tpp" />
+    <None Include="src\Engine\Engine.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

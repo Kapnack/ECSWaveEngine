@@ -5,6 +5,7 @@
 
 #include "Time/Time.h"
 #include "Input/Input.h"
+#include "WaveManager.h"
 #include "Window/Window.h"
 #include "TestingBehaviour.h"
 #include "Renderer/Renderer.h"
@@ -34,8 +35,9 @@ namespace WaveEngine
 {
 	bool Engine::isRunning = true;
 
-	Engine::Engine()
+	Engine::Engine(WaveManager* waveManager)
 	{
+		this->waveManager = waveManager;
 	}
 
 	Engine::~Engine()
@@ -84,6 +86,8 @@ namespace WaveEngine
 		drawLogic.Init();
 		transformLogic.Init();
 		imGui.Init();
+
+		waveManager->Init();
 
 #pragma region InitLights
 		Renderer::dirLight.direction = Vector3::Back();
@@ -155,11 +159,17 @@ namespace WaveEngine
 		waveBehaviourLogic.Init();
 		waveBehaviourLogic.LateInit();
 
+		waveManager->LateInit();
+
 		GetWaveObjectFactory()->Instantiate<TanakaWaveBehaviour>();
 	}
 
 	void Engine::Dispose()
 	{
+		waveManager->Dispose();
+
+		delete waveManager;
+
 		waveBehaviourLogic.Dispose();
 		imGui.Dispose();
 		GetRenderer()->Dispose();
@@ -178,20 +188,6 @@ namespace WaveEngine
 			GetWindow()->SwapBuffer();
 			GetWindow()->HandleInput();
 		}
-	}
-
-	void Engine::StartEngine()
-	{
-		Engine* engine = new Engine();
-
-		engine->Init();
-		engine->LateInit();
-
-		engine->Run();
-
-		engine->Dispose();
-
-		delete engine;
 	}
 
 	void Engine::Update()
