@@ -1,8 +1,11 @@
 #include "Window.h"
 
+#include <vector>
 #include <iostream>
+#include <algorithm>
 
 #include "EventSystem/Action.h"
+#include "TextureImporter/Texture.h"
 #include "WaveMath/Vector2/Vector2.h"
 
 using namespace std;
@@ -106,15 +109,28 @@ namespace WaveEngine
 		glfwSetWindowTitle(window, title);
 	}
 
-	void Window::SetIcon(Texture& texture)
+	void Window::SetIcon(const Texture& texture)
 	{
-		unsigned char* pixels = new unsigned char[width * height * 4];
-		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+		const int w = texture.GetWidth();
+		const int h = texture.GetHeight();
 
-		GLFWimage icon = { width, height, pixels };
+		vector<unsigned char> pixels(w * h * 4);
+
+		glBindTexture(GL_TEXTURE_2D, texture.GetGPUID());
+		glPixelStorei(GL_PACK_ALIGNMENT, 1);
+		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+
+		const int rowSize = w * 4;
+		for (int y = 0; y < h / 2; ++y)
+		{
+			swap_ranges(
+				pixels.begin() + y * rowSize,
+				pixels.begin() + (y + 1) * rowSize,
+				pixels.begin() + (h - 1 - y) * rowSize);
+		}
+
+		GLFWimage icon{ w, h, pixels.data() };
 		glfwSetWindowIcon(window, 1, &icon);
-
-		delete[] pixels;
 	}
 
 	void Window::SetPosition(Vector2 position)

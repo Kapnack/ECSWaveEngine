@@ -57,7 +57,7 @@ namespace WaveEngine
 		void ShowWindow() const;
 
 		void SetTitle(const char* title);
-		void SetIcon(Texture& texture);
+		void SetIcon(const Texture& texture);
 		void SetPosition(Vector2 position);
 		void SetPosition(int x, int y);
 		void Translate(Vector2 position);
