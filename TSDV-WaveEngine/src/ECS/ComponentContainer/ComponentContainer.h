@@ -78,6 +78,8 @@ namespace WaveEngine
 			if (!Has(entity))
 				return;
 
+			Get(entity).Dispose();
+
 			int index = componentByEntity[entity];
 			int lastIndex = components.size() - 1;
 
