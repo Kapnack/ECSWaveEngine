@@ -7,6 +7,7 @@
 #include "EventSystem/Action.h"
 #include "TextureImporter/Texture.h"
 #include "WaveMath/Vector2/Vector2.h"
+#include "ServiceProvider/ServiceProvider.h"
 
 using namespace std;
 
@@ -54,37 +55,42 @@ namespace WaveEngine
 			cout << "GLEW FAILED TO INIT!!!";
 	}
 
+	Window& Window::Get()
+	{
+		return *ServiceProvider::Instance().Get<Window>();
+	}
+
 	GLFWwindow* Window::GetGLFWindow()
 	{
 		return window;
 	}
 
-	int Window::GetWidth()
+	int Window::GetWidth() const
 	{
 		return width;
 	}
 
-	int Window::GetHeight()
+	int Window::GetHeight() const
 	{
 		return height;
 	}
 
-	int Window::GetBaseWidth()
+	int Window::GetBaseWidth() const
 	{
 		return baseWidth;
 	}
 
-	int Window::GetBaseHeight()
+	int Window::GetBaseHeight() const
 	{
 		return baseHeight;
 	}
 
-	Vector2 Window::GetSize()
+	Vector2 Window::GetSize() const
 	{
 		return Vector2(static_cast<float>(width), static_cast<float>(height));
 	}
 
-	Vector2 Window::GetPosition()
+	Vector2 Window::GetPosition() const
 	{
 		int x = 0;
 		int y = 0;

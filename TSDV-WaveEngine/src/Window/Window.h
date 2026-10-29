@@ -45,13 +45,15 @@ namespace WaveEngine
 
 	public:
 
+		static Window& Get();
+
 		GLFWwindow* GetGLFWindow();
-		int GetWidth();
-		int GetHeight();
-		int GetBaseWidth();
-		int GetBaseHeight();
-		Vector2 GetSize();
-		Vector2 GetPosition();
+		int GetWidth() const;
+		int GetHeight() const;
+		int GetBaseWidth() const;
+		int GetBaseHeight() const;
+		Vector2 GetSize() const;
+		Vector2 GetPosition() const;
 
 		void HideWindow() const;
 		void ShowWindow() const;
