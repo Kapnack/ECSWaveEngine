@@ -30,8 +30,7 @@ namespace WaveEngine
 
 	public:
 
-		Texture* LoadTextureAbsolutePath(const string_view filePath);
-		Texture* LoadTexture(const string_view filePath);
+		Texture* LoadTexture(const string_view filePath, bool useAbsolutePath = true, const char* overrideName = nullptr);
 		Texture* LoadTextureFromMemory(const unsigned char* buffer, int size);
 		Texture* LoadTextureFromPixels(const unsigned char* buffer, const unsigned int& width, const unsigned int& height);
 	};

@@ -7,8 +7,9 @@
 #include <iostream>
 #include <filesystem>
 
-#include "ServiceProvider/ServiceProvider.h"
 #include "Texture.h"
+#include "TextureManager.h"
+#include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
 {
@@ -25,21 +26,17 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<TextureManager>();
 	}
 
-	Texture* TextureImporter::LoadTextureAbsolutePath(const string_view filePath)
-	{
-		string absolutePath = std::filesystem::absolute(filePath).lexically_normal().string();
-
-		return LoadTexture(absolutePath);
-	}
-
-	Texture* TextureImporter::LoadTexture(const string_view filePath)
+	Texture* TextureImporter::LoadTexture(const string_view filePath, bool useAbsolutePath, const char* overrideName)
 	{
 		int width = 0;
 		int height = 0;
 		int nrChannels = 0;
 
 		stbi_set_flip_vertically_on_load(true);
-		unsigned char* data = stbi_load(filePath.data(), &width, &height, &nrChannels, 0);
+
+		const char* completePath = filePath.data();
+
+		unsigned char* data = stbi_load(completePath, &width, &height, &nrChannels, 0);
 
 		GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
 
@@ -70,7 +67,7 @@ namespace WaveEngine
 
 		std::filesystem::path path = filePath;
 
-		newTexture->name = path.filename().string();
+		newTexture->name = overrideName ? overrideName : path.filename().string();
 
 		GetTextureManager()->Save(newTexture);
 
