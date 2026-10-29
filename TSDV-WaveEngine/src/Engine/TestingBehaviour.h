@@ -10,6 +10,7 @@
 #include <ECS/Camera/Camera.h>
 #include <ECS/Transform/ECSTransform.h>
 #include <Input/Input.h>
+#include <Window/Window.h>
 
 namespace WaveEngine
 {
@@ -43,9 +44,9 @@ namespace WaveEngine
 			camera.SetOrthographic(false);
 			GetTransform().SetPosition(Vector3::Zero());
 
-			Engine::GetWindow()->SetSize(800, 800);
+			Window::Get().SetSize(800, 800);
 
-			Engine::GetWindow()->SetIcon(*Engine::GetTextureImporter()->LoadTexture("Sprites/whiteImage.png"));
+			Window::Get().SetIcon(Texture::Import("Sprites/whiteImage.png"));
 		}
 
 		void Update() override
