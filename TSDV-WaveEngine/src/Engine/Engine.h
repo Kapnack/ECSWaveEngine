@@ -82,6 +82,8 @@ namespace WaveEngine
 		WaveObjectRegistry* GetWaveObjectRegistry() const;
 		WaveObjectFactory* GetWaveObjectFactory() const;
 		WaveRandom* GetWaveRandom() const;
+		Window* GetWindow() const;
+		TextureImporter* GetTextureImporter() const;
 
 	public:
 
@@ -90,8 +92,6 @@ namespace WaveEngine
 		template<typename T>
 		static void StartEngine();
 
-		static Window* GetWindow();
-		static TextureImporter* GetTextureImporter();
 	};
 }
 

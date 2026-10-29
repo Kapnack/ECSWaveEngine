@@ -245,7 +245,7 @@ namespace WaveEngine
 		return GetTime()->GetDeltaTime();
 	}
 
-	Window* Engine::GetWindow()
+	Window* Engine::GetWindow() const
 	{
 		return ServiceProvider::Instance().Get<Window>();
 	}
@@ -270,7 +270,7 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<TextureManager>();
 	}
 
-	TextureImporter* Engine::GetTextureImporter()
+	TextureImporter* Engine::GetTextureImporter() const
 	{
 		return ServiceProvider::Instance().Get<TextureImporter>();
 	}
