@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 
 #include "Export.h"
 #include "WaveMath/Vector2/Vector2.h"
@@ -32,6 +33,8 @@ namespace WaveEngine
 	public:
 
 		static const int NULL_TEXTURE = 0;
+
+		static Texture& Import(const string_view path, bool useAbsolutePath = true, const char* overrideName = nullptr);
 
 		int GetWidth() const;
 		int GetHeight() const;
