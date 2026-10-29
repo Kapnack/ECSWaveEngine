@@ -36,7 +36,6 @@ namespace WaveEngine
 		string filename = "";
 
 		MeshFactory* GetMeshFactory();
-		MeshManager* GetMeshManager();
 		TextureImporter* GetTextureImporter();
 		FileReader* GetFileReader();
 		MaterialFactory* GetMaterialFactory();
