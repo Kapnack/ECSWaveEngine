@@ -87,6 +87,9 @@ namespace WaveEngine
 		transformLogic.Init();
 		imGui.Init();
 
+		waveBehaviourLogic.Init();
+		waveBehaviourLogic.LateInit();
+
 		waveManager->Init();
 
 #pragma region InitLights
@@ -156,12 +159,7 @@ namespace WaveEngine
 
 	void Engine::LateInit()
 	{
-		waveBehaviourLogic.Init();
-		waveBehaviourLogic.LateInit();
-
 		waveManager->LateInit();
-
-		GetWaveObjectFactory()->Instantiate<TanakaWaveBehaviour>();
 	}
 
 	void Engine::Dispose()
