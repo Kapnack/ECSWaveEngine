@@ -25,6 +25,7 @@ namespace WaveEngine
 
 		virtual void Init();
 		virtual void LateInit();
+		virtual void Dispose();
 
 		WaveObject& GetWaveObject() const;
 

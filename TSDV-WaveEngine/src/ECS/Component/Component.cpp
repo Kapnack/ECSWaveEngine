@@ -26,6 +26,10 @@ namespace WaveEngine
 	{
 	}
 
+	void Component::Dispose()
+	{
+	}
+
 	WaveObject& Component::GetWaveObject() const
 	{
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(ownerID);
