@@ -95,7 +95,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)TSDV-WaveEngine/src;$(SolutionDir)TSDV-WaveEngine/lib/glew-2.2.0/include;$(SolutionDir)TSDV-WaveEngine/lib/glfw-3.4.bin.WIN32/include;$(SolutionDir)TSDV-WaveEngine\lib\glm-1.0.1\include;$(SolutionDir)KapnackToolBox/src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TSDV-WaveEngine/src;$(SolutionDir)KapnackToolBox/src;$(SolutionDir)lib\glm-1.0.1\include;$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(SolutionDir)lib</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -113,7 +113,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)TSDV-WaveEngine/src;$(SolutionDir)TSDV-WaveEngine/lib/glew-2.2.0/include;$(SolutionDir)TSDV-WaveEngine/lib/glfw-3.4.bin.WIN32/include;$(SolutionDir)TSDV-WaveEngine\lib\glm-1.0.1\include;$(SolutionDir)KapnackToolBox/src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TSDV-WaveEngine/src;$(SolutionDir)KapnackToolBox/src;$(SolutionDir)lib\glm-1.0.1\include;$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(SolutionDir)lib</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

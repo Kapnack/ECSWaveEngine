@@ -87,14 +87,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;MAKEDLL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)lib\glfw-3.4.bin.WIN32\include;$(ProjectDir)src;$(ProjectDir)lib\glew-2.2.0\include;$(ProjectDir)lib\glm-1.0.1\include;$(ProjectDir)lib;$(ProjectDir)lib\assimp\include;$(ProjectDir)lib\assimp\Include;$(SolutionDir)KapnackToolBox\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(ProjectDir)src;$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\glm-1.0.1\include;$(SolutionDir)lib;$(SolutionDir)KapnackToolBox/src</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(CoreLibraryDependencies);opengl32.lib;glfw3.lib;glew32.lib;assimp-vc142-mtd.lib;KapnackToolBox.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)lib\glfw-3.4.bin.WIN32\lib-vc2022;$(LibraryPath);$(ProjectDir)lib\glew-2.2.0\lib\Release\Win32;$(ProjectDir)lib\assimp\lib;$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN32\lib-vc2022;$(LibraryPath);$(SolutionDir)lib\glew-2.2.0\lib\Release\Win32;$(SolutionDir)lib\assimp\lib;$(OutDir)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(ProjectDir)lib\glew-2.2.0\lib\Release\Win32\glew32.dll" "$(OutDir)" /i/y/s
@@ -110,7 +110,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;MAKEDLL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)lib\glfw-3.4.bin.WIN32\include;$(ProjectDir)src;$(ProjectDir)lib\glew-2.2.0\include;$(ProjectDir)lib\glm-1.0.1\include;;$(ProjectDir)lib\assimp\include;$(ProjectDir)lib\assimp\Include;$(SolutionDir)KapnackToolBox\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(ProjectDir)src;$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\glm-1.0.1\include;$(SolutionDir)lib;$(SolutionDir)KapnackToolBox/src</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -119,7 +119,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(CoreLibraryDependencies);opengl32.lib;glfw3.lib;glew32.lib;assimp-vc142-mtd.lib;KapnackToolBox.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)lib\glfw-3.4.bin.WIN32\lib-vc2022;$(LibraryPath);$(ProjectDir)lib\glew-2.2.0\lib\Release\Win32;$(ProjectDir)lib\assimp\lib;$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN32\lib-vc2022;$(LibraryPath);$(SolutionDir)lib\glew-2.2.0\lib\Release\Win32;$(SolutionDir)lib\assimp\lib;$(OutDir)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(ProjectDir)lib\glew-2.2.0\bin\Release\Win32\glew32.dll" "$(OutDir)" /i/y/s
@@ -176,6 +176,13 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\WaveObject\WaveObjectRegistry.cpp" />
     <ClCompile Include="src\ECS\WObject\WObject.cpp" />
     <ClCompile Include="src\ImGuiClass\ImGuiClass.cpp" />
+    <ClCompile Include="src\ImGui\imgui.cpp" />
+    <ClCompile Include="src\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="src\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="src\ImGui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\ImGui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="src\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="src\Material\Color\Color.cpp" />
     <ClCompile Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviour.cpp" />
     <ClCompile Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviourFactory\WaveMaterialBehaviourFactory.cpp" />
@@ -186,13 +193,6 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\Mesh\Mesh.cpp" />
     <ClCompile Include="src\ModelImporter\ModelImporter.cpp" />
     <ClCompile Include="src\ECS\Camera\Camera.cpp" />
-    <ClCompile Include="lib\ImGui\imgui.cpp" />
-    <ClCompile Include="lib\ImGui\imgui_demo.cpp" />
-    <ClCompile Include="lib\ImGui\imgui_draw.cpp" />
-    <ClCompile Include="lib\ImGui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="lib\ImGui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="lib\ImGui\imgui_tables.cpp" />
-    <ClCompile Include="lib\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="src\Material\MaterialFactory.cpp" />
     <ClCompile Include="src\Material\MaterialManager.cpp" />
     <ClCompile Include="src\FileReader\FileReader.cpp" />
@@ -229,6 +229,15 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\ECS\Managers\BinarySpacePartition\BinarySpacePartition.h" />
     <ClInclude Include="src\ECS\WaveBehaviour\WaveBehaviour.h" />
     <ClInclude Include="src\Engine\WaveManager.h" />
+    <ClInclude Include="src\ImGui\imconfig.h" />
+    <ClInclude Include="src\ImGui\imgui.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_glfw.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\ImGui\imgui_internal.h" />
+    <ClInclude Include="src\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="src\ImGui\imstb_textedit.h" />
+    <ClInclude Include="src\ImGui\imstb_truetype.h" />
     <ClInclude Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviour.h" />
     <ClInclude Include="src\OrientedBoundingBox\OrientedBoundingBox.h" />
     <ClInclude Include="src\Physics\InertiaTensor.h" />
@@ -259,15 +268,6 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\Material\Event\MaterialDelition.h" />
     <ClInclude Include="src\ModelImporter\ModelImporter.h" />
     <ClInclude Include="src\ECS\Camera\Camera.h" />
-    <ClInclude Include="lib\ImGui\imconfig.h" />
-    <ClInclude Include="lib\ImGui\imgui.h" />
-    <ClInclude Include="lib\ImGui\imgui_impl_glfw.h" />
-    <ClInclude Include="lib\ImGui\imgui_impl_opengl3.h" />
-    <ClInclude Include="lib\ImGui\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="lib\ImGui\imgui_internal.h" />
-    <ClInclude Include="lib\ImGui\imstb_rectpack.h" />
-    <ClInclude Include="lib\ImGui\imstb_textedit.h" />
-    <ClInclude Include="lib\ImGui\imstb_truetype.h" />
     <ClInclude Include="lib\json.hpp" />
     <ClInclude Include="src\Material\MaterialFactory.h" />
     <ClInclude Include="src\Material\MaterialManager.h" />
@@ -289,7 +289,6 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="src\ECS\Component\TypeComponent.h" />
-    <None Include="src\ECS\WObject\WObject.tpp" />
     <None Include="src\Engine\Engine.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
