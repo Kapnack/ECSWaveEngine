@@ -1,9 +1,7 @@
 #pragma once
 
-#include "WaveObject.h"
 #include "WaveObjectRegistry.h"
 #include "ServiceProvider/Service.h"
-#include "ECS/Component/TypeComponent.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
 
 class ServiceProvider;
@@ -11,11 +9,13 @@ class BaseGame;
 
 namespace WaveEngine
 {
+	class WaveObject;
+
 	class WaveObjectFactory : Service
 	{
 	private:
 
-		unsigned int currentObjectID = WaveObject::NULL_OBJECT;
+		unsigned int currentObjectID = 0;
 
 		WaveObjectFactory();
 		~WaveObjectFactory();
@@ -32,12 +32,5 @@ namespace WaveEngine
 	public:
 
 		WaveObject& Instantiate(const char* name = nullptr);
-
-		template<TypeComponent T>
-		T& Instantiate(const char* name = nullptr)
-		{
-			WaveObject& waveObject = Instantiate(name);
-			return waveObject.AddComponent<T>();
-		}
 	};
 }
