@@ -1,6 +1,8 @@
 #include "Engine/Engine.h"
 #include "Engine/WaveManager.h"
 #include "Engine/TestingBehaviour.h"
+#include <ECS/WObject/WObject.h>
+#include <ECS/WaveObject/WaveObject.h>
 
 using namespace WaveEngine;
 
@@ -8,9 +10,11 @@ class TestingManager : public WaveManager
 {
 protected:
 
-	void LateInit() override
+	void Init() override
 	{
-		WObject::Instantiate<TanakaWaveBehaviour>();
+		WaveObject waveObject;
+
+		waveObject.AddComponent<TanakaWaveBehaviour>();
 	}
 };
 
