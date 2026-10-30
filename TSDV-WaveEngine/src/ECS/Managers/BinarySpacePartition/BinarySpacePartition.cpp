@@ -90,7 +90,7 @@ namespace WaveEngine
 
 	void BinarySpacePartition::RemovePlane(Plane plane)
 	{
-		remove_if(planes.begin(), planes.end(), [&](Plane it) { return it == plane; });
+		planes.erase(remove_if(planes.begin(), planes.end(), [&](Plane it) { return it == plane; }), planes.end());
 	}
 
 	const vector<Plane>& BinarySpacePartition::GetPlanes()
