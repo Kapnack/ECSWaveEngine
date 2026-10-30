@@ -38,6 +38,6 @@ namespace WaveEngine
 	void WaveBehaviourLogic::Dispose() const
 	{
 		for (WaveBehaviour* waveBehaviour : GetComponentRegistry()->GetBehaviours())
-			waveBehaviour->Destroy();
+			waveBehaviour->Dispose();
 	}
 }
