@@ -59,4 +59,8 @@ namespace WaveEngine
 	{
 		return isActive;
 	}
+
+	Component::Component()
+	{
+	}
 }

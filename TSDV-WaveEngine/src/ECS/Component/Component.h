@@ -38,6 +38,6 @@ namespace WaveEngine
 		virtual void SetIsActive(bool isActive);
 		bool GetIsActive() const;
 
-		Component() = default;
+		Component();
 	};
 }
