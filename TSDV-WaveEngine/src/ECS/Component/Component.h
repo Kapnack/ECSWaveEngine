@@ -21,7 +21,7 @@ namespace WaveEngine
 		static const unsigned int NULL_COMPONENT = 0;
 
 		Component(unsigned int ID);
-		~Component();
+		virtual ~Component();
 
 		virtual void Init();
 		virtual void LateInit();
@@ -35,7 +35,7 @@ namespace WaveEngine
 
 		unsigned int GetID() const;
 
-		virtual void SetIsActive(bool isActive);
+		virtual void SetActive(bool isActive);
 		bool GetIsActive() const;
 
 		Component();

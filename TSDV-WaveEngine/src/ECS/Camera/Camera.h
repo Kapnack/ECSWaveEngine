@@ -75,7 +75,7 @@ namespace WaveEngine
 		bool IsInsideFrustum(const BoundingBox& box) const;
 		bool IsOrthografic() const;
 
-		void SetIsActive(bool isActive) override;
+		void SetActive(bool isActive) override;
 		void SetOrderIndex(int orderIndex);
 
 		void SetOrthographic(bool value);

@@ -22,9 +22,9 @@ namespace WaveEngine
 	{
 	}
 
-	void Camera::SetIsActive(bool isActive)
+	void Camera::SetActive(bool isActive)
 	{
-		Component::SetIsActive(isActive);
+		Component::SetActive(isActive);
 		SetOrderIndex(orderIndex);
 	}
 

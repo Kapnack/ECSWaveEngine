@@ -60,7 +60,7 @@ namespace WaveEngine
 
 			T& component = Get(entity);
 
-			component.SetIsActive(true);
+			component.SetActive(true);
 			component.Init();
 			component.LateInit();
 		}
@@ -78,6 +78,7 @@ namespace WaveEngine
 			if (!Has(entity))
 				return;
 
+			Get(entity).SetActive(false);
 			Get(entity).Dispose();
 
 			int index = componentByEntity[entity];

@@ -50,7 +50,7 @@ namespace WaveEngine
 		return ownerID;
 	}
 
-	void Component::SetIsActive(bool isActive)
+	void Component::SetActive(bool isActive)
 	{
 		this->isActive = isActive;
 	}
