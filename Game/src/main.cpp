@@ -1,8 +1,8 @@
 #include "Engine/Engine.h"
 #include "Engine/WaveManager.h"
+#include "ECS/WObject/WObject.h"
 #include "Engine/TestingBehaviour.h"
-#include <ECS/WObject/WObject.h>
-#include <ECS/WaveObject/WaveObject.h>
+#include "ECS/WaveObject/WaveObject.h"
 
 using namespace WaveEngine;
 
