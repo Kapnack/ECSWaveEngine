@@ -1,13 +1,15 @@
 #pragma once
 
 #include <string>
+#include <typeindex>
+#include <unordered_set>
 
 #include "Export.h"
 #include "ECS/WObject/WObject.h"
 #include "EventSystem/EventSystem.h"
 #include "ECS/Transform/ECSTransform.h"
-#include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "ECS/Component/TypeComponent.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
 
 using namespace std;
 
@@ -16,7 +18,6 @@ namespace WaveEngine
 	class BoundingBoxComp;
 	class WaveObjectFactory;
 	class WaveObjectRegistry;
-	class ComponentRegistry;
 
 	class WAVEEXPORT WaveObject : public WObject
 	{
@@ -26,6 +27,8 @@ namespace WaveEngine
 
 		bool isStatic = false;
 
+		unordered_set<type_index> componentsTypes;
+
 		ComponentRegistry* GetComponentRegistry() const;
 		EventSystem* GetEventSystem() const;
 		WaveObjectRegistry* GetWaveObjectRegistry() const;
@@ -33,7 +36,6 @@ namespace WaveEngine
 
 		friend class WaveObjectFactory;
 		friend class WaveObjectRegistry;
-
 
 	public:
 
@@ -57,6 +59,7 @@ namespace WaveEngine
 		template<TypeComponent T>
 		T& AddComponent()
 		{
+			componentsTypes.insert(typeid(T));
 			return GetComponentRegistry()->AddComponent<T>(ID);
 		}
 
