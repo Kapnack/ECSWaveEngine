@@ -26,7 +26,7 @@ namespace WaveEngine
 
 		}
 
-		virtual void Destroy()
+		virtual void Dispose()
 		{
 		}
 	};
