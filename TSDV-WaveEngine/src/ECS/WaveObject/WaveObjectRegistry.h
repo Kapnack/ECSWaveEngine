@@ -73,6 +73,9 @@ namespace WaveEngine
 
 		WaveObject& GetWaveObject(unsigned int ID) const;
 
+		void Destroy(WaveObject* waveObject);
+		void Destroy(unsigned int waveObjectID);
+
 		WaveObject& operator[](unsigned int ID) const;
 	};
 

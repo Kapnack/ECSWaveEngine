@@ -152,6 +152,22 @@ namespace WaveEngine
 		return *(waveObjects.at(ID));
 	}
 
+	void WaveObjectRegistry::Destroy(WaveObject* waveObject)
+	{
+		if (waveObject == nullptr)
+			return;
+
+		Destroy(waveObject->ID);
+	}
+
+	void WaveObjectRegistry::Destroy(unsigned int waveObjectID)
+	{
+
+
+		delete waveObjects[waveObjectID];
+		waveObjects.erase(waveObjectID);
+	}
+
 	WaveObject& WaveObjectRegistry::operator[](unsigned int ID) const
 	{
 		return GetWaveObject(ID);
