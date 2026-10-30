@@ -11,5 +11,7 @@ namespace WaveEngine
 	public:
 
 		static WaveObject& Instantiate(const char* modelDir, bool useAbsolutePath = true, const char* rootName = nullptr);
+
+		static void Destroy(WaveObject* waveObject);
 	};
 }
