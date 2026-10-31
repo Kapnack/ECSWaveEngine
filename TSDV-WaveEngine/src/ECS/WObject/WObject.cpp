@@ -41,7 +41,7 @@ namespace WaveEngine
 		if (!component)
 			return;
 
-		ServiceProvider::Instance().Get<ComponentRegistry>()->RemoveComponent(component->GetID(), typeid(*component));
+		ServiceProvider::Instance().Get<ComponentRegistry>()->ToRemoveComponent(component->GetID(), typeid(*component));
 	}
 
 	void WObject::Destroy(WaveObject* waveObject)
@@ -50,6 +50,25 @@ namespace WaveEngine
 			return;
 
 		ServiceProvider::Instance().Get<WaveObjectRegistry>()->ToDestroy(waveObject);
+	}
+
+	void WObject::DestroyImmediate(WObject* wObject)
+	{
+		if (!wObject)
+			return;
+
+		if (Component* component = dynamic_cast<Component*>(wObject))
+			DestroyImmediate(component);
+		else if (WaveObject* waveObject = dynamic_cast<WaveObject*>(wObject))
+			DestroyImmediate(waveObject);
+	}
+
+	void WObject::DestroyImmediate(Component* component)
+	{
+		if (!component)
+			return;
+
+		ServiceProvider::Instance().Get<ComponentRegistry>()->RemoveComponent(component->GetID(), typeid(*component));
 	}
 
 	void WObject::DestroyImmediate(WaveObject* waveObject)
