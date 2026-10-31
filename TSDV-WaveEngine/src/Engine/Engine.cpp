@@ -210,6 +210,8 @@ namespace WaveEngine
 		imGui.Update();
 
 		waveBehaviourLogic.LateUpdate();
+
+		GetWaveObjectRegistry()->Update();
 	}
 
 	void Engine::Draw()

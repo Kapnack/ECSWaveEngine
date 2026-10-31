@@ -214,25 +214,27 @@ namespace WaveEngine
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
-		Camera& camera = GetComponentRegistry()->GetComponentStorage<Camera>().GetFirst();
 		Material* mat = GetMaterialManager()->GetMaterial(debugMaterialID);
-
-		if (!mat)
-		{
-			glBindVertexArray(0);
-			glDeleteVertexArrays(1, &VAO);
-			glDeleteBuffers(1, &VBO);
-			glDeleteBuffers(1, &EBO);
-			return;
-		}
-
 		mat->Bind();
-		mat->SetMat4("uView", camera.GetView().Transposed());
-		mat->SetMat4("uProj", camera.GetProjection().Transposed());
-		mat->SetMat4("uModel", Matrix4x4::Identity());
-		mat->SetColor(color);
 
-		glDrawElements(GL_LINES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+		for (Camera& camera : GetComponentRegistry()->GetComponentStorage<Camera>().GetComponents())
+		{
+			if (!mat)
+			{
+				glBindVertexArray(0);
+				glDeleteVertexArrays(1, &VAO);
+				glDeleteBuffers(1, &VBO);
+				glDeleteBuffers(1, &EBO);
+				return;
+			}
+
+			mat->SetMat4("uView", camera.GetView().Transposed());
+			mat->SetMat4("uProj", camera.GetProjection().Transposed());
+			mat->SetMat4("uModel", Matrix4x4::Identity());
+			mat->SetColor(color);
+
+			glDrawElements(GL_LINES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+		}
 
 		mat->UnBind();
 
@@ -366,123 +368,122 @@ namespace WaveEngine
 
 			materialToUse->Bind();
 
-			Camera& camera = GetComponentRegistry()
-				->GetComponentStorage<Camera>()
-				.GetFirst();
-
-			glViewport(camera.viewPortRes.GetCenter().x, camera.viewPortRes.GetCenter().y, camera.viewPortRes.GetSize().x * GetWindow()->GetWidth(), camera.viewPortRes.GetSize().y * GetWindow()->GetHeight());
-
-			ECSTransform& cameraTransform = camera.GetWaveObject().GetTransform();
-
-			Matrix4x4 view = camera.GetView();
-			Matrix4x4 proj = camera.GetProjection();
-
-			materialToUse->SetVec4("uColor", materialToUse->GetColor());
-			materialToUse->SetMat4("uView", view.Transposed());
-			materialToUse->SetMat4("uProj", proj.Transposed());
-
-			materialToUse->SetVec3("dirLight.direction", dirLight.direction);
-			materialToUse->SetVec3("dirLight.ambient", dirLight.ambient);
-			materialToUse->SetVec3("dirLight.diffuse", dirLight.diffuse);
-			materialToUse->SetVec3("dirLight.specular", dirLight.specular);
-
-			for (int i = 0; i < Amount_Per_Light; ++i)
+			for (Camera& camera : GetComponentRegistry()->GetComponentStorage<Camera>().GetComponents())
 			{
-				string base = "pointLights[" + std::to_string(i) + "]";
+				glViewport(camera.viewPortRes.GetCenter().x, camera.viewPortRes.GetCenter().y, camera.viewPortRes.GetSize().x * GetWindow()->GetWidth(), camera.viewPortRes.GetSize().y * GetWindow()->GetHeight());
 
-				materialToUse->SetVec3(base + ".position", pointLight[i].position);
+				ECSTransform& cameraTransform = camera.GetWaveObject().GetTransform();
 
-				materialToUse->SetVec3(base + ".ambient", pointLight[i].ambient);
-				materialToUse->SetVec3(base + ".diffuse", pointLight[i].diffuse);
-				materialToUse->SetVec3(base + ".specular", pointLight[i].specular);
+				Matrix4x4 view = camera.GetView();
+				Matrix4x4 proj = camera.GetProjection();
 
-				materialToUse->SetFloat(base + ".constant", pointLight[i].constant);
-				materialToUse->SetFloat(base + ".linear", pointLight[i].linear);
-				materialToUse->SetFloat(base + ".quadratic", pointLight[i].quadratic);
-			}
+				materialToUse->SetVec4("uColor", materialToUse->GetColor());
+				materialToUse->SetMat4("uView", view.Transposed());
+				materialToUse->SetMat4("uProj", proj.Transposed());
 
-			materialToUse->SetVec3("viewPos", cameraTransform.position);
+				materialToUse->SetVec3("dirLight.direction", dirLight.direction);
+				materialToUse->SetVec3("dirLight.ambient", dirLight.ambient);
+				materialToUse->SetVec3("dirLight.diffuse", dirLight.diffuse);
+				materialToUse->SetVec3("dirLight.specular", dirLight.specular);
 
-			for (int i = 0; i < Amount_Per_Light; ++i)
-			{
-				string base = "flashlights[" + std::to_string(i) + "]";
-
-				materialToUse->SetVec3(base + ".position", flashLights[i].position);
-
-				materialToUse->SetVec3(base + ".direction", flashLights[i].direction);
-
-				materialToUse->SetVec3(base + ".ambient", flashLights[i].ambient);
-				materialToUse->SetVec3(base + ".diffuse", flashLights[i].diffuse);
-				materialToUse->SetVec3(base + ".specular", flashLights[i].specular);
-
-				materialToUse->SetFloat(base + ".constant", flashLights[i].constant);
-				materialToUse->SetFloat(base + ".linear", flashLights[i].linear);
-				materialToUse->SetFloat(base + ".quadratic", flashLights[i].quadratic);
-
-				materialToUse->SetFloat(base + ".cutOff", cos(WaveMath::Deg2Rad(flashLights[i].cutOff)));
-				materialToUse->SetFloat(base + ".outerCutOff", cos(WaveMath::Deg2Rad(flashLights[i].outerCutOff)));
-			}
-
-			for (unordered_map<unsigned int, RenderData>::iterator meshBatchIT = batchingIT->second.begin(); meshBatchIT != batchingIT->second.end(); ++meshBatchIT)
-			{
-				RenderData& batch = meshBatchIT->second;
-
-				if (batch.instances.empty())
-					continue;
-
-				Mesh& mesh = GetMeshManager()->Get(meshBatchIT->first);
-
-				if (batch.VAO == 0)
+				for (int i = 0; i < Amount_Per_Light; ++i)
 				{
-					CreateBuffers(
-						mesh.GetVertexBuffer(),
-						mesh.GetVertexSize(),
-						mesh.GetIndexes(),
+					string base = "pointLights[" + std::to_string(i) + "]";
+
+					materialToUse->SetVec3(base + ".position", pointLight[i].position);
+
+					materialToUse->SetVec3(base + ".ambient", pointLight[i].ambient);
+					materialToUse->SetVec3(base + ".diffuse", pointLight[i].diffuse);
+					materialToUse->SetVec3(base + ".specular", pointLight[i].specular);
+
+					materialToUse->SetFloat(base + ".constant", pointLight[i].constant);
+					materialToUse->SetFloat(base + ".linear", pointLight[i].linear);
+					materialToUse->SetFloat(base + ".quadratic", pointLight[i].quadratic);
+				}
+
+				materialToUse->SetVec3("viewPos", cameraTransform.position);
+
+				for (int i = 0; i < Amount_Per_Light; ++i)
+				{
+					string base = "flashlights[" + std::to_string(i) + "]";
+
+					materialToUse->SetVec3(base + ".position", flashLights[i].position);
+
+					materialToUse->SetVec3(base + ".direction", flashLights[i].direction);
+
+					materialToUse->SetVec3(base + ".ambient", flashLights[i].ambient);
+					materialToUse->SetVec3(base + ".diffuse", flashLights[i].diffuse);
+					materialToUse->SetVec3(base + ".specular", flashLights[i].specular);
+
+					materialToUse->SetFloat(base + ".constant", flashLights[i].constant);
+					materialToUse->SetFloat(base + ".linear", flashLights[i].linear);
+					materialToUse->SetFloat(base + ".quadratic", flashLights[i].quadratic);
+
+					materialToUse->SetFloat(base + ".cutOff", cos(WaveMath::Deg2Rad(flashLights[i].cutOff)));
+					materialToUse->SetFloat(base + ".outerCutOff", cos(WaveMath::Deg2Rad(flashLights[i].outerCutOff)));
+				}
+
+				for (unordered_map<unsigned int, RenderData>::iterator meshBatchIT = batchingIT->second.begin(); meshBatchIT != batchingIT->second.end(); ++meshBatchIT)
+				{
+					RenderData& batch = meshBatchIT->second;
+
+					if (batch.instances.empty())
+						continue;
+
+					Mesh& mesh = GetMeshManager()->Get(meshBatchIT->first);
+
+					if (batch.VAO == 0)
+					{
+						CreateBuffers(
+							mesh.GetVertexBuffer(),
+							mesh.GetVertexSize(),
+							mesh.GetIndexes(),
+							mesh.GetIndexesSize(),
+							batch.VAO,
+							batch.VBO,
+							batch.EBO,
+							batch.instanceVBO
+						);
+
+						batch.instanceCapacity = 0;
+					}
+
+					if (mesh.GetDirty())
+					{
+						UpdateBuffer(mesh.GetVertexBuffer(), mesh.GetVertexSize(), batch.VBO);
+						mesh.UnDirt();
+					}
+
+					glBindVertexArray(batch.VAO);
+					glBindBuffer(GL_ARRAY_BUFFER, batch.instanceVBO);
+
+					if (batch.instances.size() > batch.instanceCapacity)
+					{
+						batch.instanceCapacity = batch.instances.size();
+
+						glBufferData(GL_ARRAY_BUFFER,
+							batch.instanceCapacity * sizeof(InstanceData),
+							nullptr,
+							GL_DYNAMIC_DRAW);
+					}
+
+					glBufferSubData(GL_ARRAY_BUFFER,
+						0,
+						batch.instances.size() * sizeof(InstanceData),
+						batch.instances.data());
+
+					glDrawElementsInstanced(
+						GL_TRIANGLES,
 						mesh.GetIndexesSize(),
-						batch.VAO,
-						batch.VBO,
-						batch.EBO,
-						batch.instanceVBO
+						GL_UNSIGNED_INT,
+						0,
+						batch.instances.size()
 					);
 
-					batch.instanceCapacity = 0;
+					++drawCalls;
+
+					batch.instances.clear();
 				}
-
-				if (mesh.GetDirty())
-				{
-					UpdateBuffer(mesh.GetVertexBuffer(), mesh.GetVertexSize(), batch.VBO);
-					mesh.UnDirt();
-				}
-
-				glBindVertexArray(batch.VAO);
-				glBindBuffer(GL_ARRAY_BUFFER, batch.instanceVBO);
-
-				if (batch.instances.size() > batch.instanceCapacity)
-				{
-					batch.instanceCapacity = batch.instances.size();
-
-					glBufferData(GL_ARRAY_BUFFER,
-						batch.instanceCapacity * sizeof(InstanceData),
-						nullptr,
-						GL_DYNAMIC_DRAW);
-				}
-
-				glBufferSubData(GL_ARRAY_BUFFER,
-					0,
-					batch.instances.size() * sizeof(InstanceData),
-					batch.instances.data());
-
-				glDrawElementsInstanced(
-					GL_TRIANGLES,
-					mesh.GetIndexesSize(),
-					GL_UNSIGNED_INT,
-					0,
-					batch.instances.size()
-				);
-
-				++drawCalls;
-
-				batch.instances.clear();
 			}
 
 			materialToUse->UnBind();

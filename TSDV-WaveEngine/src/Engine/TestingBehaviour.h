@@ -54,6 +54,12 @@ namespace WaveEngine
 			const float camereSpeed = 180.0f * Time::Get().GetDeltaTime();
 			ECSTransform& transform = tanakaPopSoda->GetTransform();
 
+			if (Input::Get().IsKeyPressed(Keys::R))
+			{
+				Destroy(&(WObject&)GetWaveObject());
+				tanakaPopSoda = nullptr;
+			}
+
 			if (!ImGuiClass::thirdPersonCamera)
 			{
 				if (Input::Get().IsKeyPressed(Keys::W))

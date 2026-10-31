@@ -2,13 +2,15 @@
 
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
-#include "ServiceProvider/Service.h"
 #include "EventSystem/Func.h"
-#include <EventSystem/EventSystem.h>
-#include "Events/ObjectBecameParentEvent.h"
+#include "ServiceProvider/Service.h"
+#include "EventSystem/EventSystem.h"
 #include "Events/ObjectChangeName.h"
+#include "ECS/Component/Component.h"
 #include "Events/ObjectBecameChildEvent.h"
+#include "Events/ObjectBecameParentEvent.h"
 
 using namespace std;
 
@@ -32,6 +34,7 @@ namespace WaveEngine
 	private:
 
 		vector<unsigned int> parentsWaveObjects;
+		unordered_set<unsigned int> toDestroy;
 
 		unordered_map<unsigned int, WaveObject*> waveObjects;
 		unordered_map<string, unsigned int> waveObjectsIDByName;
@@ -73,8 +76,10 @@ namespace WaveEngine
 
 		WaveObject& GetWaveObject(unsigned int ID) const;
 
+		void Update();
+
+		void ToDestroy(WaveObject* waveObject);
 		void Destroy(WaveObject* waveObject);
-		void Destroy(unsigned int waveObjectID);
 
 		WaveObject& operator[](unsigned int ID) const;
 	};

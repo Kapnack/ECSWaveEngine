@@ -5,11 +5,13 @@
 #include <vector>
 #include <utility>
 #include <typeindex>
-#include <unordered_map>
-
-#include "ECS/ComponentContainer/ComponentContainer.h"
-#include <ECS/Component/TypeComponent.h>
+#include <algorithm>
 #include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
+
+#include "ECS/Component/TypeComponent.h"
+#include "ECS/ComponentContainer/ComponentContainer.h"
 
 using namespace std;
 
@@ -22,6 +24,7 @@ namespace WaveEngine
 	private:
 
 		unordered_map<type_index, IStorage*> storages;
+		unordered_map<unsigned int, unordered_set<type_index>> componentsPerEntity;
 		unordered_map<unsigned int, vector<type_index>> waveBehavioursByEntityID;
 
 	public:
@@ -45,7 +48,10 @@ namespace WaveEngine
 				waveBehavioursByEntityID[entity].push_back(typeIndex);
 
 			if (!storages.contains(typeIndex))
+			{
 				storages[typeIndex] = new ComponentContainer<T>();
+				componentsPerEntity[entity].insert(typeIndex);
+			}
 
 			static_cast<ComponentContainer<T>*>(storages.at(typeIndex))->Add(entity);
 
@@ -110,6 +116,14 @@ namespace WaveEngine
 			return waveBehaviours;
 		}
 
+		void RemoveAllComponents(unsigned int entity)
+		{
+			for (type_index componentType : componentsPerEntity.at(entity))
+				RemoveComponent(entity, componentType);
+
+			componentsPerEntity.erase(entity);
+		}
+
 		template<TypeComponent T>
 		T* TryGet(unsigned int entity)
 		{
@@ -119,12 +133,19 @@ namespace WaveEngine
 		template<TypeComponent T>
 		void RemoveComponent(unsigned int entity)
 		{
-			type_index typeIndex = typeid(T);
+			RemoveComponent(entity, typeid(T));
+		}
 
+		void RemoveComponent(unsigned int entity, type_index typeIndex)
+		{
 			if (!storages.contains(typeIndex))
 				return;
 
-			static_cast<ComponentContainer<T>*>(storages.at(typeIndex))->Remove(entity);
+			static_cast<IStorage*>(storages.at(typeIndex))->Remove(entity);
+
+			vector<type_index>& behaviours = waveBehavioursByEntityID[entity];
+
+			behaviours.erase(remove_if(behaviours.begin(), behaviours.end(), [typeIndex](type_index componentType) { return componentType == typeIndex; }), behaviours.end());
 		}
 
 		template<TypeComponent T>

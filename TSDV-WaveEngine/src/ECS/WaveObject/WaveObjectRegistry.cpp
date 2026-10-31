@@ -2,17 +2,22 @@
 
 #include <string>
 #include <vector>
-#include <unordered_map>
+#include <algorithm>
+#include <typeindex>
 #include <string_view>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "WaveObject.h"
 #include "EventSystem/EventSystem.h"
 #include "ServiceProvider/Service.h"
 #include "Events/ObjectChangeName.h"
+#include "ECS/Component/Component.h"
 #include "WaveMath/WaveMath/WaveMath.h"
 #include "Events/ObjectBecameChildEvent.h"
 #include "Events/ObjectBecameParentEvent.h"
 #include "ServiceProvider/ServiceProvider.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
 
 namespace WaveEngine
 {
@@ -152,20 +157,34 @@ namespace WaveEngine
 		return *(waveObjects.at(ID));
 	}
 
+	void WaveObjectRegistry::Update()
+	{
+		for (unsigned int waveObjectToDestroy : toDestroy)
+			Destroy(waveObjects.at(waveObjectToDestroy));
+
+		toDestroy.clear();
+	}
+
+	void WaveObjectRegistry::ToDestroy(WaveObject* waveObject)
+	{
+		if (waveObject == nullptr)
+			return;
+
+		toDestroy.insert(waveObject->ID);
+	}
+
 	void WaveObjectRegistry::Destroy(WaveObject* waveObject)
 	{
 		if (waveObject == nullptr)
 			return;
 
-		Destroy(waveObject->ID);
-	}
+		const unsigned int waveObjectID = waveObject->ID;
 
-	void WaveObjectRegistry::Destroy(unsigned int waveObjectID)
-	{
-
+		ServiceProvider::Instance().Get<ComponentRegistry>()->RemoveAllComponents(waveObjectID);
 
 		delete waveObjects[waveObjectID];
 		waveObjects.erase(waveObjectID);
+		parentsWaveObjects.erase(remove_if(parentsWaveObjects.begin(), parentsWaveObjects.end(), [waveObjectID](unsigned int ID) { return ID == waveObjectID; }), parentsWaveObjects.end());
 	}
 
 	WaveObject& WaveObjectRegistry::operator[](unsigned int ID) const
