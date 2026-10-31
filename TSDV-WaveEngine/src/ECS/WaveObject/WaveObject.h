@@ -27,13 +27,12 @@ namespace WaveEngine
 
 		bool isStatic = false;
 
-		unordered_set<type_index> componentsTypes;
-
 		ComponentRegistry* GetComponentRegistry() const;
 		EventSystem* GetEventSystem() const;
 		WaveObjectRegistry* GetWaveObjectRegistry() const;
 		WaveObjectFactory* GetWaveObjectFactory() const;
 
+		friend class WObject;
 		friend class WaveObjectFactory;
 		friend class WaveObjectRegistry;
 
@@ -59,7 +58,6 @@ namespace WaveEngine
 		template<TypeComponent T>
 		T& AddComponent()
 		{
-			componentsTypes.insert(typeid(T));
 			return GetComponentRegistry()->AddComponent<T>(ID);
 		}
 
