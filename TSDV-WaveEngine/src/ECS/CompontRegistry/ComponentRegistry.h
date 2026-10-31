@@ -2,13 +2,14 @@
 
 #include "ServiceProvider/Service.h"
 
+#include <set>
 #include <vector>
 #include <utility>
 #include <typeindex>
 #include <algorithm>
 #include <type_traits>
-#include <unordered_map>
 #include <unordered_set>
+#include <unordered_map>
 
 #include "ECS/Component/TypeComponent.h"
 #include "ECS/ComponentContainer/ComponentContainer.h"
@@ -25,6 +26,7 @@ namespace WaveEngine
 
 		unordered_map<type_index, IStorage*> storages;
 		unordered_map<unsigned int, unordered_set<type_index>> componentsPerEntity;
+		set<pair<unsigned int, type_index>> componentsToRemovePerEntity;
 		unordered_map<unsigned int, vector<type_index>> waveBehavioursByEntityID;
 
 	public:
@@ -39,6 +41,14 @@ namespace WaveEngine
 				delete storage->second;
 		}
 
+		void Update()
+		{
+			for (pair<unsigned int, type_index> componentToDestroy : componentsToRemovePerEntity)
+				RemoveComponent(componentToDestroy.first, componentToDestroy.second);
+
+			componentsToRemovePerEntity.clear();
+		}
+
 		template<TypeComponent T>
 		T& AddComponent(unsigned int entity)
 		{
@@ -47,11 +57,10 @@ namespace WaveEngine
 			if constexpr (std::is_base_of_v<WaveBehaviour, T>)
 				waveBehavioursByEntityID[entity].push_back(typeIndex);
 
+			componentsPerEntity[entity].insert(typeIndex);
+
 			if (!storages.contains(typeIndex))
-			{
 				storages[typeIndex] = new ComponentContainer<T>();
-				componentsPerEntity[entity].insert(typeIndex);
-			}
 
 			static_cast<ComponentContainer<T>*>(storages.at(typeIndex))->Add(entity);
 
@@ -118,6 +127,9 @@ namespace WaveEngine
 
 		void RemoveAllComponents(unsigned int entity)
 		{
+			if (!componentsPerEntity.contains(entity))
+				return;
+
 			for (type_index componentType : componentsPerEntity.at(entity))
 				RemoveComponent(entity, componentType);
 
@@ -147,6 +159,22 @@ namespace WaveEngine
 
 			behaviours.erase(remove_if(behaviours.begin(), behaviours.end(), [typeIndex](type_index componentType) { return componentType == typeIndex; }), behaviours.end());
 		}
+
+		template<TypeComponent T>
+		void ToRemoveComponent(unsigned int entity)
+		{
+			ToRemoveComponent(entity, typeid(T));
+		}
+
+		void ToRemoveComponent(unsigned int entity, type_index typeIndex)
+		{
+			if (!storages.contains(typeIndex))
+				return;
+
+			pair<unsigned int, type_index> pairToInsert = pair<unsigned int, type_index>(entity, typeIndex);
+			componentsToRemovePerEntity.insert(pairToInsert);
+		}
+
 
 		template<TypeComponent T>
 		ComponentContainer<T>& GetComponentStorage()

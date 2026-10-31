@@ -16,10 +16,11 @@ namespace WaveEngine
 {
 	class Renderer;
 	class WaveObject;
-	class TransformLogic;
 	class ImGuiClass;
+	class TransformLogic;
+	class WaveObjectRegistry;
 
-	class WAVEEXPORT ECSTransform : public Component
+	class WAVEEXPORT ECSTransform final : public Component
 	{
 	private:
 
@@ -54,9 +55,10 @@ namespace WaveEngine
 		EventSystem* GetEventSystem();
 
 		friend class Renderer;
-		friend class TransformLogic;
 		friend class MeshLogic;
 		friend class ImGuiClass;
+		friend class TransformLogic;
+		friend class WaveObjectRegistry;
 
 	public:
 
@@ -164,10 +166,12 @@ namespace WaveEngine
 		WaveObject& GetChild(const unsigned int index);
 		vector<WaveObject*> GetChilds() const;
 
-		WaveObject& GetParent() const;
+		WaveObject* GetParent() const;
 
 		void SetParent(unsigned int id);
 		void AddChild(unsigned int id);
 		void RemoveChild(unsigned int id);
+
+		void Dispose() override;
 	};
 }

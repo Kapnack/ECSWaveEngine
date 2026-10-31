@@ -49,6 +49,14 @@ namespace WaveEngine
 		if (!waveObject)
 			return;
 
+		ServiceProvider::Instance().Get<WaveObjectRegistry>()->ToDestroy(waveObject);
+	}
+
+	void WObject::DestroyImmediate(WaveObject* waveObject)
+	{
+		if (!waveObject)
+			return;
+
 		ServiceProvider::Instance().Get<WaveObjectRegistry>()->Destroy(waveObject);
 	}
 }

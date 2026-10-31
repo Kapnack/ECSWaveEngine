@@ -56,8 +56,8 @@ namespace WaveEngine
 
 			if (Input::Get().IsKeyPressed(Keys::R))
 			{
-				Destroy(&(WObject&)GetWaveObject());
-				tanakaPopSoda = nullptr;
+				if (tanakaPopSoda->GetTransform().GetChilds().size() > 0)
+					Destroy(tanakaPopSoda->GetTransform().GetChilds()[0]);
 			}
 
 			if (!ImGuiClass::thirdPersonCamera)

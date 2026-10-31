@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
@@ -75,6 +76,7 @@ namespace WaveEngine
 		const vector<WaveObject*> GetWaveObject(const char* name, ObjectNameSearch objectNameSearch = ObjectNameSearch::Exact);
 
 		WaveObject& GetWaveObject(unsigned int ID) const;
+		bool TryGetWaveObject(unsigned int ID, WaveObject*& waveObject) const;
 
 		void Update();
 

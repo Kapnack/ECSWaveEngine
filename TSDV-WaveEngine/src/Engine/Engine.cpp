@@ -211,6 +211,7 @@ namespace WaveEngine
 
 		waveBehaviourLogic.LateUpdate();
 
+		GetComponentRegistry()->Update();
 		GetWaveObjectRegistry()->Update();
 	}
 
@@ -275,6 +276,11 @@ namespace WaveEngine
 	TextureImporter* Engine::GetTextureImporter() const
 	{
 		return ServiceProvider::Instance().Get<TextureImporter>();
+	}
+
+	ComponentRegistry* Engine::GetComponentRegistry() const
+	{
+		return ServiceProvider::Instance().Get<ComponentRegistry>();
 	}
 
 	FileReader* Engine::GetFileReader() const

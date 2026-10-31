@@ -19,5 +19,6 @@ namespace WaveEngine
 		static void Destroy(WObject* wObject);
 		static void Destroy(Component* component);
 		static void Destroy(WaveObject* waveObject);
+		static void DestroyImmediate(WaveObject* waveObject);
 	};
 }

@@ -92,7 +92,7 @@ namespace WaveEngine
 			return;
 		}
 
-		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
+		const Matrix4x4& parentWorld = GetParent()->GetTransform().GetWorldMatrix();
 
 		Vector3 local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateTranslate(Vector3(x, y, z))).GetTranslate();
 
@@ -122,7 +122,7 @@ namespace WaveEngine
 			return;
 		}
 
-		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
+		const Matrix4x4& parentWorld = GetParent()->GetTransform().GetWorldMatrix();
 
 		Vector3 local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateTranslate(Vector3(x, y, z))).GetTranslate();
 
@@ -152,7 +152,7 @@ namespace WaveEngine
 			return;
 		}
 
-		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
+		const Matrix4x4& parentWorld = GetParent()->GetTransform().GetWorldMatrix();
 
 		Vector3 local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateScale(Vector3(x, y, z))).GetScale();
 
@@ -182,7 +182,7 @@ namespace WaveEngine
 			return;
 		}
 
-		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
+		const Matrix4x4& parentWorld = GetParent()->GetTransform().GetWorldMatrix();
 
 		Vector3 local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateScale(Vector3(x, y, z))).GetScale();
 
@@ -217,7 +217,7 @@ namespace WaveEngine
 			return;
 		}
 
-		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
+		const Matrix4x4& parentWorld = GetParent()->GetTransform().GetWorldMatrix();
 
 		Quaternion local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateRotation(quaternion)).GetRotation();
 
@@ -252,7 +252,7 @@ namespace WaveEngine
 			return;
 		}
 
-		const Matrix4x4& parentWorld = GetParent().GetTransform().GetWorldMatrix();
+		const Matrix4x4& parentWorld = GetParent()->GetTransform().GetWorldMatrix();
 
 		Quaternion local = (Matrix4x4::Inversed(parentWorld) * Matrix4x4::CreateRotation(quaternion)).GetRotation();
 
@@ -504,9 +504,11 @@ namespace WaveEngine
 		return childsObjects;
 	}
 
-	WaveObject& ECSTransform::GetParent() const
+	WaveObject* ECSTransform::GetParent() const
 	{
-		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(parentID);
+		WaveObject* parent = nullptr;
+		ServiceProvider::Instance().Get<WaveObjectRegistry>()->TryGetWaveObject(parentID, parent);
+		return parent;
 	}
 
 	void ECSTransform::SetParent(unsigned int id)
@@ -514,10 +516,10 @@ namespace WaveEngine
 		if (id != WaveObject::NULL_OBJECT)
 		{
 			SetScale(1, 1, 1);
-			GetEventSystem()->Invoke<ObjectBecameChildEvent>(GetID());
+			GetEventSystem()->Invoke<ObjectBecameChildEvent>(GetID(), id);
 		}
 		else
-			GetEventSystem()->Invoke<ObjectBecameParentEvent>(GetID());
+			GetEventSystem()->Invoke<ObjectBecameParentEvent>(GetID(), parentID);
 
 		parentID = id;
 	}
@@ -528,12 +530,22 @@ namespace WaveEngine
 			if (children[i] == id)
 				return;
 
+		MarkDirty();
 		children.push_back(id);
 	}
 
 	void ECSTransform::RemoveChild(unsigned int id)
 	{
 		children.erase(remove(children.begin(), children.end(), id), children.end());
+		MarkDirty();
+	}
+
+	void ECSTransform::Dispose()
+	{
+		SetParent(WaveObject::NULL_OBJECT);
+
+		for (WaveObject* child : GetChilds())
+			DestroyImmediate(child);
 	}
 
 	void ECSTransform::CalculateTRS()
@@ -590,7 +602,7 @@ namespace WaveEngine
 		if (parentID == WaveObject::NULL_OBJECT)
 			return;
 
-		GetParent().GetTransform().MarkHasChildDirty();
+		GetParent()->GetTransform().MarkHasChildDirty();
 	}
 
 	void ECSTransform::UnDirty()

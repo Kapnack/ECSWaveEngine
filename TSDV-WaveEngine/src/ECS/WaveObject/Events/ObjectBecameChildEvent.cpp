@@ -8,9 +8,10 @@ namespace WaveEngine
 	{
 	}
 
-	ObjectBecameChildEvent::ObjectBecameChildEvent(unsigned int waveObjectID)
+	ObjectBecameChildEvent::ObjectBecameChildEvent(unsigned int waveObjectID, unsigned int parentWaveObjectID)
 	{
 		this->waveObjectID = waveObjectID;
+		this->parentWaveObjectID = parentWaveObjectID;
 	}
 
 	void ObjectBecameChildEvent::Reset()

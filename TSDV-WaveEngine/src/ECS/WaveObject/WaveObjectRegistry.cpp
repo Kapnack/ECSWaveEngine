@@ -47,11 +47,16 @@ namespace WaveEngine
 			if (objectsID == objectBecameParentEvent.waveObjectID)
 				return;
 
+		WaveObject* parent = nullptr;
+		if (TryGetWaveObject(objectBecameParentEvent.parentID, parent))
+			parent->GetTransform().RemoveChild(objectBecameParentEvent.waveObjectID);
+
 		parentsWaveObjects.push_back(objectBecameParentEvent.waveObjectID);
 	}
 
 	void WaveObjectRegistry::OnObjectBecameChild(const ObjectBecameChildEvent& objectBecameChildEvent)
 	{
+		waveObjects[objectBecameChildEvent.parentWaveObjectID]->GetTransform().AddChild(objectBecameChildEvent.waveObjectID);
 		erase(parentsWaveObjects, objectBecameChildEvent.waveObjectID);
 	}
 
@@ -155,6 +160,17 @@ namespace WaveEngine
 	WaveObject& WaveObjectRegistry::GetWaveObject(unsigned int ID) const
 	{
 		return *(waveObjects.at(ID));
+	}
+
+	bool WaveObjectRegistry::TryGetWaveObject(unsigned int ID, WaveObject*& waveObject) const
+	{
+		waveObject = nullptr;
+
+		if (!waveObjects.contains(ID))
+			return false;
+
+		waveObject = waveObjects.at(ID);
+		return true;
 	}
 
 	void WaveObjectRegistry::Update()

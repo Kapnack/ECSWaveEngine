@@ -23,6 +23,7 @@
 #include "TextureImporter/TextureImporter.h"
 #include "ECS/WaveObject/WaveObjectFactory.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
+#include "ECS/CompontRegistry/ComponentRegistry.h"
 #include "ECS/Managers/TransformLogic/TransformLogic.h"
 #include "ECS/Managers/WaveBehaviourLogic/WaveBehaviourLogic.h"
 #include "ECS/Managers/BinarySpacePartition/BinarySpacePartition.h"
@@ -84,6 +85,7 @@ namespace WaveEngine
 		WaveRandom* GetWaveRandom() const;
 		Window* GetWindow() const;
 		TextureImporter* GetTextureImporter() const;
+		ComponentRegistry* GetComponentRegistry() const;
 
 	public:
 
