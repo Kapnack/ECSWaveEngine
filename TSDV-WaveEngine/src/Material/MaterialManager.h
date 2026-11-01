@@ -2,6 +2,7 @@
 
 #include "ServiceProvider/Service.h"
 
+#include <set>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -13,11 +14,11 @@ using namespace std;
 
 namespace WaveEngine
 {
-	class Renderer;
-	class MaterialFactory;
-	class EntityManager;
 	class Engine;
+	class Renderer;
 	class ImGuiClass;
+	class EntityManager;
+	class MaterialFactory;
 
 	class WAVEEXPORT MaterialManager final : public Service
 	{
@@ -25,20 +26,23 @@ namespace WaveEngine
 
 		unsigned int currentMaterialID = Material::NULL_MATERIAL;
 
+		set<unsigned int> materialsToDestroy;
 		unordered_map<unsigned int, Material*> materials;
 		unordered_map<string, unsigned int> materialsIDByName;
 
 		void SaveMaterial(Material*& material);
 
+		void Update();
+
 		MaterialManager();
 		~MaterialManager();
 
-		friend class Renderer;
-		friend class MaterialFactory;
-		friend class EntityManager;
 		friend class Engine;
-		friend class ServiceProvider;
+		friend class Renderer;
 		friend class ImGuiClass;
+		friend class EntityManager;
+		friend class MaterialFactory;
+		friend class ServiceProvider;
 
 	public:
 
@@ -46,9 +50,10 @@ namespace WaveEngine
 
 		unsigned int GetMaterial(const string_view name);
 
-		void DeleteMaterial(const string_view name);
-
-		void DeleteMaterial(const unsigned int& ID);
+		void Destroy(Material& material);
+		void Destroy(unsigned int ID);
+		void DestroyImmediate(Material& material);
+		void DestroyImmediate(unsigned int ID);
 
 		unordered_map<unsigned int, Material*>& GetMaterials();
 	};

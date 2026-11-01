@@ -36,7 +36,7 @@ namespace WaveEngine
 	template<TypeComponent T>
 	void WaveObject::RemoveComponent()
 	{
-		GetComponentRegistry()->RemoveComponent<T>(ID);
+		GetComponentRegistry()->RemoveComponentImmediate<T>(ID);
 	}
 }
 

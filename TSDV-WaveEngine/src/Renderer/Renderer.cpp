@@ -94,8 +94,8 @@ namespace WaveEngine
 
 		glDisable(GL_CULL_FACE);
 
-		debugMaterialID = *GetMaterialFactory()->CreateMaterial("WireFrame", GetFileReader()->ReadFile("Shaders/WireFrame/WireFrame.vert"), GetFileReader()->ReadFile("Shaders/WireFrame/WireFrame.frag"));
-		infinitePlaneMaterialID = *GetMaterialFactory()->CreateMaterial("InfinitePlane", GetFileReader()->ReadFile("Shaders/Planes/InfinitePlane.vert"), GetFileReader()->ReadFile("Shaders/Planes/InfinitePlane.frag"));
+		debugMaterialID = *Material::Load("WireFrame", "Shaders/WireFrame/WireFrame.vert", "Shaders/WireFrame/WireFrame.frag");
+		infinitePlaneMaterialID = *Material::Load("InfinitePlane", "Shaders/Planes/InfinitePlane.vert", "Shaders/Planes/InfinitePlane.frag");
 	}
 
 	const unsigned int Renderer::ReturnWorkingMaterial(const unsigned int& materialIDToTry, const unsigned int& materialIDfallBack)

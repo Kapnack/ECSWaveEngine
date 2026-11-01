@@ -1,6 +1,7 @@
 #include "MaterialManager.h"
 
 #include <utility>
+#include <GL/glew.h>
 #include <algorithm>
 #include <string_view>
 #include <unordered_map>
@@ -32,10 +33,28 @@ namespace WaveEngine
 		return materialsIDByName[name.data()];
 	}
 
+	void MaterialManager::Destroy(Material& material)
+	{
+		Destroy(material.ID);
+	}
+
+	void MaterialManager::Destroy(unsigned int ID)
+	{
+		materialsToDestroy.insert(ID);
+	}
+
 	void MaterialManager::SaveMaterial(Material*& material)
 	{
 		materials[material->GetID()] = material;
 		materialsIDByName[material->GetName()] = material->GetID();
+	}
+
+	void MaterialManager::Update()
+	{
+		for (unsigned int materialID : materialsToDestroy)
+			DestroyImmediate(materialID);
+
+		materialsToDestroy.clear();
 	}
 
 	Material* MaterialManager::GetMaterial(const unsigned int id)
@@ -48,30 +67,13 @@ namespace WaveEngine
 		return materials;
 	}
 
-	void MaterialManager::DeleteMaterial(const string_view name)
+	void MaterialManager::DestroyImmediate(Material& material)
 	{
-		unordered_map<unsigned int, Material*>::iterator it = find_if(materials.begin(), materials.end(),
-			[&name](const pair<const unsigned int, Material*>& entry)
-			{
-				return entry.second &&
-					entry.second->GetName() == name;
-			});
-
-
-		if (it == materials.end())
-			return;
-
-		ServiceProvider::Instance().Get<EventSystem>()->Invoke<MaterialDelition>(it->first);
-
-		delete it->second;
-		materials.erase(it);
+		DestroyImmediate(material.ID);
 	}
 
-	void MaterialManager::DeleteMaterial(const unsigned int& ID)
+	void MaterialManager::DestroyImmediate(unsigned int ID)
 	{
-		if (ID == Material::NULL_MATERIAL)
-			return;
-
 		Material* it = materials[ID];
 
 		if (it == nullptr)
@@ -79,6 +81,7 @@ namespace WaveEngine
 
 		ServiceProvider::Instance().Get<EventSystem>()->Invoke<MaterialDelition>(ID);
 
+		glDeleteProgram(*it);
 		delete it;
 		materials.erase(ID);
 	}

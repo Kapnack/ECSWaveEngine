@@ -3,17 +3,20 @@
 #include <string>
 
 #include "VertexData.h"
+#include "Material/Color/Color.h"
+#include "WaveMath/Vector3/Vector3.h"
 
 namespace WaveEngine
 {
 	class Renderer;
 	class MeshFactory;
+	class MeshManager;
 
 	class Mesh
 	{
 	private:
 
-		unsigned int id = NULL_MESH;
+		unsigned int ID = NULL_MESH;
 		string name;
 		VertexData* vertexBuffer = nullptr;
 		unsigned int vertexSize = 0;
@@ -28,15 +31,16 @@ namespace WaveEngine
 		bool GetDirty() const;
 		void UnDirt();
 
+		Mesh(VertexData* vertexBuffer, unsigned int vertexSize, unsigned int* index, unsigned int indexAmount, const string_view name, unsigned int meshID);
+		~Mesh();
+
 		friend class Renderer;
 		friend class MeshFactory;
+		friend class MeshManager;
 
 	public:
 
 		static const unsigned int NULL_MESH;
-
-		Mesh(VertexData* vertexBuffer, unsigned int vertexSize, unsigned int* index, unsigned int indexAmount, const string_view name, unsigned int meshID);
-		~Mesh();
 
 		unsigned int GetID();
 		const VertexData* GetVertexBuffer() const;

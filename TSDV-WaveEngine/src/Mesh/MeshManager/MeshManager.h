@@ -1,8 +1,9 @@
 #pragma once
 
+#include <set>
+#include <string>
 #include <string_view>
 #include <unordered_map>
-#include <string>
 
 #include "ServiceProvider/Service.h"
 #include "Mesh/Mesh.h"
@@ -11,6 +12,7 @@ using namespace std;
 
 namespace WaveEngine
 {
+	class Engine;
 	class MeshFactory;
 
 	class MeshManager : public Service
@@ -19,8 +21,12 @@ namespace WaveEngine
 
 		unordered_map<unsigned int, Mesh*> meshByID;
 		unordered_map<string, unsigned int> idByName;
+		set<unsigned int> meshToDestroy;
 
+		friend class Engine;
 		friend class MeshFactory;
+
+		void Update();
 
 		void SaveMesh(Mesh* mesh);
 
@@ -35,5 +41,11 @@ namespace WaveEngine
 		unsigned int GetMeshID(const const char* name);
 
 		Mesh& Get(const unsigned int meshID);
+
+		void Destroy(Mesh& mesh);
+		void Destroy(unsigned int meshID);
+
+		void DestroyImmediate(Mesh& mesh);
+		void DestroyImmediate(unsigned int meshID);
 	};
 }

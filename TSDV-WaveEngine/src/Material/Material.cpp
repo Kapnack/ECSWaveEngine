@@ -1,11 +1,12 @@
 #include "Material.h"
 
+#include <string>
 #include <GL/glew.h>
 
 #define GLM_FORCE_ALIGNED_GENTYPES
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 
 #include "Color/Color.h"
@@ -25,17 +26,11 @@ namespace WaveEngine
 
 	Material::~Material()
 	{
-		Unload();
 	}
 
 	Material* Material::Create(const char* name, const char* vertexShader, const char* fragmentShader)
 	{
 		return ServiceProvider::Instance().Get<MaterialFactory>()->CreateMaterial(name, vertexShader, fragmentShader);
-	}
-
-	Material* Material::Load(const char* name, const char* vertexShader, const char* fragmentShader)
-	{
-		return ServiceProvider::Instance().Get<MaterialFactory>()->LoadMaterial(name, vertexShader, fragmentShader);
 	}
 
 	const string& Material::GetName() const
@@ -68,9 +63,9 @@ namespace WaveEngine
 		return gpuID;
 	}
 
-	void Material::SetTexture(const std::string& uniformName, unsigned int textureID)
+	void Material::SetTexture(const std::string& uniformName, unsigned int ID)
 	{
-		textures[uniformName] = textureID;
+		textures[uniformName] = ID;
 	}
 
 	void Material::AddAlbedoTexture(const unsigned int& textureGPUID)
@@ -258,10 +253,5 @@ namespace WaveEngine
 	Material::operator unsigned int()
 	{
 		return ID;
-	}
-
-	void Material::Unload()
-	{
-		glDeleteProgram(gpuID);
 	}
 }

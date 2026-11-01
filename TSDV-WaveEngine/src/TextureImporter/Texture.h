@@ -5,6 +5,7 @@
 #include <string_view>
 
 #include "Export.h"
+#include "ECS/WObject/WObject.h"
 #include "WaveMath/Vector2/Vector2.h"
 
 using namespace std;
@@ -14,18 +15,18 @@ namespace WaveEngine
 	class TextureManager;
 	class TextureImporter;
 
-	class WAVEEXPORT Texture final
+	class WAVEEXPORT Texture final : public WObject
 	{
 	private:
 
 		string name;
-		unsigned int textureID = 0;
+		unsigned int ID = 0;
 		unsigned int gputID = 0;
 
 		int width;
 		int height;
 
-		Texture(const unsigned int& textureID, const unsigned int& gpuID, const int& width, const int& height);
+		Texture(unsigned int ID, unsigned int gpuID, int width, int height);
 		~Texture();
 
 		friend class TextureManager;

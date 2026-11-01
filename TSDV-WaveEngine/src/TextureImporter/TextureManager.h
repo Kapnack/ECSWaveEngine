@@ -2,12 +2,13 @@
 
 #include "ServiceProvider/Service.h"
 
+#include <set>
 #include <map>
 #include <string>
+#include <string_view>
 
 #include "Export.h"
 #include "TextureImporter/Texture.h"
-#include <string_view>
 
 namespace WaveEngine
 {
@@ -26,11 +27,14 @@ namespace WaveEngine
 
 		map<unsigned int, Texture*> textures;
 		map<string, unsigned int> indexByname;
+		set<unsigned int> texturesToDestroy;
 
 		TextureManager();
 		~TextureManager();
 
 		void Save(Texture*& texture);
+
+		void Update();
 
 		map<unsigned int, Texture*>& GetTextures();
 
@@ -44,8 +48,10 @@ namespace WaveEngine
 
 	public:
 
-		void DeleteTexture(const unsigned int& ID);
-		void DeleteTexture(const string_view name);
+		void Destroy(Texture& texture);
+		void Destroy(unsigned int ID);
+		void DestroyImmediate(Texture& texture);
+		void DestroyImmediate(unsigned int ID);
 
 		Texture* GetTexture(const unsigned int& ID) const;
 		Texture* TryGetTexture(const unsigned int& ID) const;

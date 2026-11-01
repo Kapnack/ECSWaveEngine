@@ -44,7 +44,7 @@ namespace WaveEngine
 		void Update()
 		{
 			for (pair<unsigned int, type_index> componentToDestroy : componentsToRemovePerEntity)
-				RemoveComponent(componentToDestroy.first, componentToDestroy.second);
+				RemoveComponentImmediate(componentToDestroy.first, componentToDestroy.second);
 
 			componentsToRemovePerEntity.clear();
 		}
@@ -137,7 +137,7 @@ namespace WaveEngine
 				return;
 
 			for (type_index componentType : componentsPerEntity.at(entity))
-				RemoveComponent(entity, componentType);
+				RemoveComponentImmediate(entity, componentType);
 
 			componentsPerEntity.erase(entity);
 		}
@@ -151,10 +151,10 @@ namespace WaveEngine
 		template<TypeComponent T>
 		void RemoveComponent(unsigned int entity)
 		{
-			RemoveComponent(entity, typeid(T));
+			RemoveComponentImmediate(entity, typeid(T));
 		}
 
-		void RemoveComponent(unsigned int entity, type_index typeIndex)
+		void RemoveComponentImmediate(unsigned int entity, type_index typeIndex)
 		{
 			if (!storages.contains(typeIndex))
 				return;
@@ -167,12 +167,12 @@ namespace WaveEngine
 		}
 
 		template<TypeComponent T>
-		void ToRemoveComponent(unsigned int entity)
+		void RemoveComponent(unsigned int entity)
 		{
-			ToRemoveComponent(entity, typeid(T));
+			RemoveComponent(entity, typeid(T));
 		}
 
-		void ToRemoveComponent(unsigned int entity, type_index typeIndex)
+		void RemoveComponent(unsigned int entity, type_index typeIndex)
 		{
 			if (!storages.contains(typeIndex))
 				return;

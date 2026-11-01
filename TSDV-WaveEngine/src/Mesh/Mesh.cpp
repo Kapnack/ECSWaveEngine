@@ -1,5 +1,9 @@
 #include "Mesh.h"
 
+#include <string>
+
+#include "VertexData.h"
+#include "Material/Color/Color.h"
 #include "WaveMath/Vector3/Vector3.h"
 
 namespace WaveEngine
@@ -18,7 +22,7 @@ namespace WaveEngine
 		this->vertexSize = vertexSize;
 		this->indexes = indexes;
 		this->indexAmount = indexAmount;
-		this->id = meshID;
+		this->ID = meshID;
 	}
 
 	Mesh::~Mesh()
@@ -27,7 +31,7 @@ namespace WaveEngine
 
 	unsigned int Mesh::GetID()
 	{
-		return id;
+		return ID;
 	}
 
 	const VertexData* Mesh::GetVertexBuffer() const

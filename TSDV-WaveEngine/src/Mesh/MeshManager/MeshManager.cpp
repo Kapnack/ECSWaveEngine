@@ -1,5 +1,7 @@
 #include "MeshManager.h"
+
 #include "Mesh/Mesh.h"
+#include "ServiceProvider/Service.h"
 
 namespace WaveEngine
 {
@@ -9,8 +11,16 @@ namespace WaveEngine
 
 	MeshManager::~MeshManager()
 	{
-		for (auto& [id, mesh] : meshByID)
+		for (auto& [ID, mesh] : meshByID)
 			delete mesh;
+	}
+
+	void MeshManager::Update()
+	{
+		for (unsigned int meshID : meshToDestroy)
+			DestroyImmediate(meshID);
+
+		meshToDestroy.clear();
 	}
 
 	void MeshManager::SaveMesh(Mesh* mesh)
@@ -42,5 +52,26 @@ namespace WaveEngine
 	Mesh& MeshManager::Get(const unsigned int meshID)
 	{
 		return *meshByID.at(meshID);
+	}
+
+	void MeshManager::Destroy(Mesh& mesh)
+	{
+		Destroy(mesh.ID);
+	}
+
+	void MeshManager::Destroy(unsigned int meshID)
+	{
+		meshToDestroy.insert(meshID);
+	}
+
+	void MeshManager::DestroyImmediate(Mesh& mesh)
+	{
+		DestroyImmediate(mesh.ID);
+	}
+
+	void MeshManager::DestroyImmediate(unsigned int meshID)
+	{
+		delete meshByID[meshID];
+		meshByID.erase(meshID);
 	}
 }

@@ -256,7 +256,7 @@ namespace WaveEngine
 		unsigned int textureGPUID = 0;
 		unsigned int count = mat->GetTextureCount(type);
 		int index = 0;
-		Texture* textureID = nullptr;
+		Texture* ID = nullptr;
 		aiString str;
 		string path;
 
@@ -267,7 +267,7 @@ namespace WaveEngine
 
 			path = str.C_Str();
 
-			textureID = 0;
+			ID = 0;
 
 			if (!path.empty() && path[0] == '*')
 			{
@@ -276,13 +276,13 @@ namespace WaveEngine
 
 				if (tex.mHeight == 0)
 				{
-					textureID = GetTextureImporter()->LoadTextureFromMemory(
+					ID = GetTextureImporter()->LoadTextureFromMemory(
 						reinterpret_cast<const unsigned char*>(tex.pcData),
 						tex.mWidth);
 				}
 				else
 				{
-					textureID = GetTextureImporter()->LoadTextureFromPixels(
+					ID = GetTextureImporter()->LoadTextureFromPixels(
 						reinterpret_cast<const unsigned char*>(tex.pcData),
 						tex.mWidth,
 						tex.mHeight);
@@ -297,11 +297,11 @@ namespace WaveEngine
 					fullPath = FindTexture(directory, path);
 
 				if (!fullPath.empty())
-					textureID = GetTextureImporter()->LoadTexture(fullPath.string());
+					ID = GetTextureImporter()->LoadTexture(fullPath.string());
 			}
 
-			if (textureID)
-				textureGPUID = textureID->GetGPUID();
+			if (ID)
+				textureGPUID = ID->GetGPUID();
 		}
 
 		return textureGPUID;

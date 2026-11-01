@@ -35,7 +35,7 @@ namespace WaveEngine
 	private:
 
 		vector<unsigned int> parentsWaveObjects;
-		unordered_set<unsigned int> toDestroy;
+		unordered_set<unsigned int> waveObjectsToDestroy;
 
 		unordered_map<unsigned int, WaveObject*> waveObjects;
 		unordered_map<string, unsigned int> waveObjectsIDByName;
@@ -80,8 +80,8 @@ namespace WaveEngine
 
 		void Update();
 
-		void ToDestroy(WaveObject* waveObject);
-		void Destroy(WaveObject* waveObject);
+		void Destroy(WaveObject& waveObject);
+		void DestroyImmediate(WaveObject& waveObject);
 
 		WaveObject& operator[](unsigned int ID) const;
 	};

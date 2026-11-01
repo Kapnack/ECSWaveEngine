@@ -213,6 +213,9 @@ namespace WaveEngine
 
 		GetComponentRegistry()->Update();
 		GetWaveObjectRegistry()->Update();
+		GetMaterialManager()->Update();
+		GetTextureManager()->Update();
+		GetMeshManager()->Update();
 	}
 
 	void Engine::Draw()

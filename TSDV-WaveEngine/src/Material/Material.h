@@ -4,13 +4,14 @@
 #include <string>
 #include <vector>
 #include <GL/glew.h>
+#include <glm/fwd.hpp>
 
 #include "Export.h"
+#include "ECS/WObject/WObject.h"
 #include "WaveMath/Vector4/Vector4.h"
 #include "WaveMath/Vector2/Vector2.h"
-#include "WaveMath/Vector3/Vector3.h"
+#include "WaveMath/Vector3/Vector3.h"ss
 #include "WaveMath/Matrix4x4/Matrix4x4.h"
-#include <glm/fwd.hpp>
 #include "Color/Color.h"
 
 namespace WaveEngine
@@ -30,7 +31,7 @@ namespace WaveEngine
 		GLint size;
 	};
 
-	class WAVEEXPORT Material final
+	class WAVEEXPORT Material final : public WObject
 	{
 	private:
 
@@ -55,7 +56,6 @@ namespace WaveEngine
 
 		void SetName(const string& name);
 		void AddUniform(const std::string& name, const GLenum& type, const GLint& location, const GLint& size);
-		void Unload();
 
 		friend class MaterialManager;
 		friend class MaterialFactory;

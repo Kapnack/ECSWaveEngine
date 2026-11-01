@@ -9,6 +9,6 @@ namespace WaveEngine
 {
 	class WAVEEXPORT TextureID : public Component
 	{
-		unsigned int textureID = Texture::NULL_TEXTURE;
+		unsigned int ID = Texture::NULL_TEXTURE;
 	};
 }

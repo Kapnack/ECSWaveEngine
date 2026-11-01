@@ -15,7 +15,7 @@ namespace WaveEngine
 	{
 		for (map<unsigned int, Texture*>::iterator iterator = textures.begin(); iterator != textures.end(); ++iterator)
 		{
-			glDeleteTextures(iterator->second->textureID, &iterator->second->textureID);
+			glDeleteTextures(iterator->second->ID, &iterator->second->ID);
 			delete iterator->second;
 		}
 	}
@@ -24,6 +24,14 @@ namespace WaveEngine
 	{
 		indexByname[texture->GetName()] = texture->GetTextureID();
 		textures[texture->GetTextureID()] = texture;
+	}
+
+	void TextureManager::Update()
+	{
+		for (unsigned int textureID : texturesToDestroy)
+			DestroyImmediate(textureID);
+
+		texturesToDestroy.clear();
 	}
 
 	Texture* TextureManager::GetTexture(const unsigned int& ID) const
@@ -44,25 +52,28 @@ namespace WaveEngine
 		return textures;
 	}
 
-	void TextureManager::DeleteTexture(const unsigned int& ID)
+	void TextureManager::Destroy(Texture& texture)
+	{
+		Destroy(texture.ID);
+	}
+
+	void TextureManager::Destroy(unsigned int ID)
+	{
+		texturesToDestroy.insert(ID);
+	}
+
+	void TextureManager::DestroyImmediate(Texture& texture)
+	{
+		DestroyImmediate(texture.ID);
+	}
+
+	void TextureManager::DestroyImmediate(unsigned int ID)
 	{
 		if (ID >= textures.size())
 			return;
 
-		glDeleteTextures(textures.at(ID)->textureID, &textures.at(ID)->textureID);
+		glDeleteTextures(textures.at(ID)->ID, &textures.at(ID)->ID);
 		indexByname.erase(textures.at(ID)->GetName());
 		delete textures.at(ID);
-	}
-
-	void TextureManager::DeleteTexture(const string_view name)
-	{
-		map<string, unsigned int>::iterator it = indexByname.find(string(name));
-
-		if (it == indexByname.end())
-			return;
-
-		glDeleteTextures(textures.at(it->second)->textureID, &textures.at(it->second)->textureID);
-		indexByname.erase(textures.at(it->second)->GetName());
-		delete textures.at(it->second);
 	}
 }
