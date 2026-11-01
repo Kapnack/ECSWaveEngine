@@ -40,6 +40,9 @@ namespace WaveEngine
 
 		static const unsigned int NULL_OBJECT = 0;
 
+		template<TypeComponent... T>
+		static WaveObject& Create(const char* name = nullptr);
+
 		WaveObject(const char* name = nullptr);
 		WaveObject(unsigned int ID);
 		~WaveObject();
@@ -56,27 +59,17 @@ namespace WaveEngine
 		BoundingBoxComp& GetBounds() const;
 
 		template<TypeComponent T>
-		T& AddComponent()
-		{
-			return GetComponentRegistry()->AddComponent<T>(ID);
-		}
+		T& AddComponent();
 
 		template<TypeComponent T>
-		T& GetComponent() const
-		{
-			return GetComponentRegistry()->GetComponent<T>(ID);
-		}
+		T& GetComponent() const;
 
 		template<TypeComponent T>
-		T* TryGetComponent()
-		{
-			return GetComponentRegistry()->TryGet<T>(ID);
-		}
+		T* TryGetComponent();
 
 		template<TypeComponent T>
-		void RemoveComponent()
-		{
-			GetComponentRegistry()->RemoveComponent<T>(ID);
-		}
+		void RemoveComponent();
 	};
 }
+
+#include "WaveObject.tpp"
