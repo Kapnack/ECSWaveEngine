@@ -28,7 +28,7 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int ID = NULL_WAVE_OBJECT;
+		unsigned int ID = NULL_OBJECT;
 
 		void SetID(unsigned int ID);
 
@@ -46,7 +46,7 @@ namespace WaveEngine
 
 	public:
 
-		static const unsigned int NULL_WAVE_OBJECT;
+		static const unsigned int NULL_OBJECT;
 
 		WObject();
 		virtual ~WObject();

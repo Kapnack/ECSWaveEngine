@@ -9,7 +9,7 @@ namespace WaveEngine
 {
 	struct WAVEEXPORT MeshID : public Component
 	{
-		unsigned int meshID = WObject::NULL_WAVE_OBJECT;
+		unsigned int meshID = WObject::NULL_OBJECT;
 
 		MeshID() : Component()
 		{

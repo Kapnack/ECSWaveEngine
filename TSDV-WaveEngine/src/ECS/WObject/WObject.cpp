@@ -17,7 +17,7 @@
 
 namespace WaveEngine
 {
-	const unsigned int WObject::NULL_WAVE_OBJECT = 0;
+	const unsigned int WObject::NULL_OBJECT = 0;
 
 	WObject::WObject()
 	{

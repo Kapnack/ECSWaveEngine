@@ -108,8 +108,8 @@ namespace WaveEngine
 		unsigned int drawCalls = 0;
 		unsigned int batchCalls = 0;
 
-		unsigned int debugMaterialID = WObject::NULL_WAVE_OBJECT;
-		unsigned int infinitePlaneMaterialID = WObject::NULL_WAVE_OBJECT;
+		unsigned int debugMaterialID = WObject::NULL_OBJECT;
+		unsigned int infinitePlaneMaterialID = WObject::NULL_OBJECT;
 
 		void Init();
 		void Dispose();

@@ -29,7 +29,7 @@ namespace WaveEngine
 
 	void ECSTransform::Init()
 	{
-		SetParent(WObject::NULL_WAVE_OBJECT);
+		SetParent(WObject::NULL_OBJECT);
 		MarkDirty();
 	}
 
@@ -90,7 +90,7 @@ namespace WaveEngine
 
 	void ECSTransform::SetPosition(float x, float y, float z)
 	{
-		if (parentID == WaveObject::NULL_WAVE_OBJECT)
+		if (parentID == WaveObject::NULL_OBJECT)
 		{
 			SetLocalPosition(x, y, z);
 			return;
@@ -120,7 +120,7 @@ namespace WaveEngine
 
 	void ECSTransform::Translate(float x, float y, float z)
 	{
-		if (parentID == WaveObject::NULL_WAVE_OBJECT)
+		if (parentID == WaveObject::NULL_OBJECT)
 		{
 			LocalTranslate(x, y, z);
 			return;
@@ -150,7 +150,7 @@ namespace WaveEngine
 
 	void ECSTransform::SetScale(float x, float y, float z)
 	{
-		if (parentID == WaveObject::NULL_WAVE_OBJECT)
+		if (parentID == WaveObject::NULL_OBJECT)
 		{
 			SetLocalScale(x, y, z);
 			return;
@@ -180,7 +180,7 @@ namespace WaveEngine
 
 	void ECSTransform::Scale(float x, float y, float z)
 	{
-		if (parentID == WObject::NULL_WAVE_OBJECT)
+		if (parentID == WObject::NULL_OBJECT)
 		{
 			LocalScale(x, y, z);
 			return;
@@ -215,7 +215,7 @@ namespace WaveEngine
 
 	void ECSTransform::SetRotation(Quaternion quaternion)
 	{
-		if (parentID == WaveObject::NULL_WAVE_OBJECT)
+		if (parentID == WaveObject::NULL_OBJECT)
 		{
 			SetLocalRotation(quaternion);
 			return;
@@ -250,7 +250,7 @@ namespace WaveEngine
 
 	void ECSTransform::Rotate(Quaternion quaternion)
 	{
-		if (parentID == WaveObject::NULL_WAVE_OBJECT)
+		if (parentID == WaveObject::NULL_OBJECT)
 		{
 			LocalRotate(quaternion);
 			return;
@@ -517,7 +517,7 @@ namespace WaveEngine
 
 	void ECSTransform::SetParent(unsigned int id)
 	{
-		if (id != WaveObject::NULL_WAVE_OBJECT)
+		if (id != WaveObject::NULL_OBJECT)
 		{
 			SetScale(1, 1, 1);
 			GetEventSystem()->Invoke<ObjectBecameChildEvent>(GetID(), id);
@@ -546,7 +546,7 @@ namespace WaveEngine
 
 	void ECSTransform::Dispose()
 	{
-		SetParent(WaveObject::NULL_WAVE_OBJECT);
+		SetParent(WaveObject::NULL_OBJECT);
 
 		for (WaveObject* child : GetChilds())
 			DestroyImmediate(*child);
@@ -587,7 +587,7 @@ namespace WaveEngine
 				child->MarkDirty();
 		}
 
-		if (parentID != WaveObject::NULL_WAVE_OBJECT)
+		if (parentID != WaveObject::NULL_OBJECT)
 		{
 			ECSTransform* parent = ServiceProvider::Instance().Get<ComponentRegistry>()->TryGet<ECSTransform>(parentID);
 
@@ -603,7 +603,7 @@ namespace WaveEngine
 
 		hasChildDirty = true;
 
-		if (parentID == WaveObject::NULL_WAVE_OBJECT)
+		if (parentID == WaveObject::NULL_OBJECT)
 			return;
 
 		GetParent()->GetTransform().MarkHasChildDirty();

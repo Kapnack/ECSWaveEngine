@@ -100,7 +100,7 @@ namespace WaveEngine
 
 	const unsigned int Renderer::ReturnWorkingMaterial(const unsigned int& materialIDToTry, const unsigned int& materialIDfallBack)
 	{
-		return materialIDToTry != WObject::NULL_WAVE_OBJECT ? materialIDToTry : materialIDfallBack;
+		return materialIDToTry != WObject::NULL_OBJECT ? materialIDToTry : materialIDfallBack;
 	}
 
 	void Renderer::CreateBuffers(

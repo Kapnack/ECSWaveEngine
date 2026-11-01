@@ -28,7 +28,7 @@ namespace WaveEngine
 	unsigned int MaterialManager::GetMaterial(const string_view name)
 	{
 		if (!materialsIDByName.contains(name.data()))
-			return WObject::NULL_WAVE_OBJECT;
+			return WObject::NULL_OBJECT;
 
 		return materialsIDByName[name.data()];
 	}
@@ -59,7 +59,7 @@ namespace WaveEngine
 
 	Material* MaterialManager::GetMaterial(const unsigned int id)
 	{
-		return id != WObject::NULL_WAVE_OBJECT ? materials[id] : nullptr;
+		return id != WObject::NULL_OBJECT ? materials[id] : nullptr;
 	}
 
 	unordered_map<unsigned int, Material*>& MaterialManager::GetMaterials()

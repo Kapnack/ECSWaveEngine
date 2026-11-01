@@ -16,6 +16,6 @@ namespace WaveEngine
 
 	void ObjectBecameChildEvent::Reset()
 	{
-		waveObjectID = WObject::NULL_WAVE_OBJECT;
+		waveObjectID = WObject::NULL_OBJECT;
 	}
 }

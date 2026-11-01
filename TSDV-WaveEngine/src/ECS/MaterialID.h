@@ -7,7 +7,7 @@ namespace WaveEngine
 {
 	struct MeshRenderer : public Component
 	{
-		unsigned int materialID = WObject::NULL_WAVE_OBJECT;
+		unsigned int materialID = WObject::NULL_OBJECT;
 
 		MeshRenderer() : Component()
 		{

@@ -7,7 +7,7 @@ namespace WaveEngine
 {
 	struct MaterialDelition : public Event
 	{
-		unsigned int ID = WObject::NULL_WAVE_OBJECT;
+		unsigned int ID = WObject::NULL_OBJECT;
 
 		MaterialDelition()
 		{
@@ -20,7 +20,7 @@ namespace WaveEngine
 
 		void Reset() override
 		{
-			ID = WObject::NULL_WAVE_OBJECT;
+			ID = WObject::NULL_OBJECT;
 		}
 	};
 }
