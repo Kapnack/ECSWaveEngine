@@ -5,11 +5,14 @@
 #include <string>
 
 #include "Material.h"
+#include "MaterialManager.h"
+#include "FileReader/FileReader.h"
+#include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
 {
 	MaterialFactory::MaterialFactory() : Service()
-	{	
+	{
 	}
 
 	MaterialFactory::~MaterialFactory()
@@ -19,6 +22,16 @@ namespace WaveEngine
 	MaterialManager* MaterialFactory::GetMaterialManager()
 	{
 		return ServiceProvider::Instance().Get<MaterialManager>();
+	}
+
+	FileReader* MaterialFactory::GetFileReader()
+	{
+		return ServiceProvider::Instance().Get<FileReader>();
+	}
+
+	Material* MaterialFactory::LoadMaterial(const string_view name, const string_view vertexShader, const string_view fragmentShader)
+	{
+		return CreateMaterial(name, GetFileReader()->ReadFile(vertexShader), GetFileReader()->ReadFile(fragmentShader));
 	}
 
 	Material* MaterialFactory::CreateMaterial(const string_view name, const string_view vertexShader, const string_view fragmentShader)

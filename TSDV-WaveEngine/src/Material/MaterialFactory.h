@@ -1,10 +1,11 @@
 #pragma once
 
-#include "ServiceProvider/Service.h"
-#include "ServiceProvider/ServiceProvider.h"
-#include "Material/MaterialManager.h"
-
 #include <string>
+
+#include "Material.h"
+#include "FileReader/FileReader.h"
+#include "ServiceProvider/Service.h"
+#include "Material/MaterialManager.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ namespace WaveEngine
 		unsigned int currentMaterialID = Material::NULL_MATERIAL;
 
 		MaterialManager* GetMaterialManager();
+		FileReader* GetFileReader();
 
 		unsigned int CompileShader(const string_view source, const unsigned int type);
 
@@ -31,5 +33,6 @@ namespace WaveEngine
 	public:
 
 		Material* CreateMaterial(const string_view name, const string_view vertexShader, const string_view fragmentShader);
+		Material* LoadMaterial(const string_view name, const string_view vertexShaderDir, const string_view fragmentShaderDir);
 	};
 }

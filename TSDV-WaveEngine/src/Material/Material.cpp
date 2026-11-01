@@ -9,6 +9,8 @@
 
 
 #include "Color/Color.h"
+#include "ServiceProvider/ServiceProvider.h"
+#include "Material/MaterialFactory.h"
 
 using namespace std;
 
@@ -24,6 +26,16 @@ namespace WaveEngine
 	Material::~Material()
 	{
 		Unload();
+	}
+
+	Material* Material::Create(const char* name, const char* vertexShader, const char* fragmentShader)
+	{
+		return ServiceProvider::Instance().Get<MaterialFactory>()->CreateMaterial(name, vertexShader, fragmentShader);
+	}
+
+	Material* Material::Load(const char* name, const char* vertexShader, const char* fragmentShader)
+	{
+		return ServiceProvider::Instance().Get<MaterialFactory>()->LoadMaterial(name, vertexShader, fragmentShader);
 	}
 
 	const string& Material::GetName() const
@@ -46,12 +58,12 @@ namespace WaveEngine
 		return roughness;
 	}
 
-	const unsigned int& Material::GetID() const
+	unsigned int Material::GetID() const
 	{
 		return ID;
 	}
 
-	const unsigned int& Material::GetGPUID() const
+	unsigned int Material::GetGPUID() const
 	{
 		return gpuID;
 	}

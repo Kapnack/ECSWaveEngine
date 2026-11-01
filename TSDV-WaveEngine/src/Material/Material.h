@@ -66,10 +66,13 @@ namespace WaveEngine
 
 		const static unsigned int NULL_MATERIAL;
 
+		static Material* Create(const char* name, const char* vertexShader, const char* fragmentShader);
+		static Material* Load(const char* name, const char* vertexShader, const char* fragmentShader);
+
 		const string& GetName() const;
 
-		const unsigned int& GetID() const;
-		const unsigned int& GetGPUID() const;
+		unsigned int GetID() const;
+		unsigned int GetGPUID() const;
 		Color GetColor() const;
 		float GetMetallic() const;
 		float GetRoughness() const;
