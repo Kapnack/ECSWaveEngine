@@ -117,25 +117,7 @@ namespace WaveEngine
 
 	void Window::SetIcon(const Texture& texture)
 	{
-		const int w = texture.GetWidth();
-		const int h = texture.GetHeight();
-
-		vector<unsigned char> pixels(w * h * 4);
-
-		glBindTexture(GL_TEXTURE_2D, texture.GetGPUID());
-		glPixelStorei(GL_PACK_ALIGNMENT, 1);
-		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
-
-		const int rowSize = w * 4;
-		for (int y = 0; y < h / 2; ++y)
-		{
-			swap_ranges(
-				pixels.begin() + y * rowSize,
-				pixels.begin() + (y + 1) * rowSize,
-				pixels.begin() + (h - 1 - y) * rowSize);
-		}
-
-		GLFWimage icon{ w, h, pixels.data() };
+		GLFWimage icon{ texture.GetWidth(), texture.GetHeight(), texture.GetPixels().data() };
 		glfwSetWindowIcon(window, 1, &icon);
 	}
 

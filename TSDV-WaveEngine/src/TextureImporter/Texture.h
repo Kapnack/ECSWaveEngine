@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <string>
 #include <string_view>
 
@@ -39,8 +40,9 @@ namespace WaveEngine
 		int GetWidth() const;
 		int GetHeight() const;
 		string GetName() const;
-
 		Vector2 GetRes() const;
+
+		vector<unsigned char> GetPixels() const;
 
 		unsigned int GetTextureID() const;
 		unsigned int GetGPUID() const;
