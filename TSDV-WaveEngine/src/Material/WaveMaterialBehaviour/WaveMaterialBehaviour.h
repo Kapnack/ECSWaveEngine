@@ -6,9 +6,12 @@ namespace WaveEngine
 	private:
 
 		unsigned int materialID;
+		unsigned int currentWaveObject;
 
 		WaveMaterialBehaviour();
 		~WaveMaterialBehaviour();
+
+		void SetWaveObject(unsigned int currentWaveObject);
 
 	public:
 

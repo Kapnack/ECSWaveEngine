@@ -6,6 +6,11 @@ namespace WaveEngine
 	{
 	}
 
+	void WaveMaterialBehaviour::SetWaveObject(unsigned int currentWaveObject)
+	{
+		this->currentWaveObject = currentWaveObject;
+	}
+
 	void WaveMaterialBehaviour::Init()
 	{
 	}
