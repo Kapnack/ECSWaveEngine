@@ -49,6 +49,12 @@ namespace WaveEngine
 			componentsToRemovePerEntity.clear();
 		}
 
+		template<TypeComponent... T>
+		tuple<T&...> AddComponents(unsigned int entity)
+		{
+			return tuple<T&...>{AddComponent<T>(entity)...};
+		}
+
 		template<TypeComponent T>
 		T& AddComponent(unsigned int entity)
 		{
