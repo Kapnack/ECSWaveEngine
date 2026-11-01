@@ -6,6 +6,7 @@
 #include "Input/Input.h"
 #include "Window/Window.h"
 #include "Renderer/Renderer.h"
+#include "WaveManagerConcept.h"
 #include "MeshLogic/MeshLogic.h"
 #include "FileReader/FileReader.h"
 #include "WaveRandom/WaveRandom.h"
@@ -91,7 +92,7 @@ namespace WaveEngine
 
 		static bool isRunning;
 
-		template<typename T>
+		template<WaveManagerConcept T>
 		static void StartEngine();
 
 	};

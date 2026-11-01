@@ -229,6 +229,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\ECS\Managers\BinarySpacePartition\BinarySpacePartition.h" />
     <ClInclude Include="src\ECS\WaveBehaviour\WaveBehaviour.h" />
     <ClInclude Include="src\Engine\WaveManager.h" />
+    <ClInclude Include="src\Engine\WaveManagerConcept.h" />
     <ClInclude Include="src\ImGui\imconfig.h" />
     <ClInclude Include="src\ImGui\imgui.h" />
     <ClInclude Include="src\ImGui\imgui_impl_glfw.h" />
