@@ -16,10 +16,10 @@
 
 namespace WaveEngine
 {
-	class MaterialManager;
-	class MaterialFactory;
 	class EntitiesImGui;
 	class MaterialsImGui;
+	class MaterialManager;
+	class MaterialFactory;
 
 	using namespace std;
 
@@ -57,10 +57,10 @@ namespace WaveEngine
 		void SetName(const string& name);
 		void AddUniform(const std::string& name, const GLenum& type, const GLint& location, const GLint& size);
 
-		friend class MaterialManager;
-		friend class MaterialFactory;
 		friend class EntitiesImGui;
 		friend class MaterialsImGui;
+		friend class MaterialManager;
+		friend class MaterialFactory;
 
 	public:
 

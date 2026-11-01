@@ -10,8 +10,9 @@
 
 
 #include "Color/Color.h"
-#include "ServiceProvider/ServiceProvider.h"
+#include "ECS/WObject/WObject.h"
 #include "Material/MaterialFactory.h"
+#include "ServiceProvider/ServiceProvider.h"
 
 using namespace std;
 
@@ -19,7 +20,7 @@ namespace WaveEngine
 {
 	const unsigned int Material::NULL_MATERIAL = 0;
 
-	Material::Material(const unsigned int& ID)
+	Material::Material(const unsigned int& ID) : WObject()
 	{
 		this->ID = ID;
 	}
@@ -31,6 +32,11 @@ namespace WaveEngine
 	Material* Material::Create(const char* name, const char* vertexShader, const char* fragmentShader)
 	{
 		return ServiceProvider::Instance().Get<MaterialFactory>()->CreateMaterial(name, vertexShader, fragmentShader);
+	}
+
+	Material* Material::Load(const char* name, const char* vertexShaderDir, const char* fragmentShaderDir)
+	{
+		return ServiceProvider::Instance().Get<MaterialFactory>()->LoadMaterial(name, vertexShaderDir, fragmentShaderDir);
 	}
 
 	const string& Material::GetName() const

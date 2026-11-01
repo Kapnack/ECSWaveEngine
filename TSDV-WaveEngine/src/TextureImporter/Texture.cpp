@@ -7,12 +7,13 @@
 #include <string_view>
 
 #include "TextureImporter.h"
+#include "ECS/WObject/WObject.h"
 #include "WaveMath/Vector2/Vector2.h"
 #include "ServiceProvider/ServiceProvider.h"
 
 namespace WaveEngine
 {
-	Texture::Texture(unsigned int ID, unsigned int gpuID, int width, int height)
+	Texture::Texture(unsigned int ID, unsigned int gpuID, int width, int height) : WObject()
 	{
 		this->ID = ID;
 		this->gputID = gpuID;

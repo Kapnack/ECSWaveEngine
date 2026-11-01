@@ -3,6 +3,7 @@
 #include <string>
 
 #include "VertexData.h"
+#include "ECS/WObject/WObject.h"
 #include "Material/Color/Color.h"
 #include "WaveMath/Vector3/Vector3.h"
 
@@ -15,7 +16,7 @@ namespace WaveEngine
 		return isDirty;
 	}
 
-	Mesh::Mesh(VertexData* vertexBuffer, unsigned int vertexSize, unsigned int* indexes, unsigned int indexAmount, string_view name, unsigned int meshID)
+	Mesh::Mesh(VertexData* vertexBuffer, unsigned int vertexSize, unsigned int* indexes, unsigned int indexAmount, string_view name, unsigned int meshID) : WObject()
 	{
 		this->name = name;
 		this->vertexBuffer = vertexBuffer;

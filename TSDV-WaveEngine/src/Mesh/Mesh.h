@@ -2,7 +2,9 @@
 
 #include <string>
 
+#include "Export.h"
 #include "VertexData.h"
+#include "ECS/WObject/WObject.h"
 #include "Material/Color/Color.h"
 #include "WaveMath/Vector3/Vector3.h"
 
@@ -12,7 +14,7 @@ namespace WaveEngine
 	class MeshFactory;
 	class MeshManager;
 
-	class Mesh
+	class WAVEEXPORT Mesh final : public WObject
 	{
 	private:
 
