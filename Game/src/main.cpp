@@ -12,9 +12,7 @@ protected:
 
 	void Init() override
 	{
-		WaveObject waveObject;
-
-		waveObject.AddComponent<TanakaWaveBehaviour>();
+		WaveObject::Create<TanakaWaveBehaviour>("dasd");
 	}
 };
 
