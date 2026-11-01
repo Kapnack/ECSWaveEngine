@@ -403,5 +403,6 @@
     <None Include="cpp.hint" />
     <None Include="src\ECS\Component\TypeComponent.h" />
     <None Include="src\Engine\Engine.tpp" />
+    <None Include="src\ECS\WaveObject\WaveObject.tpp" />
   </ItemGroup>
 </Project>
