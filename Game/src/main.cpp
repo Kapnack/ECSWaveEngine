@@ -12,7 +12,7 @@ protected:
 
 	void Init() override
 	{
-		WaveObject::Create<TanakaWaveBehaviour>("dasd");
+		WaveObject::Create<TanakaWaveBehaviour>();
 	}
 };
 
