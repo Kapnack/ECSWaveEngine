@@ -14,7 +14,7 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int currentMeshID = Mesh::NULL_MESH;
+		unsigned int currentMeshID = WObject::NULL_WAVE_OBJECT;
 		MeshManager* GetMeshManager();
 
 		void CalculateMinMaxVertex(Mesh& newMesh) const;

@@ -2,9 +2,9 @@
 
 #include "Singleton/Singleton.h"
 
+#include <map>
 #include <typeindex>
 #include <type_traits>
-#include <unordered_map>
 
 #include "Service.h"
 
@@ -19,7 +19,7 @@ namespace WaveEngine
 	{
 	private:
 
-		unordered_map <type_index, Service*> services;
+		map<type_index, Service*> services;
 
 	public:
 

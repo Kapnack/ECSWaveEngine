@@ -14,7 +14,7 @@ namespace WaveEngine
 {
 	struct CameraChangeActiveStateEvent : public Event
 	{
-		unsigned int cameraID = Component::NULL_COMPONENT;
+		unsigned int cameraID = WObject::NULL_WAVE_OBJECT;
 		int orderIndex = -1;
 		bool isActive = false;
 
@@ -31,7 +31,7 @@ namespace WaveEngine
 
 		void Reset() override
 		{
-			cameraID = Component::NULL_COMPONENT;
+			cameraID = WObject::NULL_WAVE_OBJECT;
 			orderIndex = -1;
 			isActive = false;
 		}

@@ -12,7 +12,7 @@ namespace WaveEngine
 
 		BoundingBox bounds;
 
-		BoundingBoxComp(unsigned int id) : Component(id)
+		BoundingBoxComp() : Component()
 		{ }
 	};
 }

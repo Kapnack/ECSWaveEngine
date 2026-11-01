@@ -3,10 +3,10 @@
 
 #include "Service.h"
 
-#include "ServiceProvider.h"
-
+#include <map>
 #include <typeindex>
-#include <unordered_map>
+
+#include "ServiceProvider.h"
 
 namespace WaveEngine
 {
@@ -31,7 +31,7 @@ namespace WaveEngine
 	template<ServiceStandard T>
 	T* ServiceProvider::TryGet() const
 	{
-		unordered_map<type_index, Service*>::iterator it = services.find(typeid(T));
+		map<type_index, Service*>::iterator it = services.find(typeid(T));
 
 		return (it != services.end() && it->second != nullptr) ? static_cast<T*>(it->second) : nullptr;
 	}
@@ -39,7 +39,7 @@ namespace WaveEngine
 	template<ServiceStandard T>
 	void ServiceProvider::UnRegister()
 	{
-		unordered_map<type_index, Service*>::iterator it = services.find(typeid(T));
+		map<type_index, Service*>::iterator it = services.find(typeid(T));
 
 		if (it == services.end())
 			return;
@@ -52,7 +52,7 @@ namespace WaveEngine
 
 	void ServiceProvider::Clear()
 	{
-		for (unordered_map<type_index, Service*>::iterator it = services.begin(); it != services.end(); ++it)
+		for (map<type_index, Service*>::iterator it = services.begin(); it != services.end(); ++it)
 		{
 			delete it->second;
 			it->second = nullptr;

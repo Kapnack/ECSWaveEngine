@@ -63,7 +63,9 @@ namespace WaveEngine
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		Texture* newTexture = new Texture(++currentTextureID, textureGPUID, width, height);
+		Texture* newTexture = new Texture(textureGPUID, width, height);
+
+		newTexture->SetID(++currentTextureID);
 
 		std::filesystem::path path = filePath;
 
@@ -114,7 +116,10 @@ namespace WaveEngine
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		Texture* newTexture = new Texture(++currentTextureID, textureGPUID, width, height);
+		Texture* newTexture = new Texture(textureGPUID, width, height);
+
+		newTexture->SetID(++currentTextureID);
+
 		newTexture->name = "embedded_" + std::to_string(currentTextureID);
 
 		GetTextureManager()->Save(newTexture);
@@ -147,7 +152,10 @@ namespace WaveEngine
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		Texture* newTexture = new Texture(++currentTextureID, textureGPUID, width, height);
+		Texture* newTexture = new Texture(textureGPUID, width, height);
+
+		newTexture->SetID(++currentTextureID);
+
 		newTexture->name = "embedded_pixels_" + std::to_string(currentTextureID);
 
 		GetTextureManager()->Save(newTexture);

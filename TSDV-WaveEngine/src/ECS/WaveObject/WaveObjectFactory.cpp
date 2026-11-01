@@ -33,8 +33,8 @@ namespace WaveEngine
 
 	WaveObject* WaveObjectFactory::CreateNewWaveObject()
 	{
-		WaveObject* newWaveObject = new WaveObject(++currentObjectID);
-
+		WaveObject* newWaveObject = new WaveObject();
+		newWaveObject->SetID(++currentObjectID);
 		AddDefaultComponents(*newWaveObject);
 
 		return newWaveObject;

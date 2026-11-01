@@ -18,25 +18,25 @@ namespace WaveEngine
 	template<TypeComponent T>
 	T& WaveObject::AddComponent()
 	{
-		return GetComponentRegistry()->AddComponent<T>(ID);
+		return GetComponentRegistry()->AddComponent<T>(GetID());
 	}
 
 	template<TypeComponent T>
 	T& WaveObject::GetComponent() const
 	{
-		return GetComponentRegistry()->GetComponent<T>(ID);
+		return GetComponentRegistry()->GetComponent<T>(GetID());
 	}
 
 	template<TypeComponent T>
 	T* WaveObject::TryGetComponent()
 	{
-		return GetComponentRegistry()->TryGet<T>(ID);
+		return GetComponentRegistry()->TryGet<T>(GetID());
 	}
 
 	template<TypeComponent T>
 	void WaveObject::RemoveComponent()
 	{
-		GetComponentRegistry()->RemoveComponentImmediate<T>(ID);
+		GetComponentRegistry()->RemoveComponentImmediate<T>(GetID());
 	}
 }
 

@@ -20,21 +20,18 @@ namespace WaveEngine
 	private:
 
 		string name;
-		unsigned int ID = 0;
 		unsigned int gputID = 0;
 
 		int width;
 		int height;
 
-		Texture(unsigned int ID, unsigned int gpuID, int width, int height);
+		Texture(unsigned int gpuID, int width, int height);
 		~Texture();
 
 		friend class TextureManager;
 		friend class TextureImporter;
 
 	public:
-
-		static const int NULL_TEXTURE = 0;
 
 		static Texture& Import(const string_view path, bool useAbsolutePath = true, const char* overrideName = nullptr);
 
@@ -45,7 +42,6 @@ namespace WaveEngine
 
 		vector<unsigned char> GetPixels() const;
 
-		unsigned int GetTextureID() const;
 		unsigned int GetGPUID() const;
 	};
 }

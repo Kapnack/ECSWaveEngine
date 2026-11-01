@@ -7,6 +7,7 @@
 #include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Vector2/Vector2.h"
 #include "EventSystem/EventSystem.h"
+#include "ECS/Component/TypeComponent.h"
 #include "WaveMath/Matrix4x4/Matrix4x4.h"
 #include "WaveMath/Quaternion/Quaternion.h"
 
@@ -18,7 +19,11 @@ namespace WaveEngine
 	class WaveObject;
 	class ImGuiClass;
 	class TransformLogic;
+	class WaveObjectFactory;
 	class WaveObjectRegistry;
+
+	template <TypeComponent T>
+	class ComponentContainer;
 
 	class WAVEEXPORT ECSTransform final : public Component
 	{
@@ -58,13 +63,18 @@ namespace WaveEngine
 		friend class MeshLogic;
 		friend class ImGuiClass;
 		friend class TransformLogic;
+		friend class WaveObjectFactory;
 		friend class WaveObjectRegistry;
+
+		template <TypeComponent T>
+		class ComponentContainer;
 
 	public:
 
-		ECSTransform(const unsigned int& ID);
-
+		ECSTransform();
 		virtual ~ECSTransform();
+
+		virtual void Init() override;
 
 		Vector3 GetPosition() const;
 		Vector3 GetScale() const;

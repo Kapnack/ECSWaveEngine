@@ -13,9 +13,8 @@
 
 namespace WaveEngine
 {
-	Texture::Texture(unsigned int ID, unsigned int gpuID, int width, int height) : WObject()
+	Texture::Texture(unsigned int gpuID, int width, int height) : WObject()
 	{
-		this->ID = ID;
 		this->gputID = gpuID;
 		this->width = width;
 		this->height = height;
@@ -68,11 +67,6 @@ namespace WaveEngine
 		}
 
 		return pixels;
-	}
-
-	unsigned int Texture::GetTextureID() const
-	{
-		return ID;
 	}
 
 	unsigned int Texture::GetGPUID() const

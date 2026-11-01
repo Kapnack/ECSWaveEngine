@@ -1,13 +1,13 @@
 #pragma once
 
 #include "EventSystem/Event.h"
-#include "Material/Material.h"
+#include "ECS/WObject/WObject.h"
 
 namespace WaveEngine
 {
 	struct MaterialDelition : public Event
 	{
-		unsigned int ID = Material::NULL_MATERIAL;
+		unsigned int ID = WObject::NULL_WAVE_OBJECT;
 
 		MaterialDelition()
 		{
@@ -20,7 +20,7 @@ namespace WaveEngine
 
 		void Reset() override
 		{
-			ID = Material::NULL_MATERIAL;
+			ID = WObject::NULL_WAVE_OBJECT;
 		}
 	};
 }

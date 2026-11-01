@@ -18,7 +18,6 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int ID = NULL_MESH;
 		string name;
 		VertexData* vertexBuffer = nullptr;
 		unsigned int vertexSize = 0;
@@ -33,7 +32,7 @@ namespace WaveEngine
 		bool GetDirty() const;
 		void UnDirt();
 
-		Mesh(VertexData* vertexBuffer, unsigned int vertexSize, unsigned int* index, unsigned int indexAmount, const string_view name, unsigned int meshID);
+		Mesh(VertexData* vertexBuffer, unsigned int vertexSize, unsigned int* index, unsigned int indexAmount, const string_view name);
 		~Mesh();
 
 		friend class Renderer;
@@ -42,9 +41,6 @@ namespace WaveEngine
 
 	public:
 
-		static const unsigned int NULL_MESH;
-
-		unsigned int GetID();
 		const VertexData* GetVertexBuffer() const;
 		unsigned int GetVertexSize() const;
 		string GetName();

@@ -12,7 +12,7 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<WaveObjectRegistry>();
 	}
 
-	RigidBody::RigidBody(unsigned int id) : Component(id)
+	RigidBody::RigidBody() : Component()
 	{
 
 	}

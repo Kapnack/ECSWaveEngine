@@ -23,8 +23,6 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int ID = NULL_OBJECT;
-
 		bool isStatic = false;
 
 		ComponentRegistry* GetComponentRegistry() const;
@@ -38,13 +36,11 @@ namespace WaveEngine
 
 	public:
 
-		static const unsigned int NULL_OBJECT = 0;
-
 		template<TypeComponent... T>
 		static WaveObject& Create(const char* name = nullptr);
 
-		WaveObject(const char* name = nullptr);
-		WaveObject(unsigned int ID);
+		WaveObject();
+		WaveObject(const char* name);
 		~WaveObject();
 
 		void SetName(const string& name);
@@ -52,8 +48,6 @@ namespace WaveEngine
 
 		void SetStatic(bool isStatic);
 		bool IsStatic() const;
-
-		unsigned int GetID() const;
 
 		ECSTransform& GetTransform() const;
 		BoundingBoxComp& GetBounds() const;

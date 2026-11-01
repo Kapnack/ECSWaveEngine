@@ -9,7 +9,7 @@ namespace WaveEngine
 	{
 	public:
 
-		WaveBehaviour(unsigned int ID) : Component(ID)
+		WaveBehaviour() : Component()
 		{
 		}
 

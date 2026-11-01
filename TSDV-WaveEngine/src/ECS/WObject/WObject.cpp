@@ -17,6 +17,8 @@
 
 namespace WaveEngine
 {
+	const unsigned int WObject::NULL_WAVE_OBJECT = 0;
+
 	WObject::WObject()
 	{
 	}
@@ -25,9 +27,14 @@ namespace WaveEngine
 	{
 	}
 
-	type_index WObject::GetType() const
+	void WObject::SetID(unsigned int ID)
 	{
-		return typeid(*this);
+		this->ID = ID;
+	}
+
+	unsigned int WObject::GetID() const
+	{
+		return ID;
 	}
 
 	WaveObject& WObject::Instantiate(const char* modelDir, bool useAbsolutePath, const char* rootName)

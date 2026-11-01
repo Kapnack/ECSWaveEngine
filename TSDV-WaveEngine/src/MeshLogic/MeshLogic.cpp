@@ -10,6 +10,7 @@
 #include "ECS/WaveObject/WaveObject.h"
 #include "WaveMath/Vector3/Vector3.h"
 #include "BoundingBox/BoundingBox.h"
+#include "ECS/WObject/WObject.h"
 #include "ECS/Mesh/MeshID.h"
 #include "Mesh/Mesh.h"
 
@@ -44,7 +45,7 @@ namespace WaveEngine
 	BoundingBox MeshLogic::EncapsulateMeshVerts(WaveObject& waveObject, BoundingBox box)
 	{
 		MeshID* meshID = waveObject.TryGetComponent<MeshID>();
-		if (!meshID || meshID->meshID == Mesh::NULL_MESH)
+		if (!meshID || meshID->meshID == WObject::NULL_WAVE_OBJECT)
 			return box;
 
 		const Matrix4x4& m = waveObject.GetTransform().GetGlobalModel();

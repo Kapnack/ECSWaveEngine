@@ -183,12 +183,12 @@ namespace WaveEngine
 
 	void WaveObjectRegistry::Destroy(WaveObject& waveObject)
 	{
-		waveObjectsToDestroy.insert(waveObject.ID);
+		waveObjectsToDestroy.insert(waveObject.GetID());
 	}
 
 	void WaveObjectRegistry::DestroyImmediate(WaveObject& waveObject)
 	{
-		const unsigned int waveObjectID = waveObject.ID;
+		const unsigned int waveObjectID = waveObject.GetID();
 
 		ServiceProvider::Instance().Get<ComponentRegistry>()->RemoveAllComponents(waveObjectID);
 

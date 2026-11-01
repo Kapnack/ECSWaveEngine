@@ -149,7 +149,7 @@ namespace WaveEngine
 		}
 
 		template<TypeComponent T>
-		void RemoveComponent(unsigned int entity)
+		void RemoveComponentImmediate(unsigned int entity)
 		{
 			RemoveComponentImmediate(entity, typeid(T));
 		}

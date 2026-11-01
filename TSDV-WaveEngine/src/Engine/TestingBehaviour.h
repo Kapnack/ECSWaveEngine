@@ -22,7 +22,7 @@ namespace WaveEngine
 
 	public:
 
-		TanakaWaveBehaviour(unsigned int ID) : WaveBehaviour(ID)
+		TanakaWaveBehaviour() : WaveBehaviour()
 		{
 
 		}
@@ -57,7 +57,7 @@ namespace WaveEngine
 			if (Input::Get().IsKeyPressed(Keys::R))
 			{
 				if (tanakaPopSoda->GetTransform().GetChilds().size() > 0)
-					DestroyImmediate(tanakaPopSoda->GetTransform().GetChilds()[0]);
+					DestroyImmediate(*tanakaPopSoda->GetTransform().GetChilds()[0]);
 			}
 
 			if (!ImGuiClass::thirdPersonCamera)

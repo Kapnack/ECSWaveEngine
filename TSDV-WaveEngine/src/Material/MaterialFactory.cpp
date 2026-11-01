@@ -68,7 +68,9 @@ namespace WaveEngine
 			return nullptr;
 		}
 
-		Material* newMaterial = new Material(++currentMaterialID);
+		Material* newMaterial = new Material();
+
+		newMaterial->SetID(++currentMaterialID);
 
 		GLint uniformCount = 0;
 		glGetProgramiv(gpuID, GL_ACTIVE_UNIFORMS, &uniformCount);

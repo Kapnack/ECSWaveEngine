@@ -18,11 +18,8 @@ using namespace std;
 
 namespace WaveEngine
 {
-	const unsigned int Material::NULL_MATERIAL = 0;
-
-	Material::Material(const unsigned int& ID) : WObject()
+	Material::Material() : WObject()
 	{
-		this->ID = ID;
 	}
 
 	Material::~Material()
@@ -57,11 +54,6 @@ namespace WaveEngine
 	float Material::GetRoughness() const
 	{
 		return roughness;
-	}
-
-	unsigned int Material::GetID() const
-	{
-		return ID;
 	}
 
 	unsigned int Material::GetGPUID() const
@@ -258,6 +250,6 @@ namespace WaveEngine
 
 	Material::operator unsigned int()
 	{
-		return ID;
+		return GetID();
 	}
 }

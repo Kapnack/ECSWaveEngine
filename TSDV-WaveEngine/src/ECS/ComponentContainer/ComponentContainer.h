@@ -53,13 +53,14 @@ namespace WaveEngine
 
 			int index = components.size();
 
-			components.emplace_back(entity);
+			components.emplace_back();
 			entities.push_back(entity);
 
 			componentByEntity[entity] = index;
 
 			T& component = Get(entity);
 
+			component.SetID(entity);
 			component.SetActive(true);
 			component.Init();
 			component.LateInit();

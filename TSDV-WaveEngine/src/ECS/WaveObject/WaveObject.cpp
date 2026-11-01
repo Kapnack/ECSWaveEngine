@@ -33,9 +33,8 @@ namespace WaveEngine
 		return ServiceProvider::Instance().Get<WaveObjectFactory>();
 	}
 
-	WaveObject::WaveObject(unsigned int ID) : WObject()
+	WaveObject::WaveObject()
 	{
-		this->ID = ID;
 	}
 
 	WaveObject::WaveObject(const char* name)
@@ -49,12 +48,12 @@ namespace WaveEngine
 
 	void WaveObject::SetName(const string& name)
 	{
-		GetEventSystem()->Invoke<ObjectChangeName>(ID, name);
+		GetEventSystem()->Invoke<ObjectChangeName>(GetID(), name);
 	}
 
 	string WaveObject::GetName() const
 	{
-		return GetWaveObjectRegistry()->GetObjectName(ID);
+		return GetWaveObjectRegistry()->GetObjectName(GetID());
 	}
 
 	void WaveObject::SetStatic(bool isStatic)
@@ -67,18 +66,13 @@ namespace WaveEngine
 		return isStatic;
 	}
 
-	unsigned int WaveObject::GetID() const
-	{
-		return ID;
-	}
-
 	ECSTransform& WaveObject::GetTransform() const
 	{
-		return GetComponentRegistry()->GetComponent<ECSTransform>(ID);
+		return GetComponentRegistry()->GetComponent<ECSTransform>(GetID());
 	}
 
 	BoundingBoxComp& WaveObject::GetBounds() const
 	{
-		return GetComponentRegistry()->GetComponent<BoundingBoxComp>(ID);
+		return GetComponentRegistry()->GetComponent<BoundingBoxComp>(GetID());
 	}
 }

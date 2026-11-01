@@ -17,7 +17,7 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int currentMaterialID = Material::NULL_MATERIAL;
+		unsigned int currentMaterialID = WObject::NULL_WAVE_OBJECT;
 
 		MaterialManager* GetMaterialManager();
 		FileReader* GetFileReader();

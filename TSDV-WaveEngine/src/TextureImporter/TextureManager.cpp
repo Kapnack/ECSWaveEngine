@@ -15,15 +15,15 @@ namespace WaveEngine
 	{
 		for (map<unsigned int, Texture*>::iterator iterator = textures.begin(); iterator != textures.end(); ++iterator)
 		{
-			glDeleteTextures(iterator->second->ID, &iterator->second->ID);
+			glDeleteTextures(iterator->second->GetID(), &iterator->second->ID);
 			delete iterator->second;
 		}
 	}
 
 	void TextureManager::Save(Texture*& texture)
 	{
-		indexByname[texture->GetName()] = texture->GetTextureID();
-		textures[texture->GetTextureID()] = texture;
+		indexByname[texture->GetName()] = texture->GetID();
+		textures[texture->GetID()] = texture;
 	}
 
 	void TextureManager::Update()

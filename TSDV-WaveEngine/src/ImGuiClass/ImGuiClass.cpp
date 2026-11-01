@@ -138,7 +138,7 @@ namespace WaveEngine
 
 			text = "##xx" + text;
 
-			if (it->second->GetTransform().GetParentID() == WaveObject::NULL_OBJECT)
+			if (it->second->GetTransform().GetParentID() == WaveObject::NULL_WAVE_OBJECT)
 			{
 				if (ImGui::DragFloat3(("Pos" + text).c_str(), &it->second->GetTransform().position.x))
 					it->second->GetTransform().MarkDirty();

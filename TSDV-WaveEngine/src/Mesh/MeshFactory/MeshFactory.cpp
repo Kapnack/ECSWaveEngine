@@ -18,7 +18,9 @@ namespace WaveEngine
 
 	Mesh& MeshFactory::CreateMesh(const string_view name, VertexData* vertexBuffer, const unsigned int& vertexSize, unsigned int* index, const unsigned int& indexSize)
 	{
-		Mesh* newMesh = new Mesh(vertexBuffer, vertexSize, index, indexSize, name, ++currentMeshID);
+		Mesh* newMesh = new Mesh(vertexBuffer, vertexSize, index, indexSize, name);
+
+		newMesh->SetID(++currentMeshID);
 
 		CalculateMinMaxVertex(*newMesh);
 

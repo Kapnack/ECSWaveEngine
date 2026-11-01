@@ -1,18 +1,18 @@
 #pragma once
 
-#include <unordered_map>
-#include <string>
 #include <vector>
+#include <string>
 #include <GL/glew.h>
 #include <glm/fwd.hpp>
+#include <unordered_map>
 
 #include "Export.h"
+#include "Color/Color.h"
 #include "ECS/WObject/WObject.h"
 #include "WaveMath/Vector4/Vector4.h"
 #include "WaveMath/Vector2/Vector2.h"
-#include "WaveMath/Vector3/Vector3.h"ss
+#include "WaveMath/Vector3/Vector3.h"
 #include "WaveMath/Matrix4x4/Matrix4x4.h"
-#include "Color/Color.h"
 
 namespace WaveEngine
 {
@@ -39,8 +39,6 @@ namespace WaveEngine
 
 		Color color = Color::White();
 
-		unsigned int ID = 0;
-
 		unsigned int gpuID = 0;
 
 		float metalic = 0.0f;
@@ -51,7 +49,7 @@ namespace WaveEngine
 
 		unordered_map<string, unsigned int> textures;
 
-		Material(const unsigned int& ID);
+		Material();
 		~Material();
 
 		void SetName(const string& name);
@@ -64,14 +62,11 @@ namespace WaveEngine
 
 	public:
 
-		const static unsigned int NULL_MATERIAL;
-
 		static Material* Create(const char* name, const char* vertexShader, const char* fragmentShader);
 		static Material* Load(const char* name, const char* vertexShader, const char* fragmentShader);
 
 		const string& GetName() const;
 
-		unsigned int GetID() const;
 		unsigned int GetGPUID() const;
 		Color GetColor() const;
 		float GetMetallic() const;

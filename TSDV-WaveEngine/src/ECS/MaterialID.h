@@ -5,11 +5,11 @@
 
 namespace WaveEngine
 {
-	struct MeshRenderer : Component
+	struct MeshRenderer : public Component
 	{
-		unsigned int materialID = Material::NULL_MATERIAL;
+		unsigned int materialID = WObject::NULL_WAVE_OBJECT;
 
-		MeshRenderer(unsigned int ID) : Component(ID)
+		MeshRenderer() : Component()
 		{
 		}
 	};

@@ -24,7 +24,7 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int currentMaterialID = Material::NULL_MATERIAL;
+		unsigned int currentMaterialID = WObject::NULL_WAVE_OBJECT;
 
 		set<unsigned int> materialsToDestroy;
 		unordered_map<unsigned int, Material*> materials;

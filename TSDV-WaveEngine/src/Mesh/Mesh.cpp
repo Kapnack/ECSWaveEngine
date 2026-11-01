@@ -9,30 +9,23 @@
 
 namespace WaveEngine
 {
-	const unsigned int Mesh::NULL_MESH = 0;
 
 	bool Mesh::GetDirty() const
 	{
 		return isDirty;
 	}
 
-	Mesh::Mesh(VertexData* vertexBuffer, unsigned int vertexSize, unsigned int* indexes, unsigned int indexAmount, string_view name, unsigned int meshID) : WObject()
+	Mesh::Mesh(VertexData* vertexBuffer, unsigned int vertexSize, unsigned int* indexes, unsigned int indexAmount, string_view name) : WObject()
 	{
 		this->name = name;
 		this->vertexBuffer = vertexBuffer;
 		this->vertexSize = vertexSize;
 		this->indexes = indexes;
 		this->indexAmount = indexAmount;
-		this->ID = meshID;
 	}
 
 	Mesh::~Mesh()
 	{
-	}
-
-	unsigned int Mesh::GetID()
-	{
-		return ID;
 	}
 
 	const VertexData* Mesh::GetVertexBuffer() const

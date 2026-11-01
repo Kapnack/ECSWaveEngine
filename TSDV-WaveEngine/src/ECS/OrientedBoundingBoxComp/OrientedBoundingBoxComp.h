@@ -12,7 +12,7 @@ namespace WaveEngine
 
 		OrientedBoundingBox bounds;
 
-		OrientedBoundingBoxComp(unsigned int id) : Component(id)
+		OrientedBoundingBoxComp() : Component()
 		{
 
 		}

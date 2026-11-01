@@ -61,7 +61,7 @@ namespace WaveEngine
 
 		Square viewPortRes;
 
-		Camera(unsigned int ID);
+		Camera();
 		~Camera();
 
 		Matrix4x4 GetView() const;

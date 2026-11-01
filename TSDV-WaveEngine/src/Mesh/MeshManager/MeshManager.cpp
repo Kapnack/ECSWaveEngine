@@ -56,7 +56,7 @@ namespace WaveEngine
 
 	void MeshManager::Destroy(Mesh& mesh)
 	{
-		Destroy(mesh.ID);
+		Destroy(mesh.GetID());
 	}
 
 	void MeshManager::Destroy(unsigned int meshID)
@@ -66,7 +66,7 @@ namespace WaveEngine
 
 	void MeshManager::DestroyImmediate(Mesh& mesh)
 	{
-		DestroyImmediate(mesh.ID);
+		DestroyImmediate(mesh.GetID());
 	}
 
 	void MeshManager::DestroyImmediate(unsigned int meshID)

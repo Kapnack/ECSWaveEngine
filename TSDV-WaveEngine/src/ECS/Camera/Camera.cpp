@@ -14,7 +14,7 @@
 
 namespace WaveEngine
 {
-	Camera::Camera(const unsigned int ID) : Component(ID)
+	Camera::Camera() : Component()
 	{
 	}
 

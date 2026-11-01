@@ -16,7 +16,7 @@ namespace WaveEngine
 
 	void ObjectChangeName::Reset()
 	{
-		entityID = WaveObject::NULL_OBJECT;
+		entityID = WObject::NULL_WAVE_OBJECT;
 		newName = "";
 	}
 }

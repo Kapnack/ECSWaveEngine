@@ -9,9 +9,8 @@
 
 namespace WaveEngine
 {
-	Component::Component(unsigned int ID) : WObject()
+	Component::Component()
 	{
-		ownerID = ID;
 	}
 
 	Component::~Component()
@@ -32,7 +31,7 @@ namespace WaveEngine
 
 	WaveObject& Component::GetWaveObject() const
 	{
-		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(ownerID);
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->GetWaveObject(GetID());
 	}
 
 	ECSTransform& Component::GetTransform() const
@@ -45,11 +44,6 @@ namespace WaveEngine
 		return GetWaveObject().GetBounds();
 	}
 
-	unsigned int Component::GetID() const
-	{
-		return ownerID;
-	}
-
 	void Component::SetActive(bool isActive)
 	{
 		this->isActive = isActive;
@@ -58,9 +52,5 @@ namespace WaveEngine
 	bool Component::GetIsActive() const
 	{
 		return isActive;
-	}
-
-	Component::Component()
-	{
 	}
 }

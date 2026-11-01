@@ -38,7 +38,7 @@ namespace WaveEngine
 
 	public:
 
-		RigidBody(unsigned int id);
+		RigidBody();
 
 		void SetGravityAffected(bool isGravityAffected);
 
@@ -61,7 +61,7 @@ namespace WaveEngine
 
 	class WAVEEXPORT Collider : public Component
 	{
-		Collider(unsigned int id): Component(id)
+		Collider(): Component()
 		{ }
 	};
 }
