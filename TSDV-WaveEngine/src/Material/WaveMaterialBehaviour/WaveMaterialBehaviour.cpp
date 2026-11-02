@@ -40,11 +40,11 @@ namespace WaveEngine
 	{
 	}
 
-	void WaveMaterialBehaviour::GeneralUpdate(float deltaTime)
+	void WaveMaterialBehaviour::GeneralUpdate()
 	{
 	}
 
-	void WaveMaterialBehaviour::Update(float deltaTime)
+	void WaveMaterialBehaviour::Update()
 	{
 	}
 

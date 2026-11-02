@@ -1,12 +1,15 @@
 #pragma once
 
 #include "Export.h"
-#include "Material/Material.h"
-#include "ECS/WaveObject/WaveObject.h"
+#include "ECS/WObject/WObject.h"
 
 namespace WaveEngine
 {
-	class WAVEEXPORT WaveMaterialBehaviour
+	class Material;
+	class WaveObject;
+	class MaterialManager;
+
+	class WAVEEXPORT WaveMaterialBehaviour : public WObject
 	{
 	private:
 
@@ -19,6 +22,8 @@ namespace WaveEngine
 		void SetMaterial(unsigned int materialID);
 		void SetWaveObject(unsigned int currentWaveObject);
 
+		friend class MaterialManager;
+
 	protected:
 
 		WaveObject& GetWaveObject() const;
@@ -28,8 +33,8 @@ namespace WaveEngine
 
 		virtual void Init();
 		virtual void LateInit();
-		virtual void GeneralUpdate(float deltaTime);
-		virtual void Update(float deltaTime);
+		virtual void GeneralUpdate();
+		virtual void Update();
 		virtual void Dispose();
 	};
 }

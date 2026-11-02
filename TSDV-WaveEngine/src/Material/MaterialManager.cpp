@@ -2,15 +2,14 @@
 
 #include <utility>
 #include <GL/glew.h>
-#include <algorithm>
 #include <string_view>
 #include <unordered_map>
 
 #include "Material.h"
 #include "EventSystem/EventSystem.h"
-#include "MaterialBehaviourConcept.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "Material/Event/MaterialDelition.h"
+#include "WaveMaterialBehaviour/WaveMaterialBehaviour.h"
 
 namespace WaveEngine
 {
@@ -60,11 +59,21 @@ namespace WaveEngine
 		materialsBehaviours.erase(materialID);
 	}
 
+	void MaterialManager::UpdateMaterials()
+	{
+		for (unordered_map<unsigned int, WaveMaterialBehaviour*>::iterator it = materialsBehaviours.begin(); it != materialsBehaviours.end(); ++it)
+			it->second->Update();
+	}
+
 	void MaterialManager::Update()
 	{
+		for (unsigned int waveMaterialBehaviourID : waveMaterialBehaviourToDestroy)
+			DestroyImmediateBehaviour(waveMaterialBehaviourID);
+
 		for (unsigned int materialID : materialsToDestroy)
 			DestroyImmediate(materialID);
 
+		waveMaterialBehaviourToDestroy.clear();
 		materialsToDestroy.clear();
 	}
 
@@ -85,15 +94,35 @@ namespace WaveEngine
 
 	void MaterialManager::DestroyImmediate(unsigned int ID)
 	{
-		Material* it = materials[ID];
-
-		if (it == nullptr)
-			return;
-
 		ServiceProvider::Instance().Get<EventSystem>()->Invoke<MaterialDelition>(ID);
 
-		glDeleteProgram(*it);
-		delete it;
+		if (materialsBehaviours.contains(ID))
+			DestroyImmediateBehaviour(ID);
+
+		glDeleteProgram(*materials[ID]);
+		delete materials[ID];
 		materials.erase(ID);
+	}
+
+	void MaterialManager::Destroy(WaveMaterialBehaviour& waveMaterialBehaviour)
+	{
+		DestroyBehaviour(waveMaterialBehaviour.GetID());
+	}
+
+	void MaterialManager::DestroyBehaviour(unsigned int ID)
+	{
+		waveMaterialBehaviourToDestroy.insert(ID);
+	}
+
+	void MaterialManager::DestroyImmediate(WaveMaterialBehaviour& waveMaterialBehaviour)
+	{
+		DestroyImmediateBehaviour(waveMaterialBehaviour.GetID());
+	}
+
+	void MaterialManager::DestroyImmediateBehaviour(unsigned int ID)
+	{
+		materialsBehaviours[ID]->Dispose();
+		delete materialsBehaviours[ID];
+		materialsBehaviours.erase(ID);
 	}
 }

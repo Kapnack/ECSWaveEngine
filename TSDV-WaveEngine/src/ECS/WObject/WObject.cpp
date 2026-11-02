@@ -14,6 +14,7 @@
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/WaveObject/WaveObjectRegistry.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
+#include "Material/WaveMaterialBehaviour/WaveMaterialBehaviour.h"
 
 namespace WaveEngine
 {
@@ -55,6 +56,8 @@ namespace WaveEngine
 			Destroy(*texture);
 		else if (Mesh* mesh = dynamic_cast<Mesh*>(&wObject))
 			Destroy(*mesh);
+		else if (WaveMaterialBehaviour* waveMaterialBehaviour = dynamic_cast<WaveMaterialBehaviour*>(&wObject))
+			Destroy(*waveMaterialBehaviour);
 	}
 
 	void WObject::Destroy(Component& component)
@@ -82,6 +85,11 @@ namespace WaveEngine
 		ServiceProvider::Instance().Get<MeshManager>()->Destroy(mesh);
 	}
 
+	void WObject::Destroy(WaveMaterialBehaviour& waveMaterialBehaviour)
+	{
+		ServiceProvider::Instance().Get<MaterialManager>()->Destroy(waveMaterialBehaviour);
+	}
+
 	void WObject::DestroyImmediate(WObject& wObject)
 	{
 		if (Component* component = dynamic_cast<Component*>(&wObject))
@@ -94,6 +102,8 @@ namespace WaveEngine
 			DestroyImmediate(*texture);
 		else if (Mesh* mesh = dynamic_cast<Mesh*>(&wObject))
 			DestroyImmediate(*mesh);
+		else if (WaveMaterialBehaviour* waveMaterialBehaviour = dynamic_cast<WaveMaterialBehaviour*>(&wObject))
+			DestroyImmediate(*waveMaterialBehaviour);
 	}
 
 	void WObject::DestroyImmediate(Component& component)
@@ -119,5 +129,10 @@ namespace WaveEngine
 	void WObject::DestroyImmediate(Mesh& mesh)
 	{
 		ServiceProvider::Instance().Get<MeshManager>()->DestroyImmediate(mesh);
+	}
+
+	void WObject::DestroyImmediate(WaveMaterialBehaviour& waveMaterialBehaviour)
+	{
+		ServiceProvider::Instance().Get<MaterialManager>()->DestroyImmediate(waveMaterialBehaviour);
 	}
 }

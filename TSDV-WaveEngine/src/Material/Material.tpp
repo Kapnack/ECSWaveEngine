@@ -2,7 +2,6 @@
 #define WAVE_ENGINE_MATERIAL
 
 #include "Material.h"
-#include "MaterialFactory.h"
 #include "MaterialManager.h"
 #include "MaterialBehaviourConcept.h"
 #include "ServiceProvider/ServiceProvider.h"

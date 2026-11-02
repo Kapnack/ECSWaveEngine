@@ -1,7 +1,5 @@
 #pragma once
 
-#include <typeindex>
-
 #include "Export.h"
 #include "ECS/Component/TypeComponent.h"
 
@@ -18,8 +16,9 @@ namespace WaveEngine
 	class TextureImporter;
 	class MaterialManager;
 	class WaveObjectFactory;
-	class WaveObjectRegistry;
 	class ComponentRegistry;
+	class WaveObjectRegistry;
+	class WaveMaterialBehaviour;
 
 	template <TypeComponent T>
 	class ComponentContainer;
@@ -61,11 +60,13 @@ namespace WaveEngine
 		static void Destroy(Material& material);
 		static void Destroy(Texture& texture);
 		static void Destroy(Mesh& mesh);
+		static void Destroy(WaveMaterialBehaviour& waveMaterialBehaviour);
 		static void DestroyImmediate(WObject& wObject);
 		static void DestroyImmediate(Component& component);
 		static void DestroyImmediate(WaveObject& waveObject);
 		static void DestroyImmediate(Material& material);
 		static void DestroyImmediate(Texture& texture);
 		static void DestroyImmediate(Mesh& mesh);
+		static void DestroyImmediate(WaveMaterialBehaviour& waveMaterialBehaviour);
 	};
 }

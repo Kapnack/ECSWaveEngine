@@ -13,6 +13,8 @@ namespace WaveEngine
 			delete materialsBehaviours[materialID];
 
 		materialsBehaviours[materialID] = new T();
+		materialsBehaviours[materialID]->Init();
+		materialsBehaviours[materialID]->LateInit();
 	}
 }
 

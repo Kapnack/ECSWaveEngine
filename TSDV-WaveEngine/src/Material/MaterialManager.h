@@ -10,6 +10,7 @@
 #include "Export.h"
 #include "ECS/WObject/WObject.h"
 #include "MaterialBehaviourConcept.h"
+#include "WaveMaterialBehaviour/WaveMaterialBehaviour.h"
 
 using namespace std;
 
@@ -22,7 +23,7 @@ namespace WaveEngine
 	class EntityManager;
 	class MaterialFactory;
 
-	class WAVEEXPORT MaterialManager final : public Service
+	class MaterialManager final : public Service
 	{
 	private:
 
@@ -31,6 +32,8 @@ namespace WaveEngine
 		set<unsigned int> materialsToDestroy;
 		unordered_map<unsigned int, Material*> materials;
 		unordered_map<string, unsigned int> materialsIDByName;
+		set<unsigned int> waveMaterialBehaviourToDestroy;
+
 		unordered_map<unsigned int, WaveMaterialBehaviour*> materialsBehaviours;
 
 		void SaveMaterial(Material*& material);
@@ -40,6 +43,7 @@ namespace WaveEngine
 
 		void DestroyMaterialBehaviour(unsigned int materialID);
 
+		void UpdateMaterials();
 		void Update();
 
 		MaterialManager();
@@ -63,6 +67,11 @@ namespace WaveEngine
 		void Destroy(unsigned int ID);
 		void DestroyImmediate(Material& material);
 		void DestroyImmediate(unsigned int ID);
+
+		void Destroy(WaveMaterialBehaviour& waveMaterialBehaviour);
+		void DestroyBehaviour(unsigned int ID);
+		void DestroyImmediate(WaveMaterialBehaviour& waveMaterialBehaviour);
+		void DestroyImmediateBehaviour(unsigned int ID);
 
 		unordered_map<unsigned int, Material*>& GetMaterials();
 	};

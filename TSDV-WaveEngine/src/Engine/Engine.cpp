@@ -205,6 +205,7 @@ namespace WaveEngine
 
 		rigidBodyLogic.Update(GetDeltaTime());
 
+		GetMaterialManager()->UpdateMaterials();
 		drawLogic.Update();
 
 		imGui.Update();
@@ -212,8 +213,8 @@ namespace WaveEngine
 		waveBehaviourLogic.LateUpdate();
 
 		GetComponentRegistry()->Update();
-		GetWaveObjectRegistry()->Update();
 		GetMaterialManager()->Update();
+		GetWaveObjectRegistry()->Update();
 		GetTextureManager()->Update();
 		GetMeshManager()->Update();
 	}

@@ -156,12 +156,6 @@
     <ClCompile Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviour.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviourFactory\WaveMaterialBehaviourFactory.h">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviourFactory\WaveMaterialBehaviourFactory.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="src\ECS\WObject\WObject.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
