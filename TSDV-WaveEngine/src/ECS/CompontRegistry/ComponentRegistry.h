@@ -143,9 +143,9 @@ namespace WaveEngine
 		}
 
 		template<TypeComponent T>
-		T* TryGet(unsigned int entity)
+		bool TryGet(unsigned int entity, T*& component)
 		{
-			return GetComponentStorage<T>().TryGet(entity);
+			return GetComponentStorage<T>().TryGet(entity, component);
 		}
 
 		template<TypeComponent T>

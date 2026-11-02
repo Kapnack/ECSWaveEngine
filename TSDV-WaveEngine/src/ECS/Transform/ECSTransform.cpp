@@ -581,17 +581,17 @@ namespace WaveEngine
 
 		for (int childID : children)
 		{
-			ECSTransform* child = ServiceProvider::Instance().Get<ComponentRegistry>()->TryGet<ECSTransform>(childID);
+			ECSTransform* child = nullptr;
 
-			if (child)
+			if (ServiceProvider::Instance().Get<ComponentRegistry>()->TryGet<ECSTransform>(childID, child))
 				child->MarkDirty();
 		}
 
 		if (parentID != WaveObject::NULL_OBJECT)
 		{
-			ECSTransform* parent = ServiceProvider::Instance().Get<ComponentRegistry>()->TryGet<ECSTransform>(parentID);
+			ECSTransform* parent = nullptr;
 
-			if (parent)
+			if (ServiceProvider::Instance().Get<ComponentRegistry>()->TryGet<ECSTransform>(parentID, parent))
 				parent->MarkHasChildDirty();
 		}
 	}

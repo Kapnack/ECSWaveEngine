@@ -16,10 +16,12 @@ namespace WaveEngine
 	public:
 
 		IStorage()
-		{ }
+		{
+		}
 
 		~IStorage()
-		{ }
+		{
+		}
 
 		virtual void Add(unsigned int entitiy) = 0;
 
@@ -110,17 +112,20 @@ namespace WaveEngine
 			return *it;
 		}
 
-		T* TryGet(unsigned int entity)
+		bool TryGet(unsigned int entity, T*& component)
 		{
+			component = nullptr;
+
 			if (entity >= componentByEntity.size())
-				return nullptr;
+				return false;
 
 			const unsigned int index = componentByEntity[entity];
 
 			if (index == -1)
-				return nullptr;
+				return false;
 
-			return &components[index];
+			component = &components[index];
+			return true;
 		}
 
 		vector<T>& GetComponents()

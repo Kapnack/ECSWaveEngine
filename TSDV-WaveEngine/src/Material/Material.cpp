@@ -10,9 +10,11 @@
 
 
 #include "Color/Color.h"
+#include "MaterialManager.h"
 #include "ECS/WObject/WObject.h"
 #include "Material/MaterialFactory.h"
 #include "ServiceProvider/ServiceProvider.h"
+#include "WaveMaterialBehaviour/WaveMaterialBehaviour.h"
 
 using namespace std;
 
@@ -34,6 +36,16 @@ namespace WaveEngine
 	Material* Material::Load(const char* name, const char* vertexShaderDir, const char* fragmentShaderDir)
 	{
 		return ServiceProvider::Instance().Get<MaterialFactory>()->LoadMaterial(name, vertexShaderDir, fragmentShaderDir);
+	}
+
+	WaveMaterialBehaviour* Material::GetBehaviour() const
+	{
+		return ServiceProvider::Instance().Get<MaterialManager>()->GetMaterialBehaviour(GetID());
+	}
+
+	bool Material::TryGetBehaviour(WaveMaterialBehaviour*& waveMaterialBehaviour) const
+	{
+		return ServiceProvider::Instance().Get<MaterialManager>()->TryGetMaterialBehaviour(GetID(), waveMaterialBehaviour);
 	}
 
 	const string& Material::GetName() const

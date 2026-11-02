@@ -28,9 +28,9 @@ namespace WaveEngine
 	}
 
 	template<TypeComponent T>
-	T* WaveObject::TryGetComponent()
+	bool WaveObject::TryGetComponent(T*& component)
 	{
-		return GetComponentRegistry()->TryGet<T>(GetID());
+		return GetComponentRegistry()->TryGet<T>(GetID(), component);
 	}
 
 	template<TypeComponent T>

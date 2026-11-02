@@ -7,7 +7,6 @@
 #include <string_view>
 #include <unordered_map>
 
-#include "Export.h"
 #include "ECS/WObject/WObject.h"
 #include "MaterialBehaviourConcept.h"
 #include "WaveMaterialBehaviour/WaveMaterialBehaviour.h"
@@ -60,6 +59,8 @@ namespace WaveEngine
 	public:
 
 		Material& GetMaterial(const unsigned int id);
+		WaveMaterialBehaviour* GetMaterialBehaviour(const unsigned int id);
+		bool TryGetMaterialBehaviour(const unsigned int id, WaveMaterialBehaviour*& waveMaterialBehaviour);
 
 		unsigned int GetMaterial(const string_view name);
 

@@ -44,8 +44,8 @@ namespace WaveEngine
 
 	BoundingBox MeshLogic::EncapsulateMeshVerts(WaveObject& waveObject, BoundingBox box)
 	{
-		MeshID* meshID = waveObject.TryGetComponent<MeshID>();
-		if (!meshID || meshID->meshID == WObject::NULL_OBJECT)
+		MeshID* meshID = nullptr;
+		if (!waveObject.TryGetComponent<MeshID>(meshID) || meshID->meshID == WObject::NULL_OBJECT)
 			return box;
 
 		const Matrix4x4& m = waveObject.GetTransform().GetGlobalModel();

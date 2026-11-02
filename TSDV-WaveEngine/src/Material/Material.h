@@ -67,6 +67,9 @@ namespace WaveEngine
 		static Material* Create(const char* name, const char* vertexShader, const char* fragmentShader);
 		static Material* Load(const char* name, const char* vertexShader, const char* fragmentShader);
 
+		WaveMaterialBehaviour* GetBehaviour() const;
+		bool TryGetBehaviour(WaveMaterialBehaviour*& waveMaterialBehaviour) const;
+
 		const string& GetName() const;
 
 		unsigned int GetGPUID() const;

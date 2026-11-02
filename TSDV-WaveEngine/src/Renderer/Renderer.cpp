@@ -1,15 +1,14 @@
 #include "Renderer.h"
 
+#include <cmath>
 #include <string>
 #include <vector>
 #include <utility>
 #include <cstddef>
 #include <unordered_map>
 
-#include "ServiceProvider/ServiceProvider.h"
-#include "VertexData.h"
-
 #include "Mesh/Mesh.h"
+#include "VertexData.h"
 #include "Plane/Plane.h"
 #include "Window/Window.h"
 #include "ECS/MaterialID.h"
@@ -28,8 +27,9 @@
 #include "WaveMath/Matrix4x4/Matrix4x4.h"
 #include "Mesh/MeshManager/MeshManager.h"
 #include "TextureImporter/TextureManager.h"
+#include "ServiceProvider/ServiceProvider.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
-#include <cmath>
+#include "Material/WaveMaterialBehaviour/WaveMaterialBehaviour.h"
 
 using namespace std;
 
@@ -105,13 +105,13 @@ namespace WaveEngine
 
 	void Renderer::CreateBuffers(
 		const VertexData* vertex,
-		const int& vertexSize,
+		const int vertexSize,
 		const unsigned int* indices,
-		const int& indicesSize,
-		unsigned& VAO,
-		unsigned& VBO,
-		unsigned& EBO,
-		unsigned& instanceVBO
+		const int indicesSize,
+		unsigned int& VAO,
+		unsigned int& VBO,
+		unsigned int& EBO,
+		unsigned int& instanceVBO
 	) const
 	{
 		glGenVertexArrays(1, &VAO);
@@ -164,7 +164,7 @@ namespace WaveEngine
 		glBindVertexArray(0);
 	}
 
-	void Renderer::UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned int& VBO)
+	void Renderer::UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned int VBO)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertexSize * sizeof(VertexData), vertex);
@@ -363,8 +363,8 @@ namespace WaveEngine
 			Material& materialToUse =
 				GetMaterialManager()->GetMaterial(batchingIT->first);
 
-			if (!materialToUse)
-				continue;
+			WaveMaterialBehaviour* materialBehaviour = nullptr;
+			materialToUse.TryGetBehaviour(materialBehaviour);
 
 			materialToUse.Bind();
 
@@ -391,11 +391,11 @@ namespace WaveEngine
 					string base = "pointLights[" + std::to_string(i) + "]";
 
 					materialToUse.SetVec3(base + ".position", pointLight[i].position);
-								
+
 					materialToUse.SetVec3(base + ".ambient", pointLight[i].ambient);
 					materialToUse.SetVec3(base + ".diffuse", pointLight[i].diffuse);
 					materialToUse.SetVec3(base + ".specular", pointLight[i].specular);
-								 
+
 					materialToUse.SetFloat(base + ".constant", pointLight[i].constant);
 					materialToUse.SetFloat(base + ".linear", pointLight[i].linear);
 					materialToUse.SetFloat(base + ".quadratic", pointLight[i].quadratic);
@@ -408,17 +408,17 @@ namespace WaveEngine
 					string base = "flashlights[" + std::to_string(i) + "]";
 
 					materialToUse.SetVec3(base + ".position", flashLights[i].position);
-								
+
 					materialToUse.SetVec3(base + ".direction", flashLights[i].direction);
-								
+
 					materialToUse.SetVec3(base + ".ambient", flashLights[i].ambient);
 					materialToUse.SetVec3(base + ".diffuse", flashLights[i].diffuse);
 					materialToUse.SetVec3(base + ".specular", flashLights[i].specular);
-								 
+
 					materialToUse.SetFloat(base + ".constant", flashLights[i].constant);
 					materialToUse.SetFloat(base + ".linear", flashLights[i].linear);
 					materialToUse.SetFloat(base + ".quadratic", flashLights[i].quadratic);
-								 
+
 					materialToUse.SetFloat(base + ".cutOff", cos(WaveMath::Deg2Rad(flashLights[i].cutOff)));
 					materialToUse.SetFloat(base + ".outerCutOff", cos(WaveMath::Deg2Rad(flashLights[i].outerCutOff)));
 				}

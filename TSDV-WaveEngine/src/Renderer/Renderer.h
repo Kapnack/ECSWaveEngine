@@ -145,18 +145,18 @@ namespace WaveEngine
 
 		void CreateBuffers(
 			const VertexData* vertex,
-			const int& vertexSize,
+			const int vertexSize,
 			const unsigned int* indices,
-			const int& indicesSize,
-			unsigned& VAO,
-			unsigned& VBO,
-			unsigned& EBO,
-			unsigned& instanceVBO
+			const int indicesSize,
+			unsigned int& VAO,
+			unsigned int& VBO,
+			unsigned int& EBO,
+			unsigned int& instanceVBO
 		) const;
 
 		void DeleteBuffers(unsigned int& VAO, unsigned int& VBO, unsigned int& EBO);
 
-		void UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned int& VBO);
+		void UpdateBuffer(const VertexData* vertex, int vertexSize, unsigned int VBO);
 
 		void SubmitWireBox(const BoundingBox& box, Color color = Color::Red());
 		void DrawWireBoxImmediate(const BoundingBox& box, Color color);

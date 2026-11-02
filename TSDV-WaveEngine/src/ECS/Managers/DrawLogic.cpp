@@ -50,10 +50,10 @@ namespace WaveEngine
 		if (!camera.IsInsideFrustum(objectBounds.bounds))
 			return;
 
-		const MeshRenderer* meshRenderer = waveObject.TryGetComponent<MeshRenderer>();
-
-		if (MeshID* meshComp = waveObject.TryGetComponent<MeshID>())
-			if (meshRenderer && GetBinarySpacePartition()->ObjectsShareSpace(camera.GetTransform().GetPosition(), objectBounds.bounds.GetCenter(), objectBounds.bounds.GetExtents()))
+		MeshRenderer* meshRenderer = nullptr;
+		MeshID* meshComp = nullptr;
+		if (waveObject.TryGetComponent<MeshID>(meshComp))
+			if (waveObject.TryGetComponent<MeshRenderer>(meshRenderer) && GetBinarySpacePartition()->ObjectsShareSpace(camera.GetTransform().GetPosition(), objectBounds.bounds.GetCenter(), objectBounds.bounds.GetExtents()))
 				GetRenderer()->Submit(transform, *meshComp, *meshRenderer, camera.GetID());
 
 		for (WaveObject* childWaveObject : waveObject.GetTransform().GetChilds())

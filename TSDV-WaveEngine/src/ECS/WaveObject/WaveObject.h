@@ -59,7 +59,7 @@ namespace WaveEngine
 		T& GetComponent() const;
 
 		template<TypeComponent T>
-		T* TryGetComponent();
+		bool TryGetComponent(T*& component);
 
 		template<TypeComponent T>
 		void RemoveComponent();

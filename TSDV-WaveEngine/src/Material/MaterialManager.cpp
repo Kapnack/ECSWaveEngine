@@ -82,6 +82,23 @@ namespace WaveEngine
 		return *materials.at(id);
 	}
 
+	WaveMaterialBehaviour* MaterialManager::GetMaterialBehaviour(const unsigned int id)
+	{
+		return materialsBehaviours.at(id);
+	}
+
+	bool MaterialManager::TryGetMaterialBehaviour(const unsigned int id, WaveMaterialBehaviour*& waveMaterialBehaviour)
+	{
+		waveMaterialBehaviour = nullptr;
+
+		if (!materialsBehaviours.contains(id))
+			return false;
+
+		waveMaterialBehaviour = materialsBehaviours.at(id);
+
+		return true;
+	}
+
 	unordered_map<unsigned int, Material*>& MaterialManager::GetMaterials()
 	{
 		return materials;
