@@ -111,7 +111,41 @@ namespace WaveEngine
 		return waveObjects;
 	}
 
-	const vector<WaveObject*> WaveObjectRegistry::GetWaveObject(const char* name, ObjectNameSearch objectNameSearch)
+	WaveObject& WaveObjectRegistry::Find(const char* name, ObjectNameSearch objectNameSearch)
+	{
+		WaveObject* waveObjectsToReturn = nullptr;
+
+		for (unordered_map<string, unsigned int>::iterator iterator = waveObjectsIDByName.begin(); iterator != waveObjectsIDByName.end(); ++iterator)
+			if (objectNameSearchStrategy[objectNameSearch].Invoke(name, iterator->first))
+			{
+				waveObjectsToReturn = waveObjects[iterator->second];
+				break;
+			}
+
+		return *waveObjectsToReturn;
+	}
+
+	WaveObject* WaveObjectRegistry::TryFind(const char* name, ObjectNameSearch objectNameSearch)
+	{
+		WaveObject* waveObjectsToReturn = nullptr;
+
+		for (unordered_map<string, unsigned int>::iterator iterator = waveObjectsIDByName.begin(); iterator != waveObjectsIDByName.end(); ++iterator)
+			if (objectNameSearchStrategy[objectNameSearch].Invoke(name, iterator->first))
+			{
+				waveObjectsToReturn = waveObjects[iterator->second];
+				break;
+			}
+
+		return waveObjectsToReturn;
+	}
+
+	bool WaveObjectRegistry::TryFind(const char* name, WaveObject*& waveObject, ObjectNameSearch objectNameSearch)
+	{
+		waveObject = TryFind(name, objectNameSearch);
+		return waveObject;
+	}
+
+	const vector<WaveObject*> WaveObjectRegistry::FindAll(const char* name, ObjectNameSearch objectNameSearch)
 	{
 		vector<WaveObject*> waveObjectsToReturn;
 
@@ -164,13 +198,16 @@ namespace WaveEngine
 
 	bool WaveObjectRegistry::TryGetWaveObject(unsigned int ID, WaveObject*& waveObject) const
 	{
-		waveObject = nullptr;
+		waveObject = TryGetWaveObject(ID);
+		return waveObject != nullptr;
+	}
 
+	WaveObject* WaveObjectRegistry::TryGetWaveObject(unsigned int ID) const
+	{
 		if (!waveObjects.contains(ID))
-			return false;
+			return nullptr;
 
-		waveObject = waveObjects.at(ID);
-		return true;
+		return waveObjects.at(ID);
 	}
 
 	void WaveObjectRegistry::Update()

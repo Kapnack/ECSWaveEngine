@@ -1,11 +1,10 @@
 #pragma once
 
+#include <vector>
 #include <string>
-#include <typeindex>
-#include <unordered_set>
 
 #include "Export.h"
-#include "ECS/WObject/WObject.h"
+#include "ObjectNameSearch.h"
 #include "EventSystem/EventSystem.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "ECS/Component/TypeComponent.h"
@@ -30,6 +29,8 @@ namespace WaveEngine
 		WaveObjectRegistry* GetWaveObjectRegistry() const;
 		WaveObjectFactory* GetWaveObjectFactory() const;
 
+		WaveObject();
+
 		friend class WObject;
 		friend class WaveObjectFactory;
 		friend class WaveObjectRegistry;
@@ -39,11 +40,15 @@ namespace WaveEngine
 		template<TypeComponent... T>
 		static WaveObject& Create(const char* name = nullptr);
 
-		WaveObject();
+		static WaveObject& Find(const char* name, ObjectNameSearch objectNamerSearch = ObjectNameSearch::Exact);
+		static bool TryFind(const char* name, WaveObject*& waveObject, ObjectNameSearch objectNamerSearch = ObjectNameSearch::Exact);
+		static WaveObject* TryFind(const char* name, ObjectNameSearch objectNamerSearch = ObjectNameSearch::Exact);
+		static vector<WaveObject*> FindAll(const char* name, ObjectNameSearch objectNamerSearch = ObjectNameSearch::Contains);
+
 		WaveObject(const char* name);
 		~WaveObject();
 
-		void SetName(const string& name);
+		void SetName(const char* name);
 		string GetName() const;
 
 		void SetStatic(bool isStatic);
@@ -60,6 +65,9 @@ namespace WaveEngine
 
 		template<TypeComponent T>
 		bool TryGetComponent(T*& component);
+
+		template<TypeComponent T>
+		T* TryGetComponent();
 
 		template<TypeComponent T>
 		void RemoveComponent();

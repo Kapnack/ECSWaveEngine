@@ -219,6 +219,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameChildEvent.h" />
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectBecameParentEvent.h" />
     <ClInclude Include="src\ECS\WaveObject\Events\ObjectChangeName.h" />
+    <ClInclude Include="src\ECS\WaveObject\ObjectNameSearch.h" />
     <ClInclude Include="src\ECS\WObject\WObject.h" />
     <ClInclude Include="src\Engine\TestingBehaviour.h" />
     <ClInclude Include="src\BoundingBox\BoundingBox.h" />

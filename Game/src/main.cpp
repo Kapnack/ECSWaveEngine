@@ -13,6 +13,7 @@ protected:
 	void Init() override
 	{
 		WaveObject::Create<TanakaWaveBehaviour>();
+		WObject::FindByType<Camera>();
 	}
 };
 

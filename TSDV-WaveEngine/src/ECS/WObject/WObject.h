@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+#include <typeindex>
+
 #include "Export.h"
 #include "ECS/Component/TypeComponent.h"
 
@@ -22,6 +25,8 @@ namespace WaveEngine
 
 	template <TypeComponent T>
 	class ComponentContainer;
+
+	using namespace std;
 
 	class WAVEEXPORT WObject
 	{
@@ -53,6 +58,22 @@ namespace WaveEngine
 		unsigned int GetID() const;
 
 		static WaveObject& Instantiate(const char* modelDir, bool useAbsolutePath = true, const char* rootName = nullptr);
+
+		template<TypeComponent T>
+		static vector<T*> FindByType()
+		{
+			vector<WObject*> wObjects = FindByType(typeid(T));
+			vector<T*> result;
+
+			result.reserve(wObjects.size());
+
+			for (WObject* object : wObjects)
+				result.push_back(static_cast<T*>(object));
+
+			return result;
+		}
+
+		static vector<WObject*> FindByType(type_index typeIndex);
 
 		static void Destroy(WObject& wObject);
 		static void Destroy(Component& component);

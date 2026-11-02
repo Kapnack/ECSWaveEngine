@@ -34,6 +34,12 @@ namespace WaveEngine
 	}
 
 	template<TypeComponent T>
+	T* WaveObject::TryGetComponent()
+	{
+		return GetComponentRegistry()->TryGet<T>(GetID());
+	}
+
+	template<TypeComponent T>
 	void WaveObject::RemoveComponent()
 	{
 		GetComponentRegistry()->RemoveComponentImmediate<T>(GetID());

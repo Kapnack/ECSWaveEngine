@@ -6,6 +6,7 @@
 #include <unordered_set>
 
 #include "EventSystem/Func.h"
+#include "ObjectNameSearch.h"
 #include "ServiceProvider/Service.h"
 #include "EventSystem/EventSystem.h"
 #include "Events/ObjectChangeName.h"
@@ -20,14 +21,6 @@ class ServiceProvider;
 
 namespace WaveEngine
 {
-	enum class ObjectNameSearch
-	{
-		Exact,
-		Contains,
-		Starts,
-		Ends
-	};
-
 	class WaveObject;
 
 	class WaveObjectRegistry : Service
@@ -73,10 +66,15 @@ namespace WaveEngine
 
 		vector<WaveObject*> GetParentWaveObjects();
 
-		const vector<WaveObject*> GetWaveObject(const char* name, ObjectNameSearch objectNameSearch = ObjectNameSearch::Exact);
+		WaveObject& Find(const char* name, ObjectNameSearch objectNameSearch = ObjectNameSearch::Exact);
+		WaveObject* TryFind(const char* name, ObjectNameSearch objectNameSearch = ObjectNameSearch::Exact);
+		bool TryFind(const char* name, WaveObject*& waveObject, ObjectNameSearch objectNameSearch = ObjectNameSearch::Exact);
+
+		const vector<WaveObject*> FindAll(const char* name, ObjectNameSearch objectNameSearch = ObjectNameSearch::Exact);
 
 		WaveObject& GetWaveObject(unsigned int ID) const;
 		bool TryGetWaveObject(unsigned int ID, WaveObject*& waveObject) const;
+		WaveObject* TryGetWaveObject(unsigned int ID) const;
 
 		void Update();
 

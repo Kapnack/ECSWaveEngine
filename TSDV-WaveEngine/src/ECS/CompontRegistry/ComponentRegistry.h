@@ -11,6 +11,7 @@
 #include <unordered_set>
 #include <unordered_map>
 
+#include "ECS/Component/Component.h"
 #include "ECS/Component/TypeComponent.h"
 #include "ECS/ComponentContainer/ComponentContainer.h"
 
@@ -28,26 +29,15 @@ namespace WaveEngine
 		unordered_map<unsigned int, unordered_set<type_index>> componentsPerEntity;
 		set<pair<unsigned int, type_index>> componentsToRemovePerEntity;
 		unordered_map<unsigned int, vector<type_index>> waveBehavioursByEntityID;
+		unordered_map<type_index, set<unsigned int>> entitiesPerComponents;
+		vector<type_index> waveBehavioursType;
 
 	public:
 
-		ComponentRegistry() : Service()
-		{
-		}
+		ComponentRegistry();
+		~ComponentRegistry();
 
-		~ComponentRegistry()
-		{
-			for (unordered_map<type_index, IStorage*>::iterator storage = storages.begin(); storage != storages.end(); ++storage)
-				delete storage->second;
-		}
-
-		void Update()
-		{
-			for (pair<unsigned int, type_index> componentToDestroy : componentsToRemovePerEntity)
-				RemoveComponentImmediate(componentToDestroy.first, componentToDestroy.second);
-
-			componentsToRemovePerEntity.clear();
-		}
+		void Update();
 
 		template<TypeComponent... T>
 		tuple<T&...> AddComponents(unsigned int entity)
@@ -60,10 +50,17 @@ namespace WaveEngine
 		{
 			type_index typeIndex = typeid(T);
 
-			if constexpr (std::is_base_of_v<WaveBehaviour, T>)
+			if constexpr (is_base_of_v<WaveBehaviour, T>)
+			{
 				waveBehavioursByEntityID[entity].push_back(typeIndex);
+				entitiesPerComponents[typeid(WaveBehaviour)].insert(entity);
+
+				if (find(waveBehavioursType.begin(), waveBehavioursType.end(), typeIndex) == waveBehavioursType.end())
+					waveBehavioursType.push_back(typeIndex);
+			}
 
 			componentsPerEntity[entity].insert(typeIndex);
+			entitiesPerComponents[typeIndex].insert(entity);
 
 			if (!storages.contains(typeIndex))
 				storages[typeIndex] = new ComponentContainer<T>();
@@ -91,56 +88,11 @@ namespace WaveEngine
 			return GetComponentStorage<T>().Get(entity);
 		}
 
-		vector<WaveBehaviour*> GetBehaviours()
-		{
-			vector<WaveBehaviour*> waveBehaviours;
+		vector<WaveBehaviour*> GetBehaviours();
 
-			for (const pair<const unsigned int, vector<type_index>>& entry : waveBehavioursByEntityID)
-			{
-				unsigned int entity = entry.first;
-				const vector<type_index>& typeIndices = entry.second;
+		vector<WaveBehaviour*> GetWaveBehaviours(unsigned int entity);
 
-				for (const type_index& typeIndex : typeIndices)
-				{
-					unordered_map<type_index, IStorage*>::iterator storageIt = storages.find(typeIndex);
-					if (storageIt == storages.end())
-						continue;
-
-					if (WaveBehaviour* behaviour = storageIt->second->GetAsWaveBehaviour(entity))
-						waveBehaviours.push_back(behaviour);
-				}
-			}
-
-			return waveBehaviours;
-		}
-
-		vector<WaveBehaviour*> GetWaveBehaviours(unsigned int entity)
-		{
-			vector<WaveBehaviour*> waveBehaviours;
-
-			for (type_index& waveObjectType : waveBehavioursByEntityID[entity])
-			{
-				unordered_map<type_index, IStorage*>::iterator storageIt = storages.find(waveObjectType);
-				if (storageIt == storages.end())
-					continue;
-
-				if (WaveBehaviour* behaviour = storageIt->second->GetAsWaveBehaviour(entity))
-					waveBehaviours.push_back(behaviour);
-			}
-
-			return waveBehaviours;
-		}
-
-		void RemoveAllComponents(unsigned int entity)
-		{
-			if (!componentsPerEntity.contains(entity))
-				return;
-
-			for (type_index componentType : componentsPerEntity.at(entity))
-				RemoveComponentImmediate(entity, componentType);
-
-			componentsPerEntity.erase(entity);
-		}
+		void RemoveAllComponents(unsigned int entity);
 
 		template<TypeComponent T>
 		bool TryGet(unsigned int entity, T*& component)
@@ -149,22 +101,20 @@ namespace WaveEngine
 		}
 
 		template<TypeComponent T>
+		T* TryGet(unsigned int entity)
+		{
+			return GetComponentStorage<T>().TryGet(entity);
+		}
+
+		vector<Component*> GetAll(type_index typeIndex);
+
+		template<TypeComponent T>
 		void RemoveComponentImmediate(unsigned int entity)
 		{
 			RemoveComponentImmediate(entity, typeid(T));
 		}
 
-		void RemoveComponentImmediate(unsigned int entity, type_index typeIndex)
-		{
-			if (!storages.contains(typeIndex))
-				return;
-
-			static_cast<IStorage*>(storages.at(typeIndex))->Remove(entity);
-
-			vector<type_index>& behaviours = waveBehavioursByEntityID[entity];
-
-			behaviours.erase(remove_if(behaviours.begin(), behaviours.end(), [typeIndex](type_index componentType) { return componentType == typeIndex; }), behaviours.end());
-		}
+		void RemoveComponentImmediate(unsigned int entity, type_index typeIndex);
 
 		template<TypeComponent T>
 		void RemoveComponent(unsigned int entity)
@@ -172,20 +122,17 @@ namespace WaveEngine
 			RemoveComponent(entity, typeid(T));
 		}
 
-		void RemoveComponent(unsigned int entity, type_index typeIndex)
-		{
-			if (!storages.contains(typeIndex))
-				return;
-
-			pair<unsigned int, type_index> pairToInsert = pair<unsigned int, type_index>(entity, typeIndex);
-			componentsToRemovePerEntity.insert(pairToInsert);
-		}
-
+		void RemoveComponent(unsigned int entity, type_index typeIndex);
 
 		template<TypeComponent T>
 		ComponentContainer<T>& GetComponentStorage()
 		{
-			return *static_cast<ComponentContainer<T>*>(storages.at(typeid(T)));
+			return static_cast<ComponentContainer<T>&>(GetComponentStorage(typeid(T)));
+		}
+
+		IStorage& GetComponentStorage(type_index typeIndex)
+		{
+			return *static_cast<IStorage*>(storages.at(typeIndex));
 		}
 
 		template<TypeComponent T>
@@ -216,9 +163,14 @@ namespace WaveEngine
 		}
 
 		template<TypeComponent T>
-		T& GetComponent(const unsigned int& entity)
+		T& GetComponent(unsigned int entity)
 		{
 			return GetComponentStorage<T>().Get(entity);
+		}
+
+		Component& GetComponent(unsigned int entity, type_index typeIndex)
+		{
+			return GetComponentStorage(typeIndex).GetBase(entity);
 		}
 	};
 }

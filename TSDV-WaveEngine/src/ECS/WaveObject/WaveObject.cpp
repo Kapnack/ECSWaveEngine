@@ -1,15 +1,18 @@
 #include "WaveObject.h"
 
+#include <vector>
+#include <string>
+
+#include "ObjectNameSearch.h"
 #include "WaveObjectFactory.h"
 #include "WaveObjectRegistry.h"
 #include "ECS/WObject/WObject.h"
+#include "Events/ObjectChangeName.h"
 #include "EventSystem/EventSystem.h"
 #include "ECS/Transform/ECSTransform.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "ECS/BoundingBoxComp/BoundingBoxComp.h"
 #include "ECS/CompontRegistry/ComponentRegistry.h"
-#include <string>
-#include "Events/ObjectChangeName.h"
 
 namespace WaveEngine
 {
@@ -37,6 +40,26 @@ namespace WaveEngine
 	{
 	}
 
+	WaveObject& WaveObject::Find(const char* name, ObjectNameSearch objectNamerSearch)
+	{
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->Find(name, objectNamerSearch);
+	}
+
+	bool WaveObject::TryFind(const char* name, WaveObject*& waveObject, ObjectNameSearch objectNamerSearch)
+	{
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->TryFind(name, waveObject, objectNamerSearch);
+	}
+
+	WaveObject* WaveObject::TryFind(const char* name, ObjectNameSearch objectNamerSearch)
+	{
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->TryFind(name, objectNamerSearch);
+	}
+
+	vector<WaveObject*> WaveObject::FindAll(const char* name, ObjectNameSearch objectNamerSearch)
+	{
+		return ServiceProvider::Instance().Get<WaveObjectRegistry>()->FindAll(name, objectNamerSearch);
+	}
+
 	WaveObject::WaveObject(const char* name)
 	{
 		*this = GetWaveObjectFactory()->Instantiate(name);
@@ -46,7 +69,7 @@ namespace WaveEngine
 	{
 	}
 
-	void WaveObject::SetName(const string& name)
+	void WaveObject::SetName(const char* name)
 	{
 		GetEventSystem()->Invoke<ObjectChangeName>(GetID(), name);
 	}

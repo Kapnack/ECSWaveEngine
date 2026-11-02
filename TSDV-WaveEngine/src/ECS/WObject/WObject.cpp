@@ -1,5 +1,6 @@
 #include "WObject.h"
 
+#include <vector>
 #include <typeindex>
 
 #include "Mesh/Mesh.h"
@@ -42,6 +43,13 @@ namespace WaveEngine
 	{
 		ServiceProvider::Instance().Get<ModelImporter>()->LoadScene(modelDir, useAbsolutePath);
 		return *ServiceProvider::Instance().Get<ModelImporter>()->IntantiateModel(rootName);
+	}
+
+	vector<WObject*> WObject::FindByType(type_index typeIndex)
+	{
+		vector<Component*> components = ServiceProvider::Instance().Get<ComponentRegistry>()->GetAll(typeIndex);
+
+		return vector<WObject*>(components.begin(), components.end());
 	}
 
 	void WObject::Destroy(WObject& wObject)

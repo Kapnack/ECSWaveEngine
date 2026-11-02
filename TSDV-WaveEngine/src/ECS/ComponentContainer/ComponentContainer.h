@@ -3,6 +3,7 @@
 #include <vector>
 #include <type_traits>
 
+#include "ECS/Component/Component.h"
 #include "ECS/Component/TypeComponent.h"
 
 using namespace std;
@@ -19,7 +20,7 @@ namespace WaveEngine
 		{
 		}
 
-		~IStorage()
+		virtual ~IStorage()
 		{
 		}
 
@@ -28,6 +29,9 @@ namespace WaveEngine
 		virtual bool Has(unsigned int entity) const = 0;
 
 		virtual void Remove(unsigned int entity) = 0;
+
+		virtual Component& GetBase(unsigned int entity) = 0;
+		virtual vector<Component*> GetBaseComponents() = 0;
 
 		virtual WaveBehaviour* GetAsWaveBehaviour(unsigned int entity) { return nullptr; }
 	};
@@ -106,31 +110,49 @@ namespace WaveEngine
 			return components.at(componentByEntity.at(entity));
 		}
 
+		Component& GetBase(unsigned int entity) override
+		{
+			return *static_cast<Component*>(&Get(entity));
+		}
+
 		T& GetFirst()
 		{
 			typename std::vector<T>::iterator it = components.begin();
 			return *it;
 		}
 
-		bool TryGet(unsigned int entity, T*& component)
+		T* TryGet(unsigned int entity)
 		{
-			component = nullptr;
-
 			if (entity >= componentByEntity.size())
-				return false;
+				return nullptr;
 
 			const unsigned int index = componentByEntity[entity];
 
 			if (index == -1)
-				return false;
+				return nullptr;
 
-			component = &components[index];
-			return true;
+			return &components[index];
+		}
+
+		bool TryGet(unsigned int entity, T*& component)
+		{
+			component = TryGet(entity);
+			return component != nullptr;
 		}
 
 		vector<T>& GetComponents()
 		{
 			return components;
+		}
+
+		vector<Component*> GetBaseComponents()
+		{
+			vector<Component*> componentAsBase;
+
+			for (T& component : components)
+				componentAsBase.push_back(&component);
+
+			return componentAsBase;
 		}
 
 		const vector<unsigned int>& GetEntities() const
