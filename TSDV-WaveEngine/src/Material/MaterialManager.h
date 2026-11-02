@@ -8,13 +8,15 @@
 #include <unordered_map>
 
 #include "Export.h"
-#include "Material/Material.h"
+#include "ECS/WObject/WObject.h"
+#include "MaterialBehaviourConcept.h"
 
 using namespace std;
 
 namespace WaveEngine
 {
 	class Engine;
+	class Material;
 	class Renderer;
 	class ImGuiClass;
 	class EntityManager;
@@ -29,8 +31,14 @@ namespace WaveEngine
 		set<unsigned int> materialsToDestroy;
 		unordered_map<unsigned int, Material*> materials;
 		unordered_map<string, unsigned int> materialsIDByName;
+		unordered_map<unsigned int, WaveMaterialBehaviour*> materialsBehaviours;
 
 		void SaveMaterial(Material*& material);
+
+		template<MaterialBehaviourConcept T>
+		void SetMaterialBehaviour(unsigned int materialID);
+
+		void DestroyMaterialBehaviour(unsigned int materialID);
 
 		void Update();
 
@@ -38,6 +46,7 @@ namespace WaveEngine
 		~MaterialManager();
 
 		friend class Engine;
+		friend class Material;
 		friend class Renderer;
 		friend class ImGuiClass;
 		friend class EntityManager;
@@ -46,7 +55,7 @@ namespace WaveEngine
 
 	public:
 
-		Material* GetMaterial(const unsigned int id);
+		Material& GetMaterial(const unsigned int id);
 
 		unsigned int GetMaterial(const string_view name);
 
@@ -59,3 +68,4 @@ namespace WaveEngine
 	};
 }
 
+#include "MaterialManager.tpp"

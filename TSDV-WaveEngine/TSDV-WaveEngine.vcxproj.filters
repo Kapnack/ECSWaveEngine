@@ -398,11 +398,16 @@
     <ClInclude Include="src\Engine\WaveManagerConcept.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="src\Material\MaterialBehaviourConcept.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="src\ECS\Component\TypeComponent.h" />
     <None Include="src\Engine\Engine.tpp" />
     <None Include="src\ECS\WaveObject\WaveObject.tpp" />
+    <None Include="src\Material\Material.tpp" />
+    <None Include="src\Material\MaterialManager.tpp" />
   </ItemGroup>
 </Project>

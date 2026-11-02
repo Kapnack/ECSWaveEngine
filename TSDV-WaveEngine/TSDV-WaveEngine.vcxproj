@@ -239,6 +239,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClInclude Include="src\ImGui\imstb_rectpack.h" />
     <ClInclude Include="src\ImGui\imstb_textedit.h" />
     <ClInclude Include="src\ImGui\imstb_truetype.h" />
+    <ClInclude Include="src\Material\MaterialBehaviourConcept.h" />
     <ClInclude Include="src\Material\WaveMaterialBehaviour\WaveMaterialBehaviour.h" />
     <ClInclude Include="src\OrientedBoundingBox\OrientedBoundingBox.h" />
     <ClInclude Include="src\Physics\InertiaTensor.h" />
@@ -292,6 +293,8 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <None Include="src\ECS\Component\TypeComponent.h" />
     <None Include="src\ECS\WaveObject\WaveObject.tpp" />
     <None Include="src\Engine\Engine.tpp" />
+    <None Include="src\Material\Material.tpp" />
+    <None Include="src\Material\MaterialManager.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

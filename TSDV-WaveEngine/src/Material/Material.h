@@ -9,6 +9,7 @@
 #include "Export.h"
 #include "Color/Color.h"
 #include "ECS/WObject/WObject.h"
+#include "MaterialBehaviourConcept.h"
 #include "WaveMath/Vector4/Vector4.h"
 #include "WaveMath/Vector2/Vector2.h"
 #include "WaveMath/Vector3/Vector3.h"
@@ -20,6 +21,7 @@ namespace WaveEngine
 	class MaterialsImGui;
 	class MaterialManager;
 	class MaterialFactory;
+	class WaveMaterialBehaviour;
 
 	using namespace std;
 
@@ -95,6 +97,9 @@ namespace WaveEngine
 		void SetInt(const std::string& name, const int& value);
 		void SetBool(const std::string& name, const bool& value);
 
+		template<MaterialBehaviourConcept T>
+		void SetBehaviour();
+
 		void Bind();
 		void UnBind();
 
@@ -102,3 +107,4 @@ namespace WaveEngine
 	};
 }
 
+#include "Material.tpp"

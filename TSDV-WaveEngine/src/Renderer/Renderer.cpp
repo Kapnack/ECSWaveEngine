@@ -214,8 +214,8 @@ namespace WaveEngine
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
-		Material* mat = GetMaterialManager()->GetMaterial(debugMaterialID);
-		mat->Bind();
+		Material& mat = GetMaterialManager()->GetMaterial(debugMaterialID);
+		mat.Bind();
 
 		for (Camera& camera : GetComponentRegistry()->GetComponentStorage<Camera>().GetComponents())
 		{
@@ -228,15 +228,15 @@ namespace WaveEngine
 				return;
 			}
 
-			mat->SetMat4("uView", camera.GetView().Transposed());
-			mat->SetMat4("uProj", camera.GetProjection().Transposed());
-			mat->SetMat4("uModel", Matrix4x4::Identity());
-			mat->SetColor(color);
+			mat.SetMat4("uView", camera.GetView().Transposed());
+			mat.SetMat4("uProj", camera.GetProjection().Transposed());
+			mat.SetMat4("uModel", Matrix4x4::Identity());
+			mat.SetColor(color);
 
 			glDrawElements(GL_LINES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 		}
 
-		mat->UnBind();
+		mat.UnBind();
 
 		glBindVertexArray(0);
 		glDeleteVertexArrays(1, &VAO);
@@ -273,7 +273,7 @@ namespace WaveEngine
 		glEnableVertexAttribArray(0);
 
 		Camera& camera = GetComponentRegistry()->GetComponentStorage<Camera>().GetFirst();
-		Material* mat = GetMaterialManager()->GetMaterial(infinitePlaneMaterialID);
+		Material& mat = GetMaterialManager()->GetMaterial(infinitePlaneMaterialID);
 
 		if (!mat)
 		{
@@ -287,15 +287,15 @@ namespace WaveEngine
 		Matrix4x4 proj = camera.GetProjection();
 		Matrix4x4 invViewProj = Matrix4x4::Inversed(proj * view);
 
-		mat->Bind();
-		mat->SetMat4("uView", view.Transposed());
-		mat->SetMat4("uProj", proj.Transposed());
-		mat->SetMat4("uInvViewProj", invViewProj.Transposed());
-		mat->SetVec3("uCameraPos", camera.GetTransform().GetPosition());
-		mat->SetVec3("uPlaneNormal", plane.GetNormal());
-		mat->SetFloat("uPlaneOriginDistance", plane.GetOriginDistance());
-		mat->SetFloat("uFadeDistance", fadeDistance);
-		mat->SetColor(color);
+		mat.Bind();
+		mat.SetMat4("uView", view.Transposed());
+		mat.SetMat4("uProj", proj.Transposed());
+		mat.SetMat4("uInvViewProj", invViewProj.Transposed());
+		mat.SetVec3("uCameraPos", camera.GetTransform().GetPosition());
+		mat.SetVec3("uPlaneNormal", plane.GetNormal());
+		mat.SetFloat("uPlaneOriginDistance", plane.GetOriginDistance());
+		mat.SetFloat("uFadeDistance", fadeDistance);
+		mat.SetColor(color);
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -303,7 +303,7 @@ namespace WaveEngine
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		glDisable(GL_BLEND);
-		mat->UnBind();
+		mat.UnBind();
 
 		glBindVertexArray(0);
 		glDeleteVertexArrays(1, &VAO);
@@ -360,13 +360,13 @@ namespace WaveEngine
 			if (batchingIT->second.empty())
 				continue;
 
-			Material* materialToUse =
+			Material& materialToUse =
 				GetMaterialManager()->GetMaterial(batchingIT->first);
 
 			if (!materialToUse)
 				continue;
 
-			materialToUse->Bind();
+			materialToUse.Bind();
 
 			for (Camera& camera : GetComponentRegistry()->GetComponentStorage<Camera>().GetComponents())
 			{
@@ -377,50 +377,50 @@ namespace WaveEngine
 				Matrix4x4 view = camera.GetView();
 				Matrix4x4 proj = camera.GetProjection();
 
-				materialToUse->SetVec4("uColor", materialToUse->GetColor());
-				materialToUse->SetMat4("uView", view.Transposed());
-				materialToUse->SetMat4("uProj", proj.Transposed());
+				materialToUse.SetVec4("uColor", materialToUse.GetColor());
+				materialToUse.SetMat4("uView", view.Transposed());
+				materialToUse.SetMat4("uProj", proj.Transposed());
 
-				materialToUse->SetVec3("dirLight.direction", dirLight.direction);
-				materialToUse->SetVec3("dirLight.ambient", dirLight.ambient);
-				materialToUse->SetVec3("dirLight.diffuse", dirLight.diffuse);
-				materialToUse->SetVec3("dirLight.specular", dirLight.specular);
+				materialToUse.SetVec3("dirLight.direction", dirLight.direction);
+				materialToUse.SetVec3("dirLight.ambient", dirLight.ambient);
+				materialToUse.SetVec3("dirLight.diffuse", dirLight.diffuse);
+				materialToUse.SetVec3("dirLight.specular", dirLight.specular);
 
 				for (int i = 0; i < Amount_Per_Light; ++i)
 				{
 					string base = "pointLights[" + std::to_string(i) + "]";
 
-					materialToUse->SetVec3(base + ".position", pointLight[i].position);
-
-					materialToUse->SetVec3(base + ".ambient", pointLight[i].ambient);
-					materialToUse->SetVec3(base + ".diffuse", pointLight[i].diffuse);
-					materialToUse->SetVec3(base + ".specular", pointLight[i].specular);
-
-					materialToUse->SetFloat(base + ".constant", pointLight[i].constant);
-					materialToUse->SetFloat(base + ".linear", pointLight[i].linear);
-					materialToUse->SetFloat(base + ".quadratic", pointLight[i].quadratic);
+					materialToUse.SetVec3(base + ".position", pointLight[i].position);
+								
+					materialToUse.SetVec3(base + ".ambient", pointLight[i].ambient);
+					materialToUse.SetVec3(base + ".diffuse", pointLight[i].diffuse);
+					materialToUse.SetVec3(base + ".specular", pointLight[i].specular);
+								 
+					materialToUse.SetFloat(base + ".constant", pointLight[i].constant);
+					materialToUse.SetFloat(base + ".linear", pointLight[i].linear);
+					materialToUse.SetFloat(base + ".quadratic", pointLight[i].quadratic);
 				}
 
-				materialToUse->SetVec3("viewPos", cameraTransform.position);
+				materialToUse.SetVec3("viewPos", cameraTransform.position);
 
 				for (int i = 0; i < Amount_Per_Light; ++i)
 				{
 					string base = "flashlights[" + std::to_string(i) + "]";
 
-					materialToUse->SetVec3(base + ".position", flashLights[i].position);
-
-					materialToUse->SetVec3(base + ".direction", flashLights[i].direction);
-
-					materialToUse->SetVec3(base + ".ambient", flashLights[i].ambient);
-					materialToUse->SetVec3(base + ".diffuse", flashLights[i].diffuse);
-					materialToUse->SetVec3(base + ".specular", flashLights[i].specular);
-
-					materialToUse->SetFloat(base + ".constant", flashLights[i].constant);
-					materialToUse->SetFloat(base + ".linear", flashLights[i].linear);
-					materialToUse->SetFloat(base + ".quadratic", flashLights[i].quadratic);
-
-					materialToUse->SetFloat(base + ".cutOff", cos(WaveMath::Deg2Rad(flashLights[i].cutOff)));
-					materialToUse->SetFloat(base + ".outerCutOff", cos(WaveMath::Deg2Rad(flashLights[i].outerCutOff)));
+					materialToUse.SetVec3(base + ".position", flashLights[i].position);
+								
+					materialToUse.SetVec3(base + ".direction", flashLights[i].direction);
+								
+					materialToUse.SetVec3(base + ".ambient", flashLights[i].ambient);
+					materialToUse.SetVec3(base + ".diffuse", flashLights[i].diffuse);
+					materialToUse.SetVec3(base + ".specular", flashLights[i].specular);
+								 
+					materialToUse.SetFloat(base + ".constant", flashLights[i].constant);
+					materialToUse.SetFloat(base + ".linear", flashLights[i].linear);
+					materialToUse.SetFloat(base + ".quadratic", flashLights[i].quadratic);
+								 
+					materialToUse.SetFloat(base + ".cutOff", cos(WaveMath::Deg2Rad(flashLights[i].cutOff)));
+					materialToUse.SetFloat(base + ".outerCutOff", cos(WaveMath::Deg2Rad(flashLights[i].outerCutOff)));
 				}
 
 				for (unordered_map<unsigned int, RenderData>::iterator meshBatchIT = batchingIT->second.begin(); meshBatchIT != batchingIT->second.end(); ++meshBatchIT)
@@ -486,7 +486,7 @@ namespace WaveEngine
 				}
 			}
 
-			materialToUse->UnBind();
+			materialToUse.UnBind();
 		}
 
 		entityCameras.clear();

@@ -8,6 +8,7 @@
 
 #include "Material.h"
 #include "EventSystem/EventSystem.h"
+#include "MaterialBehaviourConcept.h"
 #include "ServiceProvider/ServiceProvider.h"
 #include "Material/Event/MaterialDelition.h"
 
@@ -22,7 +23,11 @@ namespace WaveEngine
 		for (unordered_map<unsigned int, Material*>::iterator it = materials.begin(); it != materials.end(); ++it)
 			delete it->second;
 
+		for (unordered_map<unsigned int, WaveMaterialBehaviour*>::iterator it = materialsBehaviours.begin(); it != materialsBehaviours.end(); ++it)
+			delete it->second;
+
 		materials.clear();
+		materialsBehaviours.clear();
 	}
 
 	unsigned int MaterialManager::GetMaterial(const string_view name)
@@ -49,6 +54,12 @@ namespace WaveEngine
 		materialsIDByName[material->GetName()] = material->GetID();
 	}
 
+	void MaterialManager::DestroyMaterialBehaviour(unsigned int materialID)
+	{
+		delete materialsBehaviours[materialID];
+		materialsBehaviours.erase(materialID);
+	}
+
 	void MaterialManager::Update()
 	{
 		for (unsigned int materialID : materialsToDestroy)
@@ -57,9 +68,9 @@ namespace WaveEngine
 		materialsToDestroy.clear();
 	}
 
-	Material* MaterialManager::GetMaterial(const unsigned int id)
+	Material& MaterialManager::GetMaterial(const unsigned int id)
 	{
-		return id != WObject::NULL_OBJECT ? materials[id] : nullptr;
+		return *materials.at(id);
 	}
 
 	unordered_map<unsigned int, Material*>& MaterialManager::GetMaterials()

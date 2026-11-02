@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "Material.h"
 #include "FileReader/FileReader.h"
 #include "ServiceProvider/Service.h"
