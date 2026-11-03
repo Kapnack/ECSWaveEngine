@@ -5,6 +5,8 @@
 
 namespace WaveEngine
 {
+	class Camera;
+	class Renderer;
 	class Material;
 	class WaveObject;
 	class MaterialManager;
@@ -13,23 +15,27 @@ namespace WaveEngine
 	{
 	private:
 
-		unsigned int materialID;
-		unsigned int currentWaveObject;
+		unsigned int materialID = WObject::NULL_OBJECT;
+		unsigned int currentWaveObjectID = WObject::NULL_OBJECT;
+		unsigned int currentCameraID = WObject::NULL_OBJECT;
 
 		WaveMaterialBehaviour();
 		~WaveMaterialBehaviour();
 
+		void SetCamera(unsigned int cameraID);
 		void SetMaterial(unsigned int materialID);
-		void SetWaveObject(unsigned int currentWaveObject);
+		void SetWaveObject(unsigned int waveObjectID);
 
+		void UnBind();
+
+		friend class Renderer;
 		friend class MaterialManager;
 
 	protected:
 
-		WaveObject& GetWaveObject() const;
+		Camera& GetCamera() const;
 		Material& GetMaterial() const;
-
-	public:
+		WaveObject& GetWaveObject() const;
 
 		virtual void Init();
 		virtual void LateInit();
