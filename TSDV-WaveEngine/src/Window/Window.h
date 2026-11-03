@@ -32,12 +32,14 @@ namespace WaveEngine
 		GLFWmonitor* monitor;
 		GLFWwindow* share;
 
+		int vSyncMode = 0;
+
 		void Init();
 		void Dispose();
 
 		static void FrameBufferCallBack(GLFWwindow* window, int width, int height);
 
-		Window(int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
+		Window(int width, int height, const char* title, bool vSync = false, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
 		~Window();
 
 		friend class Engine;
@@ -54,6 +56,7 @@ namespace WaveEngine
 		int GetBaseHeight() const;
 		Vector2 GetSize() const;
 		Vector2 GetPosition() const;
+		int GetVSyncMode() const;
 
 		void HideWindow() const;
 		void ShowWindow() const;
@@ -66,6 +69,7 @@ namespace WaveEngine
 		void Translate(int x, int y);
 		void SetSize(Vector2 size);
 		void SetSize(int width, int height);
+		void SetVSyncMode(int vSyncMode);
 
 		void SwapBuffer();
 		void HandleInput();

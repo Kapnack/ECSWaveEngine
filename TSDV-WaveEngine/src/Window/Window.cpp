@@ -13,7 +13,7 @@ using namespace std;
 
 namespace WaveEngine
 {
-	Window::Window(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share) : Service()
+	Window::Window(int width, int height, const char* title, bool vSync, GLFWmonitor* monitor, GLFWwindow* share) : Service()
 	{
 		this->width = width;
 		this->height = height;
@@ -23,6 +23,7 @@ namespace WaveEngine
 
 		baseWidth = width;
 		baseHeight = height;
+		this->vSyncMode = vSync;
 	}
 
 	Window::~Window()
@@ -50,6 +51,8 @@ namespace WaveEngine
 
 		glfwSetWindowUserPointer(window, this);
 		glfwSetFramebufferSizeCallback(window, Window::FrameBufferCallBack);
+
+		SetVSyncMode(vSyncMode);
 
 		if (glewInit() != GLEW_OK)
 			cout << "GLEW FAILED TO INIT!!!";
@@ -98,6 +101,11 @@ namespace WaveEngine
 		glfwGetWindowPos(window, &x, &y);
 
 		return Vector2(x, y);
+	}
+
+	int Window::GetVSyncMode() const
+	{
+		return vSyncMode;
 	}
 
 	void Window::HideWindow() const
@@ -149,10 +157,12 @@ namespace WaveEngine
 
 	void Window::SetSize(int width, int height)
 	{
-		this->width = width;
-		this->height = height;
+		glfwSetWindowSize(window, this->width = width, this->height = height);
+	}
 
-		glfwSetWindowSize(window, width, height);
+	void Window::SetVSyncMode(int vSyncMode)
+	{
+		glfwSwapInterval(this->vSyncMode = vSyncMode);
 	}
 
 	void Window::SwapBuffer()
