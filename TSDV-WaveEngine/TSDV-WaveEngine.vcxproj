@@ -168,6 +168,7 @@ xcopy "$(OutDir)*.dll" "$(SolutionDir)" /i/y/s
     <ClCompile Include="src\ECS\Managers\WaveBehaviourLogic\WaveBehaviourLogic.h" />
     <ClCompile Include="src\ECS\RigidBody\RigidBody.cpp" />
     <ClCompile Include="src\ECS\RigidBody\RigidBodyLogic.cpp" />
+    <ClCompile Include="src\ECS\WaveBehaviour\WaveBehaviour.cpp" />
     <ClCompile Include="src\ECS\WaveObject\Events\ObjectBecameChildEvent.cpp" />
     <ClCompile Include="src\ECS\WaveObject\Events\ObjectBecameParentEvent.cpp" />
     <ClCompile Include="src\ECS\WaveObject\Events\ObjectChangeName.cpp" />
