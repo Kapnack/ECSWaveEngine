@@ -89,5 +89,7 @@ namespace WaveEngine
 		static void DestroyImmediate(Texture& texture);
 		static void DestroyImmediate(Mesh& mesh);
 		static void DestroyImmediate(WaveMaterialBehaviour& waveMaterialBehaviour);
+
+		operator unsigned int();
 	};
 }

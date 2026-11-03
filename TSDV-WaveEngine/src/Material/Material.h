@@ -105,8 +105,6 @@ namespace WaveEngine
 
 		void Bind();
 		void UnBind();
-
-		operator unsigned int();
 	};
 }
 

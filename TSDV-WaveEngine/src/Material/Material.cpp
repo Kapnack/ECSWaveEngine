@@ -259,9 +259,4 @@ namespace WaveEngine
 	{
 		glUseProgram(NULL);
 	}
-
-	Material::operator unsigned int()
-	{
-		return GetID();
-	}
 }

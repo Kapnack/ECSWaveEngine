@@ -143,4 +143,9 @@ namespace WaveEngine
 	{
 		ServiceProvider::Instance().Get<MaterialManager>()->DestroyImmediate(waveMaterialBehaviour);
 	}
+
+	WObject::operator unsigned int()
+	{
+		return ID;
+	}
 }
