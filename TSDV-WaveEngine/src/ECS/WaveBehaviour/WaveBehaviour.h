@@ -9,25 +9,15 @@ namespace WaveEngine
 	{
 	public:
 
-		WaveBehaviour() : Component()
-		{
-		}
+		WaveBehaviour();
+		virtual ~WaveBehaviour();
 
-		virtual void Update()
-		{
-		}
+		virtual void Update();
 
-		virtual void LateUpdate()
-		{
-		}
+		virtual void LateUpdate();
 
-		virtual void OnCollision()
-		{
+		virtual void OnCollision();
 
-		}
-
-		virtual void Dispose()
-		{
-		}
+		virtual void Dispose();
 	};
 }
