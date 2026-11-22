@@ -111,7 +111,7 @@ public:
 	}
 
 	template<typename T>
-	static thread ForEachTask(T* array, int size, void(*action)(T))
+	static thread ForEachArrayTask(T* array, int size, void(*action)(T))
 	{
 		return thread([array, size, action]() {ForEach(array, size, action); });
 	}
@@ -147,7 +147,7 @@ public:
 			threads[i] = new thread([begin, end, &array, action]()
 				{
 					for (int j = begin; j < end; ++j)
-						(*action)((array + j));
+						(*action)(array[j]);
 				});
 
 			begin = end;
