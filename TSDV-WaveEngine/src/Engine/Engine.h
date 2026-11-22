@@ -53,8 +53,6 @@ namespace WaveEngine
 
 		WaveManager* waveManager;
 
-		WaveObject* tank;
-
 		DrawLogic drawLogic;
 		TransformLogic transformLogic;
 		MeshLogic meshLogic;
@@ -62,8 +60,6 @@ namespace WaveEngine
 		WaveBehaviourLogic waveBehaviourLogic;
 
 		ImGuiClass imGui;
-
-		WaveObject* cameraObject;
 
 	protected:
 
