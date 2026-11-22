@@ -5,5 +5,5 @@ struct Subscriber
 {
 	void* instance = nullptr;
 	void* method = nullptr;
-	TReturn(*invoke)(void*, void*, TParams...);
+	TReturn(*invoke)(void*, void*, TParams...) = nullptr;
 };
